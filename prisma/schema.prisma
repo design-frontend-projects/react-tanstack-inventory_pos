@@ -1,0 +1,100 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider  = "postgresql"
+  url       = env("DATABASE_URL")
+  directUrl = env("DIRECT_URL")
+}
+
+enum TenantStatus {
+  active
+  suspended
+  archived
+}
+
+enum UserStatus {
+  active
+  invited
+  disabled
+}
+
+enum MembershipRole {
+  owner
+  admin
+  manager
+  cashier
+  staff
+}
+
+enum MembershipStatus {
+  active
+  pending
+  suspended
+  revoked
+}
+
+enum PreferenceThemeMode {
+  light
+  dark
+  system
+}
+
+model Tenant {
+  id               String              @id @default(uuid())
+  slug             String              @unique
+  name             String
+  status           TenantStatus        @default(active)
+  defaultLocale    String              @default("en")
+  defaultThemeMode PreferenceThemeMode @default(system)
+  currencyCode     String              @default("USD")
+  timezone         String              @default("UTC")
+  createdAt        DateTime            @default(now())
+  updatedAt        DateTime            @updatedAt
+  memberships      Membership[]
+  preferences      PreferenceProfile[]
+}
+
+model UserProfile {
+  id          String              @id
+  email       String              @unique
+  displayName String?
+  phone       String?
+  status      UserStatus          @default(active)
+  lastSeenAt  DateTime?
+  createdAt   DateTime            @default(now())
+  updatedAt   DateTime            @updatedAt
+  memberships Membership[]
+  preferences PreferenceProfile[]
+}
+
+model Membership {
+  id              String           @id @default(uuid())
+  tenantId        String
+  userId          String
+  role            MembershipRole
+  status          MembershipStatus @default(active)
+  defaultOutletId String?
+  createdAt       DateTime         @default(now())
+  updatedAt       DateTime         @updatedAt
+  tenant          Tenant           @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+  user            UserProfile      @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([tenantId, userId, role], map: "membership_tenant_user_role_unique")
+}
+
+model PreferenceProfile {
+  id              String              @id @default(uuid())
+  userId          String
+  tenantId        String?
+  locale          String              @default("en")
+  themeMode       PreferenceThemeMode @default(system)
+  defaultTenantId String?
+  defaultOutletId String?
+  updatedAt       DateTime            @updatedAt
+  user            UserProfile         @relation(fields: [userId], references: [id], onDelete: Cascade)
+  tenant          Tenant?             @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, tenantId], map: "preference_profile_user_tenant_unique")
+}

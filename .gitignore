@@ -2,8 +2,14 @@ node_modules
 .DS_Store
 dist
 dist-ssr
+build
+coverage
+playwright-report
+test-results
 *.local
 .env
+.env.*
+!.env.example
 .nitro
 .tanstack
 .wrangler
@@ -11,3 +17,10 @@ dist-ssr
 .vinxi
 __unconfig*
 todos.json
+.agents/
+.codex/
+.vscode/
+.cta.json
+Thumbs.db
+supabase/.temp
+supabase/.branches

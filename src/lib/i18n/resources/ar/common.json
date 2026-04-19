@@ -1,0 +1,34 @@
+{
+  "app": {
+    "title": "غرفة التحكم ميريديان",
+    "subtitle": "تشغيل متعدد المستأجرين للمخزون والمطعم ونقطة البيع وإدارة النظام"
+  },
+  "actions": {
+    "switchWorkspace": "تبديل مساحة العمل",
+    "language": "اللغة",
+    "theme": "المظهر",
+    "overview": "نظرة عامة",
+    "openBoard": "فتح اللوحة",
+    "continue": "متابعة"
+  },
+  "nav": {
+    "dashboard": "لوحة القيادة",
+    "inventory": "المخزون",
+    "inventoryOverview": "نظرة عامة",
+    "inventoryCatalog": "الكتالوج",
+    "inventoryOutlets": "الفروع",
+    "inventoryStock": "دفتر المخزون",
+    "restaurant": "المطعم",
+    "restaurantKitchen": "لوحة المطبخ",
+    "restaurantMenu": "هندسة القائمة",
+    "restaurantTables": "خدمة الطاولات",
+    "pos": "نقطة البيع",
+    "posCheckout": "البيع المباشر",
+    "posOrders": "الطلبات",
+    "posReturns": "المرتجعات",
+    "systemAdmin": "إدارة النظام",
+    "systemUsers": "المستخدمون والصلاحيات",
+    "systemNotifications": "الإشعارات",
+    "systemIntegrations": "التكاملات"
+  }
+}

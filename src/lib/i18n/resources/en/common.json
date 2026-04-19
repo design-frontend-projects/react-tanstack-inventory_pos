@@ -1,0 +1,34 @@
+{
+  "app": {
+    "title": "Meridian Control Room",
+    "subtitle": "Multitenant inventory, restaurant, POS, and system operations"
+  },
+  "actions": {
+    "switchWorkspace": "Switch workspace",
+    "language": "Language",
+    "theme": "Theme",
+    "overview": "Overview",
+    "openBoard": "Open board",
+    "continue": "Continue"
+  },
+  "nav": {
+    "dashboard": "Dashboard",
+    "inventory": "Inventory",
+    "inventoryOverview": "Overview",
+    "inventoryCatalog": "Catalog",
+    "inventoryOutlets": "Outlets",
+    "inventoryStock": "Stock Ledger",
+    "restaurant": "Restaurant",
+    "restaurantKitchen": "Kitchen Board",
+    "restaurantMenu": "Menu Engineering",
+    "restaurantTables": "Table Service",
+    "pos": "POS",
+    "posCheckout": "Checkout",
+    "posOrders": "Orders",
+    "posReturns": "Returns",
+    "systemAdmin": "System Admin",
+    "systemUsers": "Users & Roles",
+    "systemNotifications": "Notifications",
+    "systemIntegrations": "Integrations"
+  }
+}

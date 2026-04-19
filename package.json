@@ -6,13 +6,23 @@
     "#/*": "./src/*"
   },
   "scripts": {
-    "dev": "vite dev --port 3000",
+    "dev": "vite dev --port 3005",
     "build": "vite build",
     "preview": "vite preview",
     "test": "vitest run",
-    "lint": "eslint",
+    "test:unit": "vitest run",
+    "typecheck": "tsc --noEmit",
+    "lint": "eslint .",
+    "e2e": "playwright test",
+    "prisma:generate": "prisma generate",
+    "prisma:migrate": "prisma migrate dev",
+    "db:seed": "tsx prisma/seed.ts",
+    "smoke": "pnpm lint && pnpm typecheck && pnpm test",
     "format": "prettier --check .",
     "check": "prettier --write . && eslint --fix"
+  },
+  "prisma": {
+    "seed": "tsx prisma/seed.ts"
   },
   "dependencies": {
     "@fontsource-variable/geist": "^5.2.8",
@@ -60,6 +70,7 @@
     "jsdom": "^28.1.0",
     "prettier": "^3.8.1",
     "prisma": "^7.7.0",
+    "tsx": "^4.21.0",
     "typescript": "^5.7.2",
     "vite": "^8.0.0",
     "vitest": "^3.0.5"

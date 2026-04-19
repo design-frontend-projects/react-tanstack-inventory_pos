@@ -25,10 +25,10 @@
 
 **Purpose**: Initialize the TanStack Start project and baseline repo configuration.
 
-- [ ] T001 Scaffold the TanStack Start application in `package.json`, `tsconfig.json`, `vite.config.ts`, and `src/router.tsx`
-- [ ] T002 Install and pin runtime/dev dependencies in `package.json`, `pnpm-lock.yaml`, and `components.json`
-- [ ] T003 [P] Create the base directory skeleton and placeholder entry files under `src/`, `prisma/`, `public/onesignal/`, and `tests/`
-- [ ] T004 [P] Normalize environment template and local secret ignore rules in `.env.example` and `.gitignore`
+- [X] T001 Scaffold the TanStack Start application in `package.json`, `tsconfig.json`, `vite.config.ts`, and `src/router.tsx`
+- [X] T002 Install and pin runtime/dev dependencies in `package.json`, `pnpm-lock.yaml`, and `components.json`
+- [X] T003 [P] Create the base directory skeleton and placeholder entry files under `src/`, `prisma/`, `public/onesignal/`, and `tests/`
+- [X] T004 [P] Normalize environment template and local secret ignore rules in `.env.example` and `.gitignore`
 
 ---
 
@@ -38,17 +38,17 @@
 
 **Critical**: No user story work should start until this phase is complete.
 
-- [ ] T005 [P] Add shared test tooling and setup in `vitest.config.ts`, `playwright.config.ts`, and `tests/setup.ts`
-- [ ] T006 Implement runtime environment schemas and loaders in `src/lib/env/client.ts` and `src/lib/env/server.ts`
-- [ ] T007 [P] Configure the root query client and application providers in `src/lib/query/query-client.ts`, `src/routes/__root.tsx`, and `src/router.tsx`
-- [ ] T008 [P] Configure theme tokens and provider wiring in `src/styles/globals.css`, `src/lib/theme/theme-provider.tsx`, and `src/components/layout/theme-toggle.tsx`
-- [ ] T009 [P] Configure i18n bootstrap and base translation resources in `src/lib/i18n/index.ts`, `src/lib/i18n/resources/en/common.json`, and `src/lib/i18n/resources/ar/common.json`
+- [X] T005 [P] Add shared test tooling and setup in `vitest.config.ts`, `playwright.config.ts`, and `tests/setup.ts`
+- [X] T006 Implement runtime environment schemas and loaders in `src/lib/env/client.ts` and `src/lib/env/server.ts`
+- [X] T007 [P] Configure the root query client and application providers in `src/lib/query/query-client.ts`, `src/routes/__root.tsx`, and `src/router.tsx`
+- [X] T008 [P] Configure theme tokens and provider wiring in `src/styles/globals.css`, `src/lib/theme/theme-provider.tsx`, and `src/components/layout/theme-toggle.tsx`
+- [X] T009 [P] Configure i18n bootstrap and base translation resources in `src/lib/i18n/index.ts`, `src/lib/i18n/resources/en/common.json`, and `src/lib/i18n/resources/ar/common.json`
 - [ ] T010 Add foundational tenant, user, membership, and preference models plus the initial migration in `prisma/schema.prisma` and `prisma/migrations/`
 - [ ] T011 Implement the Prisma client and shared database access helpers in `src/server/db/client.ts` and `src/server/db/tenant-context.ts`
 - [ ] T012 Implement browser, server, and admin Supabase clients in `src/lib/supabase/client.ts`, `src/server/auth/supabase-server.ts`, and `src/server/auth/supabase-admin.ts`
 - [ ] T013 Implement tenant-safe session and permission guard services in `src/server/auth/session.ts`, `src/server/auth/tenant-guard.ts`, and `src/types/auth.ts`
 - [ ] T014 [P] Add foundational session contract and integration coverage in `tests/contract/session.contract.test.ts` and `tests/integration/session-preferences.test.ts`
-- [ ] T015 Create the authenticated app shell and bootstrap hook in `src/components/layout/app-shell.tsx` and `src/features/auth/use-session-bootstrap.ts`
+- [X] T015 Create the authenticated app shell and bootstrap hook in `src/components/layout/app-shell.tsx` and `src/features/auth/use-session-bootstrap.ts`
 
 **Checkpoint**: Foundation ready. User story work can now proceed.
 
@@ -63,9 +63,9 @@
 - [ ] T016 [P] [US1] Add e2e coverage for sign-in, tenant selection, theme switching, and locale switching in `tests/e2e/us1-tenant-workspace.spec.ts`
 - [ ] T017 [US1] Implement membership and preference repositories for tenant switching and persistence in `src/server/repos/membership-repo.ts` and `src/server/repos/preference-repo.ts`
 - [ ] T018 [US1] Implement session bootstrap and active-tenant API routes in `src/routes/api/session/bootstrap.ts` and `src/routes/api/session/active-tenant.ts`
-- [ ] T019 [P] [US1] Build the sign-in and tenant-selection routes in `src/routes/_auth/sign-in.tsx` and `src/routes/_auth/select-tenant.tsx`
-- [ ] T020 [P] [US1] Build the dashboard landing route and shell navigation components in `src/routes/_app/dashboard.tsx` and `src/components/layout/sidebar-nav.tsx`
-- [ ] T021 [US1] Connect locale/theme persistence and tenant bootstrap hydration in `src/routes/__root.tsx`, `src/features/preferences/preferences-store.ts`, and `src/components/layout/language-switcher.tsx`
+- [X] T019 [P] [US1] Build the sign-in and tenant-selection routes in `src/routes/_auth/sign-in.tsx` and `src/routes/_auth/select-tenant.tsx`
+- [X] T020 [P] [US1] Build the dashboard landing route and shell navigation components in `src/routes/_app/dashboard.tsx` and `src/components/layout/sidebar-nav.tsx`
+- [X] T021 [US1] Connect locale/theme persistence and tenant bootstrap hydration in `src/routes/__root.tsx`, `src/features/preferences/preferences-store.ts`, and `src/components/layout/language-switcher.tsx`
 
 **Checkpoint**: User Story 1 is independently functional and can serve as the MVP.
 
