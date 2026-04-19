@@ -11,13 +11,3 @@ dist-ssr
 .vinxi
 __unconfig*
 todos.json
-.env.*
-!.env.example
-build
-coverage
-playwright-report
-test-results
-supabase/.temp
-supabase/.branches
-.agents/
-.codex/
