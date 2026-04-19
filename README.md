@@ -25,6 +25,25 @@ This project uses [Vitest](https://vitest.dev/) for testing. You can run the tes
 pnpm test
 ```
 
+## Prisma
+
+This repo uses Prisma 7 with:
+
+- `prisma.config.ts` as the CLI source of truth for schema, migrations, and seeding
+- `DATABASE_URL` as the pooled runtime connection string used by `src/server/db/client.ts`
+- `DIRECT_URL` as the direct connection string used only by Prisma CLI commands
+
+Common commands:
+
+```bash
+pnpm prisma validate
+pnpm prisma generate
+pnpm prisma migrate dev --name <migration_name>
+pnpm db:seed
+```
+
+The generated Prisma client is emitted to `src/server/db/generated/prisma` and should not be committed.
+
 ## Styling
 
 This project uses [Tailwind CSS](https://tailwindcss.com/) for styling.

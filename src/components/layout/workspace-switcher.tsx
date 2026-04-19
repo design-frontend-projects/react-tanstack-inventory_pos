@@ -1,5 +1,6 @@
 "use client"
 
+import { useTranslation } from 'react-i18next'
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -13,6 +14,7 @@ import { Badge } from '#/components/ui/badge'
 import { ChevronDown, Crown, Store } from 'lucide-react'
 
 export function WorkspaceSwitcher() {
+  const { t } = useTranslation()
   const { memberships, activeMembership, setActiveTenantId } = useSessionBootstrap()
 
   return (
@@ -20,14 +22,14 @@ export function WorkspaceSwitcher() {
       <DropdownMenuTrigger asChild>
         <Button
           variant="outline"
-          className="h-auto w-full justify-between rounded-[1.3rem] border-white/[0.10] bg-white/[0.05] px-3 py-3 text-start text-sidebar-foreground hover:bg-white/[0.08]"
+          className="h-auto w-full justify-between rounded-[1.1rem] border-white/[0.08] bg-white/[0.04] px-3 py-2.5 text-start text-sidebar-foreground shadow-none hover:bg-white/[0.07]"
         >
           <span className="flex min-w-0 items-center gap-3">
-            <span className="flex size-10 items-center justify-center rounded-2xl bg-sidebar-primary/[0.18] text-sidebar-primary">
+            <span className="flex size-9 items-center justify-center rounded-xl bg-sidebar-primary/[0.16] text-sidebar-primary">
               <Store />
             </span>
             <span className="min-w-0">
-              <span className="block truncate font-semibold">
+              <span className="block truncate text-sm font-semibold">
                 {activeMembership.tenantName}
               </span>
               <span className="block truncate text-xs text-sidebar-foreground/65">
@@ -56,10 +58,20 @@ export function WorkspaceSwitcher() {
                 <span className="truncate text-xs text-muted-foreground">
                   {membership.regionLabel}
                 </span>
+                <span className="truncate text-xs text-muted-foreground/80">
+                  {membership.defaultOutletLabel}
+                </span>
               </span>
-              <Badge variant="secondary" className="capitalize">
-                {membership.role}
-              </Badge>
+              <div className="flex flex-col items-end gap-2">
+                <Badge variant="secondary" className="capitalize">
+                  {membership.role}
+                </Badge>
+                {membership.tenantId === activeMembership.tenantId ? (
+                  <span className="text-[0.68rem] font-semibold uppercase tracking-[0.18em] text-primary">
+                    {t('command.current')}
+                  </span>
+                ) : null}
+              </div>
             </DropdownMenuItem>
           ))}
         </DropdownMenuGroup>

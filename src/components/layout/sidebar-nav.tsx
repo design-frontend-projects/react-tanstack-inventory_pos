@@ -1,5 +1,8 @@
 "use client"
 
+import { useTranslation } from 'react-i18next'
+import { Link, useRouterState } from '@tanstack/react-router'
+import { ChevronDown } from 'lucide-react'
 import {
   SidebarGroup,
   SidebarMenu,
@@ -9,66 +12,12 @@ import {
   SidebarMenuSubButton,
   SidebarMenuSubItem,
 } from '#/components/ui/sidebar'
-import {
-  Boxes,
-  ChevronDown,
-  ChefHat,
-  ClipboardList,
-  LayoutDashboard,
-  MapPinned,
-  PackageSearch,
-  PlugZap,
-  ReceiptText,
-  RotateCcw,
-  ShieldCheck,
-  ShoppingBasket,
-  BellRing,
-  UsersRound,
-} from 'lucide-react'
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from '#/components/ui/collapsible'
-import { useTranslation } from 'react-i18next'
-import { Link, useRouterState } from '@tanstack/react-router'
-import { Badge } from '#/components/ui/badge'
-
-const navSections = [
-  {
-    key: 'inventory',
-    icon: Boxes,
-    items: [
-      { key: 'inventoryOverview', to: '/inventory', icon: PackageSearch },
-      { key: 'inventoryCatalog', to: '/inventory/catalog', icon: ClipboardList },
-      { key: 'inventoryOutlets', to: '/outlets', icon: MapPinned },
-      { key: 'inventoryStock', to: '/inventory/stock', icon: ReceiptText },
-    ],
-  },
-  {
-    key: 'restaurant',
-    icon: ChefHat,
-    items: [
-      { key: 'restaurantKitchen', to: '/restaurant/kitchen', icon: ChefHat },
-      { key: 'restaurantMenu', to: '/restaurant/menu', icon: ShoppingBasket },
-      { key: 'restaurantTables', to: '/restaurant/tables', icon: ReceiptText },
-    ],
-  },
-  {
-    key: 'pos',
-    icon: ShoppingBasket,
-    items: [
-      { key: 'posCheckout', to: '/pos', icon: ShoppingBasket },
-      { key: 'posOrders', to: '/pos/orders', icon: ClipboardList },
-      { key: 'posReturns', to: '/pos/returns', icon: RotateCcw },
-    ],
-  },
-  {
-    key: 'systemAdmin',
-    icon: ShieldCheck,
-    items: [
-      { key: 'systemUsers', to: '/settings/users', icon: UsersRound },
-      { key: 'systemNotifications', to: '/settings/notifications', icon: BellRing },
-      { key: 'systemIntegrations', to: '/settings/integrations', icon: PlugZap },
-    ],
-  },
-] as const
+import {
+  appNavSections,
+  dashboardNavItem,
+  isAppPathActive,
+} from '#/lib/navigation/app-nav'
 
 export function SidebarNav() {
   const { t } = useTranslation()
@@ -77,59 +26,65 @@ export function SidebarNav() {
   })
 
   return (
-    <div className="flex flex-col gap-2">
+    <div className="flex flex-col gap-1.5">
       <SidebarGroup className="pt-0">
         <SidebarMenu>
           <SidebarMenuItem>
             <SidebarMenuButton
               asChild
               size="lg"
-              isActive={pathname === '/dashboard'}
-              className="rounded-2xl"
+              isActive={isAppPathActive(pathname, dashboardNavItem.to)}
+              className="rounded-[1rem] border border-transparent px-3 text-sidebar-foreground/88 data-[active=true]:border-sidebar-border/50 data-[active=true]:bg-sidebar-accent/80"
             >
-              <Link to="/dashboard">
-                <LayoutDashboard />
-                <span>{t('nav.dashboard')}</span>
-                <Badge variant="secondary" className="ms-auto">
-                  Live
-                </Badge>
+              <Link to={dashboardNavItem.to}>
+                <dashboardNavItem.icon />
+                <span>{t(dashboardNavItem.titleKey, dashboardNavItem.fallbackTitle)}</span>
+                <span className="ms-auto size-2 rounded-full bg-sidebar-primary" />
               </Link>
             </SidebarMenuButton>
           </SidebarMenuItem>
         </SidebarMenu>
       </SidebarGroup>
 
-      {navSections.map((section) => {
+      {appNavSections.map((section) => {
+        const hasActiveChild = section.items.some((item) =>
+          isAppPathActive(pathname, item.to)
+        )
         const SectionIcon = section.icon
 
         return (
-          <SidebarGroup key={section.key} className="py-0">
-            <Collapsible
-              defaultOpen
-              className="group/collapsible rounded-[1.35rem] border border-white/[0.06] bg-white/[0.03] p-1"
-            >
+          <SidebarGroup key={section.id} className="py-0">
+            <Collapsible defaultOpen className="group/collapsible">
               <SidebarMenu>
-                <SidebarMenuItem>
+                <SidebarMenuItem className="rounded-[1.15rem] border border-transparent bg-white/[0.02] transition-colors hover:border-white/[0.06]">
                   <CollapsibleTrigger asChild>
-                    <SidebarMenuButton size="lg" className="rounded-[1rem]">
+                    <SidebarMenuButton
+                      size="lg"
+                      className="rounded-[1rem] px-3 text-sidebar-foreground/82 hover:text-sidebar-foreground"
+                      isActive={hasActiveChild}
+                    >
                       <SectionIcon />
-                      <span>{t(`nav.${section.key}`)}</span>
-                      <ChevronDown className="ms-auto transition-transform group-data-[state=open]/collapsible:rotate-180" />
+                      <span>{t(section.titleKey, section.fallbackTitle)}</span>
+                      <ChevronDown className="ms-auto text-sidebar-foreground/45 transition-transform group-data-[state=open]/collapsible:rotate-180" />
                     </SidebarMenuButton>
                   </CollapsibleTrigger>
+
                   <CollapsibleContent>
-                    <SidebarMenuSub className="mx-2 mb-2 mt-1 border-sidebar-border/60">
+                    <SidebarMenuSub className="mx-3 mb-3 mt-1 border-sidebar-border/45 px-2">
                       {section.items.map((item) => {
                         const ItemIcon = item.icon
-                        const isActive =
-                          pathname === item.to || pathname.startsWith(`${item.to}/`)
+                        const isActive = isAppPathActive(pathname, item.to)
 
                         return (
-                          <SidebarMenuSubItem key={item.to}>
-                            <SidebarMenuSubButton asChild isActive={isActive}>
+                          <SidebarMenuSubItem key={item.id}>
+                            <SidebarMenuSubButton
+                              asChild
+                              isActive={isActive}
+                              className="rounded-[0.95rem] px-2.5 text-sidebar-foreground/72 data-[active=true]:bg-sidebar-accent/70 data-[active=true]:text-sidebar-foreground"
+                            >
                               <Link to={item.to}>
                                 <ItemIcon />
-                                <span>{t(`nav.${item.key}`)}</span>
+                                <span>{t(item.titleKey, item.fallbackTitle)}</span>
                               </Link>
                             </SidebarMenuSubButton>
                           </SidebarMenuSubItem>

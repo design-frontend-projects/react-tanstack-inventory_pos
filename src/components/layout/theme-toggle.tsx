@@ -1,5 +1,7 @@
 "use client"
 
+import * as React from 'react'
+import { useTranslation } from 'react-i18next'
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -19,10 +21,23 @@ const themeOptions = [
 ] as const
 
 export function ThemeToggle({ className }: { className?: string }) {
+  const { t } = useTranslation()
   const { resolvedTheme, setTheme, theme } = useTheme()
+  const [mounted, setMounted] = React.useState(false)
 
-  const activeTheme = themeOptions.find((option) => option.value === theme)
-  const ActiveIcon = activeTheme?.icon ?? SunMedium
+  React.useEffect(() => {
+    setMounted(true)
+  }, [])
+
+  const activeTheme = mounted
+    ? themeOptions.find((option) => option.value === theme)
+    : undefined
+  const ActiveIcon = activeTheme?.icon ?? LaptopMinimal
+  const currentThemeLabel = !mounted
+    ? t('theme.options.system')
+    : resolvedTheme === 'dark'
+      ? t('theme.current.night')
+      : t('theme.current.day')
 
   return (
     <DropdownMenu>
@@ -31,12 +46,12 @@ export function ThemeToggle({ className }: { className?: string }) {
           variant="outline"
           size="sm"
           className={cn(
-            'justify-start rounded-full border-border/60 bg-background/70 px-3 text-muted-foreground',
+            'justify-start rounded-full border-border/60 bg-background/75 px-3 text-muted-foreground shadow-none',
             className
           )}
         >
           <ActiveIcon data-icon="inline-start" />
-          {resolvedTheme === 'dark' ? 'Night' : 'Day'}
+          {currentThemeLabel}
         </Button>
       </DropdownMenuTrigger>
       <DropdownMenuContent align="end" className="min-w-40">
@@ -49,7 +64,7 @@ export function ThemeToggle({ className }: { className?: string }) {
                 onSelect={() => setTheme(option.value)}
               >
                 <Icon />
-                {option.label}
+                {t(`theme.options.${option.value}`)}
               </DropdownMenuItem>
             )
           })}

@@ -27,7 +27,7 @@ Select:
 
 ```powershell
 pnpm add @tanstack/react-query zustand zod @supabase/supabase-js i18next react-i18next next-themes @prisma/adapter-pg pg
-pnpm add -D prisma @playwright/test vitest @testing-library/react @testing-library/jest-dom
+pnpm add -D prisma dotenv @playwright/test vitest @testing-library/react @testing-library/jest-dom
 pnpm dlx shadcn@latest init
 ```
 
@@ -51,23 +51,27 @@ ONESIGNAL_APP_ID=
 ONESIGNAL_APP_API_KEY=
 ```
 
+Use the split intentionally:
+
+- `DATABASE_URL` is the pooled runtime connection string consumed by the Prisma pg adapter.
+- `DIRECT_URL` is the direct connection string used only by Prisma CLI commands through `prisma.config.ts`.
+
 Before implementation, rename any existing browser-exposed secret keys so they are server-only.
 
 ## 5. Set up Prisma and PostgreSQL access
 
-```powershell
-pnpm prisma init
-```
-
 Then:
 
+- Add `prisma.config.ts` as the Prisma CLI source of truth
 - Define the multitenant schema in `prisma/schema.prisma`
-- Generate the client
+- Generate the client into `src/server/db/generated/prisma`
 - Run the first migration
 
 ```powershell
-pnpm prisma migrate dev --name init_multitenant_pos
+pnpm prisma validate
 pnpm prisma generate
+pnpm prisma migrate dev --name init_multitenant_pos
+pnpm prisma db seed
 ```
 
 ## 6. Create the shared application layers

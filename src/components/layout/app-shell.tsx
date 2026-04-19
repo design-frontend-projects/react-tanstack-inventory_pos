@@ -1,5 +1,7 @@
 "use client"
 
+import { useTranslation } from 'react-i18next'
+import { useNavigate, useRouterState } from '@tanstack/react-router'
 import { Avatar, AvatarFallback } from '#/components/ui/avatar'
 import { Badge } from '#/components/ui/badge'
 import {
@@ -12,33 +14,20 @@ import {
   SidebarRail,
   SidebarTrigger,
 } from '#/components/ui/sidebar'
-import { useSessionBootstrap } from '#/features/auth/use-session-bootstrap'
 import { SidebarNav } from '#/components/layout/sidebar-nav'
+import { TopCommand } from '#/components/layout/top-command'
 import { WorkspaceSwitcher } from '#/components/layout/workspace-switcher'
 import { LanguageSwitcher } from '#/components/layout/language-switcher'
 import { ThemeToggle } from '#/components/layout/theme-toggle'
+import { useSessionBootstrap } from '#/features/auth/use-session-bootstrap'
 import { useLayoutStore } from '#/features/layout/layout-store'
-import { useRouterState } from '@tanstack/react-router'
-
-const routeLabels: Record<string, string> = {
-  '/dashboard': 'Operations overview',
-  '/inventory': 'Inventory overview',
-  '/inventory/catalog': 'Catalog architecture',
-  '/inventory/stock': 'Stock visibility',
-  '/outlets': 'Outlet coverage',
-  '/restaurant/kitchen': 'Kitchen board',
-  '/restaurant/menu': 'Menu engineering',
-  '/restaurant/tables': 'Table service',
-  '/pos': 'Live checkout',
-  '/pos/orders': 'Order queue',
-  '/pos/returns': 'Return handling',
-  '/settings/users': 'Access control',
-  '/settings/notifications': 'Notification control',
-  '/settings/integrations': 'Integration posture',
-}
+import { getAppNavContext } from '#/lib/navigation/app-nav'
 
 export function AppShell({ children }: { children: React.ReactNode }) {
-  const { user, activeMembership } = useSessionBootstrap()
+  const { t } = useTranslation()
+  const navigate = useNavigate()
+  const { user, memberships, activeMembership, setActiveTenantId } =
+    useSessionBootstrap()
   const direction = useLayoutStore((state) => state.direction)
   const sidebarOpen = useLayoutStore((state) => state.sidebarOpen)
   const setSidebarOpen = useLayoutStore((state) => state.setSidebarOpen)
@@ -50,7 +39,11 @@ export function AppShell({ children }: { children: React.ReactNode }) {
     select: (state) => state.location.pathname,
   })
 
-  const activeLabel = routeLabels[pathname] ?? 'Command surface'
+  const { activeItem, activeSection } = getAppNavContext(pathname)
+  const activeLabel = t(activeItem.titleKey, activeItem.fallbackTitle)
+  const activeSectionLabel = activeSection
+    ? t(activeSection.titleKey, activeSection.fallbackTitle)
+    : t('actions.overview')
   const sidebarSide = direction === 'rtl' ? 'right' : 'left'
 
   return (
@@ -68,27 +61,30 @@ export function AppShell({ children }: { children: React.ReactNode }) {
         className="border-e-0 md:p-3"
       >
         <div className="ops-sidebar-shell flex size-full flex-col rounded-[1.65rem] border border-white/[0.06]">
-          <SidebarHeader className="gap-3 px-3 pt-3">
-            <div className="rounded-[1.5rem] border border-white/[0.08] bg-white/[0.04] px-3 py-4">
-              <p className="ops-kicker text-sidebar-foreground/55">Control Room</p>
-              <h1 className="mt-2 text-lg font-semibold text-sidebar-foreground">
-                Meridian Operations Stack
+          <SidebarHeader className="gap-4 px-3 pt-3">
+            <div className="rounded-[1.35rem] border border-white/[0.08] bg-white/[0.03] px-3 py-4">
+              <p className="ops-kicker text-sidebar-foreground/52">
+                {t('app.title')}
+              </p>
+              <h1 className="mt-2 text-base font-semibold text-sidebar-foreground md:text-lg">
+                {t('app.deckTitle')}
               </h1>
-              <p className="mt-1 text-sm text-sidebar-foreground/60">
-                Inventory, restaurant, POS, and admin workflows stay in one
-                deliberate shell.
+              <p className="mt-1 text-sm leading-6 text-sidebar-foreground/62">
+                {t('app.subtitle')}
               </p>
             </div>
             <WorkspaceSwitcher />
           </SidebarHeader>
-          <SidebarContent className="px-2 pb-2">
+
+          <SidebarContent className="px-2 pb-3">
             <SidebarNav />
           </SidebarContent>
+
           <SidebarFooter className="gap-3 px-3 pb-3">
-            <div className="rounded-[1.45rem] border border-white/[0.08] bg-white/[0.04] p-3 text-sidebar-foreground">
+            <div className="rounded-[1.35rem] border border-white/[0.08] bg-white/[0.03] p-3 text-sidebar-foreground">
               <div className="flex items-center gap-3">
-                <Avatar className="size-10 rounded-2xl border border-white/[0.10] bg-white/[0.08]">
-                  <AvatarFallback className="rounded-2xl bg-transparent text-sidebar-foreground">
+                <Avatar className="size-10 rounded-xl border border-white/[0.08] bg-white/[0.06]">
+                  <AvatarFallback className="rounded-xl bg-transparent text-sidebar-foreground">
                     AK
                   </AvatarFallback>
                 </Avatar>
@@ -101,36 +97,52 @@ export function AppShell({ children }: { children: React.ReactNode }) {
                   </p>
                 </div>
               </div>
-              <div className="mt-3 flex items-center justify-between gap-2">
+              <div className="mt-3 flex items-center justify-between gap-2 border-t border-white/[0.08] pt-3">
                 <Badge variant="secondary" className="capitalize">
                   {activeMembership.role}
                 </Badge>
-                <span className="text-xs text-sidebar-foreground/62">
+                <span className="truncate text-xs text-sidebar-foreground/62">
                   {activeMembership.defaultOutletLabel}
                 </span>
               </div>
             </div>
           </SidebarFooter>
+
           <SidebarRail />
         </div>
       </Sidebar>
 
       <SidebarInset className="min-h-svh bg-transparent">
-        <header className="ops-topbar sticky top-0 z-20 px-4 py-4 md:px-8">
-          <div className="flex flex-wrap items-center gap-3">
-            <SidebarTrigger className="rounded-full border border-border/60 bg-background/70" />
-            <div className="min-w-0">
-              <p className="ops-kicker">Active section</p>
-              <div className="flex flex-wrap items-center gap-3">
-                <strong className="truncate text-sm font-semibold md:text-base">
-                  {activeLabel}
-                </strong>
-                <span className="hidden text-sm text-muted-foreground md:inline">
-                  {activeMembership.tenantName}
-                </span>
+        <header className="ops-topbar sticky top-0 z-20 px-4 py-3 md:px-8 md:py-4">
+          <div className="grid grid-cols-[minmax(0,1fr)_auto] items-center gap-3 md:grid-cols-[minmax(0,1fr)_minmax(22rem,32rem)_auto]">
+            <div className="flex min-w-0 items-center gap-3">
+              <SidebarTrigger className="rounded-full border border-border/70 bg-background/75 shadow-none" />
+              <div className="min-w-0">
+                <p className="ops-kicker">{t('header.sectionLabel')}</p>
+                <div className="flex min-w-0 flex-wrap items-center gap-2">
+                  <strong className="truncate text-sm font-semibold md:text-base">
+                    {activeLabel}
+                  </strong>
+                  <span className="hidden rounded-full border border-border/70 bg-background/70 px-2.5 py-1 text-xs font-medium text-muted-foreground md:inline-flex">
+                    {activeSectionLabel}
+                  </span>
+                  <span className="hidden truncate text-sm text-muted-foreground xl:inline">
+                    {activeMembership.tenantName}
+                  </span>
+                </div>
               </div>
             </div>
-            <div className="ms-auto flex flex-wrap items-center gap-2">
+
+            <TopCommand
+              pathname={pathname}
+              memberships={memberships}
+              activeTenantId={activeMembership.tenantId}
+              onNavigate={(to) => void navigate({ to })}
+              onSelectWorkspace={setActiveTenantId}
+              className="order-3 col-span-full md:order-2 md:col-span-1 md:max-w-[32rem] md:justify-self-center"
+            />
+
+            <div className="order-2 flex flex-wrap items-center justify-end gap-2 md:order-3">
               <LanguageSwitcher />
               <ThemeToggle />
             </div>

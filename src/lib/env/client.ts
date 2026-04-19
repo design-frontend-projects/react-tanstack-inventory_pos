@@ -1,9 +1,34 @@
 import { z } from 'zod'
 
+const optionalEnv = z.preprocess((value) => {
+  if (typeof value !== 'string') {
+    return undefined
+  }
+
+  const normalizedValue = value.trim()
+
+  return normalizedValue.length > 0 ? normalizedValue : undefined
+}, z.string().optional())
+
+const requiredEnv = (name: string) =>
+  z.preprocess(
+    (value) => (typeof value === 'string' ? value.trim() : ''),
+    z.string().min(1, `${name} is required`)
+  )
+
+const requiredUrlEnv = (name: string) =>
+  z.preprocess(
+    (value) => (typeof value === 'string' ? value.trim() : ''),
+    z
+      .string()
+      .min(1, `${name} is required`)
+      .url(`${name} must be a valid URL`)
+  )
+
 const clientEnvSchema = z.object({
-  VITE_SUPABASE_URL: z.string().url().optional().or(z.literal('')),
-  VITE_SUPABASE_ANON_KEY: z.string().optional(),
-  VITE_GOOGLE_MAPS_API_KEY: z.string().optional(),
+  VITE_SUPABASE_URL: requiredUrlEnv('VITE_SUPABASE_URL'),
+  VITE_SUPABASE_ANON_KEY: requiredEnv('VITE_SUPABASE_ANON_KEY'),
+  VITE_GOOGLE_MAPS_API_KEY: optionalEnv,
 })
 
 export const clientEnv = clientEnvSchema.parse({

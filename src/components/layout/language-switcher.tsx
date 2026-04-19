@@ -1,5 +1,6 @@
 "use client"
 
+import { useTranslation } from 'react-i18next'
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -14,6 +15,7 @@ import type { AppLocale } from '#/types/app'
 import { Globe2 } from 'lucide-react'
 
 export function LanguageSwitcher() {
+  const { t } = useTranslation()
   const locale = useLayoutStore((state) => state.locale)
   const setLocale = useLayoutStore((state) => state.setLocale)
 
@@ -23,7 +25,8 @@ export function LanguageSwitcher() {
         <Button
           variant="outline"
           size="sm"
-          className="justify-start rounded-full border-border/60 bg-background/70 px-3 text-muted-foreground"
+          aria-label={t('actions.language')}
+          className="justify-start rounded-full border-border/60 bg-background/75 px-3 text-muted-foreground shadow-none"
         >
           <Globe2 data-icon="inline-start" />
           {localeMeta[locale].nativeLabel}

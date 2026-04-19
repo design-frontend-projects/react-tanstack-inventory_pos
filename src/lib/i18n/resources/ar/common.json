@@ -1,7 +1,8 @@
 {
   "app": {
-    "title": "غرفة التحكم ميريديان",
-    "subtitle": "تشغيل متعدد المستأجرين للمخزون والمطعم ونقطة البيع وإدارة النظام"
+    "title": "غرفة تحكم ميريديان",
+    "subtitle": "تشغيل متعدد المستأجرين للمخزون والمطعم ونقطة البيع وإدارة النظام",
+    "deckTitle": "منصة عمليات ميريديان"
   },
   "actions": {
     "switchWorkspace": "تبديل مساحة العمل",
@@ -9,7 +10,39 @@
     "theme": "المظهر",
     "overview": "نظرة عامة",
     "openBoard": "فتح اللوحة",
-    "continue": "متابعة"
+    "continue": "متابعة",
+    "openDashboard": "فتح لوحة التحكم",
+    "chooseWorkspace": "اختيار مساحة العمل",
+    "enterWorkspace": "دخول مساحة العمل",
+    "continueInWorkspace": "المتابعة داخل مساحة العمل"
+  },
+  "header": {
+    "sectionLabel": "السطح النشط",
+    "searchLabel": "فتح سطح الأوامر",
+    "searchPlaceholder": "ابحث عن المسارات والصفحات ومساحات العمل"
+  },
+  "command": {
+    "dialogTitle": "سطح الأوامر",
+    "dialogDescription": "ابحث داخل تنقل التطبيق الداخلي ومساحات العمل المتاحة.",
+    "searchPlaceholder": "اكتب مسارًا أو صفحة أو مساحة عمل",
+    "noResults": "لا توجد نتائج مطابقة.",
+    "current": "الحالي",
+    "groups": {
+      "navigation": "التنقل",
+      "pages": "الصفحات",
+      "workspaces": "مساحات العمل"
+    }
+  },
+  "theme": {
+    "current": {
+      "day": "وضع النهار",
+      "night": "وضع الليل"
+    },
+    "options": {
+      "light": "فاتح",
+      "dark": "داكن",
+      "system": "النظام"
+    }
   },
   "nav": {
     "dashboard": "لوحة القيادة",

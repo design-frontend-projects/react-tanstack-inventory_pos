@@ -24,3 +24,4 @@ todos.json
 Thumbs.db
 supabase/.temp
 supabase/.branches
+src/server/db/generated/prisma
