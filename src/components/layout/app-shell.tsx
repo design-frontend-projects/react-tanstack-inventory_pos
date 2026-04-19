@@ -17,6 +17,7 @@ import { SidebarNav } from '#/components/layout/sidebar-nav'
 import { WorkspaceSwitcher } from '#/components/layout/workspace-switcher'
 import { LanguageSwitcher } from '#/components/layout/language-switcher'
 import { ThemeToggle } from '#/components/layout/theme-toggle'
+import { useLayoutStore } from '#/features/layout/layout-store'
 import { useRouterState } from '@tanstack/react-router'
 
 const routeLabels: Record<string, string> = {
@@ -38,18 +39,33 @@ const routeLabels: Record<string, string> = {
 
 export function AppShell({ children }: { children: React.ReactNode }) {
   const { user, activeMembership } = useSessionBootstrap()
+  const direction = useLayoutStore((state) => state.direction)
+  const sidebarOpen = useLayoutStore((state) => state.sidebarOpen)
+  const setSidebarOpen = useLayoutStore((state) => state.setSidebarOpen)
+  const sidebarOpenMobile = useLayoutStore((state) => state.sidebarOpenMobile)
+  const setSidebarOpenMobile = useLayoutStore(
+    (state) => state.setSidebarOpenMobile
+  )
   const pathname = useRouterState({
     select: (state) => state.location.pathname,
   })
 
   const activeLabel = routeLabels[pathname] ?? 'Command surface'
+  const sidebarSide = direction === 'rtl' ? 'right' : 'left'
 
   return (
-    <SidebarProvider defaultOpen>
+    <SidebarProvider
+      open={sidebarOpen}
+      onOpenChange={setSidebarOpen}
+      openMobile={sidebarOpenMobile}
+      onOpenMobileChange={setSidebarOpenMobile}
+    >
       <Sidebar
+        side={sidebarSide}
+        dir={direction}
         collapsible="icon"
         variant="inset"
-        className="border-r-0 md:p-3"
+        className="border-e-0 md:p-3"
       >
         <div className="ops-sidebar-shell flex size-full flex-col rounded-[1.65rem] border border-white/[0.06]">
           <SidebarHeader className="gap-3 px-3 pt-3">
@@ -114,7 +130,7 @@ export function AppShell({ children }: { children: React.ReactNode }) {
                 </span>
               </div>
             </div>
-            <div className="ml-auto flex flex-wrap items-center gap-2">
+            <div className="ms-auto flex flex-wrap items-center gap-2">
               <LanguageSwitcher />
               <ThemeToggle />
             </div>

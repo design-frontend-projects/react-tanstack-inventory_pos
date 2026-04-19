@@ -2,10 +2,13 @@ import { HeadContent, Scripts, createRootRoute } from '@tanstack/react-router'
 import { TanStackRouterDevtoolsPanel } from '@tanstack/react-router-devtools'
 import { TanStackDevtools } from '@tanstack/react-devtools'
 import { AppProviders } from '#/components/layout/app-providers'
+import { createLayoutInitScript } from '#/lib/layout/persistence'
 
 import appCss from '../styles.css?url'
 
+const LAYOUT_INIT_SCRIPT = createLayoutInitScript()
 const THEME_INIT_SCRIPT = `(function(){try{var stored=window.localStorage.getItem('theme');var mode=stored==='light'||stored==='dark'||stored==='system'?stored:'system';var prefersDark=window.matchMedia('(prefers-color-scheme: dark)').matches;var resolved=mode==='dark'||(mode==='system'&&prefersDark);document.documentElement.classList.toggle('dark',resolved);document.documentElement.style.colorScheme=resolved?'dark':'light';}catch(e){}})();`
+const DOCUMENT_INIT_SCRIPT = `${LAYOUT_INIT_SCRIPT}${THEME_INIT_SCRIPT}`
 
 export const Route = createRootRoute({
   head: () => ({
@@ -33,9 +36,9 @@ export const Route = createRootRoute({
 
 function RootDocument({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="en" suppressHydrationWarning>
+    <html lang="en" dir="ltr" suppressHydrationWarning>
       <head>
-        <script dangerouslySetInnerHTML={{ __html: THEME_INIT_SCRIPT }} />
+        <script dangerouslySetInnerHTML={{ __html: DOCUMENT_INIT_SCRIPT }} />
         <HeadContent />
       </head>
       <body className="min-h-screen font-sans antialiased [overflow-wrap:anywhere]">

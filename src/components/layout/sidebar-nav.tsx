@@ -11,7 +11,7 @@ import {
 } from '#/components/ui/sidebar'
 import {
   Boxes,
-  ChevronRight,
+  ChevronDown,
   ChefHat,
   ClipboardList,
   LayoutDashboard,
@@ -90,7 +90,7 @@ export function SidebarNav() {
               <Link to="/dashboard">
                 <LayoutDashboard />
                 <span>{t('nav.dashboard')}</span>
-                <Badge variant="secondary" className="ml-auto">
+                <Badge variant="secondary" className="ms-auto">
                   Live
                 </Badge>
               </Link>
@@ -114,7 +114,7 @@ export function SidebarNav() {
                     <SidebarMenuButton size="lg" className="rounded-[1rem]">
                       <SectionIcon />
                       <span>{t(`nav.${section.key}`)}</span>
-                      <ChevronRight className="ml-auto transition-transform group-data-[state=open]/collapsible:rotate-90" />
+                      <ChevronDown className="ms-auto transition-transform group-data-[state=open]/collapsible:rotate-180" />
                     </SidebarMenuButton>
                   </CollapsibleTrigger>
                   <CollapsibleContent>

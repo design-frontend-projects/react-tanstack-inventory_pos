@@ -2,22 +2,23 @@
 
 import * as React from 'react'
 import { TooltipProvider } from '#/components/ui/tooltip'
-import { usePreferencesStore } from '#/features/preferences/preferences-store'
+import { useLayoutStore } from '#/features/layout/layout-store'
 import i18n, { applyLocaleDocument, resolveLocale } from '#/lib/i18n'
 import { AppQueryProvider } from '#/lib/query/query-client'
 import { ThemeProvider } from '#/lib/theme/theme-provider'
 
 function LocaleRuntimeSync() {
-  const locale = usePreferencesStore((state) => state.locale)
+  const locale = useLayoutStore((state) => state.locale)
+  const direction = useLayoutStore((state) => state.direction)
 
   React.useEffect(() => {
     const nextLocale = resolveLocale(locale)
-    applyLocaleDocument(nextLocale)
+    applyLocaleDocument(nextLocale, direction)
 
     if (i18n.language !== nextLocale) {
       void i18n.changeLanguage(nextLocale)
     }
-  }, [locale])
+  }, [direction, locale])
 
   return null
 }

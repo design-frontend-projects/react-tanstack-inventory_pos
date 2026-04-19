@@ -8,14 +8,14 @@ import {
   DropdownMenuTrigger,
 } from '#/components/ui/dropdown-menu'
 import { Button } from '#/components/ui/button'
-import { usePreferencesStore } from '#/features/preferences/preferences-store'
+import { useLayoutStore } from '#/features/layout/layout-store'
 import { localeMeta } from '#/lib/i18n'
 import type { AppLocale } from '#/types/app'
 import { Globe2 } from 'lucide-react'
 
 export function LanguageSwitcher() {
-  const locale = usePreferencesStore((state) => state.locale)
-  const setLocale = usePreferencesStore((state) => state.setLocale)
+  const locale = useLayoutStore((state) => state.locale)
+  const setLocale = useLayoutStore((state) => state.setLocale)
 
   return (
     <DropdownMenu>

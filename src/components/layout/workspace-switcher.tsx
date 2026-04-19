@@ -20,7 +20,7 @@ export function WorkspaceSwitcher() {
       <DropdownMenuTrigger asChild>
         <Button
           variant="outline"
-          className="h-auto w-full justify-between rounded-[1.3rem] border-white/[0.10] bg-white/[0.05] px-3 py-3 text-left text-sidebar-foreground hover:bg-white/[0.08]"
+          className="h-auto w-full justify-between rounded-[1.3rem] border-white/[0.10] bg-white/[0.05] px-3 py-3 text-start text-sidebar-foreground hover:bg-white/[0.08]"
         >
           <span className="flex min-w-0 items-center gap-3">
             <span className="flex size-10 items-center justify-center rounded-2xl bg-sidebar-primary/[0.18] text-sidebar-primary">
