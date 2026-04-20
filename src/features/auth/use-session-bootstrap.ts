@@ -26,6 +26,7 @@ async function fetchSessionBootstrap(
       activeTenantId: null,
       activeMembership: null,
       context: null,
+      completionFlow: null,
     }
   }
 
@@ -107,10 +108,12 @@ export function useSessionBootstrap() {
     })
   }, [clearPreferences, queryClient])
 
-  const needsProfileCompletion =
+  const needsAccountCompletion =
     session?.authenticated === true &&
     session.user !== null &&
-    !session.user.onboardingCompleted
+    (!session.user.profileCompleted ||
+      !session.user.onboardingCompleted ||
+      session.activeMembership?.status === 'invited')
 
   return {
     ...sessionQuery,
@@ -119,12 +122,14 @@ export function useSessionBootstrap() {
     activeMembership: session?.activeMembership ?? null,
     activeTenantId: session?.activeTenantId ?? null,
     context: session?.context ?? null,
+    completionFlow: session?.completionFlow ?? null,
     isAuthenticated: session?.authenticated ?? false,
     needsTenantSelection:
       (session?.authenticated ?? false) &&
       (session?.memberships.length ?? 0) > 1 &&
       !session?.activeTenantId,
-    needsProfileCompletion,
+    needsAccountCompletion,
+    needsProfileCompletion: needsAccountCompletion,
     setActiveTenantId: async (tenantId: string) => {
       await switchTenantMutation.mutateAsync(tenantId)
     },

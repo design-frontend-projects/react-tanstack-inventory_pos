@@ -17,6 +17,22 @@ export async function findLatestInvitationForTenantEmail(
   })
 }
 
+export async function findPendingInvitationForTenantEmail(
+  tenantId: string,
+  email: string
+) {
+  return prisma.user_invitations.findFirst({
+    where: {
+      tenantId,
+      email: normalizeEmail(email),
+      status: 'PENDING',
+    },
+    orderBy: {
+      createdAt: 'desc',
+    },
+  })
+}
+
 export async function createInvitation(input: {
   tenantId: string
   email: string
@@ -84,6 +100,20 @@ export async function findPendingInvitationForAuthUser(
   })
 }
 
+export async function listLatestInvitationsForTenant(tenantId: string) {
+  return prisma.user_invitations.findMany({
+    where: {
+      tenantId,
+    },
+    include: {
+      role: true,
+    },
+    orderBy: {
+      createdAt: 'desc',
+    },
+  })
+}
+
 export async function findInvitationById(invitationId: string) {
   return prisma.user_invitations.findUnique({
     where: {
@@ -92,6 +122,7 @@ export async function findInvitationById(invitationId: string) {
     include: {
       role: true,
       tenant: true,
+      invitedByProfile: true,
     },
   })
 }

@@ -6,6 +6,7 @@ import {
 import { canResendInvitation } from '#/features/auth/invitations'
 import type { Prisma } from '#/server/db/generated/prisma/client'
 import type {
+  AcceptInvitationInput,
   ChangeTenantUserPrimaryRoleInput,
   CompleteInvitedProfileInput,
   CurrentUserContext,
@@ -23,6 +24,11 @@ import {
 } from '#/server/auth/errors'
 import { createAdminSupabaseClient } from '#/server/auth/supabase-admin'
 import {
+  findAuthUserByEmail,
+  setAuthUserPassword,
+  updateAuthUserMetadata,
+} from '#/server/auth/supabase-admin-users'
+import {
   buildDisplayName,
   normalizeEmail,
   normalizeOptionalText,
@@ -36,13 +42,11 @@ import {
   updateInvitation,
 } from '#/server/repos/invitation-repo'
 import {
-  activateTenantUser,
-  createPendingTenantUser,
   findTenantUserById,
   findTenantUserByTenantAndProfile,
+  upsertTenantUser,
 } from '#/server/repos/membership-repo'
-import type { TenantUserAccessRecord } from '#/server/repos/membership-repo'
-import { ensurePreferenceProfile, setDefaultTenant } from '#/server/repos/preference-repo'
+import { setDefaultTenant } from '#/server/repos/preference-repo'
 import { findRoleByCode } from '#/server/repos/role-repo'
 import {
   ensureProfile,
@@ -50,37 +54,7 @@ import {
   updateProfileCompletion,
 } from '#/server/repos/profile-repo'
 
-async function findAuthUserByEmail(email: string) {
-  const adminClient = createAdminSupabaseClient()
-  let page = 1
-
-  while (page <= 10) {
-    const { data, error } = await adminClient.auth.admin.listUsers({
-      page,
-      perPage: 200,
-    })
-
-    if (error) {
-      throw new ValidationError(error.message)
-    }
-
-    const matchingUser = data.users.find(
-      (user) => normalizeEmail(user.email ?? '') === normalizeEmail(email)
-    )
-
-    if (matchingUser) {
-      return matchingUser
-    }
-
-    if (data.users.length < 200) {
-      break
-    }
-
-    page += 1
-  }
-
-  return null
-}
+const INVITATION_EXPIRY_IN_DAYS = 7
 
 function getActorRank(context: CurrentUserContext) {
   return Math.max(...context.roles.map((roleCode) => getRoleRank(roleCode)), 0)
@@ -98,6 +72,7 @@ async function syncPendingInvitationState(input: {
   authUserId?: string | null
   invitedByProfileId: string
   tenantId: string
+  expiresAt?: Date | null
 }) {
   return updateInvitation(input.invitationId, {
     email: normalizeEmail(input.email),
@@ -110,12 +85,80 @@ async function syncPendingInvitationState(input: {
     invitedByProfileId: input.invitedByProfileId,
     status: 'PENDING',
     acceptedAt: null,
+    revokedAt: null,
+    expiresAt: input.expiresAt ?? null,
     metadata: {
       tenantId: input.tenantId,
       roleCode: input.roleCode,
       roleId: input.roleId,
     },
   })
+}
+
+function buildInvitationCompletionUrl(origin: string, invitationId: string) {
+  const redirectUrl = new URL('/complete-account', origin)
+  redirectUrl.searchParams.set('flow', 'invite')
+  redirectUrl.searchParams.set('invitationId', invitationId)
+  return redirectUrl.toString()
+}
+
+function buildInvitationMetadata(input: {
+  invitationId: string
+  tenantId: string
+  roleCode: string
+  roleId: string
+  firstName: string
+  lastName: string
+  phone?: string | null
+  jobTitle?: string | null
+  invitedByProfileId: string
+}) {
+  return {
+    auth_flow: 'invite',
+    invitation_id: input.invitationId,
+    tenant_id: input.tenantId,
+    role_code: input.roleCode,
+    role_id: input.roleId,
+    invited_by: input.invitedByProfileId,
+    first_name: input.firstName,
+    last_name: input.lastName,
+    phone: normalizeOptionalText(input.phone),
+    job_title: normalizeOptionalText(input.jobTitle),
+  }
+}
+
+function getInvitationExpiryDate() {
+  const expiresAt = new Date()
+  expiresAt.setDate(expiresAt.getDate() + INVITATION_EXPIRY_IN_DAYS)
+  return expiresAt
+}
+
+function assertInvitationCanBeAccepted(
+  invitation: Awaited<ReturnType<typeof findInvitationById>>
+): asserts invitation is NonNullable<Awaited<ReturnType<typeof findInvitationById>>> {
+  if (!invitation) {
+    throw new NotFoundError('Invitation not found.')
+  }
+
+  const invitationStatus = invitation.status.toLowerCase() as InvitationStatusCode
+  if (invitationStatus === 'revoked') {
+    throw new ValidationError('This invitation has been revoked.')
+  }
+
+  if (invitationStatus === 'accepted') {
+    throw new ValidationError('This invitation has already been accepted.')
+  }
+
+  if (
+    invitation.expiresAt &&
+    invitation.expiresAt.getTime() < Date.now()
+  ) {
+    throw new ValidationError('This invitation has expired.')
+  }
+
+  if (invitationStatus !== 'pending') {
+    throw new ValidationError('Only pending invitations can be accepted.')
+  }
 }
 
 async function ensurePrimaryRoleAssignment(input: {
@@ -203,6 +246,7 @@ function mapTenantUserListItem(
     joinedAt: tenantUser.joinedAt?.toISOString() ?? null,
     roleCode: (primaryRole?.code ?? null) as TenantUserListItem['roleCode'],
     roleLabel: primaryRole?.name ?? null,
+    isOwner: tenantUser.isOwner,
     invitationId: invitation?.id ?? null,
     invitationStatus: invitation
       ? (invitation.status.toLowerCase() as TenantUserListItem['invitationStatus'])
@@ -365,6 +409,13 @@ export async function inviteTenantUser(
     throw new ConflictError('User already belongs to this tenant.')
   }
 
+  const latestInvitationStatus = latestInvitation?.status
+    .toLowerCase() as InvitationStatusCode | undefined
+
+  if (latestInvitationStatus === 'pending') {
+    throw new ConflictError('A pending invitation already exists for this email.')
+  }
+
   let profile = existingProfile
 
   if (!profile && existingAuthUser) {
@@ -377,170 +428,171 @@ export async function inviteTenantUser(
     })
   }
 
-  let tenantUser = existingTenantUser
-
-  const redirectTo = new URL('/complete-profile', input.origin).toString()
-  const adminClient = createAdminSupabaseClient()
-
   let authUserId = existingAuthUser?.id ?? profile?.authUserId ?? null
-
-  if (existingAuthUser) {
-    const { error } = await adminClient.auth.admin.generateLink({
-      type: 'magiclink',
-      email: normalizedEmail,
-      options: {
-        redirectTo,
-      },
-    })
-
-    if (error) {
-      throw new ValidationError(error.message)
-    }
-  } else {
-    const { data, error } = await adminClient.auth.admin.inviteUserByEmail(
-      normalizedEmail,
-      {
-        redirectTo,
-        data: {
-          first_name: input.firstName,
-          last_name: input.lastName,
-          phone: normalizeOptionalText(input.phone),
-          job_title: normalizeOptionalText(input.jobTitle),
-          tenant_id: input.tenantId,
-          role_code: input.roleCode,
-          invited_by: actor.profileId,
-        },
-      }
-    )
-
-    if (error) {
-      throw new ValidationError(error.message)
-    }
-
-    authUserId = data.user.id
-
-    if (authUserId) {
-      profile = await ensureProfile({
-        authUserId,
-        email: normalizedEmail,
-        firstName: input.firstName,
-        lastName: input.lastName,
-        phone: input.phone,
-      })
-    }
-  }
-
-  if (!profile) {
-    throw new ValidationError('Profile provisioning failed for the invited user.')
-  }
-
-  if (!tenantUser) {
-    tenantUser = await createPendingTenantUser({
+  let tenantUser =
+    profile &&
+    (await upsertTenantUser({
       tenantId: input.tenantId,
       profileId: profile.id,
       invitedByProfileId: actor.profileId,
       jobTitle: input.jobTitle,
-    })
-  }
+      isOwner: false,
+      status: 'INVITED',
+      joinedAt: null,
+    }))
 
-  if (!tenantUser) {
-    throw new ValidationError('Tenant membership provisioning failed for the invited user.')
-  }
-
-  if (
-    (tenantUser.jobTitle ?? null) !== normalizeOptionalText(input.jobTitle) ||
-    tenantUser.invitedByProfileId !== actor.profileId
-  ) {
-    tenantUser = await prisma.tenantUser.update({
-      where: {
-        id: tenantUser.id,
-      },
-      data: {
-        jobTitle: normalizeOptionalText(input.jobTitle),
-        invitedByProfileId: actor.profileId,
-      },
-      include: {
-        tenant: true,
-        profile: true,
-        roles: {
-          include: {
-            role: {
-              include: {
-                permissions: {
-                  include: {
-                    permission: true,
-                  },
-                },
-              },
-            },
-          },
-          orderBy: [{ isPrimary: 'desc' }, { assignedAt: 'desc' }],
-        },
-      },
-    })
-  }
-
-  await ensurePrimaryRoleAssignment({
-    tenantUserId: tenantUser.id,
-    roleId: role.id,
-    actorProfileId: actor.profileId,
-  })
-
-  const latestInvitationStatus = latestInvitation?.status
-    .toLowerCase() as InvitationStatusCode | undefined
-
-  if (latestInvitation && canResendInvitation(latestInvitationStatus)) {
-    await syncPendingInvitationState({
-      invitationId: latestInvitation.id,
-      email: normalizedEmail,
-      firstName: input.firstName,
-      lastName: input.lastName,
-      phone: input.phone,
-      jobTitle: input.jobTitle,
+  if (tenantUser) {
+    await ensurePrimaryRoleAssignment({
+      tenantUserId: tenantUser.id,
       roleId: role.id,
-      roleCode: input.roleCode,
-      authUserId,
-      invitedByProfileId: actor.profileId,
-      tenantId: input.tenantId,
+      actorProfileId: actor.profileId,
     })
-
-    return resendTenantInvitation(actor, latestInvitation.id, input.origin)
   }
 
-  const invitation = await createInvitation({
-        tenantId: input.tenantId,
-        email: normalizedEmail,
-        firstName: input.firstName,
-        lastName: input.lastName,
-        phone: normalizeOptionalText(input.phone),
-        jobTitle: normalizeOptionalText(input.jobTitle),
-        roleId: role.id,
-        authUserId,
-        invitedByProfileId: actor.profileId,
-        sentAt: new Date(),
-        metadata: {
-          tenantId: input.tenantId,
-          roleCode: input.roleCode,
+  const expiresAt = getInvitationExpiryDate()
+  const invitation =
+    latestInvitation && latestInvitationStatus === 'expired'
+      ? await syncPendingInvitationState({
+          invitationId: latestInvitation.id,
+          email: normalizedEmail,
+          firstName: input.firstName,
+          lastName: input.lastName,
+          phone: input.phone,
+          jobTitle: input.jobTitle,
           roleId: role.id,
+          roleCode: input.roleCode,
+          authUserId,
+          invitedByProfileId: actor.profileId,
+          tenantId: input.tenantId,
+          expiresAt,
+        })
+      : await createInvitation({
+          tenantId: input.tenantId,
+          email: normalizedEmail,
+          firstName: input.firstName,
+          lastName: input.lastName,
+          phone: normalizeOptionalText(input.phone),
+          jobTitle: normalizeOptionalText(input.jobTitle),
+          roleId: role.id,
+          authUserId,
+          invitedByProfileId: actor.profileId,
+          expiresAt,
+          metadata: {
+            tenantId: input.tenantId,
+            roleCode: input.roleCode,
+            roleId: role.id,
+          },
+        })
+
+  const redirectTo = buildInvitationCompletionUrl(input.origin, invitation.id)
+  const invitationMetadata = buildInvitationMetadata({
+    invitationId: invitation.id,
+    tenantId: input.tenantId,
+    roleCode: input.roleCode,
+    roleId: role.id,
+    firstName: input.firstName,
+    lastName: input.lastName,
+    phone: input.phone,
+    jobTitle: input.jobTitle,
+    invitedByProfileId: actor.profileId,
+  })
+  const adminClient = createAdminSupabaseClient()
+
+  try {
+    if (existingAuthUser) {
+      await updateAuthUserMetadata(existingAuthUser.id, {
+        ...(existingAuthUser.user_metadata as Record<string, unknown> | undefined),
+        ...invitationMetadata,
+      })
+
+      const { error } = await adminClient.auth.admin.generateLink({
+        type: 'magiclink',
+        email: normalizedEmail,
+        options: {
+          redirectTo,
         },
       })
+
+      if (error) {
+        throw new ValidationError(error.message)
+      }
+    } else {
+      const { data, error } = await adminClient.auth.admin.inviteUserByEmail(
+        normalizedEmail,
+        {
+          redirectTo,
+          data: invitationMetadata,
+        }
+      )
+
+      if (error) {
+        throw new ValidationError(error.message)
+      }
+
+      authUserId = data.user.id
+
+      if (authUserId) {
+        profile = await ensureProfile({
+          authUserId,
+          email: normalizedEmail,
+          firstName: input.firstName,
+          lastName: input.lastName,
+          phone: input.phone,
+        })
+
+        tenantUser = await upsertTenantUser({
+          tenantId: input.tenantId,
+          profileId: profile.id,
+          invitedByProfileId: actor.profileId,
+          jobTitle: input.jobTitle,
+          isOwner: false,
+          status: 'INVITED',
+          joinedAt: null,
+        })
+
+        if (tenantUser) {
+          await ensurePrimaryRoleAssignment({
+            tenantUserId: tenantUser.id,
+            roleId: role.id,
+            actorProfileId: actor.profileId,
+          })
+        }
+      }
+    }
+  } catch (error) {
+    await updateInvitation(invitation.id, {
+      status: 'FAILED',
+    })
+
+    throw error
+  }
+
+  const updatedInvitation = await updateInvitation(invitation.id, {
+    status: 'PENDING',
+    sentAt: new Date(),
+    authUserId,
+    metadata: invitationMetadata,
+  })
 
   await createAuditLog({
     tenantId: input.tenantId,
     actorProfileId: actor.profileId,
-    actionKey: 'invite.created',
+    actionKey:
+      latestInvitation && latestInvitationStatus === 'expired'
+        ? 'invite.resent'
+        : 'invite.created',
     entityType: 'user_invitation',
-    entityId: invitation.id,
+    entityId: updatedInvitation.id,
     newValues: {
       email: normalizedEmail,
       roleCode: input.roleCode,
-      tenantUserId: tenantUser.id,
+      tenantUserId: tenantUser?.id ?? null,
     },
   })
 
   return {
-    invitationId: invitation.id,
-    tenantUserId: tenantUser.id,
+    invitationId: updatedInvitation.id,
+    tenantUserId: tenantUser?.id ?? null,
   }
 }
 
@@ -565,12 +617,28 @@ export async function resendTenantInvitation(
   }
 
   const adminClient = createAdminSupabaseClient()
-  const redirectTo = new URL('/complete-profile', origin).toString()
+  const redirectTo = buildInvitationCompletionUrl(origin, invitation.id)
+  const metadata = buildInvitationMetadata({
+    invitationId: invitation.id,
+    tenantId: invitation.tenantId,
+    roleCode: invitation.role.code,
+    roleId: invitation.roleId,
+    firstName: invitation.firstName ?? '',
+    lastName: invitation.lastName ?? '',
+    phone: invitation.phone,
+    jobTitle: invitation.jobTitle,
+    invitedByProfileId: invitation.invitedByProfileId,
+  })
   const existingAuthUser =
     invitation.authUserId &&
     (await adminClient.auth.admin.getUserById(invitation.authUserId)).data.user
 
   if (existingAuthUser) {
+    await updateAuthUserMetadata(existingAuthUser.id, {
+      ...(existingAuthUser.user_metadata as Record<string, unknown> | undefined),
+      ...metadata,
+    })
+
     const { error } = await adminClient.auth.admin.generateLink({
       type: 'magiclink',
       email: invitation.email,
@@ -587,6 +655,7 @@ export async function resendTenantInvitation(
       invitation.email,
       {
         redirectTo,
+        data: metadata,
       }
     )
 
@@ -598,6 +667,8 @@ export async function resendTenantInvitation(
   const updatedInvitation = await updateInvitation(invitation.id, {
     status: 'PENDING',
     sentAt: new Date(),
+    expiresAt: getInvitationExpiryDate(),
+    metadata,
   })
 
   await createAuditLog({
@@ -616,38 +687,99 @@ export async function resendTenantInvitation(
   }
 }
 
-export async function completeInvitedProfile(
+export async function revokeTenantInvitation(
   actor: CurrentUserContext,
-  authUserEmail: string,
-  input: CompleteInvitedProfileInput
+  tenantId: string,
+  invitationId: string
 ) {
-  const invitation = await findPendingInvitationForAuthUser(actor.authUserId, authUserEmail)
+  const invitation = await findInvitationById(invitationId)
 
   if (!invitation) {
-    throw new NotFoundError('No pending invitation was found for this account.')
+    throw new NotFoundError('Invitation not found.')
+  }
+
+  if (actor.activeTenantId !== tenantId || invitation.tenantId !== tenantId) {
+    throw new ForbiddenError('Tenant mismatch for invitation revoke.')
+  }
+
+  const invitationStatus = invitation.status.toLowerCase() as InvitationStatusCode
+  if (invitationStatus === 'accepted') {
+    throw new ValidationError('Accepted invitations cannot be revoked.')
+  }
+
+  if (invitationStatus === 'revoked') {
+    throw new ValidationError('This invitation has already been revoked.')
+  }
+
+  const updatedInvitation = await updateInvitation(invitation.id, {
+    status: 'REVOKED',
+    revokedAt: new Date(),
+  })
+
+  await createAuditLog({
+    tenantId,
+    actorProfileId: actor.profileId,
+    actionKey: 'invite.revoked',
+    entityType: 'user_invitation',
+    entityId: invitation.id,
+    oldValues: {
+      status: invitationStatus,
+    },
+    newValues: {
+      status: updatedInvitation.status.toLowerCase(),
+    },
+  })
+
+  return {
+    invitationId: updatedInvitation.id,
+  }
+}
+
+export async function acceptInvitation(
+  actor: CurrentUserContext,
+  input: AcceptInvitationInput
+) {
+  const invitation = await findInvitationById(input.invitationId)
+  assertInvitationCanBeAccepted(invitation)
+
+  if (invitation.authUserId && invitation.authUserId !== actor.authUserId) {
+    throw new ForbiddenError('This invitation belongs to another account.')
+  }
+
+  if (normalizeEmail(invitation.email) !== normalizeEmail(actor.email)) {
+    throw new ForbiddenError('This invitation belongs to a different email address.')
+  }
+
+  if (input.password?.trim()) {
+    await setAuthUserPassword(actor.authUserId, input.password)
   }
 
   const profile = await ensureProfile({
     authUserId: actor.authUserId,
-    email: authUserEmail,
+    email: actor.email,
     firstName: input.firstName,
     lastName: input.lastName,
     phone: input.phone,
     avatarUrl: input.avatarUrl,
   })
 
-  let tenantUser: TenantUserAccessRecord | null = await findTenantUserByTenantAndProfile(
+  const existingTenantUser = await findTenantUserByTenantAndProfile(
     invitation.tenantId,
     profile.id
   )
-  if (!tenantUser) {
-    tenantUser = await createPendingTenantUser({
-      tenantId: invitation.tenantId,
-      profileId: profile.id,
-      invitedByProfileId: invitation.invitedByProfileId,
-      jobTitle: invitation.jobTitle,
-    })
+  if (existingTenantUser && existingTenantUser.status !== 'INVITED') {
+    throw new ConflictError('User already belongs to this tenant.')
   }
+
+  const tenantUser = await upsertTenantUser({
+    tenantId: invitation.tenantId,
+    profileId: profile.id,
+    invitedByProfileId: invitation.invitedByProfileId,
+    jobTitle: invitation.jobTitle,
+    isOwner: false,
+    status: 'ACTIVE',
+    joinedAt: new Date(),
+  })
 
   if (!tenantUser) {
     throw new ValidationError('Tenant membership activation failed for this invitation.')
@@ -665,17 +797,12 @@ export async function completeInvitedProfile(
     phone: input.phone,
     avatarUrl: input.avatarUrl,
   })
-  await activateTenantUser(tenantUser.id)
   await updateInvitation(invitation.id, {
     status: 'ACCEPTED',
     acceptedAt: new Date(),
     authUserId: actor.authUserId,
   })
-
-  const preferenceProfile = await ensurePreferenceProfile(profile.id)
-  if (!preferenceProfile.defaultTenantId) {
-    await setDefaultTenant(profile.id, invitation.tenantId)
-  }
+  await setDefaultTenant(profile.id, invitation.tenantId)
 
   await createAuditLog({
     tenantId: invitation.tenantId,
@@ -691,7 +818,29 @@ export async function completeInvitedProfile(
 
   return {
     tenantId: invitation.tenantId,
+    invitationId: invitation.id,
   }
+}
+
+export async function completeInvitedProfile(
+  actor: CurrentUserContext,
+  authUserEmail: string,
+  input: CompleteInvitedProfileInput
+) {
+  const invitation = await findPendingInvitationForAuthUser(actor.authUserId, authUserEmail)
+
+  if (!invitation) {
+    throw new NotFoundError('No pending invitation was found for this account.')
+  }
+  return acceptInvitation(actor, {
+    invitationId: invitation.id,
+    firstName: input.firstName,
+    lastName: input.lastName,
+    phone: input.phone,
+    avatarUrl: input.avatarUrl,
+    password: null,
+    confirmPassword: null,
+  })
 }
 
 export async function updateTenantUserStatus(
@@ -702,6 +851,10 @@ export async function updateTenantUserStatus(
 
   if (!tenantUser) {
     throw new NotFoundError('Tenant user not found.')
+  }
+
+  if (actor.tenantUserId === tenantUser.id && input.status !== 'active') {
+    throw new ForbiddenError('You cannot deactivate your own tenant access.')
   }
 
   const primaryRole = tenantUser.roles.find((role) => role.isPrimary)?.role
@@ -749,9 +902,17 @@ export async function changeTenantUserPrimaryRole(
     throw new NotFoundError('Tenant user not found.')
   }
 
+  if (actor.tenantUserId === tenantUser.id) {
+    throw new ForbiddenError('You cannot change your own primary role.')
+  }
+
   const role = await findRoleByCode(input.roleCode)
   if (!role) {
     throw new ValidationError('Role not found.')
+  }
+
+  if (tenantUser.isOwner && role.code !== 'super_admin') {
+    throw new ForbiddenError('Tenant owners must keep the super admin role.')
   }
 
   if (getActorRank(actor) <= role.rank) {

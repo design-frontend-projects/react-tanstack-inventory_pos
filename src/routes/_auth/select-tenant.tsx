@@ -32,7 +32,7 @@ function SelectTenantPage() {
     }
 
     if (needsProfileCompletion) {
-      void navigate({ to: '/complete-profile' })
+      void navigate({ to: '/complete-account' })
       return
     }
 

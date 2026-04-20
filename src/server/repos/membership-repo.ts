@@ -9,6 +9,11 @@ export type ProfileTenantMembership = Prisma.TenantUserGetPayload<{
         role: true
       }
     }
+    permissionOverrides: {
+      include: {
+        permission: true
+      }
+    }
   }
 }>
 
@@ -29,6 +34,11 @@ export type TenantUserAccessRecord = Prisma.TenantUserGetPayload<{
         }
       }
     }
+    permissionOverrides: {
+      include: {
+        permission: true
+      }
+    }
   }
 }>
 
@@ -38,6 +48,11 @@ export type TenantUserSummaryRecord = Prisma.TenantUserGetPayload<{
     roles: {
       include: {
         role: true
+      }
+    }
+    permissionOverrides: {
+      include: {
+        permission: true
       }
     }
   }
@@ -61,6 +76,11 @@ export async function listTenantUsersForProfile(profileId: string) {
           assignedAt: 'desc',
         },
         take: 1,
+      },
+      permissionOverrides: {
+        include: {
+          permission: true,
+        },
       },
     },
     orderBy: {
@@ -97,6 +117,11 @@ export async function findTenantUserByTenantAndProfile(
         },
         orderBy: [{ isPrimary: 'desc' }, { assignedAt: 'desc' }],
       },
+      permissionOverrides: {
+        include: {
+          permission: true,
+        },
+      },
     },
   })
 }
@@ -112,6 +137,11 @@ export async function findTenantUserById(tenantId: string, tenantUserId: string)
       roles: {
         include: {
           role: true,
+        },
+      },
+      permissionOverrides: {
+        include: {
+          permission: true,
         },
       },
     },
@@ -146,8 +176,11 @@ export async function setTenantUserStatus(
 export async function createPendingTenantUser(input: {
   tenantId: string
   profileId: string
-  invitedByProfileId: string
+  invitedByProfileId?: string | null
   jobTitle?: string | null
+  isOwner?: boolean
+  status?: 'INVITED' | 'ACTIVE' | 'SUSPENDED' | 'DISABLED' | 'REJECTED'
+  joinedAt?: Date | null
 }) {
   await prisma.tenantUser.create({
     data: {
@@ -155,7 +188,46 @@ export async function createPendingTenantUser(input: {
       profileId: input.profileId,
       invitedByProfileId: input.invitedByProfileId,
       jobTitle: input.jobTitle ?? null,
-      status: 'INVITED',
+      isOwner: input.isOwner ?? false,
+      status: input.status ?? 'INVITED',
+      joinedAt: input.joinedAt ?? null,
+    },
+  })
+
+  return findTenantUserByTenantAndProfile(input.tenantId, input.profileId)
+}
+
+export async function upsertTenantUser(input: {
+  tenantId: string
+  profileId: string
+  invitedByProfileId?: string | null
+  jobTitle?: string | null
+  isOwner?: boolean
+  status?: 'INVITED' | 'ACTIVE' | 'SUSPENDED' | 'DISABLED' | 'REJECTED'
+  joinedAt?: Date | null
+}) {
+  await prisma.tenantUser.upsert({
+    where: {
+      tenantId_profileId: {
+        tenantId: input.tenantId,
+        profileId: input.profileId,
+      },
+    },
+    update: {
+      invitedByProfileId: input.invitedByProfileId ?? undefined,
+      jobTitle: input.jobTitle ?? undefined,
+      isOwner: input.isOwner ?? undefined,
+      status: input.status ?? undefined,
+      joinedAt: input.joinedAt ?? undefined,
+    },
+    create: {
+      tenantId: input.tenantId,
+      profileId: input.profileId,
+      invitedByProfileId: input.invitedByProfileId ?? null,
+      jobTitle: input.jobTitle ?? null,
+      isOwner: input.isOwner ?? false,
+      status: input.status ?? 'INVITED',
+      joinedAt: input.joinedAt ?? null,
     },
   })
 
@@ -244,8 +316,47 @@ export async function listTenantUsers(
           role: true,
         },
       },
+      permissionOverrides: {
+        include: {
+          permission: true,
+        },
+      },
       tenant: true,
     },
     orderBy: [{ status: 'asc' }, { createdAt: 'desc' }],
+  })
+}
+
+export async function listTenantUsersWithAccess(tenantId: string) {
+  return prisma.tenantUser.findMany({
+    where: {
+      tenantId,
+    },
+    include: {
+      profile: true,
+      roles: {
+        where: {
+          isPrimary: true,
+        },
+        include: {
+          role: true,
+        },
+        orderBy: {
+          assignedAt: 'desc',
+        },
+        take: 1,
+      },
+      permissionOverrides: {
+        include: {
+          permission: true,
+        },
+        orderBy: {
+          createdAt: 'asc',
+        },
+      },
+    },
+    orderBy: {
+      createdAt: 'asc',
+    },
   })
 }

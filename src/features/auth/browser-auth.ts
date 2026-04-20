@@ -33,7 +33,7 @@ export async function sendMagicLink(email: string, origin: string) {
   return supabase.auth.signInWithOtp({
     email,
     options: {
-      emailRedirectTo: new URL('/complete-profile', origin).toString(),
+      emailRedirectTo: new URL('/complete-account', origin).toString(),
     },
   })
 }

@@ -33,7 +33,7 @@ function AppLayout() {
     }
 
     if (needsProfileCompletion || context?.tenantStatus === 'invited') {
-      void navigate({ to: '/complete-profile' })
+      void navigate({ to: '/complete-account' })
       return
     }
 

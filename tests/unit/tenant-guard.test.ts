@@ -14,10 +14,13 @@ const activeContext: CurrentUserContext = {
   email: 'admin@example.com',
   activeTenantId: 'tenant-1',
   tenantUserId: 'tenant-user-1',
-  roles: ['tenant_admin'],
-  permissions: ['user.view', 'user.invite', 'role.assign'],
+  roles: ['admin'],
+  permissions: ['user.view', 'user.invite', 'user.change_role'],
+  isOwner: false,
+  profileCompleted: true,
   onboardingCompleted: true,
   tenantStatus: 'active',
+  completionFlow: null,
 }
 
 describe('tenant guard helpers', () => {
@@ -41,10 +44,14 @@ describe('tenant guard helpers', () => {
   it('enforces role and permission requirements', () => {
     expect(() => requireRole(activeContext, [])).toThrow(ValidationError)
     expect(() => requirePermission(activeContext, [])).toThrow(ValidationError)
-    expect(() => requireRole(activeContext, ['manager'])).toThrow(ForbiddenError)
-    expect(() => requirePermission(activeContext, 'user.suspend')).toThrow(ForbiddenError)
-    expect(requireRole(activeContext, ['tenant_admin'])).toBe(activeContext)
-    expect(requirePermission(activeContext, ['user.view', 'user.suspend'])).toBe(
+    expect(() => requireRole(activeContext, ['res:floor_manager'])).toThrow(
+      ForbiddenError
+    )
+    expect(() => requirePermission(activeContext, 'user.deactivate')).toThrow(
+      ForbiddenError
+    )
+    expect(requireRole(activeContext, ['admin'])).toBe(activeContext)
+    expect(requirePermission(activeContext, ['user.view', 'user.deactivate'])).toBe(
       activeContext
     )
   })

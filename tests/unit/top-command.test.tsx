@@ -9,7 +9,14 @@ import type { WorkspaceMembership } from '#/types/app'
 vi.mock('#/features/auth/use-session-bootstrap', () => ({
   useSessionBootstrap: () => ({
     context: {
-      permissions: ['inventory.view', 'outlet.view', 'pos.view', 'settings.view', 'user.view'],
+      permissions: [
+        'tenant.view',
+        'dashboard.view',
+        'res.dashboard.view',
+        'res.kitchen.access',
+        'tenant.manage_settings',
+        'user.view',
+      ],
     },
   }),
 }))
@@ -18,16 +25,18 @@ const memberships: WorkspaceMembership[] = [
   {
     tenantId: 'meridian-foods',
     tenantName: 'Meridian Foods Group',
-    roleCode: 'tenant_owner',
-    roleLabel: 'Tenant Owner',
+    roleCode: 'super_admin',
+    roleLabel: 'Super Admin',
+    isOwner: true,
     status: 'active',
     joinedAt: '2026-04-01T00:00:00.000Z',
   },
   {
     tenantId: 'night-shift-labs',
     tenantName: 'Night Shift Labs',
-    roleCode: 'tenant_admin',
-    roleLabel: 'Tenant Admin',
+    roleCode: 'admin',
+    roleLabel: 'Admin',
+    isOwner: false,
     status: 'active',
     joinedAt: '2026-04-02T00:00:00.000Z',
   },

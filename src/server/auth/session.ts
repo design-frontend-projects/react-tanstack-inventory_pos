@@ -1,6 +1,8 @@
 import type { User } from '@supabase/supabase-js'
 import { getRoleRank } from '#/features/auth/rbac-catalog'
+import { mergePermissions } from '#/features/auth/permissions'
 import type {
+  CompletionFlowContext,
   CurrentUserContext,
   SessionBootstrapPayload,
   SessionUser,
@@ -29,6 +31,30 @@ function parseMetadataString(
   return null
 }
 
+function parseCompletionFlow(metadata: User['user_metadata']): CompletionFlowContext | null {
+  const flow = parseMetadataString(metadata, 'auth_flow', 'flow')
+  const registrationId = parseMetadataString(
+    metadata,
+    'registration_id',
+    'registrationId'
+  )
+  const invitationId = parseMetadataString(
+    metadata,
+    'invitation_id',
+    'invitationId'
+  )
+
+  if (flow !== 'owner' && flow !== 'invite') {
+    return null
+  }
+
+  return {
+    flow,
+    registrationId,
+    invitationId,
+  }
+}
+
 function mapMemberships(
   tenantUsers: Awaited<ReturnType<typeof listTenantUsersForProfile>>
 ): Array<WorkspaceMembership> {
@@ -40,12 +66,12 @@ function mapMemberships(
         .sort((left, right) => right.rank - left.rank)
         .at(0) ??
       null
-
     return {
       tenantId: tenantUser.tenantId,
       tenantName: tenantUser.tenant.name,
-      roleCode: (primaryRole?.code ?? 'viewer') as WorkspaceMembership['roleCode'],
-      roleLabel: primaryRole?.name ?? 'Viewer',
+      roleCode: (primaryRole?.code ?? 'res:user') as WorkspaceMembership['roleCode'],
+      roleLabel: primaryRole?.name ?? 'Restaurant User',
+      isOwner: tenantUser.isOwner,
       status: tenantUser.status.toLowerCase() as WorkspaceMembership['status'],
       joinedAt: tenantUser.joinedAt?.toISOString() ?? null,
     }
@@ -58,6 +84,9 @@ function mapSessionUser(profile: {
   email: string
   firstName: string | null
   lastName: string | null
+  phone: string | null
+  avatarUrl: string | null
+  profileCompleted: boolean
   onboardingCompleted: boolean
   preferenceProfile: {
     locale: 'EN' | 'AR'
@@ -69,7 +98,12 @@ function mapSessionUser(profile: {
     authUserId: profile.authUserId,
     displayName: buildDisplayName(profile.firstName, profile.lastName, profile.email),
     email: profile.email,
+    firstName: profile.firstName,
+    lastName: profile.lastName,
+    phone: profile.phone,
+    avatarUrl: profile.avatarUrl,
     title: null,
+    profileCompleted: profile.profileCompleted,
     onboardingCompleted: profile.onboardingCompleted,
     locale: profile.preferenceProfile?.locale.toLowerCase() as SessionUser['locale'],
     themeMode: profile.preferenceProfile?.themeMode.toLowerCase() as SessionUser['themeMode'],
@@ -81,12 +115,14 @@ function mapCurrentUserContext(
     id: string
     authUserId: string
     email: string
+    profileCompleted: boolean
     onboardingCompleted: boolean
   },
   tenantUser:
     | (Awaited<ReturnType<typeof findTenantUserByTenantAndProfile>> & {})
     | null,
-  activeTenantId: string | null
+  activeTenantId: string | null,
+  completionFlow: CompletionFlowContext | null
 ): CurrentUserContext {
   const roleCodes = tenantUser
     ? Array.from(
@@ -99,14 +135,16 @@ function mapCurrentUserContext(
     : []
 
   const permissions = tenantUser
-    ? Array.from(
-        new Set(
-          tenantUser.roles.flatMap((tenantUserRole) =>
-            tenantUserRole.role.permissions.map(
-              (rolePermission) => rolePermission.permission.code
-            )
+    ? mergePermissions(
+        tenantUser.roles.flatMap((tenantUserRole) =>
+          tenantUserRole.role.permissions.map(
+            (rolePermission) => rolePermission.permission.code
           )
-        )
+        ),
+        tenantUser.permissionOverrides.map((override) => ({
+          code: override.permission.code,
+          isAllowed: override.isAllowed,
+        }))
       )
     : []
 
@@ -118,8 +156,11 @@ function mapCurrentUserContext(
     tenantUserId: tenantUser?.id ?? null,
     roles: roleCodes as CurrentUserContext['roles'],
     permissions: permissions as CurrentUserContext['permissions'],
+    isOwner: tenantUser?.isOwner ?? false,
+    profileCompleted: profile.profileCompleted,
     onboardingCompleted: profile.onboardingCompleted,
     tenantStatus: tenantUser?.status.toLowerCase() as CurrentUserContext['tenantStatus'],
+    completionFlow,
   }
 }
 
@@ -177,6 +218,7 @@ export async function bootstrapSession(options: {
   const tenantUser = activeTenantId
     ? await findTenantUserByTenantAndProfile(activeTenantId, profile.id)
     : null
+  const completionFlow = parseCompletionFlow(authUser.user_metadata)
 
   return {
     authenticated: true,
@@ -187,7 +229,13 @@ export async function bootstrapSession(options: {
     memberships,
     activeTenantId,
     activeMembership,
-    context: mapCurrentUserContext(profile, tenantUser, activeTenantId),
+    context: mapCurrentUserContext(
+      profile,
+      tenantUser,
+      activeTenantId,
+      completionFlow
+    ),
+    completionFlow,
   }
 }
 
@@ -211,6 +259,7 @@ export function anonymousSessionBootstrap(): SessionBootstrapPayload {
     activeTenantId: null,
     activeMembership: null,
     context: null,
+    completionFlow: null,
   }
 }
 

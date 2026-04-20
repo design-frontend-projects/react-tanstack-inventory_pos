@@ -12,3 +12,308 @@ datasource db {
   provider = "postgresql"
 }
 
+enum AppLocale {
+  EN @map("en")
+  AR @map("ar")
+
+  @@map("AppLocale")
+}
+
+enum ThemeMode {
+  LIGHT  @map("light")
+  DARK   @map("dark")
+  SYSTEM @map("system")
+
+  @@map("ThemeMode")
+}
+
+enum TenantAccountStatus {
+  ACTIVE    @map("active")
+  SUSPENDED @map("suspended")
+  ARCHIVED  @map("archived")
+
+  @@map("TenantAccountStatus")
+}
+
+enum ProfileGlobalStatus {
+  ACTIVE    @map("active")
+  SUSPENDED @map("suspended")
+  DISABLED  @map("disabled")
+
+  @@map("ProfileGlobalStatus")
+}
+
+enum TenantUserStatus {
+  INVITED   @map("invited")
+  ACTIVE    @map("active")
+  SUSPENDED @map("suspended")
+  DISABLED  @map("disabled")
+  REJECTED  @map("rejected")
+
+  @@map("TenantUserStatus")
+}
+
+enum InvitationStatus {
+  PENDING  @map("pending")
+  ACCEPTED @map("accepted")
+  EXPIRED  @map("expired")
+  REVOKED  @map("revoked")
+  FAILED   @map("failed")
+
+  @@map("InvitationStatus")
+}
+
+enum TenantRegistrationStatus {
+  PENDING   @map("pending")
+  COMPLETED @map("completed")
+  EXPIRED   @map("expired")
+  CANCELLED @map("cancelled")
+
+  @@map("TenantRegistrationStatus")
+}
+
+model Profile {
+  id                    String                    @id @default(uuid()) @db.Uuid
+  authUserId            String                    @unique @map("auth_user_id") @db.Uuid
+  email                 String
+  firstName             String?                   @map("first_name")
+  lastName              String?                   @map("last_name")
+  phone                 String?
+  avatarUrl             String?                   @map("avatar_url")
+  profileCompleted      Boolean                   @default(false) @map("profile_completed")
+  onboardingCompleted   Boolean                   @default(false) @map("onboarding_completed")
+  globalStatus          ProfileGlobalStatus       @default(ACTIVE) @map("global_status")
+  createdAt             DateTime                  @default(now()) @map("created_at")
+  updatedAt             DateTime                  @updatedAt @map("updated_at")
+  tenantMemberships     TenantUser[]
+  ownedTenants          TenantAccount[]           @relation("TenantOwnerProfile")
+  invitedMemberships    TenantUser[]              @relation("TenantUserInvitedBy")
+  assignedRoles         TenantUserRole[]          @relation("TenantUserRoleAssignedBy")
+  assignedPermissions   TenantUserPermission[]    @relation("TenantUserPermissionAssignedBy")
+  createdInvitations    user_invitations[]        @relation("InvitationInvitedBy")
+  auditLogs             AuditLog[]                @relation("AuditActor")
+  preferenceProfile     PreferenceProfile?
+  registrationRequests  TenantRegistrationRequest[] @relation("RegistrationLinkedProfile")
+
+  @@index([email], map: "profiles_email_idx")
+  @@map("profiles")
+}
+
+model TenantAccount {
+  id                  String                      @id @default(uuid()) @db.Uuid
+  name                String
+  slug                String                      @unique
+  activity            String?
+  timezone            String?
+  status              TenantAccountStatus         @default(ACTIVE)
+  ownerProfileId      String?                     @map("owner_profile_id") @db.Uuid
+  createdAt           DateTime                    @default(now()) @map("created_at")
+  updatedAt           DateTime                    @updatedAt @map("updated_at")
+  ownerProfile        Profile?                    @relation("TenantOwnerProfile", fields: [ownerProfileId], references: [id], onDelete: SetNull, onUpdate: Cascade)
+  memberships         TenantUser[]
+  roles               Role[]
+  invitations         user_invitations[]
+  auditLogs           AuditLog[]
+  preferenceProfiles  PreferenceProfile[]         @relation("DefaultTenantPreference")
+
+  @@map("tenant_accounts")
+}
+
+model TenantUser {
+  id                String                 @id @default(uuid()) @db.Uuid
+  tenantId          String                 @map("tenant_id") @db.Uuid
+  profileId         String                 @map("profile_id") @db.Uuid
+  employeeCode      String?                @map("employee_code")
+  jobTitle          String?                @map("job_title")
+  isOwner           Boolean                @default(false) @map("is_owner")
+  status            TenantUserStatus       @default(INVITED)
+  joinedAt          DateTime?              @map("joined_at")
+  invitedByProfileId String?               @map("invited_by_profile_id") @db.Uuid
+  lastRoleSyncAt    DateTime?              @map("last_role_sync_at")
+  createdAt         DateTime               @default(now()) @map("created_at")
+  updatedAt         DateTime               @updatedAt @map("updated_at")
+  tenant            TenantAccount          @relation(fields: [tenantId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  profile           Profile                @relation(fields: [profileId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  invitedByProfile  Profile?               @relation("TenantUserInvitedBy", fields: [invitedByProfileId], references: [id], onDelete: SetNull, onUpdate: Cascade)
+  roles             TenantUserRole[]
+  permissionOverrides TenantUserPermission[]
+
+  @@unique([tenantId, profileId], map: "tenant_users_tenant_profile_unique")
+  @@index([tenantId, status], map: "tenant_users_tenant_status_idx")
+  @@index([profileId, status], map: "tenant_users_profile_status_idx")
+  @@map("tenant_users")
+}
+
+model Role {
+  id             String           @id @default(uuid()) @db.Uuid
+  tenantId       String?          @map("tenant_id") @db.Uuid
+  code           String
+  name           String
+  description    String?
+  activityScope  String?          @map("activity_scope")
+  isSystem       Boolean          @default(false) @map("is_system")
+  isActive       Boolean          @default(true) @map("is_active")
+  rank           Int
+  createdAt      DateTime         @default(now()) @map("created_at")
+  updatedAt      DateTime         @updatedAt @map("updated_at")
+  tenant         TenantAccount?   @relation(fields: [tenantId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  permissions    RolePermission[]
+  tenantUserRoles TenantUserRole[]
+  invitations    user_invitations[]
+
+  @@unique([tenantId, code], map: "roles_tenant_code_unique")
+  @@index([code], map: "roles_code_idx")
+  @@index([isSystem, isActive], map: "roles_system_active_idx")
+  @@map("roles")
+}
+
+model Permission {
+  id              String                 @id @default(uuid()) @db.Uuid
+  code            String                 @unique
+  name            String
+  moduleKey       String                 @map("module_key")
+  actionKey       String                 @map("action_key")
+  description     String?
+  createdAt       DateTime               @default(now()) @map("created_at")
+  rolePermissions RolePermission[]
+  userPermissions TenantUserPermission[]
+
+  @@unique([moduleKey, actionKey], map: "permissions_module_action_unique")
+  @@index([moduleKey], map: "permissions_module_idx")
+  @@map("permissions")
+}
+
+model RolePermission {
+  id           String      @id @default(uuid()) @db.Uuid
+  roleId       String      @map("role_id") @db.Uuid
+  permissionId String      @map("permission_id") @db.Uuid
+  createdAt    DateTime    @default(now()) @map("created_at")
+  role         Role        @relation(fields: [roleId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  permission   Permission  @relation(fields: [permissionId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+
+  @@unique([roleId, permissionId], map: "role_permissions_role_permission_unique")
+  @@index([permissionId], map: "role_permissions_permission_idx")
+  @@map("role_permissions")
+}
+
+model TenantUserRole {
+  id                  String      @id @default(uuid()) @db.Uuid
+  tenantUserId        String      @map("tenant_user_id") @db.Uuid
+  roleId              String      @map("role_id") @db.Uuid
+  assignedByProfileId String?     @map("assigned_by_profile_id") @db.Uuid
+  assignedAt          DateTime    @default(now()) @map("assigned_at")
+  isPrimary           Boolean     @default(false) @map("is_primary")
+  tenantUser          TenantUser  @relation(fields: [tenantUserId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  role                Role        @relation(fields: [roleId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  assignedByProfile   Profile?    @relation("TenantUserRoleAssignedBy", fields: [assignedByProfileId], references: [id], onDelete: SetNull, onUpdate: Cascade)
+
+  @@unique([tenantUserId, roleId], map: "tenant_user_roles_tenant_user_role_unique")
+  @@index([roleId], map: "tenant_user_roles_role_idx")
+  @@index([tenantUserId, isPrimary], map: "tenant_user_roles_primary_idx")
+  @@map("tenant_user_roles")
+}
+
+model TenantUserPermission {
+  id                  String      @id @default(uuid()) @db.Uuid
+  tenantUserId        String      @map("tenant_user_id") @db.Uuid
+  permissionId        String      @map("permission_id") @db.Uuid
+  isAllowed           Boolean     @map("is_allowed")
+  assignedByProfileId String?     @map("assigned_by_profile_id") @db.Uuid
+  createdAt           DateTime    @default(now()) @map("created_at")
+  updatedAt           DateTime    @updatedAt @map("updated_at")
+  tenantUser          TenantUser  @relation(fields: [tenantUserId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  permission          Permission  @relation(fields: [permissionId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  assignedByProfile   Profile?    @relation("TenantUserPermissionAssignedBy", fields: [assignedByProfileId], references: [id], onDelete: SetNull, onUpdate: Cascade)
+
+  @@unique([tenantUserId, permissionId], map: "tenant_user_permissions_tenant_user_permission_unique")
+  @@index([permissionId], map: "tenant_user_permissions_permission_idx")
+  @@map("tenant_user_permissions")
+}
+
+model user_invitations {
+  id                  String            @id @default(uuid()) @db.Uuid
+  tenantId            String            @map("tenant_id") @db.Uuid
+  email               String
+  firstName           String?           @map("first_name")
+  lastName            String?           @map("last_name")
+  phone               String?
+  jobTitle            String?           @map("job_title")
+  roleId              String            @map("role_id") @db.Uuid
+  invitationToken     String?           @map("invitation_token")
+  authUserId          String?           @map("auth_user_id") @db.Uuid
+  invitedByProfileId  String            @map("invited_by_profile_id") @db.Uuid
+  status              InvitationStatus  @default(PENDING)
+  sentAt              DateTime?         @map("sent_at")
+  acceptedAt          DateTime?         @map("accepted_at")
+  expiresAt           DateTime?         @map("expires_at")
+  revokedAt           DateTime?         @map("revoked_at")
+  metadata            Json              @default("{}")
+  createdAt           DateTime          @default(now()) @map("created_at")
+  updatedAt           DateTime          @updatedAt @map("updated_at")
+  tenant              TenantAccount     @relation(fields: [tenantId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  role                Role              @relation(fields: [roleId], references: [id], onDelete: Restrict, onUpdate: Cascade)
+  invitedByProfile    Profile           @relation("InvitationInvitedBy", fields: [invitedByProfileId], references: [id], onDelete: Restrict, onUpdate: Cascade)
+
+  @@index([tenantId, status], map: "user_invitations_tenant_status_idx")
+  @@index([email], map: "user_invitations_email_idx")
+  @@index([roleId], map: "user_invitations_role_idx")
+  @@map("user_invitations")
+}
+
+model AuditLog {
+  id             String    @id @default(uuid()) @db.Uuid
+  tenantId       String?   @map("tenant_id") @db.Uuid
+  actorProfileId String?   @map("actor_profile_id") @db.Uuid
+  actionKey      String    @map("action_key")
+  entityType     String    @map("entity_type")
+  entityId       String?   @map("entity_id") @db.Uuid
+  oldValues      Json?     @map("old_values")
+  newValues      Json?     @map("new_values")
+  createdAt      DateTime  @default(now()) @map("created_at")
+  tenant         TenantAccount? @relation(fields: [tenantId], references: [id], onDelete: SetNull, onUpdate: Cascade)
+  actorProfile   Profile?  @relation("AuditActor", fields: [actorProfileId], references: [id], onDelete: SetNull, onUpdate: Cascade)
+
+  @@index([tenantId, createdAt], map: "audit_logs_tenant_created_idx")
+  @@index([entityType, entityId, createdAt], map: "audit_logs_entity_created_idx")
+  @@map("audit_logs")
+}
+
+model PreferenceProfile {
+  id              String        @id @default(uuid()) @db.Uuid
+  profileId       String        @unique @map("profile_id") @db.Uuid
+  locale          AppLocale     @default(EN)
+  themeMode       ThemeMode     @default(SYSTEM) @map("theme_mode")
+  defaultTenantId String?       @map("default_tenant_id") @db.Uuid
+  createdAt       DateTime      @default(now()) @map("created_at")
+  updatedAt       DateTime      @updatedAt @map("updated_at")
+  profile         Profile       @relation(fields: [profileId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  defaultTenant   TenantAccount? @relation("DefaultTenantPreference", fields: [defaultTenantId], references: [id], onDelete: SetNull, onUpdate: Cascade)
+
+  @@index([defaultTenantId], map: "preference_profiles_default_tenant_idx")
+  @@map("preference_profiles")
+}
+
+model TenantRegistrationRequest {
+  id               String                   @id @default(uuid()) @db.Uuid
+  email            String
+  firstName        String                   @map("first_name")
+  lastName         String                   @map("last_name")
+  phone            String?
+  activity         String
+  isOwner          Boolean                  @default(true) @map("is_owner")
+  defaultRoleCode  String                   @map("default_role_code")
+  authUserId       String?                  @map("auth_user_id") @db.Uuid
+  linkedProfileId  String?                  @map("linked_profile_id") @db.Uuid
+  status           TenantRegistrationStatus @default(PENDING)
+  sentAt           DateTime?                @map("sent_at")
+  expiresAt        DateTime?                @map("expires_at")
+  completedAt      DateTime?                @map("completed_at")
+  metadata         Json                     @default("{}")
+  createdAt        DateTime                 @default(now()) @map("created_at")
+  updatedAt        DateTime                 @updatedAt @map("updated_at")
+  linkedProfile    Profile?                 @relation("RegistrationLinkedProfile", fields: [linkedProfileId], references: [id], onDelete: SetNull, onUpdate: Cascade)
+
+  @@index([email], map: "tenant_registration_requests_email_idx")
+  @@index([status, expiresAt], map: "tenant_registration_requests_status_expiry_idx")
+  @@map("tenant_registration_requests")
+}

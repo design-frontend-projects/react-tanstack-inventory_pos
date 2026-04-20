@@ -1,5 +1,5 @@
 import * as React from 'react'
-import { createFileRoute } from '@tanstack/react-router'
+import { Link, createFileRoute } from '@tanstack/react-router'
 import { Loader2, LogIn, MailCheck, ShieldCheck } from 'lucide-react'
 import { Button } from '#/components/ui/button'
 import { Card } from '#/components/ui/card'
@@ -30,7 +30,7 @@ function SignInPage() {
     }
 
     if (needsProfileCompletion) {
-      void navigate({ to: '/complete-profile' })
+      void navigate({ to: '/complete-account' })
       return
     }
 
@@ -65,7 +65,6 @@ function SignInPage() {
     setError(null)
     setSuccessMessage(null)
     setIsSubmitting(true)
-    console.log('location origin: ', window.location.origin);
 
     const { error: magicLinkError } = await sendMagicLink(
       email,
@@ -189,6 +188,24 @@ function SignInPage() {
             >
               Send magic link
             </Button>
+          </div>
+
+          <div className="flex flex-wrap items-center justify-between gap-3 border-t border-border/65 pt-4 text-sm text-muted-foreground">
+            <Link
+              to="/forgot-password"
+              className="font-medium text-foreground underline decoration-border underline-offset-4"
+            >
+              Forgot password?
+            </Link>
+            <p>
+              New workspace owner?{' '}
+              <Link
+                to="/sign-up"
+                className="font-medium text-foreground underline decoration-border underline-offset-4"
+              >
+                Create an account
+              </Link>
+            </p>
           </div>
         </form>
       </Card>

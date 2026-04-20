@@ -30,6 +30,7 @@ const serverEnvSchema = z.object({
   VITE_SUPABASE_URL: requiredUrlEnv('VITE_SUPABASE_URL'),
   VITE_SUPABASE_ANON_KEY: requiredEnv('VITE_SUPABASE_ANON_KEY'),
   SUPABASE_SERVICE_ROLE_KEY: optionalEnv,
+  VITE_SUPABASE_SECRET_KEY: optionalEnv,
   ONESIGNAL_APP_ID: optionalEnv,
   ONESIGNAL_APP_API_KEY: optionalEnv,
 })
@@ -39,6 +40,7 @@ export const serverEnv = serverEnvSchema.parse({
   VITE_SUPABASE_URL: process.env.VITE_SUPABASE_URL,
   VITE_SUPABASE_ANON_KEY: process.env.VITE_SUPABASE_ANON_KEY,
   SUPABASE_SERVICE_ROLE_KEY: process.env.SUPABASE_SERVICE_ROLE_KEY,
+  VITE_SUPABASE_SECRET_KEY: process.env.VITE_SUPABASE_SECRET_KEY,
   ONESIGNAL_APP_ID: process.env.ONESIGNAL_APP_ID,
   ONESIGNAL_APP_API_KEY: process.env.ONESIGNAL_APP_API_KEY,
 })

@@ -1,10 +1,21 @@
 import { z } from 'zod'
 import { createServerFn } from '@tanstack/react-start'
 import {
+  completeOwnerOnboarding,
+  listRolesPermissions,
+  resetPassword,
+  sendForgotPassword,
+  setUserPermissionOverride,
+  startTenantRegistration,
+  updateCurrentUserProfile,
+} from '#/server/auth/account-management'
+import {
+  acceptInvitation,
   changeTenantUserPrimaryRole,
   completeInvitedProfile,
   inviteTenantUser,
   listTenantUsersForManagement,
+  revokeTenantInvitation,
   resendTenantInvitation,
   updateTenantUserStatus,
 } from '#/server/auth/user-management'
@@ -16,7 +27,18 @@ import {
 } from '#/server/auth/tenant-guard'
 import { setDefaultTenant } from '#/server/repos/preference-repo'
 import { listTenantAssignableRoles } from '#/server/repos/role-repo'
-import { TENANT_ASSIGNABLE_ROLE_CODES } from '#/features/auth/rbac-catalog'
+import {
+  PERMISSION_CODES,
+  TENANT_ASSIGNABLE_ROLE_CODES,
+} from '#/features/auth/rbac-catalog'
+import {
+  forgotPasswordSchema,
+  invitationAcceptanceSchema,
+  ownerOnboardingSchema,
+  profileUpdateSchema,
+  resetPasswordSchema,
+  signUpSchema,
+} from '#/features/auth/validation'
 
 const accessTokenSchema = z.string().min(1)
 const tenantIdSchema = z.string().uuid()
@@ -146,6 +168,14 @@ export const listTenantUsersServerFn = createServerFn({
     return listTenantUsersForManagement(data.tenantId, data.filters)
   })
 
+export const startTenantRegistrationServerFn = createServerFn({
+  method: 'POST',
+})
+  .inputValidator(signUpSchema)
+  .handler(async ({ data }) => {
+    return startTenantRegistration(data)
+  })
+
 export const inviteTenantUserServerFn = createServerFn({
   method: 'POST',
 })
@@ -177,6 +207,31 @@ export const inviteTenantUserServerFn = createServerFn({
     return inviteTenantUser(context, data)
   })
 
+export const revokeTenantInvitationServerFn = createServerFn({
+  method: 'POST',
+})
+  .inputValidator(
+    z.object({
+      accessToken: accessTokenSchema,
+      invitationId: z.string().uuid(),
+      tenantId: tenantIdSchema,
+    })
+  )
+  .handler(async ({ data }) => {
+    const context = requirePermission(
+      requireTenantAccess(
+        await getCurrentUserContext({
+          accessToken: data.accessToken,
+          tenantId: data.tenantId,
+        }),
+        data.tenantId
+      ),
+      'user.invite'
+    )
+
+    return revokeTenantInvitation(context, data.tenantId, data.invitationId)
+  })
+
 export const resendTenantInvitationServerFn = createServerFn({
   method: 'POST',
 })
@@ -197,10 +252,46 @@ export const resendTenantInvitationServerFn = createServerFn({
         }),
         data.tenantId
       ),
-      'user.resend_invite'
+      'user.invite'
     )
 
     return resendTenantInvitation(context, data.invitationId, data.origin)
+  })
+
+export const completeOwnerOnboardingServerFn = createServerFn({
+  method: 'POST',
+})
+  .inputValidator(
+    ownerOnboardingSchema.extend({
+      accessToken: accessTokenSchema,
+    })
+  )
+  .handler(async ({ data }) => {
+    const context = requireAuth(
+      await getCurrentUserContext({
+        accessToken: data.accessToken,
+      })
+    )
+
+    return completeOwnerOnboarding(context, data)
+  })
+
+export const acceptInvitationServerFn = createServerFn({
+  method: 'POST',
+})
+  .inputValidator(
+    invitationAcceptanceSchema.extend({
+      accessToken: accessTokenSchema,
+    })
+  )
+  .handler(async ({ data }) => {
+    const context = requireAuth(
+      await getCurrentUserContext({
+        accessToken: data.accessToken,
+      })
+    )
+
+    return acceptInvitation(context, data)
   })
 
 export const updateTenantUserStatusServerFn = createServerFn({
@@ -215,7 +306,7 @@ export const updateTenantUserStatusServerFn = createServerFn({
     })
   )
   .handler(async ({ data }) => {
-    const permission = data.status === 'active' ? 'user.activate' : 'user.suspend'
+    const permission = data.status === 'active' ? 'user.update' : 'user.deactivate'
     const context = requirePermission(
       requireTenantAccess(
         await getCurrentUserContext({
@@ -250,7 +341,33 @@ export const changeTenantUserPrimaryRoleServerFn = createServerFn({
         }),
         data.tenantId
       ),
-      'role.assign'
+      'user.change_role'
+    )
+
+    return changeTenantUserPrimaryRole(context, data)
+  })
+
+export const assignPrimaryRoleServerFn = createServerFn({
+  method: 'POST',
+})
+  .inputValidator(
+    z.object({
+      accessToken: accessTokenSchema,
+      tenantId: tenantIdSchema,
+      tenantUserId: z.string().uuid(),
+      roleCode: z.enum(TENANT_ASSIGNABLE_ROLE_CODES),
+    })
+  )
+  .handler(async ({ data }) => {
+    const context = requirePermission(
+      requireTenantAccess(
+        await getCurrentUserContext({
+          accessToken: data.accessToken,
+          tenantId: data.tenantId,
+        }),
+        data.tenantId
+      ),
+      'user.change_role'
     )
 
     return changeTenantUserPrimaryRole(context, data)
@@ -279,4 +396,93 @@ export const completeInvitedProfileServerFn = createServerFn({
     )
 
     return completeInvitedProfile(context, data.email, data)
+  })
+
+export const sendForgotPasswordServerFn = createServerFn({
+  method: 'POST',
+})
+  .inputValidator(forgotPasswordSchema)
+  .handler(async ({ data }) => {
+    return sendForgotPassword(data)
+  })
+
+export const resetPasswordServerFn = createServerFn({
+  method: 'POST',
+})
+  .inputValidator(
+    resetPasswordSchema.extend({
+      accessToken: accessTokenSchema,
+    })
+  )
+  .handler(async ({ data }) => {
+    return resetPassword(data.accessToken, data)
+  })
+
+export const updateProfileServerFn = createServerFn({
+  method: 'POST',
+})
+  .inputValidator(
+    profileUpdateSchema.extend({
+      accessToken: accessTokenSchema,
+    })
+  )
+  .handler(async ({ data }) => {
+    const context = requireAuth(
+      await getCurrentUserContext({
+        accessToken: data.accessToken,
+      })
+    )
+
+    return updateCurrentUserProfile(context, data)
+  })
+
+export const listRolesPermissionsServerFn = createServerFn({
+  method: 'POST',
+})
+  .inputValidator(
+    z.object({
+      accessToken: accessTokenSchema,
+      tenantId: tenantIdSchema,
+    })
+  )
+  .handler(async ({ data }) => {
+    const context = requirePermission(
+      requireTenantAccess(
+        await getCurrentUserContext({
+          accessToken: data.accessToken,
+          tenantId: data.tenantId,
+        }),
+        data.tenantId
+      ),
+      ['user.view', 'user.assign_permission']
+    )
+
+    return listRolesPermissions(context, data.tenantId)
+  })
+
+export const setUserPermissionOverrideServerFn = createServerFn({
+  method: 'POST',
+})
+  .inputValidator(
+    z.object({
+      accessToken: accessTokenSchema,
+      tenantId: tenantIdSchema,
+      tenantUserId: z.string().uuid(),
+      permissionCode: z.enum(PERMISSION_CODES),
+      isAllowed: z.boolean().nullable(),
+    })
+  )
+  .handler(async ({ data }) => {
+    const context = requirePermission(
+      requireTenantAccess(
+        await getCurrentUserContext({
+          accessToken: data.accessToken,
+          tenantId: data.tenantId,
+        }),
+        data.tenantId
+      ),
+      'user.assign_permission'
+    )
+
+    return setUserPermissionOverride(context, data)
   })

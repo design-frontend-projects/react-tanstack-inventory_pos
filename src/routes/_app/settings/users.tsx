@@ -10,6 +10,7 @@ import {
   inviteTenantUserServerFn,
   listTenantAssignableRolesServerFn,
   listTenantUsersServerFn,
+  revokeTenantInvitationServerFn,
   resendTenantInvitationServerFn,
   updateTenantUserStatusServerFn,
 } from '#/features/auth/server-functions'
@@ -100,9 +101,9 @@ function UsersAccessPage() {
     lastName: '',
     phone: '',
     jobTitle: '',
-    roleCode: 'employee',
+    roleCode: 'res:user',
   })
-  const canAssignRoles = hasPermission(permissions, 'role.assign')
+  const canAssignRoles = hasPermission(permissions, 'user.change_role')
 
   const rolesQuery = useQuery({
     enabled: !!tenantId,
@@ -166,7 +167,7 @@ function UsersAccessPage() {
         lastName: '',
         phone: '',
         jobTitle: '',
-        roleCode: 'employee',
+        roleCode: 'res:user',
       })
       await queryClient.invalidateQueries({
         queryKey: USER_QUERY_KEY,
@@ -186,6 +187,24 @@ function UsersAccessPage() {
             tenantId: tenantId!,
             invitationId: user.invitationId!,
             origin: window.location.origin,
+          },
+        })
+      ),
+    onSuccess: async () => {
+      await queryClient.invalidateQueries({
+        queryKey: USER_QUERY_KEY,
+      })
+    },
+  })
+
+  const revokeMutation = useMutation({
+    mutationFn: async (user: TenantUserListItem) =>
+      withAccessToken((accessToken) =>
+        revokeTenantInvitationServerFn({
+          data: {
+            accessToken,
+            tenantId: tenantId!,
+            invitationId: user.invitationId!,
           },
         })
       ),
@@ -396,6 +415,11 @@ function UsersAccessPage() {
                       <td className="px-4 py-4 align-top">
                         <p className="font-semibold">{user.displayName}</p>
                         <p className="mt-1 text-muted-foreground">{user.email}</p>
+                        {user.isOwner ? (
+                          <Badge variant="outline" className="mt-2">
+                            Owner
+                          </Badge>
+                        ) : null}
                         {user.jobTitle ? (
                           <p className="mt-1 text-xs text-muted-foreground">
                             {user.jobTitle}
@@ -452,7 +476,7 @@ function UsersAccessPage() {
                       <td className="px-4 py-4 align-top">
                         <div className="flex flex-wrap gap-2">
                           <AccessGuard
-                            permissions={['user.resend_invite']}
+                            permissions={['user.invite']}
                             userRoles={roles}
                             userPermissions={permissions}
                           >
@@ -471,9 +495,24 @@ function UsersAccessPage() {
                               <RefreshCcw />
                               Resend
                             </Button>
+                            <Button
+                              type="button"
+                              size="sm"
+                              variant="outline"
+                              className="rounded-full"
+                              disabled={
+                                !user.invitationId ||
+                                user.invitationStatus === 'accepted' ||
+                                user.invitationStatus === 'revoked' ||
+                                revokeMutation.isPending
+                              }
+                              onClick={() => void revokeMutation.mutateAsync(user)}
+                            >
+                              Revoke
+                            </Button>
                           </AccessGuard>
                           <AccessGuard
-                            permissions={['user.suspend', 'user.activate']}
+                            permissions={['user.deactivate', 'user.update']}
                             userRoles={roles}
                             userPermissions={permissions}
                           >

@@ -28,3 +28,26 @@ export function hasAllPermissions(
     userPermissions.includes(permission)
   )
 }
+
+export type PermissionOverrideInput = {
+  code: string
+  isAllowed: boolean
+}
+
+export function mergePermissions(
+  rolePermissions: Array<string>,
+  overrides: Array<PermissionOverrideInput>
+) {
+  const mergedPermissions = new Set(rolePermissions)
+
+  for (const override of overrides) {
+    if (override.isAllowed) {
+      mergedPermissions.add(override.code)
+      continue
+    }
+
+    mergedPermissions.delete(override.code)
+  }
+
+  return Array.from(mergedPermissions).sort()
+}

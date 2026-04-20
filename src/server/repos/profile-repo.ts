@@ -14,6 +14,23 @@ type EnsureProfileInput = {
   avatarUrl?: string | null
 }
 
+function buildProfileUpdateData(
+  input: Omit<EnsureProfileInput, 'authUserId' | 'email'>
+) {
+  return {
+    ...(input.firstName !== undefined
+      ? { firstName: normalizeOptionalText(input.firstName) }
+      : {}),
+    ...(input.lastName !== undefined
+      ? { lastName: normalizeOptionalText(input.lastName) }
+      : {}),
+    ...(input.phone !== undefined ? { phone: normalizeOptionalText(input.phone) } : {}),
+    ...(input.avatarUrl !== undefined
+      ? { avatarUrl: normalizeOptionalText(input.avatarUrl) }
+      : {}),
+  }
+}
+
 export async function findProfileByAuthUserId(authUserId: string) {
   return prisma.profile.findUnique({
     where: {
@@ -34,11 +51,8 @@ export async function ensureProfile(input: EnsureProfileInput) {
     },
     update: {
       email: normalizedEmail,
-      firstName: normalizeOptionalText(input.firstName),
-      lastName: normalizeOptionalText(input.lastName),
-      phone: normalizeOptionalText(input.phone),
-      avatarUrl: normalizeOptionalText(input.avatarUrl),
       globalStatus: 'ACTIVE',
+      ...buildProfileUpdateData(input),
     },
     create: {
       authUserId: input.authUserId,
@@ -63,12 +77,22 @@ export async function updateProfileCompletion(
       id: profileId,
     },
     data: {
-      firstName: normalizeOptionalText(input.firstName),
-      lastName: normalizeOptionalText(input.lastName),
-      phone: normalizeOptionalText(input.phone),
-      avatarUrl: normalizeOptionalText(input.avatarUrl),
+      ...buildProfileUpdateData(input),
+      profileCompleted: true,
       onboardingCompleted: true,
     },
+  })
+}
+
+export async function updateProfile(
+  profileId: string,
+  input: Omit<EnsureProfileInput, 'authUserId' | 'email'>
+) {
+  return prisma.profile.update({
+    where: {
+      id: profileId,
+    },
+    data: buildProfileUpdateData(input),
   })
 }
 

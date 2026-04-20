@@ -4,13 +4,18 @@ import { serverEnv } from '#/lib/env/server'
 import { ValidationError } from '#/server/auth/errors'
 
 export function createAdminSupabaseClient(): SupabaseClient {
-  if (!serverEnv.VITE_SUPABASE_SECRET_KEY) {
-    throw new ValidationError('VITE_SUPABASE_SECRET_KEY is required for admin auth flows.')
+  const serviceRoleKey =
+    serverEnv.SUPABASE_SERVICE_ROLE_KEY ?? serverEnv.VITE_SUPABASE_SECRET_KEY
+
+  if (!serviceRoleKey) {
+    throw new ValidationError(
+      'SUPABASE_SERVICE_ROLE_KEY is required for admin auth flows.'
+    )
   }
 
   return createClient(
     serverEnv.VITE_SUPABASE_URL,
-    serverEnv.VITE_SUPABASE_SECRET_KEY,
+    serviceRoleKey,
     {
       auth: {
         autoRefreshToken: false,

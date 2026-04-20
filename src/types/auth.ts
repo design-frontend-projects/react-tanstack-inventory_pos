@@ -14,13 +14,25 @@ export type InvitationStatusCode =
   | 'expired'
   | 'revoked'
   | 'failed'
+export type CompletionFlowCode = 'owner' | 'invite'
+
+export type CompletionFlowContext = {
+  flow: CompletionFlowCode
+  registrationId: string | null
+  invitationId: string | null
+}
 
 export type SessionUser = {
   id: string
   authUserId: string
   displayName: string
   email: string
+  firstName: string | null
+  lastName: string | null
+  phone: string | null
+  avatarUrl: string | null
   title: string | null
+  profileCompleted: boolean
   onboardingCompleted: boolean
   locale: AppLocaleCode
   themeMode: ThemeModeCode
@@ -31,6 +43,7 @@ export type WorkspaceMembership = {
   tenantName: string
   roleCode: RoleCode
   roleLabel: string
+  isOwner: boolean
   status: TenantUserStatusCode
   joinedAt: string | null
 }
@@ -43,8 +56,11 @@ export type CurrentUserContext = {
   tenantUserId: string | null
   roles: Array<RoleCode>
   permissions: Array<PermissionCode>
+  isOwner: boolean
+  profileCompleted: boolean
   onboardingCompleted: boolean
   tenantStatus: TenantUserStatusCode | null
+  completionFlow: CompletionFlowContext | null
 }
 
 export type SessionBootstrapPayload = {
@@ -54,6 +70,7 @@ export type SessionBootstrapPayload = {
   activeTenantId: string | null
   activeMembership: WorkspaceMembership | null
   context: CurrentUserContext | null
+  completionFlow: CompletionFlowContext | null
 }
 
 export type TenantUserListItem = {
@@ -70,6 +87,7 @@ export type TenantUserListItem = {
   joinedAt: string | null
   roleCode: RoleCode | null
   roleLabel: string | null
+  isOwner: boolean
   invitationId: string | null
   invitationStatus: InvitationStatusCode | null
   invitationSentAt: string | null
@@ -100,6 +118,54 @@ export type CompleteInvitedProfileInput = {
   avatarUrl?: string | null
 }
 
+export type StartTenantRegistrationInput = {
+  firstName: string
+  lastName: string
+  email: string
+  phone: string
+  activity: string
+  origin: string
+}
+
+export type CompleteOwnerOnboardingInput = {
+  registrationId: string
+  tenantName: string
+  timezone: string
+  firstName: string
+  lastName: string
+  phone?: string | null
+  avatarUrl?: string | null
+  password: string
+  confirmPassword: string
+}
+
+export type AcceptInvitationInput = {
+  invitationId: string
+  firstName: string
+  lastName: string
+  phone?: string | null
+  avatarUrl?: string | null
+  password?: string | null
+  confirmPassword?: string | null
+}
+
+export type SendForgotPasswordInput = {
+  email: string
+  origin: string
+}
+
+export type ResetPasswordInput = {
+  password: string
+  confirmPassword: string
+}
+
+export type UpdateProfileInput = {
+  firstName: string
+  lastName: string
+  phone?: string | null
+  avatarUrl?: string | null
+}
+
 export type UpdateTenantUserStatusInput = {
   tenantId: string
   tenantUserId: string
@@ -110,4 +176,49 @@ export type ChangeTenantUserPrimaryRoleInput = {
   tenantId: string
   tenantUserId: string
   roleCode: RoleCode
+}
+
+export type PermissionSummary = {
+  code: PermissionCode
+  name: string
+  moduleKey: string
+  actionKey: string
+  description: string | null
+}
+
+export type RolePermissionSummary = {
+  roleId: string
+  code: RoleCode
+  name: string
+  description: string | null
+  rank: number
+  permissions: Array<PermissionCode>
+}
+
+export type TenantUserPermissionOverrideSummary = {
+  permissionCode: PermissionCode
+  isAllowed: boolean
+}
+
+export type TenantUserAccessSummary = {
+  tenantUserId: string
+  displayName: string
+  email: string
+  roleCode: RoleCode | null
+  roleLabel: string | null
+  isOwner: boolean
+  permissionOverrides: Array<TenantUserPermissionOverrideSummary>
+}
+
+export type RolesPermissionsPayload = {
+  roles: Array<RolePermissionSummary>
+  permissions: Array<PermissionSummary>
+  users: Array<TenantUserAccessSummary>
+}
+
+export type SetUserPermissionOverrideInput = {
+  tenantId: string
+  tenantUserId: string
+  permissionCode: PermissionCode
+  isAllowed: boolean | null
 }

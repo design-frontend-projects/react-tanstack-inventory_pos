@@ -13,9 +13,14 @@ import { Route as AboutRouteImport } from './routes/about'
 import { Route as AuthRouteImport } from './routes/_auth'
 import { Route as AppRouteImport } from './routes/_app'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as AuthSignUpRouteImport } from './routes/_auth/sign-up'
 import { Route as AuthSignInRouteImport } from './routes/_auth/sign-in'
 import { Route as AuthSelectTenantRouteImport } from './routes/_auth/select-tenant'
+import { Route as AuthResetPasswordRouteImport } from './routes/_auth/reset-password'
+import { Route as AuthForgotPasswordRouteImport } from './routes/_auth/forgot-password'
 import { Route as AuthCompleteProfileRouteImport } from './routes/_auth/complete-profile'
+import { Route as AuthCompleteAccountRouteImport } from './routes/_auth/complete-account'
+import { Route as AppProfileRouteImport } from './routes/_app/profile'
 import { Route as AppDashboardRouteImport } from './routes/_app/dashboard'
 import { Route as AppPosIndexRouteImport } from './routes/_app/pos/index'
 import { Route as AppOutletsIndexRouteImport } from './routes/_app/outlets/index'
@@ -23,6 +28,7 @@ import { Route as AppInventoryIndexRouteImport } from './routes/_app/inventory/i
 import { Route as AppSettingsUsersRouteImport } from './routes/_app/settings/users'
 import { Route as AppSettingsNotificationsRouteImport } from './routes/_app/settings/notifications'
 import { Route as AppSettingsIntegrationsRouteImport } from './routes/_app/settings/integrations'
+import { Route as AppSettingsAccessRouteImport } from './routes/_app/settings/access'
 import { Route as AppRestaurantTablesRouteImport } from './routes/_app/restaurant/tables'
 import { Route as AppRestaurantMenuRouteImport } from './routes/_app/restaurant/menu'
 import { Route as AppRestaurantKitchenRouteImport } from './routes/_app/restaurant/kitchen'
@@ -49,6 +55,11 @@ const IndexRoute = IndexRouteImport.update({
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const AuthSignUpRoute = AuthSignUpRouteImport.update({
+  id: '/sign-up',
+  path: '/sign-up',
+  getParentRoute: () => AuthRoute,
+} as any)
 const AuthSignInRoute = AuthSignInRouteImport.update({
   id: '/sign-in',
   path: '/sign-in',
@@ -59,10 +70,30 @@ const AuthSelectTenantRoute = AuthSelectTenantRouteImport.update({
   path: '/select-tenant',
   getParentRoute: () => AuthRoute,
 } as any)
+const AuthResetPasswordRoute = AuthResetPasswordRouteImport.update({
+  id: '/reset-password',
+  path: '/reset-password',
+  getParentRoute: () => AuthRoute,
+} as any)
+const AuthForgotPasswordRoute = AuthForgotPasswordRouteImport.update({
+  id: '/forgot-password',
+  path: '/forgot-password',
+  getParentRoute: () => AuthRoute,
+} as any)
 const AuthCompleteProfileRoute = AuthCompleteProfileRouteImport.update({
   id: '/complete-profile',
   path: '/complete-profile',
   getParentRoute: () => AuthRoute,
+} as any)
+const AuthCompleteAccountRoute = AuthCompleteAccountRouteImport.update({
+  id: '/complete-account',
+  path: '/complete-account',
+  getParentRoute: () => AuthRoute,
+} as any)
+const AppProfileRoute = AppProfileRouteImport.update({
+  id: '/profile',
+  path: '/profile',
+  getParentRoute: () => AppRoute,
 } as any)
 const AppDashboardRoute = AppDashboardRouteImport.update({
   id: '/dashboard',
@@ -98,6 +129,11 @@ const AppSettingsNotificationsRoute =
 const AppSettingsIntegrationsRoute = AppSettingsIntegrationsRouteImport.update({
   id: '/settings/integrations',
   path: '/settings/integrations',
+  getParentRoute: () => AppRoute,
+} as any)
+const AppSettingsAccessRoute = AppSettingsAccessRouteImport.update({
+  id: '/settings/access',
+  path: '/settings/access',
   getParentRoute: () => AppRoute,
 } as any)
 const AppRestaurantTablesRoute = AppRestaurantTablesRouteImport.update({
@@ -140,9 +176,14 @@ export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/about': typeof AboutRoute
   '/dashboard': typeof AppDashboardRoute
+  '/profile': typeof AppProfileRoute
+  '/complete-account': typeof AuthCompleteAccountRoute
   '/complete-profile': typeof AuthCompleteProfileRoute
+  '/forgot-password': typeof AuthForgotPasswordRoute
+  '/reset-password': typeof AuthResetPasswordRoute
   '/select-tenant': typeof AuthSelectTenantRoute
   '/sign-in': typeof AuthSignInRoute
+  '/sign-up': typeof AuthSignUpRoute
   '/inventory/catalog': typeof AppInventoryCatalogRoute
   '/inventory/stock': typeof AppInventoryStockRoute
   '/pos/orders': typeof AppPosOrdersRoute
@@ -150,6 +191,7 @@ export interface FileRoutesByFullPath {
   '/restaurant/kitchen': typeof AppRestaurantKitchenRoute
   '/restaurant/menu': typeof AppRestaurantMenuRoute
   '/restaurant/tables': typeof AppRestaurantTablesRoute
+  '/settings/access': typeof AppSettingsAccessRoute
   '/settings/integrations': typeof AppSettingsIntegrationsRoute
   '/settings/notifications': typeof AppSettingsNotificationsRoute
   '/settings/users': typeof AppSettingsUsersRoute
@@ -161,9 +203,14 @@ export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/about': typeof AboutRoute
   '/dashboard': typeof AppDashboardRoute
+  '/profile': typeof AppProfileRoute
+  '/complete-account': typeof AuthCompleteAccountRoute
   '/complete-profile': typeof AuthCompleteProfileRoute
+  '/forgot-password': typeof AuthForgotPasswordRoute
+  '/reset-password': typeof AuthResetPasswordRoute
   '/select-tenant': typeof AuthSelectTenantRoute
   '/sign-in': typeof AuthSignInRoute
+  '/sign-up': typeof AuthSignUpRoute
   '/inventory/catalog': typeof AppInventoryCatalogRoute
   '/inventory/stock': typeof AppInventoryStockRoute
   '/pos/orders': typeof AppPosOrdersRoute
@@ -171,6 +218,7 @@ export interface FileRoutesByTo {
   '/restaurant/kitchen': typeof AppRestaurantKitchenRoute
   '/restaurant/menu': typeof AppRestaurantMenuRoute
   '/restaurant/tables': typeof AppRestaurantTablesRoute
+  '/settings/access': typeof AppSettingsAccessRoute
   '/settings/integrations': typeof AppSettingsIntegrationsRoute
   '/settings/notifications': typeof AppSettingsNotificationsRoute
   '/settings/users': typeof AppSettingsUsersRoute
@@ -185,9 +233,14 @@ export interface FileRoutesById {
   '/_auth': typeof AuthRouteWithChildren
   '/about': typeof AboutRoute
   '/_app/dashboard': typeof AppDashboardRoute
+  '/_app/profile': typeof AppProfileRoute
+  '/_auth/complete-account': typeof AuthCompleteAccountRoute
   '/_auth/complete-profile': typeof AuthCompleteProfileRoute
+  '/_auth/forgot-password': typeof AuthForgotPasswordRoute
+  '/_auth/reset-password': typeof AuthResetPasswordRoute
   '/_auth/select-tenant': typeof AuthSelectTenantRoute
   '/_auth/sign-in': typeof AuthSignInRoute
+  '/_auth/sign-up': typeof AuthSignUpRoute
   '/_app/inventory/catalog': typeof AppInventoryCatalogRoute
   '/_app/inventory/stock': typeof AppInventoryStockRoute
   '/_app/pos/orders': typeof AppPosOrdersRoute
@@ -195,6 +248,7 @@ export interface FileRoutesById {
   '/_app/restaurant/kitchen': typeof AppRestaurantKitchenRoute
   '/_app/restaurant/menu': typeof AppRestaurantMenuRoute
   '/_app/restaurant/tables': typeof AppRestaurantTablesRoute
+  '/_app/settings/access': typeof AppSettingsAccessRoute
   '/_app/settings/integrations': typeof AppSettingsIntegrationsRoute
   '/_app/settings/notifications': typeof AppSettingsNotificationsRoute
   '/_app/settings/users': typeof AppSettingsUsersRoute
@@ -208,9 +262,14 @@ export interface FileRouteTypes {
     | '/'
     | '/about'
     | '/dashboard'
+    | '/profile'
+    | '/complete-account'
     | '/complete-profile'
+    | '/forgot-password'
+    | '/reset-password'
     | '/select-tenant'
     | '/sign-in'
+    | '/sign-up'
     | '/inventory/catalog'
     | '/inventory/stock'
     | '/pos/orders'
@@ -218,6 +277,7 @@ export interface FileRouteTypes {
     | '/restaurant/kitchen'
     | '/restaurant/menu'
     | '/restaurant/tables'
+    | '/settings/access'
     | '/settings/integrations'
     | '/settings/notifications'
     | '/settings/users'
@@ -229,9 +289,14 @@ export interface FileRouteTypes {
     | '/'
     | '/about'
     | '/dashboard'
+    | '/profile'
+    | '/complete-account'
     | '/complete-profile'
+    | '/forgot-password'
+    | '/reset-password'
     | '/select-tenant'
     | '/sign-in'
+    | '/sign-up'
     | '/inventory/catalog'
     | '/inventory/stock'
     | '/pos/orders'
@@ -239,6 +304,7 @@ export interface FileRouteTypes {
     | '/restaurant/kitchen'
     | '/restaurant/menu'
     | '/restaurant/tables'
+    | '/settings/access'
     | '/settings/integrations'
     | '/settings/notifications'
     | '/settings/users'
@@ -252,9 +318,14 @@ export interface FileRouteTypes {
     | '/_auth'
     | '/about'
     | '/_app/dashboard'
+    | '/_app/profile'
+    | '/_auth/complete-account'
     | '/_auth/complete-profile'
+    | '/_auth/forgot-password'
+    | '/_auth/reset-password'
     | '/_auth/select-tenant'
     | '/_auth/sign-in'
+    | '/_auth/sign-up'
     | '/_app/inventory/catalog'
     | '/_app/inventory/stock'
     | '/_app/pos/orders'
@@ -262,6 +333,7 @@ export interface FileRouteTypes {
     | '/_app/restaurant/kitchen'
     | '/_app/restaurant/menu'
     | '/_app/restaurant/tables'
+    | '/_app/settings/access'
     | '/_app/settings/integrations'
     | '/_app/settings/notifications'
     | '/_app/settings/users'
@@ -307,6 +379,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/_auth/sign-up': {
+      id: '/_auth/sign-up'
+      path: '/sign-up'
+      fullPath: '/sign-up'
+      preLoaderRoute: typeof AuthSignUpRouteImport
+      parentRoute: typeof AuthRoute
+    }
     '/_auth/sign-in': {
       id: '/_auth/sign-in'
       path: '/sign-in'
@@ -321,12 +400,40 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthSelectTenantRouteImport
       parentRoute: typeof AuthRoute
     }
+    '/_auth/reset-password': {
+      id: '/_auth/reset-password'
+      path: '/reset-password'
+      fullPath: '/reset-password'
+      preLoaderRoute: typeof AuthResetPasswordRouteImport
+      parentRoute: typeof AuthRoute
+    }
+    '/_auth/forgot-password': {
+      id: '/_auth/forgot-password'
+      path: '/forgot-password'
+      fullPath: '/forgot-password'
+      preLoaderRoute: typeof AuthForgotPasswordRouteImport
+      parentRoute: typeof AuthRoute
+    }
     '/_auth/complete-profile': {
       id: '/_auth/complete-profile'
       path: '/complete-profile'
       fullPath: '/complete-profile'
       preLoaderRoute: typeof AuthCompleteProfileRouteImport
       parentRoute: typeof AuthRoute
+    }
+    '/_auth/complete-account': {
+      id: '/_auth/complete-account'
+      path: '/complete-account'
+      fullPath: '/complete-account'
+      preLoaderRoute: typeof AuthCompleteAccountRouteImport
+      parentRoute: typeof AuthRoute
+    }
+    '/_app/profile': {
+      id: '/_app/profile'
+      path: '/profile'
+      fullPath: '/profile'
+      preLoaderRoute: typeof AppProfileRouteImport
+      parentRoute: typeof AppRoute
     }
     '/_app/dashboard': {
       id: '/_app/dashboard'
@@ -375,6 +482,13 @@ declare module '@tanstack/react-router' {
       path: '/settings/integrations'
       fullPath: '/settings/integrations'
       preLoaderRoute: typeof AppSettingsIntegrationsRouteImport
+      parentRoute: typeof AppRoute
+    }
+    '/_app/settings/access': {
+      id: '/_app/settings/access'
+      path: '/settings/access'
+      fullPath: '/settings/access'
+      preLoaderRoute: typeof AppSettingsAccessRouteImport
       parentRoute: typeof AppRoute
     }
     '/_app/restaurant/tables': {
@@ -431,6 +545,7 @@ declare module '@tanstack/react-router' {
 
 interface AppRouteChildren {
   AppDashboardRoute: typeof AppDashboardRoute
+  AppProfileRoute: typeof AppProfileRoute
   AppInventoryCatalogRoute: typeof AppInventoryCatalogRoute
   AppInventoryStockRoute: typeof AppInventoryStockRoute
   AppPosOrdersRoute: typeof AppPosOrdersRoute
@@ -438,6 +553,7 @@ interface AppRouteChildren {
   AppRestaurantKitchenRoute: typeof AppRestaurantKitchenRoute
   AppRestaurantMenuRoute: typeof AppRestaurantMenuRoute
   AppRestaurantTablesRoute: typeof AppRestaurantTablesRoute
+  AppSettingsAccessRoute: typeof AppSettingsAccessRoute
   AppSettingsIntegrationsRoute: typeof AppSettingsIntegrationsRoute
   AppSettingsNotificationsRoute: typeof AppSettingsNotificationsRoute
   AppSettingsUsersRoute: typeof AppSettingsUsersRoute
@@ -448,6 +564,7 @@ interface AppRouteChildren {
 
 const AppRouteChildren: AppRouteChildren = {
   AppDashboardRoute: AppDashboardRoute,
+  AppProfileRoute: AppProfileRoute,
   AppInventoryCatalogRoute: AppInventoryCatalogRoute,
   AppInventoryStockRoute: AppInventoryStockRoute,
   AppPosOrdersRoute: AppPosOrdersRoute,
@@ -455,6 +572,7 @@ const AppRouteChildren: AppRouteChildren = {
   AppRestaurantKitchenRoute: AppRestaurantKitchenRoute,
   AppRestaurantMenuRoute: AppRestaurantMenuRoute,
   AppRestaurantTablesRoute: AppRestaurantTablesRoute,
+  AppSettingsAccessRoute: AppSettingsAccessRoute,
   AppSettingsIntegrationsRoute: AppSettingsIntegrationsRoute,
   AppSettingsNotificationsRoute: AppSettingsNotificationsRoute,
   AppSettingsUsersRoute: AppSettingsUsersRoute,
@@ -466,15 +584,23 @@ const AppRouteChildren: AppRouteChildren = {
 const AppRouteWithChildren = AppRoute._addFileChildren(AppRouteChildren)
 
 interface AuthRouteChildren {
+  AuthCompleteAccountRoute: typeof AuthCompleteAccountRoute
   AuthCompleteProfileRoute: typeof AuthCompleteProfileRoute
+  AuthForgotPasswordRoute: typeof AuthForgotPasswordRoute
+  AuthResetPasswordRoute: typeof AuthResetPasswordRoute
   AuthSelectTenantRoute: typeof AuthSelectTenantRoute
   AuthSignInRoute: typeof AuthSignInRoute
+  AuthSignUpRoute: typeof AuthSignUpRoute
 }
 
 const AuthRouteChildren: AuthRouteChildren = {
+  AuthCompleteAccountRoute: AuthCompleteAccountRoute,
   AuthCompleteProfileRoute: AuthCompleteProfileRoute,
+  AuthForgotPasswordRoute: AuthForgotPasswordRoute,
+  AuthResetPasswordRoute: AuthResetPasswordRoute,
   AuthSelectTenantRoute: AuthSelectTenantRoute,
   AuthSignInRoute: AuthSignInRoute,
+  AuthSignUpRoute: AuthSignUpRoute,
 }
 
 const AuthRouteWithChildren = AuthRoute._addFileChildren(AuthRouteChildren)
