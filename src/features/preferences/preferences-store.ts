@@ -6,6 +6,7 @@ import { persist } from 'zustand/middleware'
 type PreferencesState = {
   activeTenantId: string | null
   setActiveTenantId: (tenantId: string) => void
+  clear: () => void
 }
 
 export const usePreferencesStore = create<PreferencesState>()(
@@ -13,6 +14,7 @@ export const usePreferencesStore = create<PreferencesState>()(
     (set) => ({
       activeTenantId: null,
       setActiveTenantId: (tenantId) => set({ activeTenantId: tenantId }),
+      clear: () => set({ activeTenantId: null }),
     }),
     {
       name: 'inventory-pos-preferences',

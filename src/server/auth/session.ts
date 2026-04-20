@@ -1,0 +1,219 @@
+import type { User } from '@supabase/supabase-js'
+import { getRoleRank } from '#/features/auth/rbac-catalog'
+import type {
+  CurrentUserContext,
+  SessionBootstrapPayload,
+  SessionUser,
+  WorkspaceMembership,
+} from '#/types/auth'
+import { createServerSupabaseClient } from '#/server/auth/supabase-server'
+import { UnauthorizedError } from '#/server/auth/errors'
+import { buildDisplayName, normalizeEmail } from '#/server/auth/normalization'
+import { resolveActiveTenantId } from '#/server/db/tenant-context'
+import { listTenantUsersForProfile, findTenantUserByTenantAndProfile } from '#/server/repos/membership-repo'
+import { ensurePreferenceProfile } from '#/server/repos/preference-repo'
+import { ensureProfile } from '#/server/repos/profile-repo'
+
+function parseMetadataString(
+  metadata: User['user_metadata'],
+  ...keys: Array<string>
+) {
+  for (const key of keys) {
+    const value = metadata[key]
+
+    if (typeof value === 'string' && value.trim().length > 0) {
+      return value.trim()
+    }
+  }
+
+  return null
+}
+
+function mapMemberships(
+  tenantUsers: Awaited<ReturnType<typeof listTenantUsersForProfile>>
+): Array<WorkspaceMembership> {
+  return tenantUsers.map((tenantUser) => {
+    const primaryRole =
+      tenantUser.roles.at(0)?.role ??
+      tenantUser.roles
+        .map((tenantUserRole) => tenantUserRole.role)
+        .sort((left, right) => right.rank - left.rank)
+        .at(0) ??
+      null
+
+    return {
+      tenantId: tenantUser.tenantId,
+      tenantName: tenantUser.tenant.name,
+      roleCode: (primaryRole?.code ?? 'viewer') as WorkspaceMembership['roleCode'],
+      roleLabel: primaryRole?.name ?? 'Viewer',
+      status: tenantUser.status.toLowerCase() as WorkspaceMembership['status'],
+      joinedAt: tenantUser.joinedAt?.toISOString() ?? null,
+    }
+  })
+}
+
+function mapSessionUser(profile: {
+  id: string
+  authUserId: string
+  email: string
+  firstName: string | null
+  lastName: string | null
+  onboardingCompleted: boolean
+  preferenceProfile: {
+    locale: 'EN' | 'AR'
+    themeMode: 'LIGHT' | 'DARK' | 'SYSTEM'
+  } | null
+}): SessionUser {
+  return {
+    id: profile.id,
+    authUserId: profile.authUserId,
+    displayName: buildDisplayName(profile.firstName, profile.lastName, profile.email),
+    email: profile.email,
+    title: null,
+    onboardingCompleted: profile.onboardingCompleted,
+    locale: profile.preferenceProfile?.locale.toLowerCase() as SessionUser['locale'],
+    themeMode: profile.preferenceProfile?.themeMode.toLowerCase() as SessionUser['themeMode'],
+  }
+}
+
+function mapCurrentUserContext(
+  profile: {
+    id: string
+    authUserId: string
+    email: string
+    onboardingCompleted: boolean
+  },
+  tenantUser:
+    | (Awaited<ReturnType<typeof findTenantUserByTenantAndProfile>> & {})
+    | null,
+  activeTenantId: string | null
+): CurrentUserContext {
+  const roleCodes = tenantUser
+    ? Array.from(
+        new Set(
+          tenantUser.roles
+            .map((tenantUserRole) => tenantUserRole.role.code)
+            .sort((left, right) => getRoleRank(right) - getRoleRank(left))
+        )
+      )
+    : []
+
+  const permissions = tenantUser
+    ? Array.from(
+        new Set(
+          tenantUser.roles.flatMap((tenantUserRole) =>
+            tenantUserRole.role.permissions.map(
+              (rolePermission) => rolePermission.permission.code
+            )
+          )
+        )
+      )
+    : []
+
+  return {
+    authUserId: profile.authUserId,
+    profileId: profile.id,
+    email: profile.email,
+    activeTenantId,
+    tenantUserId: tenantUser?.id ?? null,
+    roles: roleCodes as CurrentUserContext['roles'],
+    permissions: permissions as CurrentUserContext['permissions'],
+    onboardingCompleted: profile.onboardingCompleted,
+    tenantStatus: tenantUser?.status.toLowerCase() as CurrentUserContext['tenantStatus'],
+  }
+}
+
+export function getAccessTokenFromHeaders(headers: HeadersInit | undefined) {
+  if (!headers) {
+    return null
+  }
+
+  const normalizedHeaders = new Headers(headers)
+  const authorization = normalizedHeaders.get('authorization')
+
+  if (!authorization?.toLowerCase().startsWith('bearer ')) {
+    return null
+  }
+
+  return authorization.slice('Bearer '.length).trim()
+}
+
+export async function getAuthenticatedSupabaseUser(accessToken: string) {
+  const supabase = createServerSupabaseClient(accessToken)
+  const { data, error } = await supabase.auth.getUser(accessToken)
+
+  if (error) {
+    throw new UnauthorizedError('Unable to validate the Supabase session.')
+  }
+
+  return data.user
+}
+
+export async function bootstrapSession(options: {
+  accessToken: string
+  requestedTenantId?: string | null
+}): Promise<SessionBootstrapPayload> {
+  const authUser = await getAuthenticatedSupabaseUser(options.accessToken)
+
+  const profile = await ensureProfile({
+    authUserId: authUser.id,
+    email: authUser.email ?? '',
+    firstName: parseMetadataString(authUser.user_metadata, 'first_name', 'firstName'),
+    lastName: parseMetadataString(authUser.user_metadata, 'last_name', 'lastName'),
+    phone: parseMetadataString(authUser.user_metadata, 'phone'),
+    avatarUrl: parseMetadataString(authUser.user_metadata, 'avatar_url', 'avatarUrl'),
+  })
+
+  const preferenceProfile = await ensurePreferenceProfile(profile.id)
+  const tenantUsers = await listTenantUsersForProfile(profile.id)
+  const memberships = mapMemberships(tenantUsers)
+  const activeTenantId = resolveActiveTenantId({
+    memberships,
+    preferredTenantId: preferenceProfile.defaultTenantId,
+    requestedTenantId: options.requestedTenantId,
+  })
+  const activeMembership =
+    memberships.find((membership) => membership.tenantId === activeTenantId) ?? null
+  const tenantUser = activeTenantId
+    ? await findTenantUserByTenantAndProfile(activeTenantId, profile.id)
+    : null
+
+  return {
+    authenticated: true,
+    user: mapSessionUser({
+      ...profile,
+      preferenceProfile,
+    }),
+    memberships,
+    activeTenantId,
+    activeMembership,
+    context: mapCurrentUserContext(profile, tenantUser, activeTenantId),
+  }
+}
+
+export async function getCurrentUserContext(options: {
+  accessToken: string
+  tenantId?: string | null
+}) {
+  const bootstrap = await bootstrapSession({
+    accessToken: options.accessToken,
+    requestedTenantId: options.tenantId,
+  })
+
+  return bootstrap.context
+}
+
+export function anonymousSessionBootstrap(): SessionBootstrapPayload {
+  return {
+    authenticated: false,
+    user: null,
+    memberships: [],
+    activeTenantId: null,
+    activeMembership: null,
+    context: null,
+  }
+}
+
+export function getAuthUserEmail(authUser: User) {
+  return normalizeEmail(authUser.email ?? '')
+}

@@ -11,7 +11,7 @@ export function getSupabaseBrowserClient(): SupabaseClient {
 
   browserSupabaseClient = createClient(
     clientEnv.VITE_SUPABASE_URL,
-    clientEnv.VITE_SUPABASE_ANON_KEY
+    clientEnv.VITE_SUPABASE_ANON_KEY,
   )
 
   return browserSupabaseClient

@@ -4,8 +4,10 @@ import { Pool } from 'pg'
 
 import { serverEnv } from '#/lib/env/server'
 
+type DbClient = ReturnType<typeof createPrismaClient>
+
 declare global {
-  var __prismaClient__: PrismaClient | undefined
+  var __prismaClient__: DbClient | undefined
 }
 
 function createPrismaClient() {
@@ -22,7 +24,7 @@ function createPrismaClient() {
   })
 }
 
-export const prisma =
+export const prisma: DbClient =
   globalThis.__prismaClient__ ?? createPrismaClient()
 
 if (process.env.NODE_ENV !== 'production') {

@@ -15,6 +15,7 @@ import { Route as AppRouteImport } from './routes/_app'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as AuthSignInRouteImport } from './routes/_auth/sign-in'
 import { Route as AuthSelectTenantRouteImport } from './routes/_auth/select-tenant'
+import { Route as AuthCompleteProfileRouteImport } from './routes/_auth/complete-profile'
 import { Route as AppDashboardRouteImport } from './routes/_app/dashboard'
 import { Route as AppPosIndexRouteImport } from './routes/_app/pos/index'
 import { Route as AppOutletsIndexRouteImport } from './routes/_app/outlets/index'
@@ -56,6 +57,11 @@ const AuthSignInRoute = AuthSignInRouteImport.update({
 const AuthSelectTenantRoute = AuthSelectTenantRouteImport.update({
   id: '/select-tenant',
   path: '/select-tenant',
+  getParentRoute: () => AuthRoute,
+} as any)
+const AuthCompleteProfileRoute = AuthCompleteProfileRouteImport.update({
+  id: '/complete-profile',
+  path: '/complete-profile',
   getParentRoute: () => AuthRoute,
 } as any)
 const AppDashboardRoute = AppDashboardRouteImport.update({
@@ -134,6 +140,7 @@ export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/about': typeof AboutRoute
   '/dashboard': typeof AppDashboardRoute
+  '/complete-profile': typeof AuthCompleteProfileRoute
   '/select-tenant': typeof AuthSelectTenantRoute
   '/sign-in': typeof AuthSignInRoute
   '/inventory/catalog': typeof AppInventoryCatalogRoute
@@ -154,6 +161,7 @@ export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/about': typeof AboutRoute
   '/dashboard': typeof AppDashboardRoute
+  '/complete-profile': typeof AuthCompleteProfileRoute
   '/select-tenant': typeof AuthSelectTenantRoute
   '/sign-in': typeof AuthSignInRoute
   '/inventory/catalog': typeof AppInventoryCatalogRoute
@@ -177,6 +185,7 @@ export interface FileRoutesById {
   '/_auth': typeof AuthRouteWithChildren
   '/about': typeof AboutRoute
   '/_app/dashboard': typeof AppDashboardRoute
+  '/_auth/complete-profile': typeof AuthCompleteProfileRoute
   '/_auth/select-tenant': typeof AuthSelectTenantRoute
   '/_auth/sign-in': typeof AuthSignInRoute
   '/_app/inventory/catalog': typeof AppInventoryCatalogRoute
@@ -199,6 +208,7 @@ export interface FileRouteTypes {
     | '/'
     | '/about'
     | '/dashboard'
+    | '/complete-profile'
     | '/select-tenant'
     | '/sign-in'
     | '/inventory/catalog'
@@ -219,6 +229,7 @@ export interface FileRouteTypes {
     | '/'
     | '/about'
     | '/dashboard'
+    | '/complete-profile'
     | '/select-tenant'
     | '/sign-in'
     | '/inventory/catalog'
@@ -241,6 +252,7 @@ export interface FileRouteTypes {
     | '/_auth'
     | '/about'
     | '/_app/dashboard'
+    | '/_auth/complete-profile'
     | '/_auth/select-tenant'
     | '/_auth/sign-in'
     | '/_app/inventory/catalog'
@@ -307,6 +319,13 @@ declare module '@tanstack/react-router' {
       path: '/select-tenant'
       fullPath: '/select-tenant'
       preLoaderRoute: typeof AuthSelectTenantRouteImport
+      parentRoute: typeof AuthRoute
+    }
+    '/_auth/complete-profile': {
+      id: '/_auth/complete-profile'
+      path: '/complete-profile'
+      fullPath: '/complete-profile'
+      preLoaderRoute: typeof AuthCompleteProfileRouteImport
       parentRoute: typeof AuthRoute
     }
     '/_app/dashboard': {
@@ -447,11 +466,13 @@ const AppRouteChildren: AppRouteChildren = {
 const AppRouteWithChildren = AppRoute._addFileChildren(AppRouteChildren)
 
 interface AuthRouteChildren {
+  AuthCompleteProfileRoute: typeof AuthCompleteProfileRoute
   AuthSelectTenantRoute: typeof AuthSelectTenantRoute
   AuthSignInRoute: typeof AuthSignInRoute
 }
 
 const AuthRouteChildren: AuthRouteChildren = {
+  AuthCompleteProfileRoute: AuthCompleteProfileRoute,
   AuthSelectTenantRoute: AuthSelectTenantRoute,
   AuthSignInRoute: AuthSignInRoute,
 }

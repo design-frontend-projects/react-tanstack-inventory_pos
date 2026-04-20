@@ -1,60 +1,134 @@
 "use client"
 
 import * as React from 'react'
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
+import {
+  bootstrapSessionServerFn,
+  switchActiveTenantServerFn,
+} from '#/features/auth/server-functions'
+import { getAccessToken } from '#/features/auth/browser-auth'
 import { usePreferencesStore } from '#/features/preferences/preferences-store'
-import type { SessionUser, WorkspaceMembership } from '#/types/app'
+import { getSupabaseBrowserClient } from '#/lib/supabase/client'
+import type { SessionBootstrapPayload } from '#/types/auth'
 
-const SESSION_USER: SessionUser = {
-  id: 'user-amina-khaled',
-  displayName: 'Amina Khaled',
-  email: 'amina@meridian.demo',
-  title: 'Group Operations Director',
+const SESSION_BOOTSTRAP_QUERY_KEY = ['auth', 'session-bootstrap'] as const
+
+async function fetchSessionBootstrap(
+  requestedTenantId?: string | null
+): Promise<SessionBootstrapPayload> {
+  const accessToken = await getAccessToken()
+
+  if (!accessToken) {
+    return {
+      authenticated: false,
+      user: null,
+      memberships: [],
+      activeTenantId: null,
+      activeMembership: null,
+      context: null,
+    }
+  }
+
+  return bootstrapSessionServerFn({
+    data: {
+      accessToken,
+      requestedTenantId: requestedTenantId ?? null,
+    },
+  })
 }
 
-const MEMBERSHIPS: WorkspaceMembership[] = [
-  {
-    tenantId: 'meridian-foods',
-    tenantName: 'Meridian Foods Group',
-    role: 'owner',
-    regionLabel: 'Cairo + Giza Cluster',
-    defaultOutletLabel: 'Kasr El Nil Flagship',
-  },
-  {
-    tenantId: 'atlas-kitchens',
-    tenantName: 'Atlas Kitchens',
-    role: 'manager',
-    regionLabel: 'Alexandria + North Coast',
-    defaultOutletLabel: 'Corniche Hot Line',
-  },
-  {
-    tenantId: 'night-shift-labs',
-    tenantName: 'Night Shift Labs',
-    role: 'admin',
-    regionLabel: 'Sandbox Workspace',
-    defaultOutletLabel: 'Remote Test Counter',
-  },
-]
-
 export function useSessionBootstrap() {
+  const queryClient = useQueryClient()
   const activeTenantId = usePreferencesStore((state) => state.activeTenantId)
-  const setActiveTenantId = usePreferencesStore(
+  const setLocalActiveTenantId = usePreferencesStore(
     (state) => state.setActiveTenantId
   )
+  const clearPreferences = usePreferencesStore((state) => state.clear)
+
+  const sessionQuery = useQuery({
+    queryKey: [...SESSION_BOOTSTRAP_QUERY_KEY, activeTenantId],
+    queryFn: () => fetchSessionBootstrap(activeTenantId),
+  })
+  const session = sessionQuery.data
+
+  const switchTenantMutation = useMutation({
+    mutationFn: async (tenantId: string) => {
+      const accessToken = await getAccessToken()
+
+      if (!accessToken) {
+        throw new Error('You must be signed in to switch tenants.')
+      }
+
+      return switchActiveTenantServerFn({
+        data: {
+          accessToken,
+          tenantId,
+        },
+      })
+    },
+    onSuccess: (nextSession) => {
+      if (nextSession.activeTenantId) {
+        setLocalActiveTenantId(nextSession.activeTenantId)
+      }
+
+      queryClient.setQueryData(
+        [...SESSION_BOOTSTRAP_QUERY_KEY, nextSession.activeTenantId],
+        nextSession
+      )
+      queryClient.invalidateQueries({
+        queryKey: SESSION_BOOTSTRAP_QUERY_KEY,
+      })
+    },
+  })
 
   React.useEffect(() => {
-    if (!activeTenantId) {
-      setActiveTenantId(MEMBERSHIPS[0].tenantId)
-    }
-  }, [activeTenantId, setActiveTenantId])
+    const supabase = getSupabaseBrowserClient()
+    const {
+      data: { subscription },
+    } = supabase.auth.onAuthStateChange(() => {
+      queryClient.invalidateQueries({
+        queryKey: SESSION_BOOTSTRAP_QUERY_KEY,
+      })
+    })
 
-  const activeMembership =
-    MEMBERSHIPS.find((membership) => membership.tenantId === activeTenantId) ??
-    MEMBERSHIPS[0]
+    return () => subscription.unsubscribe()
+  }, [queryClient])
+
+  React.useEffect(() => {
+    if (sessionQuery.data?.activeTenantId) {
+      setLocalActiveTenantId(sessionQuery.data.activeTenantId)
+    }
+  }, [sessionQuery.data?.activeTenantId, setLocalActiveTenantId])
+
+  const clearSessionState = React.useCallback(() => {
+    clearPreferences()
+    queryClient.removeQueries({
+      queryKey: SESSION_BOOTSTRAP_QUERY_KEY,
+    })
+  }, [clearPreferences, queryClient])
+
+  const needsProfileCompletion =
+    session?.authenticated === true &&
+    session.user !== null &&
+    !session.user.onboardingCompleted
 
   return {
-    user: SESSION_USER,
-    memberships: MEMBERSHIPS,
-    activeMembership,
-    setActiveTenantId,
+    ...sessionQuery,
+    user: session?.user ?? null,
+    memberships: session?.memberships ?? [],
+    activeMembership: session?.activeMembership ?? null,
+    activeTenantId: session?.activeTenantId ?? null,
+    context: session?.context ?? null,
+    isAuthenticated: session?.authenticated ?? false,
+    needsTenantSelection:
+      (session?.authenticated ?? false) &&
+      (session?.memberships.length ?? 0) > 1 &&
+      !session?.activeTenantId,
+    needsProfileCompletion,
+    setActiveTenantId: async (tenantId: string) => {
+      await switchTenantMutation.mutateAsync(tenantId)
+    },
+    isSwitchingTenant: switchTenantMutation.isPending,
+    clearSessionState,
   }
 }

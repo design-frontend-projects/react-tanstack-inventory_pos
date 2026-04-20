@@ -6,20 +6,30 @@ import i18n from '#/lib/i18n'
 import type { AppNavRouteTo } from '#/lib/navigation/app-nav'
 import type { WorkspaceMembership } from '#/types/app'
 
+vi.mock('#/features/auth/use-session-bootstrap', () => ({
+  useSessionBootstrap: () => ({
+    context: {
+      permissions: ['inventory.view', 'outlet.view', 'pos.view', 'settings.view', 'user.view'],
+    },
+  }),
+}))
+
 const memberships: WorkspaceMembership[] = [
   {
     tenantId: 'meridian-foods',
     tenantName: 'Meridian Foods Group',
-    role: 'owner',
-    regionLabel: 'Cairo + Giza Cluster',
-    defaultOutletLabel: 'Kasr El Nil Flagship',
+    roleCode: 'tenant_owner',
+    roleLabel: 'Tenant Owner',
+    status: 'active',
+    joinedAt: '2026-04-01T00:00:00.000Z',
   },
   {
     tenantId: 'night-shift-labs',
     tenantName: 'Night Shift Labs',
-    role: 'admin',
-    regionLabel: 'Sandbox Workspace',
-    defaultOutletLabel: 'Remote Test Counter',
+    roleCode: 'tenant_admin',
+    roleLabel: 'Tenant Admin',
+    status: 'active',
+    joinedAt: '2026-04-02T00:00:00.000Z',
   },
 ]
 

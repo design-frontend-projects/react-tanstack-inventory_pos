@@ -18,12 +18,31 @@ import {
   dashboardNavItem,
   isAppPathActive,
 } from '#/lib/navigation/app-nav'
+import { useSessionBootstrap } from '#/features/auth/use-session-bootstrap'
+import { hasAnyPermission } from '#/features/auth/permissions'
 
 export function SidebarNav() {
   const { t } = useTranslation()
+  const { context } = useSessionBootstrap()
   const pathname = useRouterState({
     select: (state) => state.location.pathname,
   })
+
+  const visibleSections = appNavSections
+    .map((section) => ({
+      ...section,
+      items: section.items.filter(
+        (item) =>
+          !item.permissions?.length ||
+          hasAnyPermission(context?.permissions ?? [], item.permissions)
+      ),
+    }))
+    .filter(
+      (section) =>
+        section.items.length > 0 &&
+        (!section.permissions?.length ||
+          hasAnyPermission(context?.permissions ?? [], section.permissions))
+    )
 
   return (
     <div className="flex flex-col gap-1.5">
@@ -46,7 +65,7 @@ export function SidebarNav() {
         </SidebarMenu>
       </SidebarGroup>
 
-      {appNavSections.map((section) => {
+      {visibleSections.map((section) => {
         const hasActiveChild = section.items.some((item) =>
           isAppPathActive(pathname, item.to)
         )

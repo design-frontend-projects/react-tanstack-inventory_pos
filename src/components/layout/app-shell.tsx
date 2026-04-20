@@ -2,6 +2,7 @@
 
 import { useTranslation } from 'react-i18next'
 import { useNavigate, useRouterState } from '@tanstack/react-router'
+import { LogOut } from 'lucide-react'
 import { Avatar, AvatarFallback } from '#/components/ui/avatar'
 import { Badge } from '#/components/ui/badge'
 import {
@@ -20,8 +21,10 @@ import { WorkspaceSwitcher } from '#/components/layout/workspace-switcher'
 import { LanguageSwitcher } from '#/components/layout/language-switcher'
 import { ThemeToggle } from '#/components/layout/theme-toggle'
 import { useSessionBootstrap } from '#/features/auth/use-session-bootstrap'
+import { signOut } from '#/features/auth/browser-auth'
 import { useLayoutStore } from '#/features/layout/layout-store'
 import { getAppNavContext } from '#/lib/navigation/app-nav'
+import { Button } from '#/components/ui/button'
 
 export function AppShell({ children }: { children: React.ReactNode }) {
   const { t } = useTranslation()
@@ -45,6 +48,8 @@ export function AppShell({ children }: { children: React.ReactNode }) {
     ? t(activeSection.titleKey, activeSection.fallbackTitle)
     : t('actions.overview')
   const sidebarSide = direction === 'rtl' ? 'right' : 'left'
+  const activeTenantName = activeMembership?.tenantName ?? 'No active workspace'
+  const activeRoleLabel = activeMembership?.roleLabel ?? 'No role'
 
   return (
     <SidebarProvider
@@ -90,21 +95,33 @@ export function AppShell({ children }: { children: React.ReactNode }) {
                 </Avatar>
                 <div className="min-w-0">
                   <p className="truncate text-sm font-semibold">
-                    {user.displayName}
+                    {user?.displayName ?? 'Signed-out user'}
                   </p>
                   <p className="truncate text-xs text-sidebar-foreground/62">
-                    {user.title}
+                    {user?.email ?? 'No email'}
                   </p>
                 </div>
               </div>
               <div className="mt-3 flex items-center justify-between gap-2 border-t border-white/[0.08] pt-3">
                 <Badge variant="secondary" className="capitalize">
-                  {activeMembership.role}
+                  {activeRoleLabel}
                 </Badge>
                 <span className="truncate text-xs text-sidebar-foreground/62">
-                  {activeMembership.defaultOutletLabel}
+                  {activeTenantName}
                 </span>
               </div>
+              <Button
+                type="button"
+                variant="ghost"
+                className="mt-3 w-full justify-between rounded-xl text-sidebar-foreground/78 hover:bg-white/[0.06] hover:text-sidebar-foreground"
+                onClick={async () => {
+                  await signOut()
+                  void navigate({ to: '/sign-in' })
+                }}
+              >
+                Sign out
+                <LogOut className="size-4" />
+              </Button>
             </div>
           </SidebarFooter>
 
@@ -127,7 +144,7 @@ export function AppShell({ children }: { children: React.ReactNode }) {
                     {activeSectionLabel}
                   </span>
                   <span className="hidden truncate text-sm text-muted-foreground xl:inline">
-                    {activeMembership.tenantName}
+                    {activeTenantName}
                   </span>
                 </div>
               </div>
@@ -136,7 +153,7 @@ export function AppShell({ children }: { children: React.ReactNode }) {
             <TopCommand
               pathname={pathname}
               memberships={memberships}
-              activeTenantId={activeMembership.tenantId}
+              activeTenantId={activeMembership?.tenantId ?? ''}
               onNavigate={(to) => void navigate({ to })}
               onSelectWorkspace={setActiveTenantId}
               className="order-3 col-span-full md:order-2 md:col-span-1 md:max-w-[32rem] md:justify-self-center"

@@ -27,6 +27,8 @@ import type {
   AppNavRouteTo,
 } from '#/lib/navigation/app-nav'
 import type { WorkspaceMembership } from '#/types/app'
+import { useSessionBootstrap } from '#/features/auth/use-session-bootstrap'
+import { hasAnyPermission } from '#/features/auth/permissions'
 
 const DESKTOP_SHORTCUT = 'Ctrl K'
 
@@ -57,6 +59,7 @@ export function TopCommand({
   className?: string
 }) {
   const { t } = useTranslation()
+  const { context } = useSessionBootstrap()
   const [open, setOpen] = React.useState(false)
 
   React.useEffect(() => {
@@ -73,6 +76,22 @@ export function TopCommand({
   }, [])
 
   const entries = React.useMemo(() => {
+    const visibleSections = appNavSections
+      .map((section) => ({
+        ...section,
+        items: section.items.filter(
+          (item) =>
+            !item.permissions?.length ||
+            hasAnyPermission(context?.permissions ?? [], item.permissions)
+        ),
+      }))
+      .filter(
+        (section) =>
+          section.items.length > 0 &&
+          (!section.permissions?.length ||
+            hasAnyPermission(context?.permissions ?? [], section.permissions))
+      )
+
     const navigationEntries: AppCommandEntry[] = [
       {
         id: 'nav-dashboard',
@@ -83,7 +102,7 @@ export function TopCommand({
         to: dashboardNavItem.to,
         current: isAppPathActive(pathname, dashboardNavItem.to),
       },
-      ...appNavSections.map((section) => ({
+      ...visibleSections.map((section) => ({
         id: `nav-${section.id}`,
         group: 'navigation' as const,
         icon: section.icon,
@@ -98,7 +117,7 @@ export function TopCommand({
       })),
     ]
 
-    const pageEntries: AppCommandEntry[] = appNavSections.flatMap((section) =>
+    const pageEntries: AppCommandEntry[] = visibleSections.flatMap((section) =>
       section.items.map((item) => ({
         id: `page-${item.id}`,
         group: 'pages' as const,
@@ -116,12 +135,12 @@ export function TopCommand({
       group: 'workspaces' as const,
       icon: Store,
       title: membership.tenantName,
-      description: membership.regionLabel,
+      description: membership.status === 'active' ? membership.roleLabel : 'Pending access',
       keywords: [
         membership.tenantName,
-        membership.regionLabel,
-        membership.defaultOutletLabel,
-        membership.role,
+        membership.roleCode,
+        membership.roleLabel,
+        membership.status,
       ],
       tenantId: membership.tenantId,
       current: membership.tenantId === activeTenantId,
@@ -132,7 +151,7 @@ export function TopCommand({
       pageEntries,
       workspaceEntries,
     }
-  }, [activeTenantId, memberships, pathname, t])
+  }, [activeTenantId, context?.permissions, memberships, pathname, t])
 
   return (
     <>

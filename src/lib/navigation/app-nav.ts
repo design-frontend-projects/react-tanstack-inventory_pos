@@ -48,6 +48,7 @@ export type AppNavItem = {
   titleKey: string
   fallbackTitle: string
   keywords: string[]
+  permissions?: string[]
 }
 
 export type AppNavSection = {
@@ -57,6 +58,7 @@ export type AppNavSection = {
   fallbackTitle: string
   rootTo: AppNavRouteTo
   keywords: string[]
+  permissions?: string[]
   items: AppNavItem[]
 }
 
@@ -70,6 +72,7 @@ export type AppCommandEntry = {
   to?: AppNavRouteTo
   tenantId?: string
   current?: boolean
+  permissions?: string[]
 }
 
 export const dashboardNavItem: AppNavItem = {
@@ -90,6 +93,7 @@ export const appNavSections: AppNavSection[] = [
     fallbackTitle: 'Inventory',
     rootTo: '/inventory',
     keywords: ['inventory', 'stock', 'catalog', 'supply', 'outlets'],
+    permissions: ['inventory.view'],
     items: [
       {
         id: 'inventory-overview',
@@ -99,6 +103,7 @@ export const appNavSections: AppNavSection[] = [
         titleKey: 'nav.inventoryOverview',
         fallbackTitle: 'Overview',
         keywords: ['inventory overview', 'coverage', 'reorder', 'stock'],
+        permissions: ['inventory.view'],
       },
       {
         id: 'inventory-catalog',
@@ -108,6 +113,7 @@ export const appNavSections: AppNavSection[] = [
         titleKey: 'nav.inventoryCatalog',
         fallbackTitle: 'Catalog',
         keywords: ['catalog', 'products', 'assortment', 'sku'],
+        permissions: ['inventory.view'],
       },
       {
         id: 'inventory-outlets',
@@ -117,6 +123,7 @@ export const appNavSections: AppNavSection[] = [
         titleKey: 'nav.inventoryOutlets',
         fallbackTitle: 'Outlets',
         keywords: ['outlets', 'stores', 'locations', 'coverage'],
+        permissions: ['outlet.view'],
       },
       {
         id: 'inventory-stock',
@@ -126,6 +133,7 @@ export const appNavSections: AppNavSection[] = [
         titleKey: 'nav.inventoryStock',
         fallbackTitle: 'Stock Ledger',
         keywords: ['stock ledger', 'movements', 'thresholds', 'balance'],
+        permissions: ['inventory.view'],
       },
     ],
   },
@@ -136,6 +144,7 @@ export const appNavSections: AppNavSection[] = [
     fallbackTitle: 'Restaurant',
     rootTo: '/restaurant/kitchen',
     keywords: ['restaurant', 'kitchen', 'menu', 'tables', 'service'],
+    permissions: ['inventory.view'],
     items: [
       {
         id: 'restaurant-kitchen',
@@ -145,6 +154,7 @@ export const appNavSections: AppNavSection[] = [
         titleKey: 'nav.restaurantKitchen',
         fallbackTitle: 'Kitchen Board',
         keywords: ['kitchen', 'board', 'prep', 'queue'],
+        permissions: ['inventory.view'],
       },
       {
         id: 'restaurant-menu',
@@ -154,6 +164,7 @@ export const appNavSections: AppNavSection[] = [
         titleKey: 'nav.restaurantMenu',
         fallbackTitle: 'Menu Engineering',
         keywords: ['menu', 'items', 'pricing', 'engineering'],
+        permissions: ['inventory.view'],
       },
       {
         id: 'restaurant-tables',
@@ -163,6 +174,7 @@ export const appNavSections: AppNavSection[] = [
         titleKey: 'nav.restaurantTables',
         fallbackTitle: 'Table Service',
         keywords: ['tables', 'service', 'covers', 'floor'],
+        permissions: ['inventory.view'],
       },
     ],
   },
@@ -173,6 +185,7 @@ export const appNavSections: AppNavSection[] = [
     fallbackTitle: 'POS',
     rootTo: '/pos',
     keywords: ['checkout', 'pos', 'orders', 'returns', 'cashier'],
+    permissions: ['pos.view'],
     items: [
       {
         id: 'pos-checkout',
@@ -182,6 +195,7 @@ export const appNavSections: AppNavSection[] = [
         titleKey: 'nav.posCheckout',
         fallbackTitle: 'Checkout',
         keywords: ['checkout', 'basket', 'draft', 'scan'],
+        permissions: ['pos.view'],
       },
       {
         id: 'pos-orders',
@@ -191,6 +205,7 @@ export const appNavSections: AppNavSection[] = [
         titleKey: 'nav.posOrders',
         fallbackTitle: 'Orders',
         keywords: ['orders', 'queue', 'tickets', 'history'],
+        permissions: ['pos.view'],
       },
       {
         id: 'pos-returns',
@@ -200,6 +215,7 @@ export const appNavSections: AppNavSection[] = [
         titleKey: 'nav.posReturns',
         fallbackTitle: 'Returns',
         keywords: ['returns', 'refunds', 'voids', 'exceptions'],
+        permissions: ['pos.view'],
       },
     ],
   },
@@ -210,6 +226,7 @@ export const appNavSections: AppNavSection[] = [
     fallbackTitle: 'System Admin',
     rootTo: '/settings/users',
     keywords: ['system', 'users', 'notifications', 'integrations', 'admin'],
+    permissions: ['settings.view'],
     items: [
       {
         id: 'settings-users',
@@ -219,6 +236,7 @@ export const appNavSections: AppNavSection[] = [
         titleKey: 'nav.systemUsers',
         fallbackTitle: 'Users & Roles',
         keywords: ['users', 'roles', 'permissions', 'access'],
+        permissions: ['user.view'],
       },
       {
         id: 'settings-notifications',
@@ -228,6 +246,7 @@ export const appNavSections: AppNavSection[] = [
         titleKey: 'nav.systemNotifications',
         fallbackTitle: 'Notifications',
         keywords: ['notifications', 'alerts', 'delivery', 'signals'],
+        permissions: ['settings.view'],
       },
       {
         id: 'settings-integrations',
@@ -237,6 +256,7 @@ export const appNavSections: AppNavSection[] = [
         titleKey: 'nav.systemIntegrations',
         fallbackTitle: 'Integrations',
         keywords: ['integrations', 'apis', 'connections', 'webhooks'],
+        permissions: ['settings.view'],
       },
     ],
   },

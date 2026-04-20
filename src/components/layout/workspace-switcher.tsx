@@ -17,6 +17,10 @@ export function WorkspaceSwitcher() {
   const { t } = useTranslation()
   const { memberships, activeMembership, setActiveTenantId } = useSessionBootstrap()
 
+  if (!activeMembership) {
+    return null
+  }
+
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
@@ -33,7 +37,7 @@ export function WorkspaceSwitcher() {
                 {activeMembership.tenantName}
               </span>
               <span className="block truncate text-xs text-sidebar-foreground/65">
-                {activeMembership.regionLabel}
+                {activeMembership.roleLabel}
               </span>
             </span>
           </span>
@@ -56,15 +60,12 @@ export function WorkspaceSwitcher() {
                   {membership.tenantName}
                 </span>
                 <span className="truncate text-xs text-muted-foreground">
-                  {membership.regionLabel}
-                </span>
-                <span className="truncate text-xs text-muted-foreground/80">
-                  {membership.defaultOutletLabel}
+                  {membership.status === 'active' ? 'Active workspace access' : 'Pending workspace access'}
                 </span>
               </span>
               <div className="flex flex-col items-end gap-2">
                 <Badge variant="secondary" className="capitalize">
-                  {membership.role}
+                  {membership.roleLabel}
                 </Badge>
                 {membership.tenantId === activeMembership.tenantId ? (
                   <span className="text-[0.68rem] font-semibold uppercase tracking-[0.18em] text-primary">
