@@ -83,7 +83,9 @@ function SignUpPage() {
         data: parsedForm.data,
       })
 
-      setSuccessMessage('Check your email. The magic link will take you into account setup.')
+      setSuccessMessage(
+        'Check your email for the secure setup link. It returns here to complete the owner profile, password, and tenant workspace.'
+      )
     } catch (submissionError) {
       setError(
         submissionError instanceof Error
@@ -140,7 +142,7 @@ function SignUpPage() {
       <Card className="ops-panel rounded-[1.8rem] border-border/65 p-6 md:p-7">
         <div>
           <p className="ops-kicker">Owner registration</p>
-          <h2 className="mt-2 text-2xl font-semibold">Start the magic-link flow</h2>
+          <h2 className="mt-2 text-2xl font-semibold">Start the verified setup flow</h2>
         </div>
 
         <form className="mt-6 grid gap-4" onSubmit={handleSubmit}>

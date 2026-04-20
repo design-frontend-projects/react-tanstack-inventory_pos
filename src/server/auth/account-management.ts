@@ -14,6 +14,7 @@ import {
   ValidationError,
 } from '#/server/auth/errors'
 import { createServerSupabaseClient } from '#/server/auth/supabase-server'
+import { stripCompletionFlowMetadata } from '#/server/auth/completion-flow'
 import {
   buildDisplayName,
   normalizeEmail,
@@ -49,6 +50,7 @@ import {
 } from '#/server/repos/membership-repo'
 import { createTenantAccount, findTenantById, updateTenantAccount } from '#/server/repos/tenant-repo'
 import {
+  findAuthUserById,
   findAuthUserByEmail,
   setAuthUserPassword,
   updateAuthUserMetadata,
@@ -346,6 +348,14 @@ export async function completeOwnerOnboarding(
       timezone: input.timezone,
     },
   })
+
+  const authUser = await findAuthUserById(actor.authUserId)
+  await updateAuthUserMetadata(
+    actor.authUserId,
+    stripCompletionFlowMetadata(
+      authUser.user_metadata as Record<string, unknown> | undefined
+    )
+  )
 
   await createAuditLog({
     tenantId: tenant.id,

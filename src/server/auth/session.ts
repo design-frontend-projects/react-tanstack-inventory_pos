@@ -8,6 +8,7 @@ import type {
   SessionUser,
   WorkspaceMembership,
 } from '#/types/auth'
+import { parseCompletionFlow } from '#/server/auth/completion-flow'
 import { createServerSupabaseClient } from '#/server/auth/supabase-server'
 import { UnauthorizedError } from '#/server/auth/errors'
 import { buildDisplayName, normalizeEmail } from '#/server/auth/normalization'
@@ -29,30 +30,6 @@ function parseMetadataString(
   }
 
   return null
-}
-
-function parseCompletionFlow(metadata: User['user_metadata']): CompletionFlowContext | null {
-  const flow = parseMetadataString(metadata, 'auth_flow', 'flow')
-  const registrationId = parseMetadataString(
-    metadata,
-    'registration_id',
-    'registrationId'
-  )
-  const invitationId = parseMetadataString(
-    metadata,
-    'invitation_id',
-    'invitationId'
-  )
-
-  if (flow !== 'owner' && flow !== 'invite') {
-    return null
-  }
-
-  return {
-    flow,
-    registrationId,
-    invitationId,
-  }
 }
 
 function mapMemberships(

@@ -34,6 +34,17 @@ export async function findAuthUserByEmail(email: string) {
   return null
 }
 
+export async function findAuthUserById(authUserId: string) {
+  const adminClient = createAdminSupabaseClient()
+  const { data, error } = await adminClient.auth.admin.getUserById(authUserId)
+
+  if (error) {
+    throw new ValidationError(error.message)
+  }
+
+  return data.user
+}
+
 export async function updateAuthUserMetadata(
   authUserId: string,
   metadata: Record<string, unknown>

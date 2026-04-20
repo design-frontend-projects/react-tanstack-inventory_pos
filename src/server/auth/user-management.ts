@@ -24,10 +24,12 @@ import {
 } from '#/server/auth/errors'
 import { createAdminSupabaseClient } from '#/server/auth/supabase-admin'
 import {
+  findAuthUserById,
   findAuthUserByEmail,
   setAuthUserPassword,
   updateAuthUserMetadata,
 } from '#/server/auth/supabase-admin-users'
+import { stripCompletionFlowMetadata } from '#/server/auth/completion-flow'
 import {
   buildDisplayName,
   normalizeEmail,
@@ -803,6 +805,14 @@ export async function acceptInvitation(
     authUserId: actor.authUserId,
   })
   await setDefaultTenant(profile.id, invitation.tenantId)
+
+  const authUser = await findAuthUserById(actor.authUserId)
+  await updateAuthUserMetadata(
+    actor.authUserId,
+    stripCompletionFlowMetadata(
+      authUser.user_metadata as Record<string, unknown> | undefined
+    )
+  )
 
   await createAuditLog({
     tenantId: invitation.tenantId,

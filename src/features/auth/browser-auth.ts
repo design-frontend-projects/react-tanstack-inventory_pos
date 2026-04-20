@@ -20,21 +20,29 @@ export async function getSupabaseUser() {
   return user
 }
 
-export async function signInWithPassword(email: string, password: string) {
+export async function requestSignInOtp(email: string) {
   const supabase = getSupabaseBrowserClient()
-  return supabase.auth.signInWithPassword({
-    email,
-    password,
-  })
-}
 
-export async function sendMagicLink(email: string, origin: string) {
-  const supabase = getSupabaseBrowserClient()
+  // Hosted Supabase projects need the Magic Link email template to branch on
+  // auth_flow so sign-in renders {{ .Token }} while onboarding keeps links.
   return supabase.auth.signInWithOtp({
     email,
     options: {
-      emailRedirectTo: new URL('/complete-account', origin).toString(),
+      shouldCreateUser: false,
+      data: {
+        auth_flow: 'sign_in',
+        auth_delivery: 'otp',
+      },
     },
+  })
+}
+
+export async function verifySignInOtp(email: string, token: string) {
+  const supabase = getSupabaseBrowserClient()
+  return supabase.auth.verifyOtp({
+    email,
+    token,
+    type: 'email',
   })
 }
 

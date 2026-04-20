@@ -3,6 +3,8 @@ import {
   invitationAcceptanceSchema,
   PASSWORD_POLICY_MESSAGE,
   signUpSchema,
+  signInOtpRequestSchema,
+  signInOtpVerifySchema,
 } from '#/features/auth/validation'
 
 describe('auth validation', () => {
@@ -50,5 +52,25 @@ describe('auth validation', () => {
 
     expect(parsed.password).toBe('')
     expect(parsed.confirmPassword).toBe('')
+  })
+
+  it('normalizes sign-in OTP email requests', () => {
+    const parsed = signInOtpRequestSchema.parse({
+      email: 'OWNER@Example.COM',
+    })
+
+    expect(parsed.email).toBe('owner@example.com')
+  })
+
+  it('rejects sign-in OTP verification with a non-6-digit token', () => {
+    const parsed = signInOtpVerifySchema.safeParse({
+      email: 'owner@example.com',
+      token: '12ab',
+    })
+
+    expect(parsed.success).toBe(false)
+    if (!parsed.success) {
+      expect(parsed.error.issues[0]?.message).toBe('Enter the 6-digit code.')
+    }
   })
 })

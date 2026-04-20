@@ -6,6 +6,7 @@ export const PASSWORD_POLICY_MESSAGE =
   'Use at least 8 characters with uppercase, lowercase, number, and special character.'
 
 const PHONE_PATTERN = /^[+\d().\-\s/]{7,32}$/
+const OTP_CODE_PATTERN = /^\d{8}$/
 const passwordValueSchema = z
   .string()
   .min(8, PASSWORD_POLICY_MESSAGE)
@@ -31,6 +32,11 @@ export const emailSchema = z
   .trim()
   .email('Enter a valid email address.')
   .transform((value) => value.toLowerCase())
+
+export const signInOtpCodeSchema = z
+  .string()
+  .trim()
+  .regex(OTP_CODE_PATTERN, 'Enter the 6-digit code.')
 
 export const requiredPhoneSchema = z
   .string()
@@ -77,6 +83,15 @@ export const signUpSchema = z.object({
   phone: requiredPhoneSchema,
   activity: activitySchema,
   origin: z.string().url('Origin must be a valid URL.'),
+})
+
+export const signInOtpRequestSchema = z.object({
+  email: emailSchema,
+})
+
+export const signInOtpVerifySchema = z.object({
+  email: emailSchema,
+  token: signInOtpCodeSchema,
 })
 
 const profileFieldsSchema = z.object({
