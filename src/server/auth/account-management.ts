@@ -15,10 +15,7 @@ import {
 } from '#/server/auth/errors'
 import { createServerSupabaseClient } from '#/server/auth/supabase-server'
 import { stripCompletionFlowMetadata } from '#/server/auth/completion-flow'
-import {
-  buildDisplayName,
-  normalizeEmail,
-} from '#/server/auth/normalization'
+import { buildDisplayName, normalizeEmail } from '#/server/auth/normalization'
 import { createAuditLog } from '#/server/repos/audit-log-repo'
 import {
   findPermissionByCode,
@@ -48,7 +45,11 @@ import {
   listTenantUsersWithAccess,
   upsertTenantUser,
 } from '#/server/repos/membership-repo'
-import { createTenantAccount, findTenantById, updateTenantAccount } from '#/server/repos/tenant-repo'
+import {
+  createTenantAccount,
+  findTenantById,
+  updateTenantAccount,
+} from '#/server/repos/tenant-repo'
 import {
   findAuthUserById,
   findAuthUserByEmail,
@@ -101,9 +102,13 @@ function isExpired(expiresAt: Date | null | undefined) {
   return !!expiresAt && expiresAt.getTime() < Date.now()
 }
 
-export async function startTenantRegistration(input: StartTenantRegistrationInput) {
+export async function startTenantRegistration(
+  input: StartTenantRegistrationInput,
+) {
   const normalizedEmail = normalizeEmail(input.email)
   const existingAuthUser = await findAuthUserByEmail(normalizedEmail)
+  console.log('is user exist: ', existingAuthUser)
+
   const existingProfile = existingAuthUser
     ? await findProfileByAuthUserId(existingAuthUser.id)
     : null
@@ -111,11 +116,14 @@ export async function startTenantRegistration(input: StartTenantRegistrationInpu
   if (existingProfile) {
     const memberships = await listTenantUsersForProfile(existingProfile.id)
     if (existingProfile.onboardingCompleted || memberships.length > 0) {
-      throw new ConflictError('An account already exists for this email address.')
+      throw new ConflictError(
+        'An account already exists for this email address.',
+      )
     }
   }
 
-  const pendingRequest = await findPendingRegistrationRequestByEmail(normalizedEmail)
+  const pendingRequest =
+    await findPendingRegistrationRequestByEmail(normalizedEmail)
   const expiresAt = getRegistrationExpiryDate()
   const authUserId = existingAuthUser?.id ?? null
   const linkedProfileId = existingProfile?.id ?? null
@@ -157,7 +165,9 @@ export async function startTenantRegistration(input: StartTenantRegistrationInpu
 
   if (existingAuthUser) {
     await updateAuthUserMetadata(existingAuthUser.id, {
-      ...(existingAuthUser.user_metadata as Record<string, unknown> | undefined),
+      ...(existingAuthUser.user_metadata as
+        | Record<string, unknown>
+        | undefined),
       ...registrationMetadata,
     })
   }
@@ -198,7 +208,7 @@ export async function completeOwnerOnboarding(
     phone?: string | null
     avatarUrl?: string | null
     password: string
-  }
+  },
 ) {
   const registration = await findRegistrationRequestById(input.registrationId)
 
@@ -211,7 +221,9 @@ export async function completeOwnerOnboarding(
       typeof registration.metadata === 'object' &&
       registration.metadata &&
       'tenantId' in registration.metadata
-        ? String((registration.metadata as Record<string, unknown>).tenantId ?? '')
+        ? String(
+            (registration.metadata as Record<string, unknown>).tenantId ?? '',
+          )
         : ''
 
     if (existingTenantId) {
@@ -240,7 +252,9 @@ export async function completeOwnerOnboarding(
   }
 
   if (normalizeEmail(registration.email) !== normalizeEmail(actor.email)) {
-    throw new ForbiddenError('This registration belongs to a different email address.')
+    throw new ForbiddenError(
+      'This registration belongs to a different email address.',
+    )
   }
 
   await setAuthUserPassword(actor.authUserId, input.password)
@@ -260,8 +274,9 @@ export async function completeOwnerOnboarding(
       : {}
   const existingTenantId =
     typeof metadata.tenantId === 'string' ? metadata.tenantId : null
-  const existingTenant =
-    existingTenantId ? await findTenantById(existingTenantId) : null
+  const existingTenant = existingTenantId
+    ? await findTenantById(existingTenantId)
+    : null
   const tenant =
     existingTenant ??
     (await createTenantAccount({
@@ -353,8 +368,8 @@ export async function completeOwnerOnboarding(
   await updateAuthUserMetadata(
     actor.authUserId,
     stripCompletionFlowMetadata(
-      authUser.user_metadata as Record<string, unknown> | undefined
-    )
+      authUser.user_metadata as Record<string, unknown> | undefined,
+    ),
   )
 
   await createAuditLog({
@@ -383,7 +398,7 @@ export async function sendForgotPassword(input: SendForgotPasswordInput) {
     normalizeEmail(input.email),
     {
       redirectTo: redirectUrl,
-    }
+    },
   )
 
   if (error) {
@@ -395,7 +410,10 @@ export async function sendForgotPassword(input: SendForgotPasswordInput) {
   }
 }
 
-export async function resetPassword(accessToken: string, input: { password: string }) {
+export async function resetPassword(
+  accessToken: string,
+  input: { password: string },
+) {
   const authUser = await getAuthenticatedSupabaseUser(accessToken)
   await setAuthUserPassword(authUser.id, input.password)
 
@@ -414,7 +432,7 @@ export async function resetPassword(accessToken: string, input: { password: stri
 
 export async function updateCurrentUserProfile(
   actor: CurrentUserContext,
-  input: UpdateProfileInput
+  input: UpdateProfileInput,
 ) {
   const profile = await updateProfile(actor.profileId, {
     firstName: input.firstName,
@@ -447,7 +465,7 @@ export async function updateCurrentUserProfile(
 
 export async function listRolesPermissions(
   actor: CurrentUserContext,
-  tenantId: string
+  tenantId: string,
 ): Promise<RolesPermissionsPayload> {
   if (actor.activeTenantId !== tenantId) {
     throw new ForbiddenError('Tenant mismatch for access management.')
@@ -468,7 +486,8 @@ export async function listRolesPermissions(
       rank: role.rank,
       permissions: role.permissions.map(
         (rolePermission) =>
-          rolePermission.permission.code as RolesPermissionsPayload['roles'][number]['permissions'][number]
+          rolePermission.permission
+            .code as RolesPermissionsPayload['roles'][number]['permissions'][number],
       ),
     })),
     permissions: permissions.map((permission) => ({
@@ -483,17 +502,18 @@ export async function listRolesPermissions(
       displayName: buildDisplayName(
         tenantUser.profile.firstName,
         tenantUser.profile.lastName,
-        tenantUser.profile.email
+        tenantUser.profile.email,
       ),
       email: tenantUser.profile.email,
       roleCode:
-        (tenantUser.roles.at(0)?.role.code as RolesPermissionsPayload['users'][number]['roleCode']) ??
+        (tenantUser.roles.at(0)?.role
+          .code as RolesPermissionsPayload['users'][number]['roleCode']) ??
         null,
       roleLabel: tenantUser.roles.at(0)?.role.name ?? null,
       isOwner: tenantUser.isOwner,
       permissionOverrides: tenantUser.permissionOverrides.map((override) => ({
-        permissionCode:
-          override.permission.code as RolesPermissionsPayload['users'][number]['permissionOverrides'][number]['permissionCode'],
+        permissionCode: override.permission
+          .code as RolesPermissionsPayload['users'][number]['permissionOverrides'][number]['permissionCode'],
         isAllowed: override.isAllowed,
       })),
     })),
@@ -502,7 +522,7 @@ export async function listRolesPermissions(
 
 export async function setUserPermissionOverride(
   actor: CurrentUserContext,
-  input: SetUserPermissionOverrideInput
+  input: SetUserPermissionOverrideInput,
 ) {
   if (actor.activeTenantId !== input.tenantId) {
     throw new ForbiddenError('Tenant mismatch for permission update.')
@@ -525,9 +545,13 @@ export async function setUserPermissionOverride(
     throw new NotFoundError('Permission not found.')
   }
 
-  const targetPrimaryRole = tenantUser.roles.find((role) => role.isPrimary)?.role
+  const targetPrimaryRole = tenantUser.roles.find(
+    (role) => role.isPrimary,
+  )?.role
   if (targetPrimaryRole && getActorRank(actor) <= targetPrimaryRole.rank) {
-    throw new ForbiddenError('You cannot change permissions for equal or higher privilege.')
+    throw new ForbiddenError(
+      'You cannot change permissions for equal or higher privilege.',
+    )
   }
 
   await persistTenantUserPermissionOverride({
