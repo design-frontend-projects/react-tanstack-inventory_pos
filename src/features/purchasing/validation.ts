@@ -61,6 +61,7 @@ export const goodsReceiptLineSchema = z.object({
   unitCost: decimalInput,
   lotNumber: z.string().max(120).nullish(),
   expiryDate: dateInput.nullish(),
+  serialNumbers: z.array(z.string().min(1).max(120)).optional(),
 })
 
 export const goodsReceiptCreateSchema = z.object({

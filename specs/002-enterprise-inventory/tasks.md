@@ -72,8 +72,47 @@
 - [X] T074 Unit tests: return + note state machines, POS refund status flow, RBAC wiring (`tests/unit/returns.test.ts`)
 - [ ] T075 Non-restock disposition to `damaged`/`expired` buckets (currently non-restock lines credit but do not post); separate AR/AP ledger posting from notes; UoM conversion on return lines
 
-## Phases 8–11 (pending)
+## Phase 8 — Reservations ✅
 
-- [ ] T080 Reservations · T090 Batch/Serial/Expiry · T100 Manufacturing · T110 Reorder/Snapshots/Valuation
+- [X] T080 StockReservation (+ ReservationStatus/ReservationType) + migration + generate; `reservation` state machine (active→partially_fulfilled→fulfilled / released / expired)
+- [X] T081 `stock-reservation-repo` + `stock-balance-repo.adjustReserved` (reserved bucket under the balance lock) + `sales-order-repo.setLineReserved`
+- [X] T082 `reservation-service.ts`: `reserveStock` (lock grain → available≥qty guard → reserved += qty → record hold), `fulfillReservation` (release hold, mark FULFILLED — caller posts SALE), `releaseReservation`/`releaseReservationsForSource` (cancel), `expireReservations` (scheduled sweep, EXPIRED)
+- [X] T083 Wired into sales orders: `reserveSalesOrder` (confirmed→reserved), `fulfillSalesOrder` converts holds before posting SALE, `cancelSalesOrder` releases holds
+- [X] T084 `features/sales.reserveSalesOrderServerFn` + `features/inventory` list/expire reservations + `inventory.reserve` RBAC (admin/inventory_manager/warehouse_manager/sales_manager) + reseed
+- [X] T085 Unit tests: reservation + SO reserve state machine, RBAC wiring (`tests/unit/reservations.test.ts`)
+- [ ] T086 Reservation-aware fulfilment quantities (partial-line fulfil converts only the fulfilled portion); reserve at pick time for POS; cron wiring for `expireReservations`
+
+## Phase 9 — Batch / Serial / Expiry ✅
+
+- [X] T090 Lot (+ LotStatus) + SerialNumber (+ SerialStatus) models + GoodsReceiptLine.serialNumbers + migration + generate; `lot`/`serial` state machines
+- [X] T091 `lot-repo` (FEFO order, expiry sweep) + `serial-repo` (state/location) + `product-repo.getProductTracking`
+- [X] T092 `tracking-policy.ts` pure guards: `assertTrackingCompliance` (LOT needs lot, SERIAL needs serial at qty 1, LOT_SERIAL both) + `serialTransition` (movement → serial status/whereabouts)
+- [X] T093 Engine enforcement in `postMovement`: policy lookup (or caller-supplied) + compliance assert + serial location/status side-effect
+- [X] T094 `lot-serial-service.ts`: `ensureLot`, `createSerial`, `pickFefo`, `setLotStatus`/`setSerialStatus` (machine-guarded), `expireLots` (scheduled sweep → EXPIRED)
+- [X] T095 Goods-receipt wiring: lot-tracked lines materialize a Lot; serialized lines split into one Lot-linked SerialNumber + one qty-1 movement per serial (guarded against serial-count < accepted qty)
+- [X] T096 `features/inventory` list lots/serials, FEFO pick, lot/serial status, expire lots + `inventory.manage_lots`/`inventory.manage_serials` RBAC + reseed; `tests/unit/lots-serials.test.ts`
+- [ ] T097 Serial picking on the SALE/transfer/return side (currently only receiving materializes serials); balance disposition to the `expired` bucket on lot expiry; FEFO auto-allocation in issue documents
+
+## Phase 10 — Manufacturing ✅
+
+- [X] T100 BillOfMaterials/BomComponent, ProductionOrder/ProductionMaterial/ProductionOutput (+ BomStatus/ProductionOrderStatus) + migration + generate
+- [X] T101 `production-costing.ts` pure helpers: `explodeComponentQty` (scale × scrap) + `rollupOutputUnitCost` ((material + overhead) / produced)
+- [X] T102 Repos: `bom-repo` + `production-order-repo` (materials + outputs, cost setters); `product-repo.getProductTracking` now returns `baseUomId`
+- [X] T103 Services: `bom-service` (create/list/get) + `production-order-service` (create from BOM/ad-hoc → plan → release → consume→PRODUCTION_CONSUMPTION OUT at WAC → complete→PRODUCTION_OUTPUT IN at rolled-up cost → cancel); lot/serial-tracked outputs materialize masters like goods receipt
+- [X] T104 `features/manufacturing/{validation,server-functions}.ts` + `production.*` RBAC + `production_manager` role + module-catalog links + reseed + `tests/unit/manufacturing.test.ts`
+- [ ] T105 Partial completion (PARTIALLY_COMPLETED loop), scrap/by-product outputs, WIP location + labor cost lines, reserve components at release
+
+## Phase 11 — Reorder, Snapshots & Valuation ✅
+
+- [X] T110 ReorderRule (per product×warehouse) + StockSnapshot models + migration + generate
+- [X] T111 Pure helpers: `reorder-logic.computeReorderSuggestion` (available = on-hand − reserved vs point; qty = reorderQty or top-up-to-max) + `valuation-logic.aggregateValuation` (Σ on-hand/value + blended WAC)
+- [X] T112 Repos: `reorder-rule-repo` (find-then-write upsert) + `stock-snapshot-repo` (period delete + createMany)
+- [X] T113 Services: `reorder-service` (upsert/list/delete rules, `getReorderSuggestions` aggregating live balances) + `valuation-service` (`getValuationSummary` groupBy product×warehouse, `takeSnapshot` idempotent per period, `listSnapshots`)
+- [X] T114 `features/inventory` reorder-rule CRUD + suggestions + valuation summary + snapshot take/list + `inventory.manage_reorder`/`inventory.view_valuation` RBAC + module-catalog links + reseed + `tests/unit/reorder-valuation.test.ts`
+- [ ] T115 Auto-generate draft purchase requisitions from suggestions; EOQ-based suggested qty; scheduled monthly snapshot cron; ABC analysis + turnover/aging reports; snapshot-anchored historical valuation replay
+
+## Spec 002 build status
+
+Phases 0–11 implemented. Remaining cross-cutting items (deferred through the phase tasks above): month-range partitioning of `inventory_movements`, ltree/GIST on category & location hierarchies, UoM conversion inside the engine, serial picking on issue documents, separate AR/AP payment ledger, and the gated DB-integration test suite (`INVENTORY_DB_TESTS=1`).
 
 Status legend: [X] done · [ ] pending.

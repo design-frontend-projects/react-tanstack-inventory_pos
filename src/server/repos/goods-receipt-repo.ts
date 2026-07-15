@@ -14,6 +14,7 @@ export interface GoodsReceiptLineInput {
   unitCost: Prisma.Decimal | string | number
   lotNumber?: string | null
   expiryDate?: Date | null
+  serialNumbers?: Array<string>
 }
 
 export interface GoodsReceiptCreateInput {
@@ -92,6 +93,7 @@ export function createGoodsReceipt(
           unitCost: line.unitCost,
           lotNumber: line.lotNumber ?? null,
           expiryDate: line.expiryDate ?? null,
+          serialNumbers: line.serialNumbers ?? [],
         })),
       },
     },

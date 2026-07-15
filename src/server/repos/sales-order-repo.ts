@@ -134,3 +134,14 @@ export function setLineFulfilled(
     data: { fulfilledQty: data.fulfilledQty, costAtSale: data.costAtSale },
   })
 }
+
+export function setLineReserved(
+  lineId: string,
+  reservedQty: Prisma.Decimal | string | number,
+  client: PrismaClientLike = prisma
+) {
+  return client.salesOrderLine.update({
+    where: { id: lineId },
+    data: { reservedQty },
+  })
+}

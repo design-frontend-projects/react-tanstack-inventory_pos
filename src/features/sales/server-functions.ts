@@ -68,6 +68,14 @@ export const confirmSalesOrderServerFn = createServerFn({ method: 'POST' })
     return orderService.confirmSalesOrder(context, data.tenantId, data.id)
   })
 
+export const reserveSalesOrderServerFn = createServerFn({ method: 'POST' })
+  .inputValidator(withId)
+  .handler(async ({ data }) => {
+    const context = await resolveContext(data, 'inventory.reserve')
+
+    return orderService.reserveSalesOrder(context, data.tenantId, data.id)
+  })
+
 export const fulfillSalesOrderServerFn = createServerFn({ method: 'POST' })
   .inputValidator(withId)
   .handler(async ({ data }) => {

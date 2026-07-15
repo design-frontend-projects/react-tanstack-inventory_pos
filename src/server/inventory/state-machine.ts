@@ -140,6 +140,29 @@ export const DOCUMENT_STATE_MACHINES = {
     closed: [],
     cancelled: [],
   },
+  reservation: {
+    active: ['partially_fulfilled', 'fulfilled', 'released', 'expired'],
+    partially_fulfilled: ['partially_fulfilled', 'fulfilled', 'released', 'expired'],
+    fulfilled: [],
+    released: [],
+    expired: [],
+  },
+  lot: {
+    active: ['quarantine', 'expired', 'recalled', 'depleted'],
+    quarantine: ['active', 'expired', 'recalled'],
+    expired: ['depleted'],
+    recalled: ['depleted'],
+    depleted: [],
+  },
+  serial: {
+    in_stock: ['reserved', 'sold', 'in_transit', 'returned', 'scrapped', 'in_repair'],
+    reserved: ['in_stock', 'sold', 'in_transit'],
+    in_transit: ['in_stock', 'returned'],
+    sold: ['returned'],
+    returned: ['in_stock', 'scrapped'],
+    in_repair: ['in_stock', 'scrapped'],
+    scrapped: [],
+  },
 } as const satisfies Record<string, StateTransitionMap>
 
 export type DocumentMachineKey = keyof typeof DOCUMENT_STATE_MACHINES

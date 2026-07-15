@@ -93,6 +93,21 @@ export async function ensureAndLockBalance(
   }
 }
 
+// Adjusts the soft-hold `reserved` bucket on an already-locked balance row by a
+// signed delta (positive to reserve, negative to release). `on_hand` and value are
+// untouched — a reservation is not a ledger movement. MUST be called after
+// `ensureAndLockBalance` inside the same transaction so the hold is serialized.
+export async function adjustReserved(
+  tx: Prisma.TransactionClient,
+  balanceId: string,
+  delta: Prisma.Decimal
+): Promise<void> {
+  await tx.stockBalance.update({
+    where: { id: balanceId },
+    data: { reserved: { increment: delta } },
+  })
+}
+
 export interface ListBalanceFilters {
   productId?: string
   warehouseId?: string

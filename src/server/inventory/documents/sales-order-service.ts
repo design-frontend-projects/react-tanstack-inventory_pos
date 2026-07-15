@@ -2,10 +2,16 @@ import { ConflictError, NotFoundError } from '#/server/auth/errors'
 import { nextDocumentNumber } from '#/server/inventory/document-number-service'
 import { serializeSalesOrder } from '#/server/inventory/sales-dto'
 import { postMovement } from '#/server/inventory/movement-engine'
+import {
+  fulfillReservation,
+  releaseReservationsForSource,
+  reserveStock,
+} from '#/server/inventory/reservation-service'
 import { assertTransition } from '#/server/inventory/state-machine'
 import { prisma } from '#/server/db/client'
 import { Prisma } from '#/server/db/generated/prisma/client'
 import { createAuditLog } from '#/server/repos/audit-log-repo'
+import * as reservationRepo from '#/server/repos/stock-reservation-repo'
 import * as salesOrderRepo from '#/server/repos/sales-order-repo'
 import type { CurrentUserContext } from '#/types/auth'
 
@@ -145,8 +151,79 @@ export async function confirmSalesOrder(
   return serializeSalesOrder(refreshed!)
 }
 
-// Fulfilment reduces stock: a SALE (OUT) movement per line at its pick location,
-// with the WAC issue cost stamped onto the line for margin.
+// Confirmed → reserved: places a soft hold (raises `reserved`) on every line's
+// pick grain so the ordered quantity can't be sold out from under the order. No
+// stock leaves; only `available` drops until fulfilment or cancel.
+export async function reserveSalesOrder(
+  context: CurrentUserContext,
+  tenantId: string,
+  id: string
+) {
+  const reserved = await prisma.$transaction(
+    async (tx) => {
+      const order = await salesOrderRepo.findSalesOrderById(tenantId, id, tx)
+
+      if (!order) {
+        throw new NotFoundError('Sales order not found.')
+      }
+
+      assertTransition('salesOrder', order.status.toLowerCase(), 'reserved')
+
+      for (const line of order.lines) {
+        const ordered = new Prisma.Decimal(line.orderedQty)
+        const alreadyReserved = new Prisma.Decimal(line.reservedQty)
+        const toReserve = ordered.minus(alreadyReserved)
+
+        if (toReserve.lte(ZERO)) {
+          continue
+        }
+
+        await reserveStock(tx, tenantId, {
+          reservationType: 'SALES_ORDER',
+          productId: line.productId,
+          variantId: line.variantId,
+          warehouseId: order.warehouseId,
+          locationId: line.locationId,
+          uomId: line.uomId,
+          quantity: toReserve,
+          sourceDocType: 'SALES_ORDER',
+          sourceDocId: order.id,
+          sourceDocLineId: line.id,
+          sourceDocNumber: order.documentNumber,
+          reservedByProfileId: context.profileId,
+        })
+
+        await salesOrderRepo.setLineReserved(line.id, ordered, tx)
+      }
+
+      await salesOrderRepo.updateSalesOrderStatus(tenantId, id, 'RESERVED', tx)
+
+      await createAuditLog(
+        {
+          tenantId,
+          actorProfileId: context.profileId,
+          actorEmail: context.email,
+          actionKey: 'sales.order_reserve',
+          entityType: 'sales_order',
+          entityId: order.id,
+          newValues: { documentNumber: order.documentNumber },
+        },
+        tx
+      )
+
+      const refreshed = await salesOrderRepo.findSalesOrderById(tenantId, id, tx)
+
+      return refreshed!
+    },
+    { isolationLevel: Prisma.TransactionIsolationLevel.RepeatableRead, timeout: 30_000 }
+  )
+
+  return serializeSalesOrder(reserved)
+}
+
+// Fulfilment reduces stock: any open reservation for the line is converted first
+// (releasing the hold off `reserved`), then a SALE (OUT) movement posts at its
+// pick location with the WAC issue cost stamped onto the line for margin.
 export async function fulfillSalesOrder(
   context: CurrentUserContext,
   tenantId: string,
@@ -167,6 +244,18 @@ export async function fulfillSalesOrder(
 
         if (qty.lte(ZERO)) {
           continue
+        }
+
+        // Convert any hold placed at reservation time so the oversell guard does
+        // not count these units as both reserved and on-hand.
+        const holds = await reservationRepo.findOpenReservationsForSourceLine(
+          tenantId,
+          line.id,
+          tx
+        )
+
+        for (const hold of holds) {
+          await fulfillReservation(tx, hold)
         }
 
         const result = await postMovement(tx, {
@@ -219,32 +308,46 @@ export async function fulfillSalesOrder(
   return serializeSalesOrder(fulfilled)
 }
 
+// Cancelling frees any outstanding reservation holds back to available before
+// closing the order.
 export async function cancelSalesOrder(
   context: CurrentUserContext,
   tenantId: string,
   id: string
 ) {
-  const order = await salesOrderRepo.findSalesOrderById(tenantId, id)
+  const cancelled = await prisma.$transaction(
+    async (tx) => {
+      const order = await salesOrderRepo.findSalesOrderById(tenantId, id, tx)
 
-  if (!order) {
-    throw new NotFoundError('Sales order not found.')
-  }
+      if (!order) {
+        throw new NotFoundError('Sales order not found.')
+      }
 
-  assertTransition('salesOrder', order.status.toLowerCase(), 'cancelled')
-  await salesOrderRepo.updateSalesOrderStatus(tenantId, id, 'CANCELLED')
+      assertTransition('salesOrder', order.status.toLowerCase(), 'cancelled')
 
-  await createAuditLog({
-    tenantId,
-    actorProfileId: context.profileId,
-    actorEmail: context.email,
-    actionKey: 'sales.order_cancel',
-    entityType: 'sales_order',
-    entityId: id,
-  })
+      await releaseReservationsForSource(tx, tenantId, order.id)
+      await salesOrderRepo.updateSalesOrderStatus(tenantId, id, 'CANCELLED', tx)
 
-  const refreshed = await salesOrderRepo.findSalesOrderById(tenantId, id)
+      await createAuditLog(
+        {
+          tenantId,
+          actorProfileId: context.profileId,
+          actorEmail: context.email,
+          actionKey: 'sales.order_cancel',
+          entityType: 'sales_order',
+          entityId: id,
+        },
+        tx
+      )
 
-  return serializeSalesOrder(refreshed!)
+      const refreshed = await salesOrderRepo.findSalesOrderById(tenantId, id, tx)
+
+      return refreshed!
+    },
+    { isolationLevel: Prisma.TransactionIsolationLevel.RepeatableRead, timeout: 30_000 }
+  )
+
+  return serializeSalesOrder(cancelled)
 }
 
 export async function listSalesOrders(_context: CurrentUserContext, tenantId: string) {

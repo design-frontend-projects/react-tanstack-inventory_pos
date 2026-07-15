@@ -213,6 +213,15 @@ model TenantAccount {
   salesReturnLines         SalesReturnLine[]
   financialNotes           FinancialNote[]
   stockReservations        StockReservation[]
+  lots                     Lot[]
+  serialNumbers            SerialNumber[]
+  billsOfMaterials         BillOfMaterials[]
+  bomComponents            BomComponent[]
+  productionOrders         ProductionOrder[]
+  productionMaterials      ProductionMaterial[]
+  productionOutputs        ProductionOutput[]
+  reorderRules             ReorderRule[]
+  stockSnapshots           StockSnapshot[]
 
   @@map("tenant_accounts")
 }
@@ -1790,6 +1799,7 @@ model GoodsReceiptLine {
   unitCost            Decimal       @map("unit_cost") @db.Decimal(19, 6)
   lotNumber           String?       @map("lot_number")
   expiryDate          DateTime?     @map("expiry_date")
+  serialNumbers       String[]      @default([]) @map("serial_numbers")
   createdAt           DateTime      @default(now()) @map("created_at")
   tenant              TenantAccount @relation(fields: [tenantId], references: [id], onDelete: Cascade, onUpdate: Cascade)
   goodsReceipt        GoodsReceipt  @relation(fields: [goodsReceiptId], references: [id], onDelete: Cascade, onUpdate: Cascade)
@@ -1975,6 +1985,50 @@ enum ReservationType {
   MANUAL      @map("manual")
 
   @@map("ReservationType")
+}
+
+enum LotStatus {
+  ACTIVE     @map("active")
+  QUARANTINE @map("quarantine")
+  EXPIRED    @map("expired")
+  RECALLED   @map("recalled")
+  DEPLETED   @map("depleted")
+
+  @@map("LotStatus")
+}
+
+enum SerialStatus {
+  IN_STOCK   @map("in_stock")
+  RESERVED   @map("reserved")
+  SOLD       @map("sold")
+  IN_TRANSIT @map("in_transit")
+  RETURNED   @map("returned")
+  SCRAPPED   @map("scrapped")
+  IN_REPAIR  @map("in_repair")
+
+  @@map("SerialStatus")
+}
+
+enum BomStatus {
+  DRAFT    @map("draft")
+  ACTIVE   @map("active")
+  ARCHIVED @map("archived")
+
+  @@map("BomStatus")
+}
+
+enum ProductionOrderStatus {
+  DRAFT               @map("draft")
+  PLANNED             @map("planned")
+  RELEASED            @map("released")
+  IN_PROGRESS         @map("in_progress")
+  PARTIALLY_COMPLETED @map("partially_completed")
+  COMPLETED           @map("completed")
+  CLOSED              @map("closed")
+  ON_HOLD             @map("on_hold")
+  CANCELLED           @map("cancelled")
+
+  @@map("ProductionOrderStatus")
 }
 
 // --- Phase 6: sales orders + invoices ---------------------------------------
@@ -2294,4 +2348,294 @@ model FinancialNote {
   @@index([tenantId, customerId], map: "financial_notes_tenant_customer_idx")
   @@index([tenantId, supplierId], map: "financial_notes_tenant_supplier_idx")
   @@map("financial_notes")
+}
+
+// ============================================================================
+// Enterprise Inventory — Spec 002 (Phase 8 reservations). A reservation is a soft
+// hold: it raises the balance `reserved` bucket (never `on_hand`), so
+// `available = on_hand − reserved − allocated` drops without any ledger movement.
+// Confirming a sales order reserves its lines; fulfilment releases the hold and
+// posts the SALE; cancel / expiry release it. The hold is adjusted only under the
+// same `SELECT … FOR UPDATE` balance lock the movement engine uses.
+// ============================================================================
+
+model StockReservation {
+  id                  String            @id @default(uuid()) @db.Uuid
+  tenantId            String            @map("tenant_id") @db.Uuid
+  reservationType     ReservationType   @map("reservation_type")
+  productId           String            @map("product_id") @db.Uuid
+  variantId           String?           @map("variant_id") @db.Uuid
+  warehouseId         String            @map("warehouse_id") @db.Uuid
+  locationId          String            @map("location_id") @db.Uuid
+  lotId               String?           @map("lot_id") @db.Uuid
+  serialId            String?           @map("serial_id") @db.Uuid
+  uomId               String            @map("uom_id") @db.Uuid
+  quantity            Decimal           @db.Decimal(18, 4)
+  fulfilledQty        Decimal           @default(0) @map("fulfilled_qty") @db.Decimal(18, 4)
+  releasedQty         Decimal           @default(0) @map("released_qty") @db.Decimal(18, 4)
+  status              ReservationStatus @default(ACTIVE)
+  sourceDocType       SourceDocType?    @map("source_doc_type")
+  sourceDocId         String?           @map("source_doc_id") @db.Uuid
+  sourceDocLineId     String?           @map("source_doc_line_id") @db.Uuid
+  sourceDocNumber     String?           @map("source_doc_number")
+  expiresAt           DateTime?         @map("expires_at")
+  reservedByProfileId String?           @map("reserved_by_profile_id") @db.Uuid
+  notes               String?
+  createdAt           DateTime          @default(now()) @map("created_at")
+  updatedAt           DateTime          @updatedAt @map("updated_at")
+  tenant              TenantAccount     @relation(fields: [tenantId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+
+  @@index([tenantId, status], map: "stock_reservations_tenant_status_idx")
+  @@index([tenantId, sourceDocType, sourceDocId], map: "stock_reservations_source_idx")
+  @@index([tenantId, sourceDocLineId], map: "stock_reservations_source_line_idx")
+  @@index([tenantId, productId, warehouseId], map: "stock_reservations_product_wh_idx")
+  @@index([tenantId, expiresAt], map: "stock_reservations_expiry_idx")
+  @@map("stock_reservations")
+}
+
+// ============================================================================
+// Enterprise Inventory — Spec 002 (Phase 9 batch / serial / expiry). Lot and
+// SerialNumber are masters keyed to a product; the on-hand quantity for a lot or
+// serial lives in StockBalance (grained by lotId / serialId), not here. The
+// movement engine enforces the product's trackingPolicy (LOT requires a lot,
+// SERIAL requires a serial at qty 1) and stamps a serial's current
+// location/status as it moves. Expiry sweeps flip lot status to EXPIRED (FEFO
+// picks the nearest expiry first).
+// ============================================================================
+
+model Lot {
+  id              String         @id @default(uuid()) @db.Uuid
+  tenantId        String         @map("tenant_id") @db.Uuid
+  productId       String         @map("product_id") @db.Uuid
+  variantId       String?        @map("variant_id") @db.Uuid
+  lotNumber       String         @map("lot_number")
+  status          LotStatus      @default(ACTIVE)
+  manufactureDate DateTime?      @map("manufacture_date")
+  expiryDate      DateTime?      @map("expiry_date")
+  receivedDate    DateTime?      @map("received_date")
+  supplierId      String?        @map("supplier_id") @db.Uuid
+  initialQty      Decimal        @default(0) @map("initial_qty") @db.Decimal(18, 4)
+  sourceDocType   SourceDocType? @map("source_doc_type")
+  sourceDocId     String?        @map("source_doc_id") @db.Uuid
+  notes           String?
+  createdAt       DateTime       @default(now()) @map("created_at")
+  updatedAt       DateTime       @updatedAt @map("updated_at")
+  tenant          TenantAccount  @relation(fields: [tenantId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+
+  @@unique([tenantId, productId, lotNumber], map: "lots_tenant_product_number_unique")
+  @@index([tenantId, productId, expiryDate], map: "lots_fefo_idx")
+  @@index([tenantId, status], map: "lots_tenant_status_idx")
+  @@index([tenantId, expiryDate], map: "lots_expiry_idx")
+  @@map("lots")
+}
+
+model SerialNumber {
+  id                 String         @id @default(uuid()) @db.Uuid
+  tenantId           String         @map("tenant_id") @db.Uuid
+  productId          String         @map("product_id") @db.Uuid
+  variantId          String?        @map("variant_id") @db.Uuid
+  serialNumber       String         @map("serial_number")
+  status             SerialStatus   @default(IN_STOCK)
+  currentWarehouseId String?        @map("current_warehouse_id") @db.Uuid
+  currentLocationId  String?        @map("current_location_id") @db.Uuid
+  lotId              String?        @map("lot_id") @db.Uuid
+  supplierId         String?        @map("supplier_id") @db.Uuid
+  warrantyExpiresAt  DateTime?      @map("warranty_expires_at")
+  sourceDocType      SourceDocType? @map("source_doc_type")
+  sourceDocId        String?        @map("source_doc_id") @db.Uuid
+  soldAt             DateTime?      @map("sold_at")
+  notes              String?
+  createdAt          DateTime       @default(now()) @map("created_at")
+  updatedAt          DateTime       @updatedAt @map("updated_at")
+  tenant             TenantAccount  @relation(fields: [tenantId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+
+  @@unique([tenantId, productId, serialNumber], map: "serials_tenant_product_number_unique")
+  @@index([tenantId, status], map: "serials_tenant_status_idx")
+  @@index([tenantId, currentLocationId], map: "serials_location_idx")
+  @@index([tenantId, lotId], map: "serials_lot_idx")
+  @@map("serial_numbers")
+}
+
+// ============================================================================
+// Enterprise Inventory — Spec 002 (Phase 10 manufacturing). A BillOfMaterials
+// defines the recipe (components per output batch). A ProductionOrder consumes
+// its materials (PRODUCTION_CONSUMPTION OUT at WAC) and receives finished goods
+// (PRODUCTION_OUTPUT IN); the finished-good unit cost rolls up from consumed
+// material cost + overhead / produced quantity, then flows into the finished
+// product's weighted average through the engine like any other receipt.
+// ============================================================================
+
+model BillOfMaterials {
+  id           String         @id @default(uuid()) @db.Uuid
+  tenantId     String         @map("tenant_id") @db.Uuid
+  productId    String         @map("product_id") @db.Uuid
+  variantId    String?        @map("variant_id") @db.Uuid
+  name         String
+  version      Int            @default(1)
+  status       BomStatus      @default(ACTIVE)
+  isDefault    Boolean        @default(false) @map("is_default")
+  outputQty    Decimal        @default(1) @map("output_qty") @db.Decimal(18, 4)
+  uomId        String         @map("uom_id") @db.Uuid
+  overheadCost Decimal        @default(0) @map("overhead_cost") @db.Decimal(19, 4)
+  notes        String?
+  deletedAt    DateTime?      @map("deleted_at")
+  createdAt    DateTime       @default(now()) @map("created_at")
+  updatedAt    DateTime       @updatedAt @map("updated_at")
+  tenant       TenantAccount  @relation(fields: [tenantId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  components   BomComponent[]
+
+  @@index([tenantId, productId], map: "boms_tenant_product_idx")
+  @@index([tenantId, status], map: "boms_tenant_status_idx")
+  @@map("bills_of_materials")
+}
+
+model BomComponent {
+  id                 String          @id @default(uuid()) @db.Uuid
+  tenantId           String          @map("tenant_id") @db.Uuid
+  bomId              String          @map("bom_id") @db.Uuid
+  lineNo             Int             @map("line_no")
+  componentProductId String          @map("component_product_id") @db.Uuid
+  componentVariantId String?         @map("component_variant_id") @db.Uuid
+  quantity           Decimal         @db.Decimal(18, 4)
+  uomId              String          @map("uom_id") @db.Uuid
+  scrapPercent       Decimal         @default(0) @map("scrap_percent") @db.Decimal(9, 6)
+  notes              String?
+  createdAt          DateTime        @default(now()) @map("created_at")
+  tenant             TenantAccount   @relation(fields: [tenantId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  bom                BillOfMaterials @relation(fields: [bomId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+
+  @@index([tenantId, bomId], map: "bom_components_bom_idx")
+  @@index([tenantId, componentProductId], map: "bom_components_product_idx")
+  @@map("bom_components")
+}
+
+model ProductionOrder {
+  id               String                @id @default(uuid()) @db.Uuid
+  tenantId         String                @map("tenant_id") @db.Uuid
+  documentNumber   String                @map("document_number")
+  productId        String                @map("product_id") @db.Uuid
+  variantId        String?               @map("variant_id") @db.Uuid
+  bomId            String?               @map("bom_id") @db.Uuid
+  warehouseId      String                @map("warehouse_id") @db.Uuid
+  outputLocationId String                @map("output_location_id") @db.Uuid
+  status           ProductionOrderStatus @default(DRAFT)
+  plannedQty       Decimal               @map("planned_qty") @db.Decimal(18, 4)
+  producedQty      Decimal               @default(0) @map("produced_qty") @db.Decimal(18, 4)
+  materialCost     Decimal               @default(0) @map("material_cost") @db.Decimal(19, 4)
+  overheadCost     Decimal               @default(0) @map("overhead_cost") @db.Decimal(19, 4)
+  outputCost       Decimal               @default(0) @map("output_cost") @db.Decimal(19, 4)
+  plannedStartDate DateTime?             @map("planned_start_date")
+  plannedEndDate   DateTime?             @map("planned_end_date")
+  notes            String?
+  createdByProfileId String?             @map("created_by_profile_id") @db.Uuid
+  correlationId    String?               @map("correlation_id") @db.Uuid
+  createdAt        DateTime              @default(now()) @map("created_at")
+  updatedAt        DateTime              @updatedAt @map("updated_at")
+  tenant           TenantAccount         @relation(fields: [tenantId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  materials        ProductionMaterial[]
+  outputs          ProductionOutput[]
+
+  @@unique([tenantId, documentNumber], map: "production_orders_tenant_number_unique")
+  @@index([tenantId, status], map: "production_orders_tenant_status_idx")
+  @@index([tenantId, productId], map: "production_orders_tenant_product_idx")
+  @@map("production_orders")
+}
+
+model ProductionMaterial {
+  id                 String          @id @default(uuid()) @db.Uuid
+  tenantId           String          @map("tenant_id") @db.Uuid
+  productionOrderId  String          @map("production_order_id") @db.Uuid
+  lineNo             Int             @map("line_no")
+  componentProductId String          @map("component_product_id") @db.Uuid
+  componentVariantId String?         @map("component_variant_id") @db.Uuid
+  fromLocationId     String          @map("from_location_id") @db.Uuid
+  uomId              String          @map("uom_id") @db.Uuid
+  plannedQty         Decimal         @map("planned_qty") @db.Decimal(18, 4)
+  consumedQty        Decimal         @default(0) @map("consumed_qty") @db.Decimal(18, 4)
+  unitCost           Decimal?        @map("unit_cost") @db.Decimal(19, 6)
+  lotId              String?         @map("lot_id") @db.Uuid
+  serialId           String?         @map("serial_id") @db.Uuid
+  isConsumed         Boolean         @default(false) @map("is_consumed")
+  createdAt          DateTime        @default(now()) @map("created_at")
+  tenant             TenantAccount   @relation(fields: [tenantId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  productionOrder    ProductionOrder @relation(fields: [productionOrderId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+
+  @@index([tenantId, productionOrderId], map: "production_materials_order_idx")
+  @@index([tenantId, componentProductId], map: "production_materials_product_idx")
+  @@map("production_materials")
+}
+
+model ProductionOutput {
+  id                String          @id @default(uuid()) @db.Uuid
+  tenantId          String          @map("tenant_id") @db.Uuid
+  productionOrderId String          @map("production_order_id") @db.Uuid
+  lineNo            Int             @map("line_no")
+  productId         String          @map("product_id") @db.Uuid
+  variantId         String?         @map("variant_id") @db.Uuid
+  toLocationId      String          @map("to_location_id") @db.Uuid
+  uomId             String          @map("uom_id") @db.Uuid
+  quantity          Decimal         @db.Decimal(18, 4)
+  unitCost          Decimal         @map("unit_cost") @db.Decimal(19, 6)
+  lotId             String?         @map("lot_id") @db.Uuid
+  createdAt         DateTime        @default(now()) @map("created_at")
+  tenant            TenantAccount   @relation(fields: [tenantId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  productionOrder   ProductionOrder @relation(fields: [productionOrderId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+
+  @@index([tenantId, productionOrderId], map: "production_outputs_order_idx")
+  @@map("production_outputs")
+}
+
+// ============================================================================
+// Enterprise Inventory — Spec 002 (Phase 11 reorder + valuation). ReorderRule is
+// the per-product×warehouse override of the product-level reorder defaults; the
+// reorder-suggestion query compares live available stock to the reorder point.
+// StockSnapshot captures a point-in-time valuation per period (monthly job) so
+// historical valuation does not require replaying the whole movement ledger.
+// ============================================================================
+
+model ReorderRule {
+  id                  String        @id @default(uuid()) @db.Uuid
+  tenantId            String        @map("tenant_id") @db.Uuid
+  productId           String        @map("product_id") @db.Uuid
+  variantId           String?       @map("variant_id") @db.Uuid
+  warehouseId         String        @map("warehouse_id") @db.Uuid
+  minStock            Decimal       @default(0) @map("min_stock") @db.Decimal(18, 4)
+  maxStock            Decimal       @default(0) @map("max_stock") @db.Decimal(18, 4)
+  safetyStock         Decimal       @default(0) @map("safety_stock") @db.Decimal(18, 4)
+  reorderPoint        Decimal       @default(0) @map("reorder_point") @db.Decimal(18, 4)
+  reorderQty          Decimal       @default(0) @map("reorder_qty") @db.Decimal(18, 4)
+  economicOrderQty    Decimal?      @map("economic_order_qty") @db.Decimal(18, 4)
+  leadTimeDays        Int?          @map("lead_time_days")
+  preferredSupplierId String?       @map("preferred_supplier_id") @db.Uuid
+  isActive            Boolean       @default(true) @map("is_active")
+  notes               String?
+  createdAt           DateTime      @default(now()) @map("created_at")
+  updatedAt           DateTime      @updatedAt @map("updated_at")
+  tenant              TenantAccount @relation(fields: [tenantId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+
+  @@unique([tenantId, productId, warehouseId], map: "reorder_rules_tenant_product_wh_unique")
+  @@index([tenantId, warehouseId], map: "reorder_rules_tenant_wh_idx")
+  @@index([tenantId, productId], map: "reorder_rules_tenant_product_idx")
+  @@map("reorder_rules")
+}
+
+model StockSnapshot {
+  id           String        @id @default(uuid()) @db.Uuid
+  tenantId     String        @map("tenant_id") @db.Uuid
+  periodKey    String        @map("period_key")
+  snapshotDate DateTime      @default(now()) @map("snapshot_date")
+  productId    String        @map("product_id") @db.Uuid
+  variantId    String?       @map("variant_id") @db.Uuid
+  warehouseId  String?       @map("warehouse_id") @db.Uuid
+  onHand       Decimal       @default(0) @map("on_hand") @db.Decimal(18, 4)
+  reserved     Decimal       @default(0) @db.Decimal(18, 4)
+  allocated    Decimal       @default(0) @db.Decimal(18, 4)
+  avgUnitCost  Decimal       @default(0) @map("avg_unit_cost") @db.Decimal(19, 6)
+  totalValue   Decimal       @default(0) @map("total_value") @db.Decimal(19, 4)
+  createdAt    DateTime      @default(now()) @map("created_at")
+  tenant       TenantAccount @relation(fields: [tenantId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+
+  @@index([tenantId, periodKey], map: "stock_snapshots_tenant_period_idx")
+  @@index([tenantId, productId], map: "stock_snapshots_tenant_product_idx")
+  @@map("stock_snapshots")
 }

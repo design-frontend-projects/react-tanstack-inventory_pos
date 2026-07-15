@@ -1,12 +1,19 @@
 import { ValidationError } from '#/server/auth/errors'
 import { applyMovement } from '#/server/inventory/costing'
+import {
+  assertTrackingCompliance,
+  serialTransition,
+} from '#/server/inventory/tracking-policy'
 import { createCostLayer } from '#/server/repos/cost-layer-repo'
 import { createMovement } from '#/server/repos/movement-repo'
+import { getProductTracking } from '#/server/repos/product-repo'
+import { updateSerialState } from '#/server/repos/serial-repo'
 import { ensureAndLockBalance } from '#/server/repos/stock-balance-repo'
 import { Prisma } from '#/server/db/generated/prisma/client'
 import type {
   MovementType,
   SourceDocType,
+  TrackingPolicy,
 } from '#/server/db/generated/prisma/client'
 
 // The movement engine is the ONLY code path that writes StockBalance. It appends
@@ -43,6 +50,10 @@ export interface PostMovementInput {
   counterpartyLocationId?: string | null
   notes?: string | null
   allowNegative?: boolean
+  // The product's lot/serial policy. When omitted the engine looks it up so the
+  // rule is always enforced; callers that already have it can pass it to skip the
+  // lookup on the hot path.
+  trackingPolicy?: TrackingPolicy | null
 }
 
 export interface PostMovementResult {
@@ -69,6 +80,19 @@ export async function postMovement(
   if (quantity.lte(ZERO)) {
     throw new ValidationError('Movement quantity must be a positive magnitude.')
   }
+
+  // Enforce the product's lot/serial tracking policy (LOT needs a lot, SERIAL a
+  // serial at qty 1). Look the policy up only when the caller did not supply it.
+  const trackingPolicy =
+    input.trackingPolicy ??
+    (await getProductTracking(input.tenantId, input.productId, tx))?.trackingPolicy ??
+    'NONE'
+
+  assertTrackingCompliance(trackingPolicy, {
+    lotId: input.lotId,
+    serialId: input.serialId,
+    quantity,
+  })
 
   // Phase 3 treats the supplied quantity as base-UoM quantity; UoM conversion is
   // layered in with the purchasing/sales documents.
@@ -168,6 +192,24 @@ export async function postMovement(
         receivedAt: occurredAt,
         originalQty: qtyInBaseUom,
         unitCost: movementUnitCost,
+      },
+      tx
+    )
+  }
+
+  // Advance the serialized unit's lifecycle + whereabouts (the movement is
+  // authoritative for a serial). Manual states (quarantine/repair) are handled by
+  // the lot/serial service, not here.
+  if (input.serialId) {
+    const transition = serialTransition(input.movementType, input.direction)
+
+    await updateSerialState(
+      input.serialId,
+      {
+        status: transition.status,
+        currentWarehouseId: transition.toTarget ? input.warehouseId : null,
+        currentLocationId: transition.toTarget ? input.locationId : null,
+        soldAt: transition.sold ? occurredAt : undefined,
       },
       tx
     )

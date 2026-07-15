@@ -1,13 +1,16 @@
 import { ConflictError, NotFoundError } from '#/server/auth/errors'
 import { nextDocumentNumber } from '#/server/inventory/document-number-service'
 import { serializeGoodsReceipt } from '#/server/inventory/document-dto'
+import { createSerial, ensureLot } from '#/server/inventory/lot-serial-service'
 import { postMovement } from '#/server/inventory/movement-engine'
+import { requiresSerial } from '#/server/inventory/tracking-policy'
 import { assertTransition, canTransition } from '#/server/inventory/state-machine'
 import { prisma } from '#/server/db/client'
 import { Prisma } from '#/server/db/generated/prisma/client'
 import type { Prisma as PrismaNS } from '#/server/db/generated/prisma/client'
 import { createAuditLog } from '#/server/repos/audit-log-repo'
 import * as goodsReceiptRepo from '#/server/repos/goods-receipt-repo'
+import { getProductTracking } from '#/server/repos/product-repo'
 import * as poRepo from '#/server/repos/purchase-order-repo'
 import type { CurrentUserContext } from '#/types/auth'
 
@@ -124,24 +127,96 @@ export async function postGoodsReceipt(
           continue
         }
 
-        await postMovement(tx, {
-          tenantId,
-          productId: line.productId,
-          variantId: line.variantId,
-          warehouseId: receipt.warehouseId,
-          locationId: line.toLocationId,
-          movementType: 'PURCHASE_RECEIPT',
-          direction: 'IN',
-          quantity: acceptedQty,
-          uomId: line.uomId,
-          unitCost: new Prisma.Decimal(line.unitCost),
-          sourceDocType: 'GOODS_RECEIPT',
-          sourceDocId: receipt.id,
-          sourceDocLineId: line.id,
-          sourceDocNumber: receipt.documentNumber,
-          performedByProfileId: context.profileId,
-          correlationId: receipt.correlationId ?? undefined,
-        })
+        const tracking = await getProductTracking(tenantId, line.productId, tx)
+        const policy = tracking?.trackingPolicy ?? 'NONE'
+
+        // Lot-tracked lines materialize (or reuse) a Lot for the received batch.
+        let lotId: string | null = null
+
+        if ((policy === 'LOT' || policy === 'LOT_SERIAL') && line.lotNumber) {
+          const lot = await ensureLot(tx, tenantId, {
+            productId: line.productId,
+            variantId: line.variantId,
+            lotNumber: line.lotNumber,
+            expiryDate: line.expiryDate,
+            receivedDate: receipt.receiptDate,
+            supplierId: receipt.supplierId,
+            initialQty: acceptedQty,
+            sourceDocType: 'GOODS_RECEIPT',
+            sourceDocId: receipt.id,
+          })
+          lotId = lot.id
+        }
+
+        if (requiresSerial(policy)) {
+          // Serialized receipt: one Lot-linked SerialNumber + one qty-1 movement
+          // per serial. Guard the count against the accepted quantity.
+          const serials = line.serialNumbers
+
+          if (new Prisma.Decimal(serials.length).lt(acceptedQty)) {
+            throw new ConflictError(
+              `Line ${line.lineNo}: ${serials.length} serial number(s) for ${acceptedQty.toString()} accepted units.`
+            )
+          }
+
+          for (const serialNumber of serials) {
+            const serial = await createSerial(tx, tenantId, {
+              productId: line.productId,
+              variantId: line.variantId,
+              serialNumber,
+              status: 'IN_STOCK',
+              currentWarehouseId: receipt.warehouseId,
+              currentLocationId: line.toLocationId,
+              lotId,
+              supplierId: receipt.supplierId,
+              sourceDocType: 'GOODS_RECEIPT',
+              sourceDocId: receipt.id,
+            })
+
+            await postMovement(tx, {
+              tenantId,
+              productId: line.productId,
+              variantId: line.variantId,
+              warehouseId: receipt.warehouseId,
+              locationId: line.toLocationId,
+              lotId,
+              serialId: serial.id,
+              movementType: 'PURCHASE_RECEIPT',
+              direction: 'IN',
+              quantity: 1,
+              uomId: line.uomId,
+              unitCost: new Prisma.Decimal(line.unitCost),
+              sourceDocType: 'GOODS_RECEIPT',
+              sourceDocId: receipt.id,
+              sourceDocLineId: line.id,
+              sourceDocNumber: receipt.documentNumber,
+              performedByProfileId: context.profileId,
+              correlationId: receipt.correlationId ?? undefined,
+              trackingPolicy: policy,
+            })
+          }
+        } else {
+          await postMovement(tx, {
+            tenantId,
+            productId: line.productId,
+            variantId: line.variantId,
+            warehouseId: receipt.warehouseId,
+            locationId: line.toLocationId,
+            lotId,
+            movementType: 'PURCHASE_RECEIPT',
+            direction: 'IN',
+            quantity: acceptedQty,
+            uomId: line.uomId,
+            unitCost: new Prisma.Decimal(line.unitCost),
+            sourceDocType: 'GOODS_RECEIPT',
+            sourceDocId: receipt.id,
+            sourceDocLineId: line.id,
+            sourceDocNumber: receipt.documentNumber,
+            performedByProfileId: context.profileId,
+            correlationId: receipt.correlationId ?? undefined,
+            trackingPolicy: policy,
+          })
+        }
 
         if (line.purchaseOrderLineId) {
           await poRepo.incrementLineReceivedQty(line.purchaseOrderLineId, acceptedQty, tx)

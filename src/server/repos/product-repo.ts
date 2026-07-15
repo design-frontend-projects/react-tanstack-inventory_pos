@@ -218,3 +218,31 @@ export async function softDeleteProduct(
 
   return result.count > 0
 }
+
+export interface ProductTracking {
+  trackingPolicy: TrackingPolicy
+  hasExpiry: boolean
+  shelfLifeDays: number | null
+  baseUomId: string
+}
+
+// Minimal projection the movement engine needs to enforce lot/serial rules — a
+// single indexed PK lookup, kept narrow to stay cheap on the hot posting path.
+// `baseUomId` lets manufacturing resolve the finished-good unit of measure.
+export async function getProductTracking(
+  tenantId: string,
+  productId: string,
+  client: PrismaClientLike = prisma
+): Promise<ProductTracking | null> {
+  const product = await client.product.findFirst({
+    where: { id: productId, tenantId },
+    select: {
+      trackingPolicy: true,
+      hasExpiry: true,
+      shelfLifeDays: true,
+      baseUomId: true,
+    },
+  })
+
+  return product
+}
