@@ -19,6 +19,20 @@ import {
   resendTenantInvitation,
   updateTenantUserStatus,
 } from '#/server/auth/user-management'
+import { getNavigationTree } from '#/server/auth/navigation'
+import {
+  createRole,
+  deleteRole,
+  getRoleManagement,
+  updateRole,
+} from '#/server/auth/role-management'
+import {
+  getModuleManagement,
+  reorderScreens,
+  setModuleState,
+  setScreenVisibility,
+} from '#/server/auth/module-management'
+import { getSecurityOverview } from '#/server/auth/security-management'
 import { bootstrapSession, getCurrentUserContext } from '#/server/auth/session'
 import {
   requireAuth,
@@ -26,11 +40,7 @@ import {
   requireTenantAccess,
 } from '#/server/auth/tenant-guard'
 import { setDefaultTenant } from '#/server/repos/preference-repo'
-import { listTenantAssignableRoles } from '#/server/repos/role-repo'
-import {
-  PERMISSION_CODES,
-  TENANT_ASSIGNABLE_ROLE_CODES,
-} from '#/features/auth/rbac-catalog'
+import { listAssignableRoles } from '#/server/repos/role-repo'
 import {
   forgotPasswordSchema,
   invitationAcceptanceSchema,
@@ -119,7 +129,7 @@ export const listTenantAssignableRolesServerFn = createServerFn({
 
     requireAuth(context)
 
-    return listTenantAssignableRoles().then((roles) =>
+    return listAssignableRoles(data.tenantId).then((roles) =>
       roles.map((role) => ({
         code: role.code,
         name: role.name,
@@ -138,9 +148,7 @@ export const listTenantUsersServerFn = createServerFn({
       filters: z
         .object({
           search: z.string().optional(),
-          roleCode: z
-            .enum([...TENANT_ASSIGNABLE_ROLE_CODES, 'all'] as const)
-            .optional(),
+          roleCode: z.string().min(1).optional(),
           status: z
             .enum(['invited', 'active', 'suspended', 'disabled', 'rejected', 'all'])
             .optional(),
@@ -188,7 +196,7 @@ export const inviteTenantUserServerFn = createServerFn({
       lastName: z.string().min(1),
       phone: z.string().optional().nullable(),
       jobTitle: z.string().optional().nullable(),
-      roleCode: z.enum(TENANT_ASSIGNABLE_ROLE_CODES),
+      roleCode: z.string().min(1),
       origin: z.string().url(),
     })
   )
@@ -329,7 +337,7 @@ export const changeTenantUserPrimaryRoleServerFn = createServerFn({
       accessToken: accessTokenSchema,
       tenantId: tenantIdSchema,
       tenantUserId: z.string().uuid(),
-      roleCode: z.enum(TENANT_ASSIGNABLE_ROLE_CODES),
+      roleCode: z.string().min(1),
     })
   )
   .handler(async ({ data }) => {
@@ -355,7 +363,7 @@ export const assignPrimaryRoleServerFn = createServerFn({
       accessToken: accessTokenSchema,
       tenantId: tenantIdSchema,
       tenantUserId: z.string().uuid(),
-      roleCode: z.enum(TENANT_ASSIGNABLE_ROLE_CODES),
+      roleCode: z.string().min(1),
     })
   )
   .handler(async ({ data }) => {
@@ -468,7 +476,7 @@ export const setUserPermissionOverrideServerFn = createServerFn({
       accessToken: accessTokenSchema,
       tenantId: tenantIdSchema,
       tenantUserId: z.string().uuid(),
-      permissionCode: z.enum(PERMISSION_CODES),
+      permissionCode: z.string().min(1),
       isAllowed: z.boolean().nullable(),
     })
   )
@@ -485,4 +493,289 @@ export const setUserPermissionOverrideServerFn = createServerFn({
     )
 
     return setUserPermissionOverride(context, data)
+  })
+
+export const getSecurityOverviewServerFn = createServerFn({
+  method: 'POST',
+})
+  .inputValidator(
+    z.object({
+      accessToken: accessTokenSchema,
+      tenantId: tenantIdSchema,
+    })
+  )
+  .handler(async ({ data }) => {
+    const context = requirePermission(
+      requireTenantAccess(
+        await getCurrentUserContext({
+          accessToken: data.accessToken,
+          tenantId: data.tenantId,
+        }),
+        data.tenantId
+      ),
+      ['tenant.manage_settings', 'res.settings.manage', 'user.view']
+    )
+
+    return getSecurityOverview(context, data.tenantId)
+  })
+
+export const getNavigationTreeServerFn = createServerFn({
+  method: 'POST',
+})
+  .inputValidator(
+    z.object({
+      accessToken: accessTokenSchema,
+      tenantId: tenantIdSchema,
+    })
+  )
+  .handler(async ({ data }) => {
+    const context = requireTenantAccess(
+      await getCurrentUserContext({
+        accessToken: data.accessToken,
+        tenantId: data.tenantId,
+      }),
+      data.tenantId
+    )
+
+    return getNavigationTree(context, data.tenantId)
+  })
+
+const permissionCodesSchema = z.array(z.string().min(1)).max(200)
+
+export const getRoleManagementServerFn = createServerFn({
+  method: 'POST',
+})
+  .inputValidator(
+    z.object({
+      accessToken: accessTokenSchema,
+      tenantId: tenantIdSchema,
+    })
+  )
+  .handler(async ({ data }) => {
+    const context = requirePermission(
+      requireTenantAccess(
+        await getCurrentUserContext({
+          accessToken: data.accessToken,
+          tenantId: data.tenantId,
+        }),
+        data.tenantId
+      ),
+      ['role.view', 'role.manage']
+    )
+
+    return getRoleManagement(context, data.tenantId)
+  })
+
+export const createRoleServerFn = createServerFn({
+  method: 'POST',
+})
+  .inputValidator(
+    z.object({
+      accessToken: accessTokenSchema,
+      tenantId: tenantIdSchema,
+      name: z.string().min(1).max(80),
+      description: z.string().max(500).nullish(),
+      rank: z.number().int().min(1).max(200),
+      permissionCodes: permissionCodesSchema,
+    })
+  )
+  .handler(async ({ data }) => {
+    const context = requirePermission(
+      requireTenantAccess(
+        await getCurrentUserContext({
+          accessToken: data.accessToken,
+          tenantId: data.tenantId,
+        }),
+        data.tenantId
+      ),
+      'role.manage'
+    )
+
+    return createRole(context, {
+      tenantId: data.tenantId,
+      name: data.name,
+      description: data.description ?? null,
+      rank: data.rank,
+      permissionCodes: data.permissionCodes,
+    })
+  })
+
+export const updateRoleServerFn = createServerFn({
+  method: 'POST',
+})
+  .inputValidator(
+    z.object({
+      accessToken: accessTokenSchema,
+      tenantId: tenantIdSchema,
+      roleId: z.string().uuid(),
+      name: z.string().min(1).max(80).optional(),
+      description: z.string().max(500).nullish(),
+      isActive: z.boolean().optional(),
+      rank: z.number().int().min(1).max(200).optional(),
+      permissionCodes: permissionCodesSchema.optional(),
+    })
+  )
+  .handler(async ({ data }) => {
+    const context = requirePermission(
+      requireTenantAccess(
+        await getCurrentUserContext({
+          accessToken: data.accessToken,
+          tenantId: data.tenantId,
+        }),
+        data.tenantId
+      ),
+      'role.manage'
+    )
+
+    return updateRole(context, {
+      tenantId: data.tenantId,
+      roleId: data.roleId,
+      name: data.name,
+      description: data.description,
+      isActive: data.isActive,
+      rank: data.rank,
+      permissionCodes: data.permissionCodes,
+    })
+  })
+
+export const deleteRoleServerFn = createServerFn({
+  method: 'POST',
+})
+  .inputValidator(
+    z.object({
+      accessToken: accessTokenSchema,
+      tenantId: tenantIdSchema,
+      roleId: z.string().uuid(),
+    })
+  )
+  .handler(async ({ data }) => {
+    const context = requirePermission(
+      requireTenantAccess(
+        await getCurrentUserContext({
+          accessToken: data.accessToken,
+          tenantId: data.tenantId,
+        }),
+        data.tenantId
+      ),
+      'role.manage'
+    )
+
+    return deleteRole(context, {
+      tenantId: data.tenantId,
+      roleId: data.roleId,
+    })
+  })
+
+export const getModuleManagementServerFn = createServerFn({
+  method: 'POST',
+})
+  .inputValidator(
+    z.object({
+      accessToken: accessTokenSchema,
+      tenantId: tenantIdSchema,
+    })
+  )
+  .handler(async ({ data }) => {
+    const context = requirePermission(
+      requireTenantAccess(
+        await getCurrentUserContext({
+          accessToken: data.accessToken,
+          tenantId: data.tenantId,
+        }),
+        data.tenantId
+      ),
+      'module.manage'
+    )
+
+    return getModuleManagement(context, data.tenantId)
+  })
+
+export const setModuleStateServerFn = createServerFn({
+  method: 'POST',
+})
+  .inputValidator(
+    z.object({
+      accessToken: accessTokenSchema,
+      tenantId: tenantIdSchema,
+      moduleId: z.string().uuid(),
+      isEnabled: z.boolean(),
+    })
+  )
+  .handler(async ({ data }) => {
+    const context = requirePermission(
+      requireTenantAccess(
+        await getCurrentUserContext({
+          accessToken: data.accessToken,
+          tenantId: data.tenantId,
+        }),
+        data.tenantId
+      ),
+      'module.manage'
+    )
+
+    return setModuleState(context, {
+      tenantId: data.tenantId,
+      moduleId: data.moduleId,
+      isEnabled: data.isEnabled,
+    })
+  })
+
+export const setScreenVisibilityServerFn = createServerFn({
+  method: 'POST',
+})
+  .inputValidator(
+    z.object({
+      accessToken: accessTokenSchema,
+      tenantId: tenantIdSchema,
+      screenId: z.string().uuid(),
+      showInMenu: z.boolean(),
+    })
+  )
+  .handler(async ({ data }) => {
+    const context = requirePermission(
+      requireTenantAccess(
+        await getCurrentUserContext({
+          accessToken: data.accessToken,
+          tenantId: data.tenantId,
+        }),
+        data.tenantId
+      ),
+      'module.manage'
+    )
+
+    return setScreenVisibility(context, {
+      tenantId: data.tenantId,
+      screenId: data.screenId,
+      showInMenu: data.showInMenu,
+    })
+  })
+
+export const reorderScreensServerFn = createServerFn({
+  method: 'POST',
+})
+  .inputValidator(
+    z.object({
+      accessToken: accessTokenSchema,
+      tenantId: tenantIdSchema,
+      moduleId: z.string().uuid(),
+      orderedScreenIds: z.array(z.string().uuid()).min(1).max(200),
+    })
+  )
+  .handler(async ({ data }) => {
+    const context = requirePermission(
+      requireTenantAccess(
+        await getCurrentUserContext({
+          accessToken: data.accessToken,
+          tenantId: data.tenantId,
+        }),
+        data.tenantId
+      ),
+      'module.manage'
+    )
+
+    return reorderScreens(context, {
+      tenantId: data.tenantId,
+      moduleId: data.moduleId,
+      orderedScreenIds: data.orderedScreenIds,
+    })
   })

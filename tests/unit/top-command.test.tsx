@@ -21,6 +21,11 @@ vi.mock('#/features/auth/use-session-bootstrap', () => ({
   }),
 }))
 
+// No DB nav tree in this unit test -> the command palette uses the static fallback.
+vi.mock('#/features/layout/use-navigation-tree', () => ({
+  useNavigationTree: () => ({ data: undefined }),
+}))
+
 const memberships: WorkspaceMembership[] = [
   {
     tenantId: 'meridian-foods',

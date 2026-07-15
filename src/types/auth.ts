@@ -1,5 +1,6 @@
-import type { PermissionCode, RoleCode } from '#/features/auth/rbac-catalog'
-
+// Role and permission codes flow through as `string`: system codes come from the
+// code catalog, but tenants can define custom roles/permissions at runtime, so
+// these are validated against the database rather than a compile-time union.
 export type AppLocaleCode = 'en' | 'ar'
 export type ThemeModeCode = 'light' | 'dark' | 'system'
 export type TenantUserStatusCode =
@@ -41,7 +42,7 @@ export type SessionUser = {
 export type WorkspaceMembership = {
   tenantId: string
   tenantName: string
-  roleCode: RoleCode
+  roleCode: string
   roleLabel: string
   isOwner: boolean
   status: TenantUserStatusCode
@@ -54,8 +55,8 @@ export type CurrentUserContext = {
   email: string
   activeTenantId: string | null
   tenantUserId: string | null
-  roles: Array<RoleCode>
-  permissions: Array<PermissionCode>
+  roles: Array<string>
+  permissions: Array<string>
   isOwner: boolean
   profileCompleted: boolean
   onboardingCompleted: boolean
@@ -85,7 +86,7 @@ export type TenantUserListItem = {
   jobTitle: string | null
   status: TenantUserStatusCode
   joinedAt: string | null
-  roleCode: RoleCode | null
+  roleCode: string | null
   roleLabel: string | null
   isOwner: boolean
   invitationId: string | null
@@ -95,7 +96,7 @@ export type TenantUserListItem = {
 
 export type TenantUserFilters = {
   search?: string
-  roleCode?: RoleCode | 'all'
+  roleCode?: string | 'all'
   status?: TenantUserStatusCode | 'all'
   invitationStatus?: InvitationStatusCode | 'all'
 }
@@ -107,7 +108,7 @@ export type InviteTenantUserInput = {
   lastName: string
   phone?: string | null
   jobTitle?: string | null
-  roleCode: RoleCode
+  roleCode: string
   origin: string
 }
 
@@ -175,11 +176,11 @@ export type UpdateTenantUserStatusInput = {
 export type ChangeTenantUserPrimaryRoleInput = {
   tenantId: string
   tenantUserId: string
-  roleCode: RoleCode
+  roleCode: string
 }
 
 export type PermissionSummary = {
-  code: PermissionCode
+  code: string
   name: string
   moduleKey: string
   actionKey: string
@@ -188,15 +189,15 @@ export type PermissionSummary = {
 
 export type RolePermissionSummary = {
   roleId: string
-  code: RoleCode
+  code: string
   name: string
   description: string | null
   rank: number
-  permissions: Array<PermissionCode>
+  permissions: Array<string>
 }
 
 export type TenantUserPermissionOverrideSummary = {
-  permissionCode: PermissionCode
+  permissionCode: string
   isAllowed: boolean
 }
 
@@ -204,7 +205,7 @@ export type TenantUserAccessSummary = {
   tenantUserId: string
   displayName: string
   email: string
-  roleCode: RoleCode | null
+  roleCode: string | null
   roleLabel: string | null
   isOwner: boolean
   permissionOverrides: Array<TenantUserPermissionOverrideSummary>
@@ -219,6 +220,6 @@ export type RolesPermissionsPayload = {
 export type SetUserPermissionOverrideInput = {
   tenantId: string
   tenantUserId: string
-  permissionCode: PermissionCode
+  permissionCode: string
   isAllowed: boolean | null
 }

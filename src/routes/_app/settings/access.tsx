@@ -3,7 +3,6 @@ import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import { createFileRoute } from '@tanstack/react-router'
 import { Loader2, ShieldCheck } from 'lucide-react'
 import { AccessGuard } from '#/features/auth/access-guard'
-import type { PermissionCode } from '#/features/auth/rbac-catalog'
 import { hasPermission } from '#/features/auth/permissions'
 import {
   listRolesPermissionsServerFn,
@@ -59,7 +58,7 @@ function AccessManagementPage() {
   const overrideMutation = useMutation({
     mutationFn: async (payload: {
       tenantUserId: string
-      permissionCode: PermissionCode
+      permissionCode: string
       isAllowed: boolean | null
     }) =>
       withAccessToken((accessToken) =>

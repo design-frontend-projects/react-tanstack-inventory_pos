@@ -1,8 +1,5 @@
 import { prisma } from '#/server/db/client'
-import {
-  getRoleRank,
-  isTenantAssignableRole,
-} from '#/features/auth/rbac-catalog'
+import { getRoleRank } from '#/features/auth/rbac-catalog'
 import { canResendInvitation } from '#/features/auth/invitations'
 import type { Prisma } from '#/server/db/generated/prisma/client'
 import type {
@@ -49,7 +46,7 @@ import {
   upsertTenantUser,
 } from '#/server/repos/membership-repo'
 import { setDefaultTenant } from '#/server/repos/preference-repo'
-import { findRoleByCode } from '#/server/repos/role-repo'
+import { findAssignableRoleByCode } from '#/server/repos/role-repo'
 import {
   ensureProfile,
   findProfileByAuthUserId,
@@ -246,7 +243,7 @@ function mapTenantUserListItem(
     jobTitle: tenantUser.jobTitle ?? invitation?.jobTitle ?? null,
     status: tenantUser.status.toLowerCase() as TenantUserListItem['status'],
     joinedAt: tenantUser.joinedAt?.toISOString() ?? null,
-    roleCode: (primaryRole?.code ?? null) as TenantUserListItem['roleCode'],
+    roleCode: (primaryRole?.code ?? null),
     roleLabel: primaryRole?.name ?? null,
     isOwner: tenantUser.isOwner,
     invitationId: invitation?.id ?? null,
@@ -377,17 +374,13 @@ export async function inviteTenantUser(
   actor: CurrentUserContext,
   input: InviteTenantUserInput
 ) {
-  if (!isTenantAssignableRole(input.roleCode)) {
-    throw new ValidationError('The selected role cannot be assigned in this tenant.')
-  }
-
   if (actor.activeTenantId !== input.tenantId) {
     throw new ForbiddenError('Tenant mismatch for invitation request.')
   }
 
-  const role = await findRoleByCode(input.roleCode)
-  if (!role || !role.isActive) {
-    throw new ValidationError('The selected role does not exist or is inactive.')
+  const role = await findAssignableRoleByCode(input.tenantId, input.roleCode)
+  if (!role) {
+    throw new ValidationError('The selected role cannot be assigned in this tenant.')
   }
 
   if (getActorRank(actor) <= role.rank) {
@@ -916,9 +909,9 @@ export async function changeTenantUserPrimaryRole(
     throw new ForbiddenError('You cannot change your own primary role.')
   }
 
-  const role = await findRoleByCode(input.roleCode)
+  const role = await findAssignableRoleByCode(input.tenantId, input.roleCode)
   if (!role) {
-    throw new ValidationError('Role not found.')
+    throw new ValidationError('Role not found or not assignable in this tenant.')
   }
 
   if (tenantUser.isOwner && role.code !== 'super_admin') {

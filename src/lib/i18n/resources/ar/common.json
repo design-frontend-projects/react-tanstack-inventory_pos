@@ -60,6 +60,9 @@
     "posOrders": "الطلبات",
     "posReturns": "المرتجعات",
     "systemAdmin": "إدارة النظام",
+    "systemSecurity": "مركز الأمان",
+    "systemRoles": "الأدوار",
+    "systemModules": "الوحدات",
     "systemUsers": "المستخدمون والصلاحيات",
     "systemNotifications": "الإشعارات",
     "systemIntegrations": "التكاملات"

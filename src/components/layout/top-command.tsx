@@ -19,15 +19,17 @@ import { cn } from '#/lib/utils'
 import {
   appNavSections,
   dashboardNavItem,
-  getAppNavSection,
   isAppPathActive,
 } from '#/lib/navigation/app-nav'
 import type {
   AppCommandEntry,
   AppNavRouteTo,
 } from '#/lib/navigation/app-nav'
+import type { NavSectionView } from '#/features/layout/navigation-view'
+import { navTreeToSections } from '#/features/layout/navigation-view'
 import type { WorkspaceMembership } from '#/types/app'
 import { useSessionBootstrap } from '#/features/auth/use-session-bootstrap'
+import { useNavigationTree } from '#/features/layout/use-navigation-tree'
 import { hasAnyPermission } from '#/features/auth/permissions'
 
 const DESKTOP_SHORTCUT = 'Ctrl K'
@@ -60,6 +62,7 @@ export function TopCommand({
 }) {
   const { t } = useTranslation()
   const { context } = useSessionBootstrap()
+  const navQuery = useNavigationTree(activeTenantId || null)
   const [open, setOpen] = React.useState(false)
 
   React.useEffect(() => {
@@ -76,21 +79,43 @@ export function TopCommand({
   }, [])
 
   const entries = React.useMemo(() => {
-    const visibleSections = appNavSections
-      .map((section) => ({
-        ...section,
-        items: section.items.filter(
-          (item) =>
-            !item.permissions?.length ||
-            hasAnyPermission(context?.permissions ?? [], item.permissions)
-        ),
-      }))
+    const label = (fallbackTitle: string, titleKey?: string) =>
+      titleKey ? t(titleKey, fallbackTitle) : fallbackTitle
+
+    // Prefer the DB-driven navigation tree (already permission-filtered
+    // server-side); fall back to the static catalog while it loads or on error.
+    const dbSections = navTreeToSections(navQuery.data)
+    const staticSections: Array<NavSectionView> = appNavSections
       .filter(
         (section) =>
-          section.items.length > 0 &&
-          (!section.permissions?.length ||
-            hasAnyPermission(context?.permissions ?? [], section.permissions))
+          !section.permissions?.length ||
+          hasAnyPermission(context?.permissions ?? [], section.permissions)
       )
+      .map((section) => ({
+        id: section.id,
+        icon: section.icon,
+        titleKey: section.titleKey,
+        fallbackTitle: section.fallbackTitle,
+        rootTo: section.rootTo,
+        keywords: section.keywords,
+        items: section.items
+          .filter(
+            (item) =>
+              !item.permissions?.length ||
+              hasAnyPermission(context?.permissions ?? [], item.permissions)
+          )
+          .map((item) => ({
+            id: item.id,
+            to: item.to,
+            icon: item.icon,
+            titleKey: item.titleKey,
+            fallbackTitle: item.fallbackTitle,
+            keywords: item.keywords,
+          })),
+      }))
+      .filter((section) => section.items.length > 0)
+
+    const sections = dbSections.length > 0 ? dbSections : staticSections
 
     const navigationEntries: AppCommandEntry[] = [
       {
@@ -102,28 +127,26 @@ export function TopCommand({
         to: dashboardNavItem.to,
         current: isAppPathActive(pathname, dashboardNavItem.to),
       },
-      ...visibleSections.map((section) => ({
+      ...sections.map((section) => ({
         id: `nav-${section.id}`,
         group: 'navigation' as const,
         icon: section.icon,
-        title: t(section.titleKey, section.fallbackTitle),
+        title: label(section.fallbackTitle, section.titleKey),
         keywords: section.keywords,
         to: section.rootTo,
         current:
           pathname === section.rootTo ||
-          getAppNavSection(section.id)?.items.some((item) =>
-            isAppPathActive(pathname, item.to)
-          ) === true,
+          section.items.some((item) => isAppPathActive(pathname, item.to)),
       })),
     ]
 
-    const pageEntries: AppCommandEntry[] = visibleSections.flatMap((section) =>
+    const pageEntries: AppCommandEntry[] = sections.flatMap((section) =>
       section.items.map((item) => ({
         id: `page-${item.id}`,
         group: 'pages' as const,
         icon: item.icon,
-        title: t(item.titleKey, item.fallbackTitle),
-        description: t(section.titleKey, section.fallbackTitle),
+        title: label(item.fallbackTitle, item.titleKey),
+        description: label(section.fallbackTitle, section.titleKey),
         keywords: item.keywords,
         to: item.to,
         current: isAppPathActive(pathname, item.to),
@@ -151,7 +174,7 @@ export function TopCommand({
       pageEntries,
       workspaceEntries,
     }
-  }, [activeTenantId, context?.permissions, memberships, pathname, t])
+  }, [activeTenantId, context?.permissions, memberships, navQuery.data, pathname, t])
 
   return (
     <>

@@ -28,6 +28,9 @@ export type AppNavRouteTo =
   | '/pos/orders'
   | '/pos/returns'
   | '/profile'
+  | '/settings/security'
+  | '/settings/roles'
+  | '/settings/modules'
   | '/settings/access'
   | '/settings/users'
   | '/settings/notifications'
@@ -240,6 +243,36 @@ export const appNavSections: AppNavSection[] = [
         fallbackTitle: 'My Profile',
         keywords: ['profile', 'account', 'self service', 'identity'],
         permissions: ['profile.view_self'],
+      },
+      {
+        id: 'settings-security',
+        sectionId: 'systemAdmin',
+        to: '/settings/security',
+        icon: ShieldCheck,
+        titleKey: 'nav.systemSecurity',
+        fallbackTitle: 'Security Center',
+        keywords: ['security', 'rbac', 'modules', 'screens', 'registry', 'audit'],
+        permissions: ['tenant.manage_settings', 'res.settings.manage', 'user.view'],
+      },
+      {
+        id: 'settings-roles',
+        sectionId: 'systemAdmin',
+        to: '/settings/roles',
+        icon: UsersRound,
+        titleKey: 'nav.systemRoles',
+        fallbackTitle: 'Roles',
+        keywords: ['roles', 'rbac', 'permissions', 'custom roles'],
+        permissions: ['role.view', 'role.manage'],
+      },
+      {
+        id: 'settings-modules',
+        sectionId: 'systemAdmin',
+        to: '/settings/modules',
+        icon: Boxes,
+        titleKey: 'nav.systemModules',
+        fallbackTitle: 'Modules',
+        keywords: ['modules', 'menus', 'navigation'],
+        permissions: ['module.manage'],
       },
       {
         id: 'settings-access',

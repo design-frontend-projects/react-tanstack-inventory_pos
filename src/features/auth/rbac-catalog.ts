@@ -160,6 +160,27 @@ export const PERMISSION_DEFINITIONS = [
     description: 'Access the tenant dashboard.',
   },
   {
+    code: 'role.view',
+    name: 'View Roles',
+    moduleKey: 'role',
+    actionKey: 'view',
+    description: 'View tenant roles and their permission mappings.',
+  },
+  {
+    code: 'role.manage',
+    name: 'Manage Roles',
+    moduleKey: 'role',
+    actionKey: 'manage',
+    description: 'Create, edit, and delete tenant roles and their permissions.',
+  },
+  {
+    code: 'module.manage',
+    name: 'Manage Modules',
+    moduleKey: 'module',
+    actionKey: 'manage',
+    description: 'Enable, disable, and reorder tenant modules and menus.',
+  },
+  {
     code: 'res.dashboard.view',
     name: 'View Restaurant Dashboard',
     moduleKey: 'restaurant_dashboard',
@@ -275,6 +296,9 @@ export const ROLE_PERMISSION_MAP: Record<RoleCode, Array<PermissionCode>> = {
     'dashboard.view',
     'profile.view_self',
     'profile.update_self',
+    'role.view',
+    'role.manage',
+    'module.manage',
   ],
   'res:super_admin': [
     'tenant.view',
@@ -299,6 +323,9 @@ export const ROLE_PERMISSION_MAP: Record<RoleCode, Array<PermissionCode>> = {
     'res.users.view',
     'res.users.manage',
     'res.settings.manage',
+    'role.view',
+    'role.manage',
+    'module.manage',
   ],
   'res:admin': [
     'user.view',

@@ -14,6 +14,21 @@ export async function listPermissions() {
   })
 }
 
+export async function findPermissionsByCodes(codes: Array<string>) {
+  return prisma.permission.findMany({
+    where: {
+      code: {
+        in: codes,
+      },
+      deletedAt: null,
+    },
+    select: {
+      id: true,
+      code: true,
+    },
+  })
+}
+
 export async function setTenantUserPermissionOverride(input: {
   tenantUserId: string
   permissionId: string

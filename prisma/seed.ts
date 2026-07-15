@@ -1,9 +1,26 @@
 import { prisma } from '#/server/db/client'
+import { PermissionKind } from '#/server/db/generated/prisma/client'
 import {
   PERMISSION_DEFINITIONS,
   ROLE_DEFINITIONS,
   ROLE_PERMISSION_MAP,
 } from '#/features/auth/rbac-catalog'
+import type { PermissionKindCode } from '#/features/auth/module-catalog'
+import {
+  MODULE_DEFINITIONS,
+  PERMISSION_LINKS,
+  SCREEN_ACTION_DEFINITIONS,
+  SCREEN_DEFINITIONS,
+} from '#/features/auth/module-catalog'
+
+const PERMISSION_KIND_BY_CODE: Record<PermissionKindCode, PermissionKind> = {
+  screen: PermissionKind.SCREEN,
+  menu: PermissionKind.MENU,
+  action: PermissionKind.ACTION,
+  api: PermissionKind.API,
+  data: PermissionKind.DATA,
+  admin: PermissionKind.ADMIN,
+}
 
 const LEGACY_ROLE_CODE_MAP: Record<string, string> = {
   tenant_owner: 'super_admin',
@@ -14,19 +31,271 @@ const LEGACY_ROLE_CODE_MAP: Record<string, string> = {
   viewer: 'res:user',
 }
 
+async function seedModules() {
+  for (const definition of MODULE_DEFINITIONS) {
+    const existingModule = await prisma.module.findFirst({
+      where: {
+        tenantId: null,
+        code: definition.code,
+      },
+      select: {
+        id: true,
+      },
+    })
+
+    const data = {
+      name: definition.name,
+      description: definition.description,
+      icon: definition.icon,
+      displayOrder: definition.displayOrder,
+      isSystem: true,
+      isActive: true,
+      isVisible: true,
+      metadata: {
+        titleKey: definition.titleKey,
+        rootPath: definition.rootPath,
+      },
+    }
+
+    if (existingModule) {
+      await prisma.module.update({
+        where: {
+          id: existingModule.id,
+        },
+        data,
+      })
+      continue
+    }
+
+    await prisma.module.create({
+      data: {
+        ...data,
+        tenantId: null,
+        code: definition.code,
+      },
+    })
+  }
+}
+
+async function loadSystemModuleIdByCode() {
+  const modules = await prisma.module.findMany({
+    where: {
+      tenantId: null,
+    },
+    select: {
+      id: true,
+      code: true,
+    },
+  })
+
+  return new Map(modules.map((module) => [module.code, module.id]))
+}
+
+async function loadSystemScreenIdByCode() {
+  const screens = await prisma.screen.findMany({
+    where: {
+      tenantId: null,
+    },
+    select: {
+      id: true,
+      code: true,
+    },
+  })
+
+  return new Map(screens.map((screen) => [screen.code, screen.id]))
+}
+
+async function seedScreens() {
+  const moduleIdByCode = await loadSystemModuleIdByCode()
+
+  for (const definition of SCREEN_DEFINITIONS) {
+    const moduleId = moduleIdByCode.get(definition.moduleCode)
+
+    if (!moduleId) {
+      throw new Error(
+        `Missing module "${definition.moduleCode}" for screen "${definition.code}"`
+      )
+    }
+
+    const existingScreen = await prisma.screen.findFirst({
+      where: {
+        moduleId,
+        code: definition.code,
+      },
+      select: {
+        id: true,
+      },
+    })
+
+    const data = {
+      name: definition.name,
+      routeId: definition.path,
+      path: definition.path,
+      titleKey: definition.titleKey,
+      icon: definition.icon,
+      displayOrder: definition.displayOrder,
+      showInMenu: true,
+      isSystem: true,
+      isActive: true,
+      metadata: { keywords: [...definition.keywords] },
+    }
+
+    if (existingScreen) {
+      await prisma.screen.update({
+        where: {
+          id: existingScreen.id,
+        },
+        data,
+      })
+      continue
+    }
+
+    await prisma.screen.create({
+      data: {
+        ...data,
+        moduleId,
+        tenantId: null,
+        code: definition.code,
+      },
+    })
+  }
+}
+
+async function seedScreenActions() {
+  const screenIdByCode = await loadSystemScreenIdByCode()
+
+  for (const definition of SCREEN_ACTION_DEFINITIONS) {
+    const screenId = screenIdByCode.get(definition.screenCode)
+
+    if (!screenId) {
+      throw new Error(
+        `Missing screen "${definition.screenCode}" for action "${definition.code}"`
+      )
+    }
+
+    const existingAction = await prisma.screenAction.findFirst({
+      where: {
+        screenId,
+        code: definition.code,
+      },
+      select: {
+        id: true,
+      },
+    })
+
+    const data = {
+      name: definition.name,
+      actionKey: definition.actionKey,
+      description: definition.description,
+      displayOrder: definition.displayOrder,
+      isSystem: true,
+      isActive: true,
+    }
+
+    if (existingAction) {
+      await prisma.screenAction.update({
+        where: {
+          id: existingAction.id,
+        },
+        data,
+      })
+      continue
+    }
+
+    await prisma.screenAction.create({
+      data: {
+        ...data,
+        screenId,
+        tenantId: null,
+        code: definition.code,
+      },
+    })
+  }
+}
+
 async function seedPermissions() {
+  const moduleIdByCode = await loadSystemModuleIdByCode()
+  const screenIdByCode = await loadSystemScreenIdByCode()
+  const screenActions = await prisma.screenAction.findMany({
+    where: {
+      tenantId: null,
+    },
+    select: {
+      id: true,
+      code: true,
+    },
+  })
+  const actionIdByCode = new Map(
+    screenActions.map((action) => [action.code, action.id])
+  )
+
   for (const definition of PERMISSION_DEFINITIONS) {
+    const link = PERMISSION_LINKS[definition.code]
+    const moduleId = moduleIdByCode.get(link.moduleCode) ?? null
+    const screenId = link.screenCode
+      ? (screenIdByCode.get(link.screenCode) ?? null)
+      : null
+    const actionId = link.actionCode
+      ? (actionIdByCode.get(link.actionCode) ?? null)
+      : null
+
+    const data = {
+      name: definition.name,
+      moduleKey: definition.moduleKey,
+      actionKey: definition.actionKey,
+      description: definition.description,
+      kind: PERMISSION_KIND_BY_CODE[link.kind],
+      moduleId,
+      screenId,
+      actionId,
+      isSystem: true,
+      isActive: true,
+    }
+
     await prisma.permission.upsert({
       where: {
         code: definition.code,
       },
-      update: {
-        name: definition.name,
-        moduleKey: definition.moduleKey,
-        actionKey: definition.actionKey,
-        description: definition.description,
+      update: data,
+      create: {
+        ...data,
+        code: definition.code,
       },
-      create: definition,
+    })
+  }
+}
+
+async function linkScreenDefaultPermissions() {
+  const screenIdByCode = await loadSystemScreenIdByCode()
+  const permissions = await prisma.permission.findMany({
+    select: {
+      id: true,
+      code: true,
+    },
+  })
+  const permissionIdByCode = new Map(
+    permissions.map((permission) => [permission.code, permission.id])
+  )
+
+  for (const definition of SCREEN_DEFINITIONS) {
+    if (!definition.defaultPermissionCode) {
+      continue
+    }
+
+    const screenId = screenIdByCode.get(definition.code)
+    const permissionId = permissionIdByCode.get(definition.defaultPermissionCode)
+
+    if (!screenId || !permissionId) {
+      continue
+    }
+
+    await prisma.screen.update({
+      where: {
+        id: screenId,
+      },
+      data: {
+        defaultPermissionId: permissionId,
+      },
     })
   }
 }
@@ -302,7 +571,11 @@ async function cleanupStalePermissions() {
 }
 
 async function main() {
+  await seedModules()
+  await seedScreens()
+  await seedScreenActions()
   await seedPermissions()
+  await linkScreenDefaultPermissions()
   await seedRoles()
   await migrateLegacyRoles()
   await seedRolePermissions()

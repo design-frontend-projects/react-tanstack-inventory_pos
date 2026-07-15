@@ -60,6 +60,9 @@
     "posOrders": "Orders",
     "posReturns": "Returns",
     "systemAdmin": "System Admin",
+    "systemSecurity": "Security Center",
+    "systemRoles": "Roles",
+    "systemModules": "Modules",
     "systemUsers": "Users & Roles",
     "systemNotifications": "Notifications",
     "systemIntegrations": "Integrations"

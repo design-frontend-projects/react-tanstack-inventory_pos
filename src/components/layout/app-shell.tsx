@@ -23,6 +23,8 @@ import { ThemeToggle } from '#/components/layout/theme-toggle'
 import { useSessionBootstrap } from '#/features/auth/use-session-bootstrap'
 import { signOut } from '#/features/auth/browser-auth'
 import { useLayoutStore } from '#/features/layout/layout-store'
+import { useNavigationTree } from '#/features/layout/use-navigation-tree'
+import { findActiveNavFromTree } from '#/features/layout/navigation-view'
 import { getAppNavContext } from '#/lib/navigation/app-nav'
 import { Button } from '#/components/ui/button'
 
@@ -41,12 +43,25 @@ export function AppShell({ children }: { children: React.ReactNode }) {
   const pathname = useRouterState({
     select: (state) => state.location.pathname,
   })
+  const navQuery = useNavigationTree(activeMembership?.tenantId ?? null)
 
-  const { activeItem, activeSection } = getAppNavContext(pathname)
-  const activeLabel = t(activeItem.titleKey, activeItem.fallbackTitle)
-  const activeSectionLabel = activeSection
-    ? t(activeSection.titleKey, activeSection.fallbackTitle)
-    : t('actions.overview')
+  // Resolve the active screen/module from the DB nav tree; fall back to the
+  // static catalog while it loads or if the route isn't in the tree.
+  const staticContext = getAppNavContext(pathname)
+  const activeNav = findActiveNavFromTree(navQuery.data, pathname)
+  const label = (fallbackTitle: string, titleKey?: string) =>
+    titleKey ? t(titleKey, fallbackTitle) : fallbackTitle
+
+  const activeLabel = activeNav
+    ? label(activeNav.screenFallback, activeNav.screenTitleKey)
+    : t(staticContext.activeItem.titleKey, staticContext.activeItem.fallbackTitle)
+  const activeSectionLabel = activeNav
+    ? activeNav.moduleFallback
+      ? label(activeNav.moduleFallback, activeNav.moduleTitleKey)
+      : t('actions.overview')
+    : staticContext.activeSection
+      ? t(staticContext.activeSection.titleKey, staticContext.activeSection.fallbackTitle)
+      : t('actions.overview')
   const sidebarSide = direction === 'rtl' ? 'right' : 'left'
   const activeTenantName = activeMembership?.tenantName ?? 'No active workspace'
   const activeRoleLabel = activeMembership?.roleLabel ?? 'No role'

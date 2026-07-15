@@ -72,6 +72,28 @@ enum TenantRegistrationStatus {
   @@map("TenantRegistrationStatus")
 }
 
+enum PermissionKind {
+  SCREEN @map("screen")
+  MENU   @map("menu")
+  ACTION @map("action")
+  API    @map("api")
+  DATA   @map("data")
+  ADMIN  @map("admin")
+
+  @@map("PermissionKind")
+}
+
+enum HttpMethod {
+  GET    @map("GET")
+  POST   @map("POST")
+  PUT    @map("PUT")
+  PATCH  @map("PATCH")
+  DELETE @map("DELETE")
+  ANY    @map("ANY")
+
+  @@map("HttpMethod")
+}
+
 model Profile {
   id                    String                    @id @default(uuid()) @db.Uuid
   authUserId            String                    @unique @map("auth_user_id") @db.Uuid
@@ -115,6 +137,11 @@ model TenantAccount {
   invitations         user_invitations[]
   auditLogs           AuditLog[]
   preferenceProfiles  PreferenceProfile[]         @relation("DefaultTenantPreference")
+  modules             Module[]
+  screens             Screen[]
+  screenActions       ScreenAction[]
+  permissions         Permission[]
+  tenantModules       TenantModule[]
 
   @@map("tenant_accounts")
 }
@@ -153,9 +180,11 @@ model Role {
   activityScope  String?          @map("activity_scope")
   isSystem       Boolean          @default(false) @map("is_system")
   isActive       Boolean          @default(true) @map("is_active")
+  isDefault      Boolean          @default(false) @map("is_default")
   rank           Int
   createdAt      DateTime         @default(now()) @map("created_at")
   updatedAt      DateTime         @updatedAt @map("updated_at")
+  deletedAt      DateTime?        @map("deleted_at")
   tenant         TenantAccount?   @relation(fields: [tenantId], references: [id], onDelete: Cascade, onUpdate: Cascade)
   permissions    RolePermission[]
   tenantUserRoles TenantUserRole[]
@@ -174,12 +203,31 @@ model Permission {
   moduleKey       String                 @map("module_key")
   actionKey       String                 @map("action_key")
   description     String?
+  tenantId        String?                @map("tenant_id") @db.Uuid
+  kind            PermissionKind         @default(ACTION)
+  moduleId        String?                @map("module_id") @db.Uuid
+  screenId        String?                @map("screen_id") @db.Uuid
+  actionId        String?                @map("action_id") @db.Uuid
+  httpMethod      HttpMethod?            @map("http_method")
+  apiPath         String?                @map("api_path")
+  isSystem        Boolean                @default(true) @map("is_system")
+  isActive        Boolean                @default(true) @map("is_active")
   createdAt       DateTime               @default(now()) @map("created_at")
+  updatedAt       DateTime               @default(now()) @updatedAt @map("updated_at")
+  deletedAt       DateTime?              @map("deleted_at")
   rolePermissions RolePermission[]
   userPermissions TenantUserPermission[]
+  tenant          TenantAccount?         @relation(fields: [tenantId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  module          Module?                @relation(fields: [moduleId], references: [id], onDelete: SetNull, onUpdate: Cascade)
+  screen          Screen?                @relation("ScreenPermissions", fields: [screenId], references: [id], onDelete: SetNull, onUpdate: Cascade)
+  action          ScreenAction?          @relation(fields: [actionId], references: [id], onDelete: SetNull, onUpdate: Cascade)
+  defaultForScreens Screen[]             @relation("ScreenDefaultPermission")
 
   @@unique([moduleKey, actionKey], map: "permissions_module_action_unique")
   @@index([moduleKey], map: "permissions_module_idx")
+  @@index([kind], map: "permissions_kind_idx")
+  @@index([moduleId], map: "permissions_module_id_idx")
+  @@index([screenId], map: "permissions_screen_id_idx")
   @@map("permissions")
 }
 
@@ -269,12 +317,17 @@ model AuditLog {
   entityId       String?   @map("entity_id") @db.Uuid
   oldValues      Json?     @map("old_values")
   newValues      Json?     @map("new_values")
+  actorEmail     String?   @map("actor_email")
+  ipAddress      String?   @map("ip_address")
+  userAgent      String?   @map("user_agent")
+  correlationId  String?   @map("correlation_id") @db.Uuid
   createdAt      DateTime  @default(now()) @map("created_at")
   tenant         TenantAccount? @relation(fields: [tenantId], references: [id], onDelete: SetNull, onUpdate: Cascade)
   actorProfile   Profile?  @relation("AuditActor", fields: [actorProfileId], references: [id], onDelete: SetNull, onUpdate: Cascade)
 
   @@index([tenantId, createdAt], map: "audit_logs_tenant_created_idx")
   @@index([entityType, entityId, createdAt], map: "audit_logs_entity_created_idx")
+  @@index([correlationId], map: "audit_logs_correlation_idx")
   @@map("audit_logs")
 }
 
@@ -316,4 +369,110 @@ model TenantRegistrationRequest {
   @@index([email], map: "tenant_registration_requests_email_idx")
   @@index([status, expiresAt], map: "tenant_registration_requests_status_expiry_idx")
   @@map("tenant_registration_requests")
+}
+
+model Module {
+  id             String    @id @default(uuid()) @db.Uuid
+  tenantId       String?   @map("tenant_id") @db.Uuid
+  parentModuleId String?   @map("parent_module_id") @db.Uuid
+  code           String
+  name           String
+  description    String?
+  icon           String?
+  displayOrder   Int       @default(0) @map("display_order")
+  isSystem       Boolean   @default(false) @map("is_system")
+  isActive       Boolean   @default(true) @map("is_active")
+  isVisible      Boolean   @default(true) @map("is_visible")
+  metadata       Json      @default("{}")
+  createdAt      DateTime  @default(now()) @map("created_at")
+  updatedAt      DateTime  @default(now()) @updatedAt @map("updated_at")
+  deletedAt      DateTime? @map("deleted_at")
+  tenant         TenantAccount? @relation(fields: [tenantId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  parentModule   Module?        @relation("ModuleHierarchy", fields: [parentModuleId], references: [id], onDelete: SetNull, onUpdate: Cascade)
+  childModules   Module[]       @relation("ModuleHierarchy")
+  screens        Screen[]
+  permissions    Permission[]
+  tenantModules  TenantModule[]
+
+  @@unique([tenantId, code], map: "modules_tenant_code_unique")
+  @@index([parentModuleId], map: "modules_parent_idx")
+  @@index([tenantId, isActive], map: "modules_tenant_active_idx")
+  @@map("modules")
+}
+
+model TenantModule {
+  id           String   @id @default(uuid()) @db.Uuid
+  tenantId     String   @map("tenant_id") @db.Uuid
+  moduleId     String   @map("module_id") @db.Uuid
+  isEnabled    Boolean  @default(true) @map("is_enabled")
+  displayOrder Int?     @map("display_order")
+  isVisible    Boolean? @map("is_visible")
+  createdAt    DateTime @default(now()) @map("created_at")
+  updatedAt    DateTime @default(now()) @updatedAt @map("updated_at")
+  tenant       TenantAccount @relation(fields: [tenantId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  module       Module        @relation(fields: [moduleId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+
+  @@unique([tenantId, moduleId], map: "tenant_modules_tenant_module_unique")
+  @@index([moduleId], map: "tenant_modules_module_idx")
+  @@map("tenant_modules")
+}
+
+model Screen {
+  id                  String    @id @default(uuid()) @db.Uuid
+  moduleId            String    @map("module_id") @db.Uuid
+  tenantId            String?   @map("tenant_id") @db.Uuid
+  parentScreenId      String?   @map("parent_screen_id") @db.Uuid
+  code                String
+  name                String
+  routeId             String?   @map("route_id")
+  path                String?
+  componentKey        String?   @map("component_key")
+  icon                String?
+  titleKey            String?   @map("title_key")
+  displayOrder        Int       @default(0) @map("display_order")
+  showInMenu          Boolean   @default(true) @map("show_in_menu")
+  showBreadcrumb      Boolean   @default(true) @map("show_breadcrumb")
+  isSystem            Boolean   @default(false) @map("is_system")
+  isActive            Boolean   @default(true) @map("is_active")
+  defaultPermissionId String?   @map("default_permission_id") @db.Uuid
+  metadata            Json      @default("{}")
+  createdAt           DateTime  @default(now()) @map("created_at")
+  updatedAt           DateTime  @default(now()) @updatedAt @map("updated_at")
+  deletedAt           DateTime? @map("deleted_at")
+  module              Module         @relation(fields: [moduleId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  tenant              TenantAccount? @relation(fields: [tenantId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  parentScreen        Screen?        @relation("ScreenHierarchy", fields: [parentScreenId], references: [id], onDelete: SetNull, onUpdate: Cascade)
+  childScreens        Screen[]       @relation("ScreenHierarchy")
+  defaultPermission   Permission?    @relation("ScreenDefaultPermission", fields: [defaultPermissionId], references: [id], onDelete: SetNull, onUpdate: Cascade)
+  actions             ScreenAction[]
+  permissions         Permission[]   @relation("ScreenPermissions")
+
+  @@unique([moduleId, code], map: "screens_module_code_unique")
+  @@index([tenantId, isActive], map: "screens_tenant_active_idx")
+  @@index([parentScreenId], map: "screens_parent_idx")
+  @@index([defaultPermissionId], map: "screens_default_permission_idx")
+  @@map("screens")
+}
+
+model ScreenAction {
+  id           String    @id @default(uuid()) @db.Uuid
+  screenId     String    @map("screen_id") @db.Uuid
+  tenantId     String?   @map("tenant_id") @db.Uuid
+  code         String
+  name         String
+  actionKey    String    @map("action_key")
+  description  String?
+  displayOrder Int       @default(0) @map("display_order")
+  isSystem     Boolean   @default(false) @map("is_system")
+  isActive     Boolean   @default(true) @map("is_active")
+  createdAt    DateTime  @default(now()) @map("created_at")
+  updatedAt    DateTime  @default(now()) @updatedAt @map("updated_at")
+  deletedAt    DateTime? @map("deleted_at")
+  screen       Screen         @relation(fields: [screenId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  tenant       TenantAccount? @relation(fields: [tenantId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  permissions  Permission[]
+
+  @@unique([screenId, code], map: "screen_actions_screen_code_unique")
+  @@index([tenantId, isActive], map: "screen_actions_tenant_active_idx")
+  @@map("screen_actions")
 }

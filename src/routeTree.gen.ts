@@ -26,7 +26,10 @@ import { Route as AppPosIndexRouteImport } from './routes/_app/pos/index'
 import { Route as AppOutletsIndexRouteImport } from './routes/_app/outlets/index'
 import { Route as AppInventoryIndexRouteImport } from './routes/_app/inventory/index'
 import { Route as AppSettingsUsersRouteImport } from './routes/_app/settings/users'
+import { Route as AppSettingsSecurityRouteImport } from './routes/_app/settings/security'
+import { Route as AppSettingsRolesRouteImport } from './routes/_app/settings/roles'
 import { Route as AppSettingsNotificationsRouteImport } from './routes/_app/settings/notifications'
+import { Route as AppSettingsModulesRouteImport } from './routes/_app/settings/modules'
 import { Route as AppSettingsIntegrationsRouteImport } from './routes/_app/settings/integrations'
 import { Route as AppSettingsAccessRouteImport } from './routes/_app/settings/access'
 import { Route as AppRestaurantTablesRouteImport } from './routes/_app/restaurant/tables'
@@ -120,12 +123,27 @@ const AppSettingsUsersRoute = AppSettingsUsersRouteImport.update({
   path: '/settings/users',
   getParentRoute: () => AppRoute,
 } as any)
+const AppSettingsSecurityRoute = AppSettingsSecurityRouteImport.update({
+  id: '/settings/security',
+  path: '/settings/security',
+  getParentRoute: () => AppRoute,
+} as any)
+const AppSettingsRolesRoute = AppSettingsRolesRouteImport.update({
+  id: '/settings/roles',
+  path: '/settings/roles',
+  getParentRoute: () => AppRoute,
+} as any)
 const AppSettingsNotificationsRoute =
   AppSettingsNotificationsRouteImport.update({
     id: '/settings/notifications',
     path: '/settings/notifications',
     getParentRoute: () => AppRoute,
   } as any)
+const AppSettingsModulesRoute = AppSettingsModulesRouteImport.update({
+  id: '/settings/modules',
+  path: '/settings/modules',
+  getParentRoute: () => AppRoute,
+} as any)
 const AppSettingsIntegrationsRoute = AppSettingsIntegrationsRouteImport.update({
   id: '/settings/integrations',
   path: '/settings/integrations',
@@ -193,7 +211,10 @@ export interface FileRoutesByFullPath {
   '/restaurant/tables': typeof AppRestaurantTablesRoute
   '/settings/access': typeof AppSettingsAccessRoute
   '/settings/integrations': typeof AppSettingsIntegrationsRoute
+  '/settings/modules': typeof AppSettingsModulesRoute
   '/settings/notifications': typeof AppSettingsNotificationsRoute
+  '/settings/roles': typeof AppSettingsRolesRoute
+  '/settings/security': typeof AppSettingsSecurityRoute
   '/settings/users': typeof AppSettingsUsersRoute
   '/inventory/': typeof AppInventoryIndexRoute
   '/outlets/': typeof AppOutletsIndexRoute
@@ -220,7 +241,10 @@ export interface FileRoutesByTo {
   '/restaurant/tables': typeof AppRestaurantTablesRoute
   '/settings/access': typeof AppSettingsAccessRoute
   '/settings/integrations': typeof AppSettingsIntegrationsRoute
+  '/settings/modules': typeof AppSettingsModulesRoute
   '/settings/notifications': typeof AppSettingsNotificationsRoute
+  '/settings/roles': typeof AppSettingsRolesRoute
+  '/settings/security': typeof AppSettingsSecurityRoute
   '/settings/users': typeof AppSettingsUsersRoute
   '/inventory': typeof AppInventoryIndexRoute
   '/outlets': typeof AppOutletsIndexRoute
@@ -250,7 +274,10 @@ export interface FileRoutesById {
   '/_app/restaurant/tables': typeof AppRestaurantTablesRoute
   '/_app/settings/access': typeof AppSettingsAccessRoute
   '/_app/settings/integrations': typeof AppSettingsIntegrationsRoute
+  '/_app/settings/modules': typeof AppSettingsModulesRoute
   '/_app/settings/notifications': typeof AppSettingsNotificationsRoute
+  '/_app/settings/roles': typeof AppSettingsRolesRoute
+  '/_app/settings/security': typeof AppSettingsSecurityRoute
   '/_app/settings/users': typeof AppSettingsUsersRoute
   '/_app/inventory/': typeof AppInventoryIndexRoute
   '/_app/outlets/': typeof AppOutletsIndexRoute
@@ -279,7 +306,10 @@ export interface FileRouteTypes {
     | '/restaurant/tables'
     | '/settings/access'
     | '/settings/integrations'
+    | '/settings/modules'
     | '/settings/notifications'
+    | '/settings/roles'
+    | '/settings/security'
     | '/settings/users'
     | '/inventory/'
     | '/outlets/'
@@ -306,7 +336,10 @@ export interface FileRouteTypes {
     | '/restaurant/tables'
     | '/settings/access'
     | '/settings/integrations'
+    | '/settings/modules'
     | '/settings/notifications'
+    | '/settings/roles'
+    | '/settings/security'
     | '/settings/users'
     | '/inventory'
     | '/outlets'
@@ -335,7 +368,10 @@ export interface FileRouteTypes {
     | '/_app/restaurant/tables'
     | '/_app/settings/access'
     | '/_app/settings/integrations'
+    | '/_app/settings/modules'
     | '/_app/settings/notifications'
+    | '/_app/settings/roles'
+    | '/_app/settings/security'
     | '/_app/settings/users'
     | '/_app/inventory/'
     | '/_app/outlets/'
@@ -470,11 +506,32 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AppSettingsUsersRouteImport
       parentRoute: typeof AppRoute
     }
+    '/_app/settings/security': {
+      id: '/_app/settings/security'
+      path: '/settings/security'
+      fullPath: '/settings/security'
+      preLoaderRoute: typeof AppSettingsSecurityRouteImport
+      parentRoute: typeof AppRoute
+    }
+    '/_app/settings/roles': {
+      id: '/_app/settings/roles'
+      path: '/settings/roles'
+      fullPath: '/settings/roles'
+      preLoaderRoute: typeof AppSettingsRolesRouteImport
+      parentRoute: typeof AppRoute
+    }
     '/_app/settings/notifications': {
       id: '/_app/settings/notifications'
       path: '/settings/notifications'
       fullPath: '/settings/notifications'
       preLoaderRoute: typeof AppSettingsNotificationsRouteImport
+      parentRoute: typeof AppRoute
+    }
+    '/_app/settings/modules': {
+      id: '/_app/settings/modules'
+      path: '/settings/modules'
+      fullPath: '/settings/modules'
+      preLoaderRoute: typeof AppSettingsModulesRouteImport
       parentRoute: typeof AppRoute
     }
     '/_app/settings/integrations': {
@@ -555,7 +612,10 @@ interface AppRouteChildren {
   AppRestaurantTablesRoute: typeof AppRestaurantTablesRoute
   AppSettingsAccessRoute: typeof AppSettingsAccessRoute
   AppSettingsIntegrationsRoute: typeof AppSettingsIntegrationsRoute
+  AppSettingsModulesRoute: typeof AppSettingsModulesRoute
   AppSettingsNotificationsRoute: typeof AppSettingsNotificationsRoute
+  AppSettingsRolesRoute: typeof AppSettingsRolesRoute
+  AppSettingsSecurityRoute: typeof AppSettingsSecurityRoute
   AppSettingsUsersRoute: typeof AppSettingsUsersRoute
   AppInventoryIndexRoute: typeof AppInventoryIndexRoute
   AppOutletsIndexRoute: typeof AppOutletsIndexRoute
@@ -574,7 +634,10 @@ const AppRouteChildren: AppRouteChildren = {
   AppRestaurantTablesRoute: AppRestaurantTablesRoute,
   AppSettingsAccessRoute: AppSettingsAccessRoute,
   AppSettingsIntegrationsRoute: AppSettingsIntegrationsRoute,
+  AppSettingsModulesRoute: AppSettingsModulesRoute,
   AppSettingsNotificationsRoute: AppSettingsNotificationsRoute,
+  AppSettingsRolesRoute: AppSettingsRolesRoute,
+  AppSettingsSecurityRoute: AppSettingsSecurityRoute,
   AppSettingsUsersRoute: AppSettingsUsersRoute,
   AppInventoryIndexRoute: AppInventoryIndexRoute,
   AppOutletsIndexRoute: AppOutletsIndexRoute,

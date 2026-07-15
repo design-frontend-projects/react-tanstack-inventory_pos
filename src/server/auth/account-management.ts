@@ -480,18 +480,18 @@ export async function listRolesPermissions(
   return {
     roles: roles.map((role) => ({
       roleId: role.id,
-      code: role.code as RolesPermissionsPayload['roles'][number]['code'],
+      code: role.code,
       name: role.name,
       description: role.description ?? null,
       rank: role.rank,
       permissions: role.permissions.map(
         (rolePermission) =>
           rolePermission.permission
-            .code as RolesPermissionsPayload['roles'][number]['permissions'][number],
+            .code,
       ),
     })),
     permissions: permissions.map((permission) => ({
-      code: permission.code as RolesPermissionsPayload['permissions'][number]['code'],
+      code: permission.code,
       name: permission.name,
       moduleKey: permission.moduleKey,
       actionKey: permission.actionKey,
@@ -513,7 +513,7 @@ export async function listRolesPermissions(
       isOwner: tenantUser.isOwner,
       permissionOverrides: tenantUser.permissionOverrides.map((override) => ({
         permissionCode: override.permission
-          .code as RolesPermissionsPayload['users'][number]['permissionOverrides'][number]['permissionCode'],
+          .code,
         isAllowed: override.isAllowed,
       })),
     })),
