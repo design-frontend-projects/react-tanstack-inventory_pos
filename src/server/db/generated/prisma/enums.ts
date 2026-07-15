@@ -310,7 +310,8 @@ export const SourceDocType = {
   COUNT: 'COUNT',
   PRODUCTION: 'PRODUCTION',
   RETURN: 'RETURN',
-  RESERVATION: 'RESERVATION'
+  RESERVATION: 'RESERVATION',
+  RESTAURANT_ORDER: 'RESTAURANT_ORDER'
 } as const
 
 export type SourceDocType = (typeof SourceDocType)[keyof typeof SourceDocType]
@@ -701,3 +702,261 @@ export const LoyaltyRuleType = {
 } as const
 
 export type LoyaltyRuleType = (typeof LoyaltyRuleType)[keyof typeof LoyaltyRuleType]
+
+
+export const ResRestaurantStatus = {
+  ACTIVE: 'ACTIVE',
+  INACTIVE: 'INACTIVE',
+  ARCHIVED: 'ARCHIVED'
+} as const
+
+export type ResRestaurantStatus = (typeof ResRestaurantStatus)[keyof typeof ResRestaurantStatus]
+
+
+export const ResBranchStatus = {
+  ACTIVE: 'ACTIVE',
+  INACTIVE: 'INACTIVE',
+  CLOSED: 'CLOSED',
+  ARCHIVED: 'ARCHIVED'
+} as const
+
+export type ResBranchStatus = (typeof ResBranchStatus)[keyof typeof ResBranchStatus]
+
+
+export const ResTableStatus = {
+  AVAILABLE: 'AVAILABLE',
+  OCCUPIED: 'OCCUPIED',
+  RESERVED: 'RESERVED',
+  BLOCKED: 'BLOCKED'
+} as const
+
+export type ResTableStatus = (typeof ResTableStatus)[keyof typeof ResTableStatus]
+
+
+export const ResServiceKind = {
+  DINE_IN: 'DINE_IN',
+  TAKEAWAY: 'TAKEAWAY',
+  PICKUP: 'PICKUP',
+  DELIVERY: 'DELIVERY',
+  DRIVE_THRU: 'DRIVE_THRU',
+  QR_ORDER: 'QR_ORDER',
+  WEBSITE: 'WEBSITE',
+  MOBILE_APP: 'MOBILE_APP',
+  PHONE: 'PHONE',
+  THIRD_PARTY: 'THIRD_PARTY'
+} as const
+
+export type ResServiceKind = (typeof ResServiceKind)[keyof typeof ResServiceKind]
+
+
+export const ResTaxAppliesTo = {
+  ORDER: 'ORDER',
+  LINE: 'LINE',
+  SERVICE_CHARGE: 'SERVICE_CHARGE',
+  DELIVERY: 'DELIVERY'
+} as const
+
+export type ResTaxAppliesTo = (typeof ResTaxAppliesTo)[keyof typeof ResTaxAppliesTo]
+
+
+export const ResChargeType = {
+  PERCENT: 'PERCENT',
+  FIXED: 'FIXED'
+} as const
+
+export type ResChargeType = (typeof ResChargeType)[keyof typeof ResChargeType]
+
+
+export const ResReceiptTemplateType = {
+  RECEIPT: 'RECEIPT',
+  INVOICE: 'INVOICE',
+  KITCHEN_TICKET: 'KITCHEN_TICKET'
+} as const
+
+export type ResReceiptTemplateType = (typeof ResReceiptTemplateType)[keyof typeof ResReceiptTemplateType]
+
+
+export const ResSequenceType = {
+  ORDER: 'ORDER',
+  INVOICE: 'INVOICE',
+  KITCHEN_TICKET: 'KITCHEN_TICKET',
+  RESERVATION: 'RESERVATION'
+} as const
+
+export type ResSequenceType = (typeof ResSequenceType)[keyof typeof ResSequenceType]
+
+
+export const ResMenuType = {
+  STANDARD: 'STANDARD',
+  BREAKFAST: 'BREAKFAST',
+  LUNCH: 'LUNCH',
+  DINNER: 'DINNER',
+  SEASONAL: 'SEASONAL',
+  LIMITED_TIME: 'LIMITED_TIME'
+} as const
+
+export type ResMenuType = (typeof ResMenuType)[keyof typeof ResMenuType]
+
+
+export const ResMenuVisibility = {
+  VISIBLE: 'VISIBLE',
+  HIDDEN: 'HIDDEN',
+  STAFF_ONLY: 'STAFF_ONLY'
+} as const
+
+export type ResMenuVisibility = (typeof ResMenuVisibility)[keyof typeof ResMenuVisibility]
+
+
+export const ResMenuItemStatus = {
+  ACTIVE: 'ACTIVE',
+  INACTIVE: 'INACTIVE',
+  OUT_OF_STOCK: 'OUT_OF_STOCK',
+  ARCHIVED: 'ARCHIVED'
+} as const
+
+export type ResMenuItemStatus = (typeof ResMenuItemStatus)[keyof typeof ResMenuItemStatus]
+
+
+export const ResPriceType = {
+  BASE: 'BASE',
+  HAPPY_HOUR: 'HAPPY_HOUR',
+  WEEKEND: 'WEEKEND',
+  HOLIDAY: 'HOLIDAY',
+  DELIVERY: 'DELIVERY',
+  TAKEAWAY: 'TAKEAWAY',
+  CHANNEL: 'CHANNEL'
+} as const
+
+export type ResPriceType = (typeof ResPriceType)[keyof typeof ResPriceType]
+
+
+export const ResModifierSelectionType = {
+  SINGLE: 'SINGLE',
+  MULTI: 'MULTI'
+} as const
+
+export type ResModifierSelectionType = (typeof ResModifierSelectionType)[keyof typeof ResModifierSelectionType]
+
+
+export const ResComboPricingType = {
+  FIXED: 'FIXED',
+  DISCOUNTED: 'DISCOUNTED',
+  COMPONENT_SUM: 'COMPONENT_SUM'
+} as const
+
+export type ResComboPricingType = (typeof ResComboPricingType)[keyof typeof ResComboPricingType]
+
+
+export const ResCrossSellType = {
+  CROSS_SELL: 'CROSS_SELL',
+  UPSELL: 'UPSELL',
+  RECOMMENDED: 'RECOMMENDED',
+  RELATED: 'RELATED'
+} as const
+
+export type ResCrossSellType = (typeof ResCrossSellType)[keyof typeof ResCrossSellType]
+
+
+export const ResRecipeStatus = {
+  DRAFT: 'DRAFT',
+  APPROVED: 'APPROVED',
+  ARCHIVED: 'ARCHIVED'
+} as const
+
+export type ResRecipeStatus = (typeof ResRecipeStatus)[keyof typeof ResRecipeStatus]
+
+
+export const ResRecipeApprovalStatus = {
+  PENDING: 'PENDING',
+  APPROVED: 'APPROVED',
+  REJECTED: 'REJECTED'
+} as const
+
+export type ResRecipeApprovalStatus = (typeof ResRecipeApprovalStatus)[keyof typeof ResRecipeApprovalStatus]
+
+
+export const ResOrderStatus = {
+  DRAFT: 'DRAFT',
+  OPEN: 'OPEN',
+  CONFIRMED: 'CONFIRMED',
+  PREPARING: 'PREPARING',
+  COOKING: 'COOKING',
+  READY: 'READY',
+  SERVED: 'SERVED',
+  COMPLETED: 'COMPLETED',
+  CANCELLED: 'CANCELLED',
+  REFUNDED: 'REFUNDED',
+  VOIDED: 'VOIDED'
+} as const
+
+export type ResOrderStatus = (typeof ResOrderStatus)[keyof typeof ResOrderStatus]
+
+
+export const ResOrderType = {
+  DINE_IN: 'DINE_IN',
+  TAKEAWAY: 'TAKEAWAY',
+  PICKUP: 'PICKUP',
+  DELIVERY: 'DELIVERY',
+  DRIVE_THRU: 'DRIVE_THRU'
+} as const
+
+export type ResOrderType = (typeof ResOrderType)[keyof typeof ResOrderType]
+
+
+export const ResOrderChannel = {
+  POS: 'POS',
+  QR: 'QR',
+  WEBSITE: 'WEBSITE',
+  MOBILE_APP: 'MOBILE_APP',
+  PHONE: 'PHONE',
+  THIRD_PARTY: 'THIRD_PARTY'
+} as const
+
+export type ResOrderChannel = (typeof ResOrderChannel)[keyof typeof ResOrderChannel]
+
+
+export const ResOrderItemStatus = {
+  PENDING: 'PENDING',
+  FIRED: 'FIRED',
+  PREPARING: 'PREPARING',
+  READY: 'READY',
+  SERVED: 'SERVED',
+  VOIDED: 'VOIDED'
+} as const
+
+export type ResOrderItemStatus = (typeof ResOrderItemStatus)[keyof typeof ResOrderItemStatus]
+
+
+export const ResPaymentMethod = {
+  CASH: 'CASH',
+  CARD: 'CARD',
+  WALLET: 'WALLET',
+  LOYALTY: 'LOYALTY',
+  GIFT_CARD: 'GIFT_CARD',
+  ONLINE: 'ONLINE',
+  THIRD_PARTY: 'THIRD_PARTY'
+} as const
+
+export type ResPaymentMethod = (typeof ResPaymentMethod)[keyof typeof ResPaymentMethod]
+
+
+export const ResPaymentStatus = {
+  PENDING: 'PENDING',
+  CAPTURED: 'CAPTURED',
+  VOIDED: 'VOIDED',
+  REFUNDED: 'REFUNDED'
+} as const
+
+export type ResPaymentStatus = (typeof ResPaymentStatus)[keyof typeof ResPaymentStatus]
+
+
+export const ResOrderChargeKind = {
+  SERVICE_CHARGE: 'SERVICE_CHARGE',
+  DELIVERY_FEE: 'DELIVERY_FEE',
+  PACKAGING: 'PACKAGING',
+  TIP: 'TIP',
+  ROUNDING: 'ROUNDING',
+  OTHER: 'OTHER'
+} as const
+
+export type ResOrderChargeKind = (typeof ResOrderChargeKind)[keyof typeof ResOrderChargeKind]

@@ -33,6 +33,7 @@ import { Route as AppSettingsModulesRouteImport } from './routes/_app/settings/m
 import { Route as AppSettingsIntegrationsRouteImport } from './routes/_app/settings/integrations'
 import { Route as AppSettingsAccessRouteImport } from './routes/_app/settings/access'
 import { Route as AppRestaurantTablesRouteImport } from './routes/_app/restaurant/tables'
+import { Route as AppRestaurantSettingsRouteImport } from './routes/_app/restaurant/settings'
 import { Route as AppRestaurantMenuRouteImport } from './routes/_app/restaurant/menu'
 import { Route as AppRestaurantKitchenRouteImport } from './routes/_app/restaurant/kitchen'
 import { Route as AppPosReturnsRouteImport } from './routes/_app/pos/returns'
@@ -163,6 +164,11 @@ const AppRestaurantTablesRoute = AppRestaurantTablesRouteImport.update({
   path: '/restaurant/tables',
   getParentRoute: () => AppRoute,
 } as any)
+const AppRestaurantSettingsRoute = AppRestaurantSettingsRouteImport.update({
+  id: '/restaurant/settings',
+  path: '/restaurant/settings',
+  getParentRoute: () => AppRoute,
+} as any)
 const AppRestaurantMenuRoute = AppRestaurantMenuRouteImport.update({
   id: '/restaurant/menu',
   path: '/restaurant/menu',
@@ -236,6 +242,7 @@ export interface FileRoutesByFullPath {
   '/pos/returns': typeof AppPosReturnsRoute
   '/restaurant/kitchen': typeof AppRestaurantKitchenRoute
   '/restaurant/menu': typeof AppRestaurantMenuRoute
+  '/restaurant/settings': typeof AppRestaurantSettingsRoute
   '/restaurant/tables': typeof AppRestaurantTablesRoute
   '/settings/access': typeof AppSettingsAccessRoute
   '/settings/integrations': typeof AppSettingsIntegrationsRoute
@@ -270,6 +277,7 @@ export interface FileRoutesByTo {
   '/pos/returns': typeof AppPosReturnsRoute
   '/restaurant/kitchen': typeof AppRestaurantKitchenRoute
   '/restaurant/menu': typeof AppRestaurantMenuRoute
+  '/restaurant/settings': typeof AppRestaurantSettingsRoute
   '/restaurant/tables': typeof AppRestaurantTablesRoute
   '/settings/access': typeof AppSettingsAccessRoute
   '/settings/integrations': typeof AppSettingsIntegrationsRoute
@@ -307,6 +315,7 @@ export interface FileRoutesById {
   '/_app/pos/returns': typeof AppPosReturnsRoute
   '/_app/restaurant/kitchen': typeof AppRestaurantKitchenRoute
   '/_app/restaurant/menu': typeof AppRestaurantMenuRoute
+  '/_app/restaurant/settings': typeof AppRestaurantSettingsRoute
   '/_app/restaurant/tables': typeof AppRestaurantTablesRoute
   '/_app/settings/access': typeof AppSettingsAccessRoute
   '/_app/settings/integrations': typeof AppSettingsIntegrationsRoute
@@ -343,6 +352,7 @@ export interface FileRouteTypes {
     | '/pos/returns'
     | '/restaurant/kitchen'
     | '/restaurant/menu'
+    | '/restaurant/settings'
     | '/restaurant/tables'
     | '/settings/access'
     | '/settings/integrations'
@@ -377,6 +387,7 @@ export interface FileRouteTypes {
     | '/pos/returns'
     | '/restaurant/kitchen'
     | '/restaurant/menu'
+    | '/restaurant/settings'
     | '/restaurant/tables'
     | '/settings/access'
     | '/settings/integrations'
@@ -413,6 +424,7 @@ export interface FileRouteTypes {
     | '/_app/pos/returns'
     | '/_app/restaurant/kitchen'
     | '/_app/restaurant/menu'
+    | '/_app/restaurant/settings'
     | '/_app/restaurant/tables'
     | '/_app/settings/access'
     | '/_app/settings/integrations'
@@ -603,6 +615,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AppRestaurantTablesRouteImport
       parentRoute: typeof AppRoute
     }
+    '/_app/restaurant/settings': {
+      id: '/_app/restaurant/settings'
+      path: '/restaurant/settings'
+      fullPath: '/restaurant/settings'
+      preLoaderRoute: typeof AppRestaurantSettingsRouteImport
+      parentRoute: typeof AppRoute
+    }
     '/_app/restaurant/menu': {
       id: '/_app/restaurant/menu'
       path: '/restaurant/menu'
@@ -689,6 +708,7 @@ interface AppRouteChildren {
   AppPosReturnsRoute: typeof AppPosReturnsRoute
   AppRestaurantKitchenRoute: typeof AppRestaurantKitchenRoute
   AppRestaurantMenuRoute: typeof AppRestaurantMenuRoute
+  AppRestaurantSettingsRoute: typeof AppRestaurantSettingsRoute
   AppRestaurantTablesRoute: typeof AppRestaurantTablesRoute
   AppSettingsAccessRoute: typeof AppSettingsAccessRoute
   AppSettingsIntegrationsRoute: typeof AppSettingsIntegrationsRoute
@@ -715,6 +735,7 @@ const AppRouteChildren: AppRouteChildren = {
   AppPosReturnsRoute: AppPosReturnsRoute,
   AppRestaurantKitchenRoute: AppRestaurantKitchenRoute,
   AppRestaurantMenuRoute: AppRestaurantMenuRoute,
+  AppRestaurantSettingsRoute: AppRestaurantSettingsRoute,
   AppRestaurantTablesRoute: AppRestaurantTablesRoute,
   AppSettingsAccessRoute: AppSettingsAccessRoute,
   AppSettingsIntegrationsRoute: AppSettingsIntegrationsRoute,

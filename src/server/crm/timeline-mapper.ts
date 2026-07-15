@@ -53,6 +53,14 @@ const EVENT_TITLES: Partial<Record<string, (documentNumber: string | null) => st
   'crm.loyalty_expired': () => 'Loyalty points expired',
   'crm.segment_entered': () => 'Entered segment',
   'crm.segment_exited': () => 'Exited segment',
+  'restaurant_order.completed': (doc) => `Restaurant order ${doc ?? ''} completed`.trim(),
+  'restaurant_order.refunded': (doc) => `Restaurant order ${doc ?? ''} refunded`.trim(),
+  'restaurant_order.voided': (doc) => `Restaurant order ${doc ?? ''} voided`.trim(),
+  'restaurant_reservation.created': () => 'Reservation created',
+  'restaurant_reservation.no_show': () => 'Reservation no-show',
+  'restaurant_gift_card.issued': () => 'Gift card issued',
+  'restaurant_gift_card.redeemed': () => 'Gift card redeemed',
+  'restaurant_promotion.applied': () => 'Promotion applied',
 }
 
 const ENTRY_TYPE_BY_PREFIX: Array<[string, string]> = [
@@ -65,6 +73,10 @@ const ENTRY_TYPE_BY_PREFIX: Array<[string, string]> = [
   ['crm.consent', 'consent'],
   ['crm.loyalty', 'loyalty'],
   ['crm.segment', 'segment'],
+  ['restaurant_order.', 'sale'],
+  ['restaurant_reservation.', 'reservation'],
+  ['restaurant_gift_card.', 'gift_card'],
+  ['restaurant_promotion.', 'promotion'],
 ]
 
 export function mapEventToTimelineEntry(

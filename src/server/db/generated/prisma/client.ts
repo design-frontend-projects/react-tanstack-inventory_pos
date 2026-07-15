@@ -566,3 +566,263 @@ export type CrmSegmentMember = Prisma.CrmSegmentMemberModel
  * 
  */
 export type CrmCustomerScore = Prisma.CrmCustomerScoreModel
+/**
+ * Model ResRestaurant
+ * 
+ */
+export type ResRestaurant = Prisma.ResRestaurantModel
+/**
+ * Model ResBranch
+ * 
+ */
+export type ResBranch = Prisma.ResBranchModel
+/**
+ * Model ResBranchMember
+ * 
+ */
+export type ResBranchMember = Prisma.ResBranchMemberModel
+/**
+ * Model ResBusinessHours
+ * 
+ */
+export type ResBusinessHours = Prisma.ResBusinessHoursModel
+/**
+ * Model ResHoliday
+ * 
+ */
+export type ResHoliday = Prisma.ResHolidayModel
+/**
+ * Model ResDiningArea
+ * 
+ */
+export type ResDiningArea = Prisma.ResDiningAreaModel
+/**
+ * Model ResTableSection
+ * 
+ */
+export type ResTableSection = Prisma.ResTableSectionModel
+/**
+ * Model ResTable
+ * 
+ */
+export type ResTable = Prisma.ResTableModel
+/**
+ * Model ResTableQrCode
+ * 
+ */
+export type ResTableQrCode = Prisma.ResTableQrCodeModel
+/**
+ * Model ResServiceType
+ * 
+ */
+export type ResServiceType = Prisma.ResServiceTypeModel
+/**
+ * Model ResShift
+ * 
+ */
+export type ResShift = Prisma.ResShiftModel
+/**
+ * Model ResKitchenStation
+ * 
+ */
+export type ResKitchenStation = Prisma.ResKitchenStationModel
+/**
+ * Model ResKitchenPrinter
+ * 
+ */
+export type ResKitchenPrinter = Prisma.ResKitchenPrinterModel
+/**
+ * Model ResReceiptTemplate
+ * 
+ */
+export type ResReceiptTemplate = Prisma.ResReceiptTemplateModel
+/**
+ * Model ResTaxConfig
+ * 
+ */
+export type ResTaxConfig = Prisma.ResTaxConfigModel
+/**
+ * Model ResServiceChargeRule
+ * 
+ */
+export type ResServiceChargeRule = Prisma.ResServiceChargeRuleModel
+/**
+ * Model ResDeliverySettings
+ * 
+ */
+export type ResDeliverySettings = Prisma.ResDeliverySettingsModel
+/**
+ * Model ResTakeawaySettings
+ * 
+ */
+export type ResTakeawaySettings = Prisma.ResTakeawaySettingsModel
+/**
+ * Model ResNumberSequence
+ * 
+ */
+export type ResNumberSequence = Prisma.ResNumberSequenceModel
+/**
+ * Model ResRestaurantSettings
+ * 
+ */
+export type ResRestaurantSettings = Prisma.ResRestaurantSettingsModel
+/**
+ * Model ResBranchSettings
+ * 
+ */
+export type ResBranchSettings = Prisma.ResBranchSettingsModel
+/**
+ * Model ResMenu
+ * 
+ */
+export type ResMenu = Prisma.ResMenuModel
+/**
+ * Model ResMenuCategory
+ * 
+ */
+export type ResMenuCategory = Prisma.ResMenuCategoryModel
+/**
+ * Model ResMenuItem
+ * 
+ */
+export type ResMenuItem = Prisma.ResMenuItemModel
+/**
+ * Model ResMenuItemVariant
+ * 
+ */
+export type ResMenuItemVariant = Prisma.ResMenuItemVariantModel
+/**
+ * Model ResMenuItemPrice
+ * 
+ */
+export type ResMenuItemPrice = Prisma.ResMenuItemPriceModel
+/**
+ * Model ResModifierGroup
+ * 
+ */
+export type ResModifierGroup = Prisma.ResModifierGroupModel
+/**
+ * Model ResModifier
+ * 
+ */
+export type ResModifier = Prisma.ResModifierModel
+/**
+ * Model ResMenuItemModifierGroup
+ * 
+ */
+export type ResMenuItemModifierGroup = Prisma.ResMenuItemModifierGroupModel
+/**
+ * Model ResCombo
+ * 
+ */
+export type ResCombo = Prisma.ResComboModel
+/**
+ * Model ResComboComponent
+ * 
+ */
+export type ResComboComponent = Prisma.ResComboComponentModel
+/**
+ * Model ResMenuItemAllergen
+ * 
+ */
+export type ResMenuItemAllergen = Prisma.ResMenuItemAllergenModel
+/**
+ * Model ResMenuItemTag
+ * 
+ */
+export type ResMenuItemTag = Prisma.ResMenuItemTagModel
+/**
+ * Model ResMenuAvailability
+ * 
+ */
+export type ResMenuAvailability = Prisma.ResMenuAvailabilityModel
+/**
+ * Model ResCrossSell
+ * 
+ */
+export type ResCrossSell = Prisma.ResCrossSellModel
+/**
+ * Model ResRecipe
+ * 
+ */
+export type ResRecipe = Prisma.ResRecipeModel
+/**
+ * Model ResRecipeVersion
+ * 
+ */
+export type ResRecipeVersion = Prisma.ResRecipeVersionModel
+/**
+ * Model ResRecipeLine
+ * 
+ */
+export type ResRecipeLine = Prisma.ResRecipeLineModel
+/**
+ * Model ResRecipeSubRecipe
+ * 
+ */
+export type ResRecipeSubRecipe = Prisma.ResRecipeSubRecipeModel
+/**
+ * Model ResRecipeStep
+ * 
+ */
+export type ResRecipeStep = Prisma.ResRecipeStepModel
+/**
+ * Model ResRecipeApproval
+ * 
+ */
+export type ResRecipeApproval = Prisma.ResRecipeApprovalModel
+/**
+ * Model ResOrder
+ * 
+ */
+export type ResOrder = Prisma.ResOrderModel
+/**
+ * Model ResOrderItem
+ * 
+ */
+export type ResOrderItem = Prisma.ResOrderItemModel
+/**
+ * Model ResOrderItemModifier
+ * 
+ */
+export type ResOrderItemModifier = Prisma.ResOrderItemModifierModel
+/**
+ * Model ResOrderPayment
+ * 
+ */
+export type ResOrderPayment = Prisma.ResOrderPaymentModel
+/**
+ * Model ResOrderDiscount
+ * 
+ */
+export type ResOrderDiscount = Prisma.ResOrderDiscountModel
+/**
+ * Model ResOrderCharge
+ * 
+ */
+export type ResOrderCharge = Prisma.ResOrderChargeModel
+/**
+ * Model ResOrderSplit
+ * 
+ */
+export type ResOrderSplit = Prisma.ResOrderSplitModel
+/**
+ * Model ResOrderTransfer
+ * 
+ */
+export type ResOrderTransfer = Prisma.ResOrderTransferModel
+/**
+ * Model ResOrderEvent
+ * 
+ */
+export type ResOrderEvent = Prisma.ResOrderEventModel
+/**
+ * Model ResVoidReason
+ * 
+ */
+export type ResVoidReason = Prisma.ResVoidReasonModel
+/**
+ * Model ResCancelReason
+ * 
+ */
+export type ResCancelReason = Prisma.ResCancelReasonModel
