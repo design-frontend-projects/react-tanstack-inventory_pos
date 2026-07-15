@@ -148,6 +148,39 @@ export async function findTenantUserById(tenantId: string, tenantUserId: string)
   })
 }
 
+export async function findTenantUserWithRolePermissions(
+  tenantId: string,
+  tenantUserId: string
+) {
+  return prisma.tenantUser.findFirst({
+    where: {
+      id: tenantUserId,
+      tenantId,
+    },
+    include: {
+      profile: true,
+      roles: {
+        include: {
+          role: {
+            include: {
+              permissions: {
+                include: {
+                  permission: true,
+                },
+              },
+            },
+          },
+        },
+      },
+      permissionOverrides: {
+        include: {
+          permission: true,
+        },
+      },
+    },
+  })
+}
+
 export async function setTenantUserStatus(
   _tenantId: string,
   tenantUserId: string,

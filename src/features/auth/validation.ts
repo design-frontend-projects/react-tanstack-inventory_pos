@@ -1,6 +1,10 @@
 import { z } from 'zod'
+import { ACTIVITY_OPTION_CODES } from '#/features/owner/owner-catalog'
 
-export const ACTIVITY_OPTIONS = ['restaurant', 'retail', 'hybrid'] as const
+// Client-side fallback list of activity codes. The DB-backed `owner_activity_options`
+// table is the runtime source of truth (fetched via `listActivityOptionsServerFn`);
+// this remains for the sign-up fallback and existing imports.
+export const ACTIVITY_OPTIONS = ACTIVITY_OPTION_CODES
 
 export const PASSWORD_POLICY_MESSAGE =
   'Use at least 8 characters with uppercase, lowercase, number, and special character.'
@@ -72,9 +76,12 @@ export const tenantNameSchema = z
   .min(2, 'Tenant name must be at least 2 characters.')
   .max(120, 'Tenant name must be 120 characters or fewer.')
 
-export const activitySchema = z.enum(ACTIVITY_OPTIONS, {
-  error: 'Select a valid activity type.',
-})
+// Activity is the option `code`; the server validates it against the active
+// `owner_activity_options` rows, so a non-empty string is sufficient here.
+export const activitySchema = z
+  .string()
+  .trim()
+  .min(1, 'Select a valid activity type.')
 
 export const signUpSchema = z.object({
   firstName: firstNameSchema,

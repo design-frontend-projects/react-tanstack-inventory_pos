@@ -50,6 +50,8 @@ import {
   findTenantById,
   updateTenantAccount,
 } from '#/server/repos/tenant-repo'
+import { findActiveActivityOptionByCode } from '#/server/repos/owner-activity-option-repo'
+import { provisionDefaultSubscription } from '#/server/owner/subscription-provisioning'
 import {
   findAuthUserById,
   findAuthUserByEmail,
@@ -106,8 +108,13 @@ export async function startTenantRegistration(
   input: StartTenantRegistrationInput,
 ) {
   const normalizedEmail = normalizeEmail(input.email)
+
+  const activityOption = await findActiveActivityOptionByCode(input.activity)
+  if (!activityOption) {
+    throw new ValidationError('Select a valid activity type.')
+  }
+
   const existingAuthUser = await findAuthUserByEmail(normalizedEmail)
-  console.log('is user exist: ', existingAuthUser)
 
   const existingProfile = existingAuthUser
     ? await findProfileByAuthUserId(existingAuthUser.id)
@@ -134,6 +141,7 @@ export async function startTenantRegistration(
         lastName: input.lastName,
         phone: input.phone,
         activity: input.activity,
+        activityOptionId: activityOption.id,
         authUserId,
         linkedProfileId,
         defaultRoleCode: OWNER_DEFAULT_ROLE_CODE,
@@ -147,6 +155,7 @@ export async function startTenantRegistration(
         lastName: input.lastName,
         phone: input.phone,
         activity: input.activity,
+        activityOptionId: activityOption.id,
         isOwner: true,
         defaultRoleCode: OWNER_DEFAULT_ROLE_CODE,
         authUserId,
@@ -282,6 +291,7 @@ export async function completeOwnerOnboarding(
     (await createTenantAccount({
       tenantName: input.tenantName,
       activity: registration.activity,
+      activityOptionId: registration.activityOptionId,
       timezone: input.timezone,
       ownerProfileId: profile.id,
     }))
@@ -290,10 +300,13 @@ export async function completeOwnerOnboarding(
     await updateTenantAccount(existingTenant.id, {
       name: input.tenantName,
       activity: registration.activity,
+      activityOptionId: registration.activityOptionId,
       timezone: input.timezone,
       ownerProfileId: profile.id,
     })
   }
+
+  await provisionDefaultSubscription(tenant.id, profile.id)
 
   const tenantUser = await upsertTenantUser({
     tenantId: tenant.id,

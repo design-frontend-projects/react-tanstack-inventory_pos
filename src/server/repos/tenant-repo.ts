@@ -45,6 +45,7 @@ export async function findTenantById(tenantId: string) {
 export async function createTenantAccount(input: {
   tenantName: string
   activity?: string | null
+  activityOptionId?: string | null
   timezone?: string | null
   ownerProfileId?: string | null
 }) {
@@ -55,6 +56,7 @@ export async function createTenantAccount(input: {
       name: input.tenantName.trim(),
       slug,
       activity: input.activity ?? null,
+      activityOptionId: input.activityOptionId ?? null,
       timezone: input.timezone ?? null,
       ownerProfileId: input.ownerProfileId ?? null,
       status: 'ACTIVE',
@@ -67,6 +69,7 @@ export async function updateTenantAccount(
   data: {
     name?: string
     activity?: string | null
+    activityOptionId?: string | null
     timezone?: string | null
     ownerProfileId?: string | null
   }
@@ -78,6 +81,9 @@ export async function updateTenantAccount(
     data: {
       ...(data.name ? { name: data.name.trim() } : {}),
       ...(data.activity !== undefined ? { activity: data.activity ?? null } : {}),
+      ...(data.activityOptionId !== undefined
+        ? { activityOptionId: data.activityOptionId ?? null }
+        : {}),
       ...(data.timezone !== undefined ? { timezone: data.timezone ?? null } : {}),
       ...(data.ownerProfileId !== undefined
         ? { ownerProfileId: data.ownerProfileId ?? null }

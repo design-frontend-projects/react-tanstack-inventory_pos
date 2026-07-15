@@ -1,20 +1,28 @@
 import type { Prisma } from '#/server/db/generated/prisma/client'
 import { prisma } from '#/server/db/client'
 
-export async function createAuditLog(input: {
-  tenantId?: string | null
-  actorProfileId?: string | null
-  actorEmail?: string | null
-  actionKey: string
-  entityType: string
-  entityId?: string | null
-  oldValues?: Record<string, unknown> | null
-  newValues?: Record<string, unknown> | null
-  ipAddress?: string | null
-  userAgent?: string | null
-  correlationId?: string | null
-}) {
-  return prisma.auditLog.create({
+// Repos accept an optional Prisma client so callers can pass a transaction
+// client (`Prisma.TransactionClient`) to enlist the write in an in-flight
+// `$transaction`; it defaults to the shared singleton for standalone calls.
+type PrismaClientLike = Prisma.TransactionClient | typeof prisma
+
+export async function createAuditLog(
+  input: {
+    tenantId?: string | null
+    actorProfileId?: string | null
+    actorEmail?: string | null
+    actionKey: string
+    entityType: string
+    entityId?: string | null
+    oldValues?: Record<string, unknown> | null
+    newValues?: Record<string, unknown> | null
+    ipAddress?: string | null
+    userAgent?: string | null
+    correlationId?: string | null
+  },
+  client: PrismaClientLike = prisma
+) {
+  return client.auditLog.create({
     data: {
       tenantId: input.tenantId ?? null,
       actorProfileId: input.actorProfileId ?? null,

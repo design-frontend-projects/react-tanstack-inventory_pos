@@ -35,6 +35,23 @@ enum TenantAccountStatus {
   @@map("TenantAccountStatus")
 }
 
+enum OwnerSubscriptionStatus {
+  TRIALING @map("trialing")
+  ACTIVE   @map("active")
+  PAST_DUE @map("past_due")
+  CANCELED @map("canceled")
+  EXPIRED  @map("expired")
+
+  @@map("OwnerSubscriptionStatus")
+}
+
+enum OwnerBillingCycle {
+  MONTHLY @map("monthly")
+  YEARLY  @map("yearly")
+
+  @@map("OwnerBillingCycle")
+}
+
 enum ProfileGlobalStatus {
   ACTIVE    @map("active")
   SUSPENDED @map("suspended")
@@ -95,74 +112,106 @@ enum HttpMethod {
 }
 
 model Profile {
-  id                    String                    @id @default(uuid()) @db.Uuid
-  authUserId            String                    @unique @map("auth_user_id") @db.Uuid
-  email                 String
-  firstName             String?                   @map("first_name")
-  lastName              String?                   @map("last_name")
-  phone                 String?
-  avatarUrl             String?                   @map("avatar_url")
-  profileCompleted      Boolean                   @default(false) @map("profile_completed")
-  onboardingCompleted   Boolean                   @default(false) @map("onboarding_completed")
-  globalStatus          ProfileGlobalStatus       @default(ACTIVE) @map("global_status")
-  createdAt             DateTime                  @default(now()) @map("created_at")
-  updatedAt             DateTime                  @updatedAt @map("updated_at")
-  tenantMemberships     TenantUser[]
-  ownedTenants          TenantAccount[]           @relation("TenantOwnerProfile")
-  invitedMemberships    TenantUser[]              @relation("TenantUserInvitedBy")
-  assignedRoles         TenantUserRole[]          @relation("TenantUserRoleAssignedBy")
-  assignedPermissions   TenantUserPermission[]    @relation("TenantUserPermissionAssignedBy")
-  createdInvitations    user_invitations[]        @relation("InvitationInvitedBy")
-  auditLogs             AuditLog[]                @relation("AuditActor")
-  preferenceProfile     PreferenceProfile?
-  registrationRequests  TenantRegistrationRequest[] @relation("RegistrationLinkedProfile")
+  id                   String                      @id @default(uuid()) @db.Uuid
+  authUserId           String                      @unique @map("auth_user_id") @db.Uuid
+  email                String
+  firstName            String?                     @map("first_name")
+  lastName             String?                     @map("last_name")
+  phone                String?
+  avatarUrl            String?                     @map("avatar_url")
+  profileCompleted     Boolean                     @default(false) @map("profile_completed")
+  onboardingCompleted  Boolean                     @default(false) @map("onboarding_completed")
+  globalStatus         ProfileGlobalStatus         @default(ACTIVE) @map("global_status")
+  createdAt            DateTime                    @default(now()) @map("created_at")
+  updatedAt            DateTime                    @updatedAt @map("updated_at")
+  tenantMemberships    TenantUser[]
+  ownedTenants         TenantAccount[]             @relation("TenantOwnerProfile")
+  invitedMemberships   TenantUser[]                @relation("TenantUserInvitedBy")
+  assignedRoles        TenantUserRole[]            @relation("TenantUserRoleAssignedBy")
+  assignedPermissions  TenantUserPermission[]      @relation("TenantUserPermissionAssignedBy")
+  createdInvitations   user_invitations[]          @relation("InvitationInvitedBy")
+  auditLogs            AuditLog[]                  @relation("AuditActor")
+  preferenceProfile    PreferenceProfile?
+  registrationRequests TenantRegistrationRequest[] @relation("RegistrationLinkedProfile")
 
   @@index([email], map: "profiles_email_idx")
   @@map("profiles")
 }
 
 model TenantAccount {
-  id                  String                      @id @default(uuid()) @db.Uuid
-  name                String
-  slug                String                      @unique
-  activity            String?
-  timezone            String?
-  status              TenantAccountStatus         @default(ACTIVE)
-  ownerProfileId      String?                     @map("owner_profile_id") @db.Uuid
-  createdAt           DateTime                    @default(now()) @map("created_at")
-  updatedAt           DateTime                    @updatedAt @map("updated_at")
-  ownerProfile        Profile?                    @relation("TenantOwnerProfile", fields: [ownerProfileId], references: [id], onDelete: SetNull, onUpdate: Cascade)
-  memberships         TenantUser[]
-  roles               Role[]
-  invitations         user_invitations[]
-  auditLogs           AuditLog[]
-  preferenceProfiles  PreferenceProfile[]         @relation("DefaultTenantPreference")
-  modules             Module[]
-  screens             Screen[]
-  screenActions       ScreenAction[]
-  permissions         Permission[]
-  tenantModules       TenantModule[]
+  id                     String                  @id @default(uuid()) @db.Uuid
+  name                   String
+  slug                   String                  @unique
+  activity               String?
+  activityOptionId       String?                 @map("activity_option_id") @db.Uuid
+  timezone               String?
+  status                 TenantAccountStatus     @default(ACTIVE)
+  ownerProfileId         String?                 @map("owner_profile_id") @db.Uuid
+  createdAt              DateTime                @default(now()) @map("created_at")
+  updatedAt              DateTime                @updatedAt @map("updated_at")
+  ownerProfile           Profile?                @relation("TenantOwnerProfile", fields: [ownerProfileId], references: [id], onDelete: SetNull, onUpdate: Cascade)
+  activityOption         OwnerActivityOption?    @relation(fields: [activityOptionId], references: [id], onDelete: SetNull, onUpdate: Cascade)
+  subscription           OwnerTenantSubscription?
+  memberships            TenantUser[]
+  roles                  Role[]
+  invitations            user_invitations[]
+  auditLogs              AuditLog[]
+  preferenceProfiles     PreferenceProfile[]     @relation("DefaultTenantPreference")
+  modules                Module[]
+  screens                Screen[]
+  screenActions          ScreenAction[]
+  permissions            Permission[]
+  tenantModules          TenantModule[]
+  tenantScreens          TenantScreen[]
+  documentSequences      DocumentSequence[]
+  brands                 Brand[]
+  productCategories      ProductCategory[]
+  unitsOfMeasure         UnitOfMeasure[]
+  uomConversions         UomConversion[]
+  products               Product[]
+  productVariants        ProductVariant[]
+  productBarcodes        ProductBarcode[]
+  productImages          ProductImage[]
+  productSuppliers       ProductSupplier[]
+  priceLists             PriceList[]
+  productPrices          ProductPrice[]
+  bundleComponents       BundleComponent[]
+  attributes             Attribute[]
+  attributeOptions       AttributeOption[]
+  productAttributeValues ProductAttributeValue[]
+  productTags            ProductTag[]
+  productTagLinks        ProductTagLink[]
+  suppliers              Supplier[]
+  customers              Customer[]
+  taxRates               TaxRate[]
+  warehouses             Warehouse[]
+  warehouseLocations     WarehouseLocation[]
+  stockBalances          StockBalance[]
+  inventoryMovements     InventoryMovement[]
+  costLayers             CostLayer[]
+  stockAdjustments       StockAdjustment[]
+  stockAdjustmentLines   StockAdjustmentLine[]
 
   @@map("tenant_accounts")
 }
 
 model TenantUser {
-  id                String                 @id @default(uuid()) @db.Uuid
-  tenantId          String                 @map("tenant_id") @db.Uuid
-  profileId         String                 @map("profile_id") @db.Uuid
-  employeeCode      String?                @map("employee_code")
-  jobTitle          String?                @map("job_title")
-  isOwner           Boolean                @default(false) @map("is_owner")
-  status            TenantUserStatus       @default(INVITED)
-  joinedAt          DateTime?              @map("joined_at")
-  invitedByProfileId String?               @map("invited_by_profile_id") @db.Uuid
-  lastRoleSyncAt    DateTime?              @map("last_role_sync_at")
-  createdAt         DateTime               @default(now()) @map("created_at")
-  updatedAt         DateTime               @updatedAt @map("updated_at")
-  tenant            TenantAccount          @relation(fields: [tenantId], references: [id], onDelete: Cascade, onUpdate: Cascade)
-  profile           Profile                @relation(fields: [profileId], references: [id], onDelete: Cascade, onUpdate: Cascade)
-  invitedByProfile  Profile?               @relation("TenantUserInvitedBy", fields: [invitedByProfileId], references: [id], onDelete: SetNull, onUpdate: Cascade)
-  roles             TenantUserRole[]
+  id                  String                 @id @default(uuid()) @db.Uuid
+  tenantId            String                 @map("tenant_id") @db.Uuid
+  profileId           String                 @map("profile_id") @db.Uuid
+  employeeCode        String?                @map("employee_code")
+  jobTitle            String?                @map("job_title")
+  isOwner             Boolean                @default(false) @map("is_owner")
+  status              TenantUserStatus       @default(INVITED)
+  joinedAt            DateTime?              @map("joined_at")
+  invitedByProfileId  String?                @map("invited_by_profile_id") @db.Uuid
+  lastRoleSyncAt      DateTime?              @map("last_role_sync_at")
+  createdAt           DateTime               @default(now()) @map("created_at")
+  updatedAt           DateTime               @updatedAt @map("updated_at")
+  tenant              TenantAccount          @relation(fields: [tenantId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  profile             Profile                @relation(fields: [profileId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  invitedByProfile    Profile?               @relation("TenantUserInvitedBy", fields: [invitedByProfileId], references: [id], onDelete: SetNull, onUpdate: Cascade)
+  roles               TenantUserRole[]
   permissionOverrides TenantUserPermission[]
 
   @@unique([tenantId, profileId], map: "tenant_users_tenant_profile_unique")
@@ -172,23 +221,23 @@ model TenantUser {
 }
 
 model Role {
-  id             String           @id @default(uuid()) @db.Uuid
-  tenantId       String?          @map("tenant_id") @db.Uuid
-  code           String
-  name           String
-  description    String?
-  activityScope  String?          @map("activity_scope")
-  isSystem       Boolean          @default(false) @map("is_system")
-  isActive       Boolean          @default(true) @map("is_active")
-  isDefault      Boolean          @default(false) @map("is_default")
-  rank           Int
-  createdAt      DateTime         @default(now()) @map("created_at")
-  updatedAt      DateTime         @updatedAt @map("updated_at")
-  deletedAt      DateTime?        @map("deleted_at")
-  tenant         TenantAccount?   @relation(fields: [tenantId], references: [id], onDelete: Cascade, onUpdate: Cascade)
-  permissions    RolePermission[]
+  id              String             @id @default(uuid()) @db.Uuid
+  tenantId        String?            @map("tenant_id") @db.Uuid
+  code            String
+  name            String
+  description     String?
+  activityScope   String?            @map("activity_scope")
+  isSystem        Boolean            @default(false) @map("is_system")
+  isActive        Boolean            @default(true) @map("is_active")
+  isDefault       Boolean            @default(false) @map("is_default")
+  rank            Int
+  createdAt       DateTime           @default(now()) @map("created_at")
+  updatedAt       DateTime           @updatedAt @map("updated_at")
+  deletedAt       DateTime?          @map("deleted_at")
+  tenant          TenantAccount?     @relation(fields: [tenantId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  permissions     RolePermission[]
   tenantUserRoles TenantUserRole[]
-  invitations    user_invitations[]
+  invitations     user_invitations[]
 
   @@unique([tenantId, code], map: "roles_tenant_code_unique")
   @@index([code], map: "roles_code_idx")
@@ -197,31 +246,31 @@ model Role {
 }
 
 model Permission {
-  id              String                 @id @default(uuid()) @db.Uuid
-  code            String                 @unique
-  name            String
-  moduleKey       String                 @map("module_key")
-  actionKey       String                 @map("action_key")
-  description     String?
-  tenantId        String?                @map("tenant_id") @db.Uuid
-  kind            PermissionKind         @default(ACTION)
-  moduleId        String?                @map("module_id") @db.Uuid
-  screenId        String?                @map("screen_id") @db.Uuid
-  actionId        String?                @map("action_id") @db.Uuid
-  httpMethod      HttpMethod?            @map("http_method")
-  apiPath         String?                @map("api_path")
-  isSystem        Boolean                @default(true) @map("is_system")
-  isActive        Boolean                @default(true) @map("is_active")
-  createdAt       DateTime               @default(now()) @map("created_at")
-  updatedAt       DateTime               @default(now()) @updatedAt @map("updated_at")
-  deletedAt       DateTime?              @map("deleted_at")
-  rolePermissions RolePermission[]
-  userPermissions TenantUserPermission[]
-  tenant          TenantAccount?         @relation(fields: [tenantId], references: [id], onDelete: Cascade, onUpdate: Cascade)
-  module          Module?                @relation(fields: [moduleId], references: [id], onDelete: SetNull, onUpdate: Cascade)
-  screen          Screen?                @relation("ScreenPermissions", fields: [screenId], references: [id], onDelete: SetNull, onUpdate: Cascade)
-  action          ScreenAction?          @relation(fields: [actionId], references: [id], onDelete: SetNull, onUpdate: Cascade)
-  defaultForScreens Screen[]             @relation("ScreenDefaultPermission")
+  id                String                 @id @default(uuid()) @db.Uuid
+  code              String                 @unique
+  name              String
+  moduleKey         String                 @map("module_key")
+  actionKey         String                 @map("action_key")
+  description       String?
+  tenantId          String?                @map("tenant_id") @db.Uuid
+  kind              PermissionKind         @default(ACTION)
+  moduleId          String?                @map("module_id") @db.Uuid
+  screenId          String?                @map("screen_id") @db.Uuid
+  actionId          String?                @map("action_id") @db.Uuid
+  httpMethod        HttpMethod?            @map("http_method")
+  apiPath           String?                @map("api_path")
+  isSystem          Boolean                @default(true) @map("is_system")
+  isActive          Boolean                @default(true) @map("is_active")
+  createdAt         DateTime               @default(now()) @map("created_at")
+  updatedAt         DateTime               @default(now()) @updatedAt @map("updated_at")
+  deletedAt         DateTime?              @map("deleted_at")
+  rolePermissions   RolePermission[]
+  userPermissions   TenantUserPermission[]
+  tenant            TenantAccount?         @relation(fields: [tenantId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  module            Module?                @relation(fields: [moduleId], references: [id], onDelete: SetNull, onUpdate: Cascade)
+  screen            Screen?                @relation("ScreenPermissions", fields: [screenId], references: [id], onDelete: SetNull, onUpdate: Cascade)
+  action            ScreenAction?          @relation(fields: [actionId], references: [id], onDelete: SetNull, onUpdate: Cascade)
+  defaultForScreens Screen[]               @relation("ScreenDefaultPermission")
 
   @@unique([moduleKey, actionKey], map: "permissions_module_action_unique")
   @@index([moduleKey], map: "permissions_module_idx")
@@ -232,12 +281,12 @@ model Permission {
 }
 
 model RolePermission {
-  id           String      @id @default(uuid()) @db.Uuid
-  roleId       String      @map("role_id") @db.Uuid
-  permissionId String      @map("permission_id") @db.Uuid
-  createdAt    DateTime    @default(now()) @map("created_at")
-  role         Role        @relation(fields: [roleId], references: [id], onDelete: Cascade, onUpdate: Cascade)
-  permission   Permission  @relation(fields: [permissionId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  id           String     @id @default(uuid()) @db.Uuid
+  roleId       String     @map("role_id") @db.Uuid
+  permissionId String     @map("permission_id") @db.Uuid
+  createdAt    DateTime   @default(now()) @map("created_at")
+  role         Role       @relation(fields: [roleId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  permission   Permission @relation(fields: [permissionId], references: [id], onDelete: Cascade, onUpdate: Cascade)
 
   @@unique([roleId, permissionId], map: "role_permissions_role_permission_unique")
   @@index([permissionId], map: "role_permissions_permission_idx")
@@ -245,15 +294,15 @@ model RolePermission {
 }
 
 model TenantUserRole {
-  id                  String      @id @default(uuid()) @db.Uuid
-  tenantUserId        String      @map("tenant_user_id") @db.Uuid
-  roleId              String      @map("role_id") @db.Uuid
-  assignedByProfileId String?     @map("assigned_by_profile_id") @db.Uuid
-  assignedAt          DateTime    @default(now()) @map("assigned_at")
-  isPrimary           Boolean     @default(false) @map("is_primary")
-  tenantUser          TenantUser  @relation(fields: [tenantUserId], references: [id], onDelete: Cascade, onUpdate: Cascade)
-  role                Role        @relation(fields: [roleId], references: [id], onDelete: Cascade, onUpdate: Cascade)
-  assignedByProfile   Profile?    @relation("TenantUserRoleAssignedBy", fields: [assignedByProfileId], references: [id], onDelete: SetNull, onUpdate: Cascade)
+  id                  String     @id @default(uuid()) @db.Uuid
+  tenantUserId        String     @map("tenant_user_id") @db.Uuid
+  roleId              String     @map("role_id") @db.Uuid
+  assignedByProfileId String?    @map("assigned_by_profile_id") @db.Uuid
+  assignedAt          DateTime   @default(now()) @map("assigned_at")
+  isPrimary           Boolean    @default(false) @map("is_primary")
+  tenantUser          TenantUser @relation(fields: [tenantUserId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  role                Role       @relation(fields: [roleId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  assignedByProfile   Profile?   @relation("TenantUserRoleAssignedBy", fields: [assignedByProfileId], references: [id], onDelete: SetNull, onUpdate: Cascade)
 
   @@unique([tenantUserId, roleId], map: "tenant_user_roles_tenant_user_role_unique")
   @@index([roleId], map: "tenant_user_roles_role_idx")
@@ -262,16 +311,16 @@ model TenantUserRole {
 }
 
 model TenantUserPermission {
-  id                  String      @id @default(uuid()) @db.Uuid
-  tenantUserId        String      @map("tenant_user_id") @db.Uuid
-  permissionId        String      @map("permission_id") @db.Uuid
-  isAllowed           Boolean     @map("is_allowed")
-  assignedByProfileId String?     @map("assigned_by_profile_id") @db.Uuid
-  createdAt           DateTime    @default(now()) @map("created_at")
-  updatedAt           DateTime    @updatedAt @map("updated_at")
-  tenantUser          TenantUser  @relation(fields: [tenantUserId], references: [id], onDelete: Cascade, onUpdate: Cascade)
-  permission          Permission  @relation(fields: [permissionId], references: [id], onDelete: Cascade, onUpdate: Cascade)
-  assignedByProfile   Profile?    @relation("TenantUserPermissionAssignedBy", fields: [assignedByProfileId], references: [id], onDelete: SetNull, onUpdate: Cascade)
+  id                  String     @id @default(uuid()) @db.Uuid
+  tenantUserId        String     @map("tenant_user_id") @db.Uuid
+  permissionId        String     @map("permission_id") @db.Uuid
+  isAllowed           Boolean    @map("is_allowed")
+  assignedByProfileId String?    @map("assigned_by_profile_id") @db.Uuid
+  createdAt           DateTime   @default(now()) @map("created_at")
+  updatedAt           DateTime   @updatedAt @map("updated_at")
+  tenantUser          TenantUser @relation(fields: [tenantUserId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  permission          Permission @relation(fields: [permissionId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  assignedByProfile   Profile?   @relation("TenantUserPermissionAssignedBy", fields: [assignedByProfileId], references: [id], onDelete: SetNull, onUpdate: Cascade)
 
   @@unique([tenantUserId, permissionId], map: "tenant_user_permissions_tenant_user_permission_unique")
   @@index([permissionId], map: "tenant_user_permissions_permission_idx")
@@ -279,28 +328,28 @@ model TenantUserPermission {
 }
 
 model user_invitations {
-  id                  String            @id @default(uuid()) @db.Uuid
-  tenantId            String            @map("tenant_id") @db.Uuid
-  email               String
-  firstName           String?           @map("first_name")
-  lastName            String?           @map("last_name")
-  phone               String?
-  jobTitle            String?           @map("job_title")
-  roleId              String            @map("role_id") @db.Uuid
-  invitationToken     String?           @map("invitation_token")
-  authUserId          String?           @map("auth_user_id") @db.Uuid
-  invitedByProfileId  String            @map("invited_by_profile_id") @db.Uuid
-  status              InvitationStatus  @default(PENDING)
-  sentAt              DateTime?         @map("sent_at")
-  acceptedAt          DateTime?         @map("accepted_at")
-  expiresAt           DateTime?         @map("expires_at")
-  revokedAt           DateTime?         @map("revoked_at")
-  metadata            Json              @default("{}")
-  createdAt           DateTime          @default(now()) @map("created_at")
-  updatedAt           DateTime          @updatedAt @map("updated_at")
-  tenant              TenantAccount     @relation(fields: [tenantId], references: [id], onDelete: Cascade, onUpdate: Cascade)
-  role                Role              @relation(fields: [roleId], references: [id], onDelete: Restrict, onUpdate: Cascade)
-  invitedByProfile    Profile           @relation("InvitationInvitedBy", fields: [invitedByProfileId], references: [id], onDelete: Restrict, onUpdate: Cascade)
+  id                 String           @id @default(uuid()) @db.Uuid
+  tenantId           String           @map("tenant_id") @db.Uuid
+  email              String
+  firstName          String?          @map("first_name")
+  lastName           String?          @map("last_name")
+  phone              String?
+  jobTitle           String?          @map("job_title")
+  roleId             String           @map("role_id") @db.Uuid
+  invitationToken    String?          @map("invitation_token")
+  authUserId         String?          @map("auth_user_id") @db.Uuid
+  invitedByProfileId String           @map("invited_by_profile_id") @db.Uuid
+  status             InvitationStatus @default(PENDING)
+  sentAt             DateTime?        @map("sent_at")
+  acceptedAt         DateTime?        @map("accepted_at")
+  expiresAt          DateTime?        @map("expires_at")
+  revokedAt          DateTime?        @map("revoked_at")
+  metadata           Json             @default("{}")
+  createdAt          DateTime         @default(now()) @map("created_at")
+  updatedAt          DateTime         @updatedAt @map("updated_at")
+  tenant             TenantAccount    @relation(fields: [tenantId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  role               Role             @relation(fields: [roleId], references: [id], onDelete: Restrict, onUpdate: Cascade)
+  invitedByProfile   Profile          @relation("InvitationInvitedBy", fields: [invitedByProfileId], references: [id], onDelete: Restrict, onUpdate: Cascade)
 
   @@index([tenantId, status], map: "user_invitations_tenant_status_idx")
   @@index([email], map: "user_invitations_email_idx")
@@ -309,21 +358,21 @@ model user_invitations {
 }
 
 model AuditLog {
-  id             String    @id @default(uuid()) @db.Uuid
-  tenantId       String?   @map("tenant_id") @db.Uuid
-  actorProfileId String?   @map("actor_profile_id") @db.Uuid
-  actionKey      String    @map("action_key")
-  entityType     String    @map("entity_type")
-  entityId       String?   @map("entity_id") @db.Uuid
-  oldValues      Json?     @map("old_values")
-  newValues      Json?     @map("new_values")
-  actorEmail     String?   @map("actor_email")
-  ipAddress      String?   @map("ip_address")
-  userAgent      String?   @map("user_agent")
-  correlationId  String?   @map("correlation_id") @db.Uuid
-  createdAt      DateTime  @default(now()) @map("created_at")
+  id             String         @id @default(uuid()) @db.Uuid
+  tenantId       String?        @map("tenant_id") @db.Uuid
+  actorProfileId String?        @map("actor_profile_id") @db.Uuid
+  actionKey      String         @map("action_key")
+  entityType     String         @map("entity_type")
+  entityId       String?        @map("entity_id") @db.Uuid
+  oldValues      Json?          @map("old_values")
+  newValues      Json?          @map("new_values")
+  actorEmail     String?        @map("actor_email")
+  ipAddress      String?        @map("ip_address")
+  userAgent      String?        @map("user_agent")
+  correlationId  String?        @map("correlation_id") @db.Uuid
+  createdAt      DateTime       @default(now()) @map("created_at")
   tenant         TenantAccount? @relation(fields: [tenantId], references: [id], onDelete: SetNull, onUpdate: Cascade)
-  actorProfile   Profile?  @relation("AuditActor", fields: [actorProfileId], references: [id], onDelete: SetNull, onUpdate: Cascade)
+  actorProfile   Profile?       @relation("AuditActor", fields: [actorProfileId], references: [id], onDelete: SetNull, onUpdate: Cascade)
 
   @@index([tenantId, createdAt], map: "audit_logs_tenant_created_idx")
   @@index([entityType, entityId, createdAt], map: "audit_logs_entity_created_idx")
@@ -332,14 +381,14 @@ model AuditLog {
 }
 
 model PreferenceProfile {
-  id              String        @id @default(uuid()) @db.Uuid
-  profileId       String        @unique @map("profile_id") @db.Uuid
-  locale          AppLocale     @default(EN)
-  themeMode       ThemeMode     @default(SYSTEM) @map("theme_mode")
-  defaultTenantId String?       @map("default_tenant_id") @db.Uuid
-  createdAt       DateTime      @default(now()) @map("created_at")
-  updatedAt       DateTime      @updatedAt @map("updated_at")
-  profile         Profile       @relation(fields: [profileId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  id              String         @id @default(uuid()) @db.Uuid
+  profileId       String         @unique @map("profile_id") @db.Uuid
+  locale          AppLocale      @default(EN)
+  themeMode       ThemeMode      @default(SYSTEM) @map("theme_mode")
+  defaultTenantId String?        @map("default_tenant_id") @db.Uuid
+  createdAt       DateTime       @default(now()) @map("created_at")
+  updatedAt       DateTime       @updatedAt @map("updated_at")
+  profile         Profile        @relation(fields: [profileId], references: [id], onDelete: Cascade, onUpdate: Cascade)
   defaultTenant   TenantAccount? @relation("DefaultTenantPreference", fields: [defaultTenantId], references: [id], onDelete: SetNull, onUpdate: Cascade)
 
   @@index([defaultTenantId], map: "preference_profiles_default_tenant_idx")
@@ -347,12 +396,13 @@ model PreferenceProfile {
 }
 
 model TenantRegistrationRequest {
-  id               String                   @id @default(uuid()) @db.Uuid
-  email            String
-  firstName        String                   @map("first_name")
-  lastName         String                   @map("last_name")
+  id              String                   @id @default(uuid()) @db.Uuid
+  email           String
+  firstName       String                   @map("first_name")
+  lastName        String                   @map("last_name")
   phone            String?
   activity         String
+  activityOptionId String?                  @map("activity_option_id") @db.Uuid
   isOwner          Boolean                  @default(true) @map("is_owner")
   defaultRoleCode  String                   @map("default_role_code")
   authUserId       String?                  @map("auth_user_id") @db.Uuid
@@ -365,6 +415,7 @@ model TenantRegistrationRequest {
   createdAt        DateTime                 @default(now()) @map("created_at")
   updatedAt        DateTime                 @updatedAt @map("updated_at")
   linkedProfile    Profile?                 @relation("RegistrationLinkedProfile", fields: [linkedProfileId], references: [id], onDelete: SetNull, onUpdate: Cascade)
+  activityOption   OwnerActivityOption?     @relation(fields: [activityOptionId], references: [id], onDelete: Restrict, onUpdate: Cascade)
 
   @@index([email], map: "tenant_registration_requests_email_idx")
   @@index([status, expiresAt], map: "tenant_registration_requests_status_expiry_idx")
@@ -372,21 +423,21 @@ model TenantRegistrationRequest {
 }
 
 model Module {
-  id             String    @id @default(uuid()) @db.Uuid
-  tenantId       String?   @map("tenant_id") @db.Uuid
-  parentModuleId String?   @map("parent_module_id") @db.Uuid
+  id             String         @id @default(uuid()) @db.Uuid
+  tenantId       String?        @map("tenant_id") @db.Uuid
+  parentModuleId String?        @map("parent_module_id") @db.Uuid
   code           String
   name           String
   description    String?
   icon           String?
-  displayOrder   Int       @default(0) @map("display_order")
-  isSystem       Boolean   @default(false) @map("is_system")
-  isActive       Boolean   @default(true) @map("is_active")
-  isVisible      Boolean   @default(true) @map("is_visible")
-  metadata       Json      @default("{}")
-  createdAt      DateTime  @default(now()) @map("created_at")
-  updatedAt      DateTime  @default(now()) @updatedAt @map("updated_at")
-  deletedAt      DateTime? @map("deleted_at")
+  displayOrder   Int            @default(0) @map("display_order")
+  isSystem       Boolean        @default(false) @map("is_system")
+  isActive       Boolean        @default(true) @map("is_active")
+  isVisible      Boolean        @default(true) @map("is_visible")
+  metadata       Json           @default("{}")
+  createdAt      DateTime       @default(now()) @map("created_at")
+  updatedAt      DateTime       @default(now()) @updatedAt @map("updated_at")
+  deletedAt      DateTime?      @map("deleted_at")
   tenant         TenantAccount? @relation(fields: [tenantId], references: [id], onDelete: Cascade, onUpdate: Cascade)
   parentModule   Module?        @relation("ModuleHierarchy", fields: [parentModuleId], references: [id], onDelete: SetNull, onUpdate: Cascade)
   childModules   Module[]       @relation("ModuleHierarchy")
@@ -401,14 +452,14 @@ model Module {
 }
 
 model TenantModule {
-  id           String   @id @default(uuid()) @db.Uuid
-  tenantId     String   @map("tenant_id") @db.Uuid
-  moduleId     String   @map("module_id") @db.Uuid
-  isEnabled    Boolean  @default(true) @map("is_enabled")
-  displayOrder Int?     @map("display_order")
-  isVisible    Boolean? @map("is_visible")
-  createdAt    DateTime @default(now()) @map("created_at")
-  updatedAt    DateTime @default(now()) @updatedAt @map("updated_at")
+  id           String        @id @default(uuid()) @db.Uuid
+  tenantId     String        @map("tenant_id") @db.Uuid
+  moduleId     String        @map("module_id") @db.Uuid
+  isEnabled    Boolean       @default(true) @map("is_enabled")
+  displayOrder Int?          @map("display_order")
+  isVisible    Boolean?      @map("is_visible")
+  createdAt    DateTime      @default(now()) @map("created_at")
+  updatedAt    DateTime      @default(now()) @updatedAt @map("updated_at")
   tenant       TenantAccount @relation(fields: [tenantId], references: [id], onDelete: Cascade, onUpdate: Cascade)
   module       Module        @relation(fields: [moduleId], references: [id], onDelete: Cascade, onUpdate: Cascade)
 
@@ -417,28 +468,44 @@ model TenantModule {
   @@map("tenant_modules")
 }
 
+model TenantScreen {
+  id           String        @id @default(uuid()) @db.Uuid
+  tenantId     String        @map("tenant_id") @db.Uuid
+  screenId     String        @map("screen_id") @db.Uuid
+  showInMenu   Boolean?      @map("show_in_menu")
+  displayOrder Int?          @map("display_order")
+  createdAt    DateTime      @default(now()) @map("created_at")
+  updatedAt    DateTime      @default(now()) @updatedAt @map("updated_at")
+  tenant       TenantAccount @relation(fields: [tenantId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  screen       Screen        @relation(fields: [screenId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+
+  @@unique([tenantId, screenId], map: "tenant_screens_tenant_screen_unique")
+  @@index([screenId], map: "tenant_screens_screen_idx")
+  @@map("tenant_screens")
+}
+
 model Screen {
-  id                  String    @id @default(uuid()) @db.Uuid
-  moduleId            String    @map("module_id") @db.Uuid
-  tenantId            String?   @map("tenant_id") @db.Uuid
-  parentScreenId      String?   @map("parent_screen_id") @db.Uuid
+  id                  String         @id @default(uuid()) @db.Uuid
+  moduleId            String         @map("module_id") @db.Uuid
+  tenantId            String?        @map("tenant_id") @db.Uuid
+  parentScreenId      String?        @map("parent_screen_id") @db.Uuid
   code                String
   name                String
-  routeId             String?   @map("route_id")
+  routeId             String?        @map("route_id")
   path                String?
-  componentKey        String?   @map("component_key")
+  componentKey        String?        @map("component_key")
   icon                String?
-  titleKey            String?   @map("title_key")
-  displayOrder        Int       @default(0) @map("display_order")
-  showInMenu          Boolean   @default(true) @map("show_in_menu")
-  showBreadcrumb      Boolean   @default(true) @map("show_breadcrumb")
-  isSystem            Boolean   @default(false) @map("is_system")
-  isActive            Boolean   @default(true) @map("is_active")
-  defaultPermissionId String?   @map("default_permission_id") @db.Uuid
-  metadata            Json      @default("{}")
-  createdAt           DateTime  @default(now()) @map("created_at")
-  updatedAt           DateTime  @default(now()) @updatedAt @map("updated_at")
-  deletedAt           DateTime? @map("deleted_at")
+  titleKey            String?        @map("title_key")
+  displayOrder        Int            @default(0) @map("display_order")
+  showInMenu          Boolean        @default(true) @map("show_in_menu")
+  showBreadcrumb      Boolean        @default(true) @map("show_breadcrumb")
+  isSystem            Boolean        @default(false) @map("is_system")
+  isActive            Boolean        @default(true) @map("is_active")
+  defaultPermissionId String?        @map("default_permission_id") @db.Uuid
+  metadata            Json           @default("{}")
+  createdAt           DateTime       @default(now()) @map("created_at")
+  updatedAt           DateTime       @default(now()) @updatedAt @map("updated_at")
+  deletedAt           DateTime?      @map("deleted_at")
   module              Module         @relation(fields: [moduleId], references: [id], onDelete: Cascade, onUpdate: Cascade)
   tenant              TenantAccount? @relation(fields: [tenantId], references: [id], onDelete: Cascade, onUpdate: Cascade)
   parentScreen        Screen?        @relation("ScreenHierarchy", fields: [parentScreenId], references: [id], onDelete: SetNull, onUpdate: Cascade)
@@ -446,6 +513,7 @@ model Screen {
   defaultPermission   Permission?    @relation("ScreenDefaultPermission", fields: [defaultPermissionId], references: [id], onDelete: SetNull, onUpdate: Cascade)
   actions             ScreenAction[]
   permissions         Permission[]   @relation("ScreenPermissions")
+  tenantScreens       TenantScreen[]
 
   @@unique([moduleId, code], map: "screens_module_code_unique")
   @@index([tenantId, isActive], map: "screens_tenant_active_idx")
@@ -455,19 +523,19 @@ model Screen {
 }
 
 model ScreenAction {
-  id           String    @id @default(uuid()) @db.Uuid
-  screenId     String    @map("screen_id") @db.Uuid
-  tenantId     String?   @map("tenant_id") @db.Uuid
+  id           String         @id @default(uuid()) @db.Uuid
+  screenId     String         @map("screen_id") @db.Uuid
+  tenantId     String?        @map("tenant_id") @db.Uuid
   code         String
   name         String
-  actionKey    String    @map("action_key")
+  actionKey    String         @map("action_key")
   description  String?
-  displayOrder Int       @default(0) @map("display_order")
-  isSystem     Boolean   @default(false) @map("is_system")
-  isActive     Boolean   @default(true) @map("is_active")
-  createdAt    DateTime  @default(now()) @map("created_at")
-  updatedAt    DateTime  @default(now()) @updatedAt @map("updated_at")
-  deletedAt    DateTime? @map("deleted_at")
+  displayOrder Int            @default(0) @map("display_order")
+  isSystem     Boolean        @default(false) @map("is_system")
+  isActive     Boolean        @default(true) @map("is_active")
+  createdAt    DateTime       @default(now()) @map("created_at")
+  updatedAt    DateTime       @default(now()) @updatedAt @map("updated_at")
+  deletedAt    DateTime?      @map("deleted_at")
   screen       Screen         @relation(fields: [screenId], references: [id], onDelete: Cascade, onUpdate: Cascade)
   tenant       TenantAccount? @relation(fields: [tenantId], references: [id], onDelete: Cascade, onUpdate: Cascade)
   permissions  Permission[]
@@ -475,4 +543,969 @@ model ScreenAction {
   @@unique([screenId, code], map: "screen_actions_screen_code_unique")
   @@index([tenantId, isActive], map: "screen_actions_tenant_active_idx")
   @@map("screen_actions")
+}
+
+// ============================================================================
+// Enterprise Inventory — Spec 002 (Phase 0 + Phase 1: transaction foundation,
+// product catalog, and master data). Ledger/warehouse/document tables land in
+// later phases. Lookup FKs (category/brand/uom/tax/supplier refs) are stored as
+// scalar Uuid columns with app-enforced integrity, mirroring the app-enforced
+// tenant isolation already used across this schema; composition/ownership links
+// use real relations with cascade.
+// ============================================================================
+
+enum DocumentType {
+  PURCHASE_REQUISITION @map("purchase_requisition")
+  PURCHASE_ORDER       @map("purchase_order")
+  GOODS_RECEIPT        @map("goods_receipt")
+  PURCHASE_RETURN      @map("purchase_return")
+  DEBIT_NOTE           @map("debit_note")
+  SALES_ORDER          @map("sales_order")
+  SALES_INVOICE        @map("sales_invoice")
+  POS_SALE             @map("pos_sale")
+  SALES_RETURN         @map("sales_return")
+  CREDIT_NOTE          @map("credit_note")
+  STOCK_TRANSFER       @map("stock_transfer")
+  STOCK_ADJUSTMENT     @map("stock_adjustment")
+  STOCK_COUNT          @map("stock_count")
+  PRODUCTION_ORDER     @map("production_order")
+
+  @@map("DocumentType")
+}
+
+enum ProductType {
+  SIMPLE    @map("simple")
+  VARIANT   @map("variant")
+  BUNDLE    @map("bundle")
+  KIT       @map("kit")
+  SERVICE   @map("service")
+  COMPOSITE @map("composite")
+
+  @@map("ProductType")
+}
+
+enum TrackingPolicy {
+  NONE       @map("none")
+  LOT        @map("lot")
+  SERIAL     @map("serial")
+  LOT_SERIAL @map("lot_serial")
+
+  @@map("TrackingPolicy")
+}
+
+enum CostingMethod {
+  WEIGHTED_AVERAGE @map("weighted_average")
+  FIFO             @map("fifo")
+  STANDARD         @map("standard")
+
+  @@map("CostingMethod")
+}
+
+enum ProductStatus {
+  ACTIVE   @map("active")
+  INACTIVE @map("inactive")
+  ARCHIVED @map("archived")
+
+  @@map("ProductStatus")
+}
+
+enum UomType {
+  COUNT  @map("count")
+  WEIGHT @map("weight")
+  VOLUME @map("volume")
+  LENGTH @map("length")
+  TIME   @map("time")
+
+  @@map("UomType")
+}
+
+enum AttributeInputType {
+  SELECT  @map("select")
+  TEXT    @map("text")
+  NUMBER  @map("number")
+  BOOLEAN @map("boolean")
+
+  @@map("AttributeInputType")
+}
+
+enum BarcodeType {
+  EAN13   @map("ean13")
+  UPC     @map("upc")
+  CODE128 @map("code128")
+  QR      @map("qr")
+  CUSTOM  @map("custom")
+
+  @@map("BarcodeType")
+}
+
+enum PriceListType {
+  SALES    @map("sales")
+  PURCHASE @map("purchase")
+
+  @@map("PriceListType")
+}
+
+enum BundleComponentType {
+  KIT_STATIC    @map("kit_static")
+  BUNDLE_PRICED @map("bundle_priced")
+
+  @@map("BundleComponentType")
+}
+
+enum TaxType {
+  VAT   @map("vat")
+  GST   @map("gst")
+  SALES @map("sales")
+  NONE  @map("none")
+
+  @@map("TaxType")
+}
+
+enum CustomerType {
+  RETAIL    @map("retail")
+  WHOLESALE @map("wholesale")
+  B2B       @map("b2b")
+
+  @@map("CustomerType")
+}
+
+// --- Phase 0: transaction / document-numbering foundation -------------------
+
+model DocumentSequence {
+  id           String        @id @default(uuid()) @db.Uuid
+  tenantId     String        @map("tenant_id") @db.Uuid
+  documentType DocumentType  @map("document_type")
+  scope        String        @default("default")
+  periodKey    String        @default("all") @map("period_key")
+  prefix       String?
+  padding      Int           @default(6)
+  nextValue    Int           @default(1) @map("next_value")
+  createdAt    DateTime      @default(now()) @map("created_at")
+  updatedAt    DateTime      @updatedAt @map("updated_at")
+  tenant       TenantAccount @relation(fields: [tenantId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+
+  @@unique([tenantId, documentType, scope, periodKey], map: "document_sequences_scope_unique")
+  @@index([tenantId, documentType], map: "document_sequences_tenant_type_idx")
+  @@map("document_sequences")
+}
+
+// --- Phase 1: product catalog -----------------------------------------------
+
+model Brand {
+  id        String        @id @default(uuid()) @db.Uuid
+  tenantId  String        @map("tenant_id") @db.Uuid
+  code      String
+  name      String
+  logoUrl   String?       @map("logo_url")
+  isActive  Boolean       @default(true) @map("is_active")
+  createdAt DateTime      @default(now()) @map("created_at")
+  updatedAt DateTime      @updatedAt @map("updated_at")
+  deletedAt DateTime?     @map("deleted_at")
+  tenant    TenantAccount @relation(fields: [tenantId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+
+  @@unique([tenantId, code], map: "brands_tenant_code_unique")
+  @@index([tenantId, isActive], map: "brands_tenant_active_idx")
+  @@map("brands")
+}
+
+model ProductCategory {
+  id           String            @id @default(uuid()) @db.Uuid
+  tenantId     String            @map("tenant_id") @db.Uuid
+  parentId     String?           @map("parent_id") @db.Uuid
+  code         String
+  name         String
+  path         String?
+  depth        Int               @default(0)
+  displayOrder Int               @default(0) @map("display_order")
+  isActive     Boolean           @default(true) @map("is_active")
+  createdAt    DateTime          @default(now()) @map("created_at")
+  updatedAt    DateTime          @updatedAt @map("updated_at")
+  deletedAt    DateTime?         @map("deleted_at")
+  tenant       TenantAccount     @relation(fields: [tenantId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  parent       ProductCategory?  @relation("ProductCategoryHierarchy", fields: [parentId], references: [id], onDelete: SetNull, onUpdate: Cascade)
+  children     ProductCategory[] @relation("ProductCategoryHierarchy")
+
+  @@unique([tenantId, code], map: "product_categories_tenant_code_unique")
+  @@index([tenantId, parentId], map: "product_categories_tenant_parent_idx")
+  @@index([tenantId, isActive], map: "product_categories_tenant_active_idx")
+  @@map("product_categories")
+}
+
+model UnitOfMeasure {
+  id            String        @id @default(uuid()) @db.Uuid
+  tenantId      String        @map("tenant_id") @db.Uuid
+  code          String
+  name          String
+  symbol        String?
+  uomType       UomType       @map("uom_type")
+  isBaseUnit    Boolean       @default(false) @map("is_base_unit")
+  decimalPlaces Int           @default(2) @map("decimal_places")
+  isActive      Boolean       @default(true) @map("is_active")
+  createdAt     DateTime      @default(now()) @map("created_at")
+  updatedAt     DateTime      @updatedAt @map("updated_at")
+  deletedAt     DateTime?     @map("deleted_at")
+  tenant        TenantAccount @relation(fields: [tenantId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+
+  @@unique([tenantId, code], map: "units_of_measure_tenant_code_unique")
+  @@index([tenantId, isActive], map: "units_of_measure_tenant_active_idx")
+  @@map("units_of_measure")
+}
+
+model UomConversion {
+  id        String        @id @default(uuid()) @db.Uuid
+  tenantId  String        @map("tenant_id") @db.Uuid
+  productId String?       @map("product_id") @db.Uuid
+  fromUomId String        @map("from_uom_id") @db.Uuid
+  toUomId   String        @map("to_uom_id") @db.Uuid
+  factor    Decimal       @db.Decimal(18, 8)
+  createdAt DateTime      @default(now()) @map("created_at")
+  updatedAt DateTime      @updatedAt @map("updated_at")
+  tenant    TenantAccount @relation(fields: [tenantId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+
+  @@unique([tenantId, productId, fromUomId, toUomId], map: "uom_conversions_grain_unique")
+  @@index([tenantId, productId], map: "uom_conversions_tenant_product_idx")
+  @@map("uom_conversions")
+}
+
+model Product {
+  id                  String                  @id @default(uuid()) @db.Uuid
+  tenantId            String                  @map("tenant_id") @db.Uuid
+  sku                 String
+  name                String
+  slug                String?
+  description         String?
+  productType         ProductType             @default(SIMPLE) @map("product_type")
+  trackingPolicy      TrackingPolicy          @default(NONE) @map("tracking_policy")
+  isStockTracked      Boolean                 @default(true) @map("is_stock_tracked")
+  hasExpiry           Boolean                 @default(false) @map("has_expiry")
+  shelfLifeDays       Int?                    @map("shelf_life_days")
+  categoryId          String?                 @map("category_id") @db.Uuid
+  brandId             String?                 @map("brand_id") @db.Uuid
+  baseUomId           String                  @map("base_uom_id") @db.Uuid
+  salesUomId          String?                 @map("sales_uom_id") @db.Uuid
+  purchaseUomId       String?                 @map("purchase_uom_id") @db.Uuid
+  costingMethod       CostingMethod           @default(WEIGHTED_AVERAGE) @map("costing_method")
+  standardCost        Decimal?                @map("standard_cost") @db.Decimal(19, 6)
+  defaultPrice        Decimal?                @map("default_price") @db.Decimal(19, 4)
+  taxRateId           String?                 @map("tax_rate_id") @db.Uuid
+  barcode             String?
+  weight              Decimal?                @db.Decimal(18, 4)
+  dimensions          Json?
+  reorderPoint        Decimal?                @map("reorder_point") @db.Decimal(18, 4)
+  reorderQty          Decimal?                @map("reorder_qty") @db.Decimal(18, 4)
+  minStock            Decimal?                @map("min_stock") @db.Decimal(18, 4)
+  maxStock            Decimal?                @map("max_stock") @db.Decimal(18, 4)
+  safetyStock         Decimal?                @map("safety_stock") @db.Decimal(18, 4)
+  leadTimeDays        Int?                    @map("lead_time_days")
+  preferredSupplierId String?                 @map("preferred_supplier_id") @db.Uuid
+  status              ProductStatus           @default(ACTIVE)
+  isActive            Boolean                 @default(true) @map("is_active")
+  createdAt           DateTime                @default(now()) @map("created_at")
+  updatedAt           DateTime                @updatedAt @map("updated_at")
+  deletedAt           DateTime?               @map("deleted_at")
+  tenant              TenantAccount           @relation(fields: [tenantId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  variants            ProductVariant[]
+  barcodes            ProductBarcode[]
+  images              ProductImage[]
+  prices              ProductPrice[]
+  productSuppliers    ProductSupplier[]
+  attributeValues     ProductAttributeValue[]
+  tagLinks            ProductTagLink[]
+  bundleComponents    BundleComponent[]       @relation("BundleParent")
+
+  @@unique([tenantId, sku], map: "products_tenant_sku_unique")
+  @@index([tenantId, status], map: "products_tenant_status_idx")
+  @@index([tenantId, categoryId], map: "products_tenant_category_idx")
+  @@index([tenantId, brandId], map: "products_tenant_brand_idx")
+  @@index([tenantId, productType], map: "products_tenant_type_idx")
+  @@index([tenantId, barcode], map: "products_tenant_barcode_idx")
+  @@map("products")
+}
+
+model ProductVariant {
+  id             String        @id @default(uuid()) @db.Uuid
+  tenantId       String        @map("tenant_id") @db.Uuid
+  productId      String        @map("product_id") @db.Uuid
+  sku            String
+  name           String
+  attributesJson Json          @default("{}") @map("attributes_json")
+  barcode        String?
+  priceOverride  Decimal?      @map("price_override") @db.Decimal(19, 4)
+  costOverride   Decimal?      @map("cost_override") @db.Decimal(19, 6)
+  weight         Decimal?      @db.Decimal(18, 4)
+  isDefault      Boolean       @default(false) @map("is_default")
+  isActive       Boolean       @default(true) @map("is_active")
+  createdAt      DateTime      @default(now()) @map("created_at")
+  updatedAt      DateTime      @updatedAt @map("updated_at")
+  deletedAt      DateTime?     @map("deleted_at")
+  tenant         TenantAccount @relation(fields: [tenantId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  product        Product       @relation(fields: [productId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+
+  @@unique([tenantId, sku], map: "product_variants_tenant_sku_unique")
+  @@index([tenantId, productId], map: "product_variants_tenant_product_idx")
+  @@map("product_variants")
+}
+
+model ProductBarcode {
+  id          String        @id @default(uuid()) @db.Uuid
+  tenantId    String        @map("tenant_id") @db.Uuid
+  productId   String        @map("product_id") @db.Uuid
+  variantId   String?       @map("variant_id") @db.Uuid
+  barcode     String
+  barcodeType BarcodeType   @default(EAN13) @map("barcode_type")
+  uomId       String        @map("uom_id") @db.Uuid
+  packQty     Decimal       @default(1) @map("pack_qty") @db.Decimal(18, 4)
+  isPrimary   Boolean       @default(false) @map("is_primary")
+  createdAt   DateTime      @default(now()) @map("created_at")
+  updatedAt   DateTime      @updatedAt @map("updated_at")
+  tenant      TenantAccount @relation(fields: [tenantId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  product     Product       @relation(fields: [productId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+
+  @@unique([tenantId, barcode], map: "product_barcodes_tenant_barcode_unique")
+  @@index([tenantId, productId], map: "product_barcodes_tenant_product_idx")
+  @@map("product_barcodes")
+}
+
+model ProductImage {
+  id           String        @id @default(uuid()) @db.Uuid
+  tenantId     String        @map("tenant_id") @db.Uuid
+  productId    String        @map("product_id") @db.Uuid
+  variantId    String?       @map("variant_id") @db.Uuid
+  url          String
+  altText      String?       @map("alt_text")
+  displayOrder Int           @default(0) @map("display_order")
+  isPrimary    Boolean       @default(false) @map("is_primary")
+  createdAt    DateTime      @default(now()) @map("created_at")
+  updatedAt    DateTime      @updatedAt @map("updated_at")
+  tenant       TenantAccount @relation(fields: [tenantId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  product      Product       @relation(fields: [productId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+
+  @@index([tenantId, productId], map: "product_images_tenant_product_idx")
+  @@map("product_images")
+}
+
+model ProductSupplier {
+  id                  String        @id @default(uuid()) @db.Uuid
+  tenantId            String        @map("tenant_id") @db.Uuid
+  productId           String        @map("product_id") @db.Uuid
+  supplierId          String        @map("supplier_id") @db.Uuid
+  supplierSku         String?       @map("supplier_sku")
+  supplierProductName String?       @map("supplier_product_name")
+  lastPurchaseCost    Decimal?      @map("last_purchase_cost") @db.Decimal(19, 6)
+  currencyCode        String        @default("USD") @map("currency_code")
+  leadTimeDays        Int?          @map("lead_time_days")
+  minOrderQty         Decimal?      @map("min_order_qty") @db.Decimal(18, 4)
+  packSize            Decimal?      @map("pack_size") @db.Decimal(18, 4)
+  isPreferred         Boolean       @default(false) @map("is_preferred")
+  createdAt           DateTime      @default(now()) @map("created_at")
+  updatedAt           DateTime      @updatedAt @map("updated_at")
+  tenant              TenantAccount @relation(fields: [tenantId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  product             Product       @relation(fields: [productId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  supplier            Supplier      @relation(fields: [supplierId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+
+  @@unique([tenantId, productId, supplierId], map: "product_suppliers_grain_unique")
+  @@index([tenantId, supplierId], map: "product_suppliers_tenant_supplier_idx")
+  @@map("product_suppliers")
+}
+
+model PriceList {
+  id           String         @id @default(uuid()) @db.Uuid
+  tenantId     String         @map("tenant_id") @db.Uuid
+  code         String
+  name         String
+  currencyCode String         @default("USD") @map("currency_code")
+  type         PriceListType  @default(SALES)
+  validFrom    DateTime?      @map("valid_from")
+  validTo      DateTime?      @map("valid_to")
+  isDefault    Boolean        @default(false) @map("is_default")
+  isActive     Boolean        @default(true) @map("is_active")
+  createdAt    DateTime       @default(now()) @map("created_at")
+  updatedAt    DateTime       @updatedAt @map("updated_at")
+  deletedAt    DateTime?      @map("deleted_at")
+  tenant       TenantAccount  @relation(fields: [tenantId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  prices       ProductPrice[]
+
+  @@unique([tenantId, code], map: "price_lists_tenant_code_unique")
+  @@index([tenantId, type, isActive], map: "price_lists_tenant_type_idx")
+  @@map("price_lists")
+}
+
+model ProductPrice {
+  id          String        @id @default(uuid()) @db.Uuid
+  tenantId    String        @map("tenant_id") @db.Uuid
+  priceListId String        @map("price_list_id") @db.Uuid
+  productId   String        @map("product_id") @db.Uuid
+  variantId   String?       @map("variant_id") @db.Uuid
+  uomId       String        @map("uom_id") @db.Uuid
+  minQty      Decimal       @default(1) @map("min_qty") @db.Decimal(18, 4)
+  unitPrice   Decimal       @map("unit_price") @db.Decimal(19, 4)
+  taxIncluded Boolean       @default(false) @map("tax_included")
+  validFrom   DateTime?     @map("valid_from")
+  validTo     DateTime?     @map("valid_to")
+  createdAt   DateTime      @default(now()) @map("created_at")
+  updatedAt   DateTime      @updatedAt @map("updated_at")
+  tenant      TenantAccount @relation(fields: [tenantId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  priceList   PriceList     @relation(fields: [priceListId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  product     Product       @relation(fields: [productId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+
+  @@unique([tenantId, priceListId, productId, variantId, uomId, minQty], map: "product_prices_grain_unique")
+  @@index([tenantId, productId], map: "product_prices_tenant_product_idx")
+  @@map("product_prices")
+}
+
+model BundleComponent {
+  id                 String              @id @default(uuid()) @db.Uuid
+  tenantId           String              @map("tenant_id") @db.Uuid
+  bundleProductId    String              @map("bundle_product_id") @db.Uuid
+  componentProductId String              @map("component_product_id") @db.Uuid
+  componentVariantId String?             @map("component_variant_id") @db.Uuid
+  quantity           Decimal             @db.Decimal(18, 4)
+  uomId              String              @map("uom_id") @db.Uuid
+  isOptional         Boolean             @default(false) @map("is_optional")
+  componentType      BundleComponentType @default(KIT_STATIC) @map("component_type")
+  createdAt          DateTime            @default(now()) @map("created_at")
+  updatedAt          DateTime            @updatedAt @map("updated_at")
+  tenant             TenantAccount       @relation(fields: [tenantId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  bundleProduct      Product             @relation("BundleParent", fields: [bundleProductId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+
+  @@unique([tenantId, bundleProductId, componentProductId, componentVariantId], map: "bundle_components_grain_unique")
+  @@index([tenantId, bundleProductId], map: "bundle_components_tenant_bundle_idx")
+  @@map("bundle_components")
+}
+
+model Attribute {
+  id        String             @id @default(uuid()) @db.Uuid
+  tenantId  String             @map("tenant_id") @db.Uuid
+  code      String
+  name      String
+  inputType AttributeInputType @default(SELECT) @map("input_type")
+  isActive  Boolean            @default(true) @map("is_active")
+  createdAt DateTime           @default(now()) @map("created_at")
+  updatedAt DateTime           @updatedAt @map("updated_at")
+  deletedAt DateTime?          @map("deleted_at")
+  tenant    TenantAccount      @relation(fields: [tenantId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  options   AttributeOption[]
+
+  @@unique([tenantId, code], map: "attributes_tenant_code_unique")
+  @@map("attributes")
+}
+
+model AttributeOption {
+  id           String        @id @default(uuid()) @db.Uuid
+  tenantId     String        @map("tenant_id") @db.Uuid
+  attributeId  String        @map("attribute_id") @db.Uuid
+  code         String
+  value        String
+  displayOrder Int           @default(0) @map("display_order")
+  createdAt    DateTime      @default(now()) @map("created_at")
+  updatedAt    DateTime      @updatedAt @map("updated_at")
+  tenant       TenantAccount @relation(fields: [tenantId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  attribute    Attribute     @relation(fields: [attributeId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+
+  @@unique([tenantId, attributeId, code], map: "attribute_options_grain_unique")
+  @@index([tenantId, attributeId], map: "attribute_options_tenant_attribute_idx")
+  @@map("attribute_options")
+}
+
+model ProductAttributeValue {
+  id          String        @id @default(uuid()) @db.Uuid
+  tenantId    String        @map("tenant_id") @db.Uuid
+  productId   String        @map("product_id") @db.Uuid
+  variantId   String?       @map("variant_id") @db.Uuid
+  attributeId String        @map("attribute_id") @db.Uuid
+  optionId    String?       @map("option_id") @db.Uuid
+  valueText   String?       @map("value_text")
+  createdAt   DateTime      @default(now()) @map("created_at")
+  updatedAt   DateTime      @updatedAt @map("updated_at")
+  tenant      TenantAccount @relation(fields: [tenantId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  product     Product       @relation(fields: [productId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+
+  @@index([tenantId, productId], map: "product_attribute_values_tenant_product_idx")
+  @@index([tenantId, attributeId], map: "product_attribute_values_tenant_attribute_idx")
+  @@map("product_attribute_values")
+}
+
+model ProductTag {
+  id        String           @id @default(uuid()) @db.Uuid
+  tenantId  String           @map("tenant_id") @db.Uuid
+  code      String
+  name      String
+  color     String?
+  createdAt DateTime         @default(now()) @map("created_at")
+  updatedAt DateTime         @updatedAt @map("updated_at")
+  deletedAt DateTime?        @map("deleted_at")
+  tenant    TenantAccount    @relation(fields: [tenantId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  tagLinks  ProductTagLink[]
+
+  @@unique([tenantId, code], map: "product_tags_tenant_code_unique")
+  @@map("product_tags")
+}
+
+model ProductTagLink {
+  id        String        @id @default(uuid()) @db.Uuid
+  tenantId  String        @map("tenant_id") @db.Uuid
+  productId String        @map("product_id") @db.Uuid
+  tagId     String        @map("tag_id") @db.Uuid
+  createdAt DateTime      @default(now()) @map("created_at")
+  tenant    TenantAccount @relation(fields: [tenantId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  product   Product       @relation(fields: [productId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  tag       ProductTag    @relation(fields: [tagId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+
+  @@unique([tenantId, productId, tagId], map: "product_tag_links_grain_unique")
+  @@index([tenantId, tagId], map: "product_tag_links_tenant_tag_idx")
+  @@map("product_tag_links")
+}
+
+// --- Phase 1: master data ---------------------------------------------------
+
+model Supplier {
+  id               String            @id @default(uuid()) @db.Uuid
+  tenantId         String            @map("tenant_id") @db.Uuid
+  code             String
+  name             String
+  taxId            String?           @map("tax_id")
+  email            String?
+  phone            String?
+  addressJson      Json?             @map("address_json")
+  paymentTerms     String?           @map("payment_terms")
+  currencyCode     String            @default("USD") @map("currency_code")
+  creditLimit      Decimal?          @map("credit_limit") @db.Decimal(19, 4)
+  isActive         Boolean           @default(true) @map("is_active")
+  createdAt        DateTime          @default(now()) @map("created_at")
+  updatedAt        DateTime          @updatedAt @map("updated_at")
+  deletedAt        DateTime?         @map("deleted_at")
+  tenant           TenantAccount     @relation(fields: [tenantId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  productSuppliers ProductSupplier[]
+
+  @@unique([tenantId, code], map: "suppliers_tenant_code_unique")
+  @@index([tenantId, isActive], map: "suppliers_tenant_active_idx")
+  @@map("suppliers")
+}
+
+model Customer {
+  id                  String        @id @default(uuid()) @db.Uuid
+  tenantId            String        @map("tenant_id") @db.Uuid
+  code                String
+  name                String
+  customerType        CustomerType  @default(RETAIL) @map("customer_type")
+  taxId               String?       @map("tax_id")
+  email               String?
+  phone               String?
+  billingAddressJson  Json?         @map("billing_address_json")
+  shippingAddressJson Json?         @map("shipping_address_json")
+  priceListId         String?       @map("price_list_id") @db.Uuid
+  creditLimit         Decimal?      @map("credit_limit") @db.Decimal(19, 4)
+  loyaltyPoints       Int           @default(0) @map("loyalty_points")
+  isActive            Boolean       @default(true) @map("is_active")
+  createdAt           DateTime      @default(now()) @map("created_at")
+  updatedAt           DateTime      @updatedAt @map("updated_at")
+  deletedAt           DateTime?     @map("deleted_at")
+  tenant              TenantAccount @relation(fields: [tenantId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+
+  @@unique([tenantId, code], map: "customers_tenant_code_unique")
+  @@index([tenantId, isActive], map: "customers_tenant_active_idx")
+  @@index([tenantId, phone], map: "customers_tenant_phone_idx")
+  @@map("customers")
+}
+
+model TaxRate {
+  id          String        @id @default(uuid()) @db.Uuid
+  tenantId    String        @map("tenant_id") @db.Uuid
+  code        String
+  name        String
+  rate        Decimal       @db.Decimal(9, 6)
+  taxType     TaxType       @default(VAT) @map("tax_type")
+  isCompound  Boolean       @default(false) @map("is_compound")
+  isInclusive Boolean       @default(false) @map("is_inclusive")
+  isActive    Boolean       @default(true) @map("is_active")
+  createdAt   DateTime      @default(now()) @map("created_at")
+  updatedAt   DateTime      @updatedAt @map("updated_at")
+  deletedAt   DateTime?     @map("deleted_at")
+  tenant      TenantAccount @relation(fields: [tenantId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+
+  @@unique([tenantId, code], map: "tax_rates_tenant_code_unique")
+  @@index([tenantId, isActive], map: "tax_rates_tenant_active_idx")
+  @@map("tax_rates")
+}
+
+// ============================================================================
+// Enterprise Inventory — Spec 002 (Phase 2 warehousing + Phase 3 ledger core).
+// InventoryMovement is the immutable append-only ledger; StockBalance is a
+// materialized projection written ONLY by the movement engine inside a
+// transaction under row lock. Documents (e.g. StockAdjustment) post movements.
+// Scale optimizations (month-range partitioning of inventory_movements,
+// ltree/GIST on location paths) are deferred to Phase 11; correctness invariants
+// do not depend on them.
+// ============================================================================
+
+enum WarehouseType {
+  WAREHOUSE  @map("warehouse")
+  STORE      @map("store")
+  OUTLET     @map("outlet")
+  VIRTUAL    @map("virtual")
+  TRANSIT    @map("transit")
+  QUARANTINE @map("quarantine")
+
+  @@map("WarehouseType")
+}
+
+enum LocationType {
+  ZONE    @map("zone")
+  AISLE   @map("aisle")
+  RACK    @map("rack")
+  SHELF   @map("shelf")
+  BIN     @map("bin")
+  DOCK    @map("dock")
+  STAGING @map("staging")
+
+  @@map("LocationType")
+}
+
+enum MovementType {
+  OPENING_BALANCE        @map("opening_balance")
+  PURCHASE_RECEIPT       @map("purchase_receipt")
+  PURCHASE_RETURN        @map("purchase_return")
+  SALE                   @map("sale")
+  SALES_RETURN           @map("sales_return")
+  TRANSFER_OUT           @map("transfer_out")
+  TRANSFER_IN            @map("transfer_in")
+  ADJUSTMENT_INC         @map("adjustment_inc")
+  ADJUSTMENT_DEC         @map("adjustment_dec")
+  PRODUCTION_OUTPUT      @map("production_output")
+  PRODUCTION_CONSUMPTION @map("production_consumption")
+  DAMAGE                 @map("damage")
+  EXPIRED                @map("expired")
+  LOST                   @map("lost")
+  CYCLE_COUNT_INC        @map("cycle_count_inc")
+  CYCLE_COUNT_DEC        @map("cycle_count_dec")
+  RESERVATION            @map("reservation")
+  RESERVATION_RELEASE    @map("reservation_release")
+  RESERVATION_CONVERSION @map("reservation_conversion")
+  REVALUATION            @map("revaluation")
+  LANDED_COST_ADJUSTMENT @map("landed_cost_adjustment")
+
+  @@map("MovementType")
+}
+
+enum SourceDocType {
+  OPENING        @map("opening")
+  PURCHASE_ORDER @map("purchase_order")
+  GOODS_RECEIPT  @map("goods_receipt")
+  SALES_ORDER    @map("sales_order")
+  POS_SALE       @map("pos_sale")
+  SALES_INVOICE  @map("sales_invoice")
+  TRANSFER       @map("transfer")
+  ADJUSTMENT     @map("adjustment")
+  COUNT          @map("count")
+  PRODUCTION     @map("production")
+  RETURN         @map("return")
+  RESERVATION    @map("reservation")
+
+  @@map("SourceDocType")
+}
+
+enum AdjustmentStatus {
+  DRAFT            @map("draft")
+  PENDING_APPROVAL @map("pending_approval")
+  APPROVED         @map("approved")
+  POSTED           @map("posted")
+  REJECTED         @map("rejected")
+  CANCELLED        @map("cancelled")
+
+  @@map("AdjustmentStatus")
+}
+
+enum AdjustmentReason {
+  DAMAGE      @map("damage")
+  EXPIRY      @map("expiry")
+  LOSS        @map("loss")
+  FOUND       @map("found")
+  CORRECTION  @map("correction")
+  REVALUATION @map("revaluation")
+
+  @@map("AdjustmentReason")
+}
+
+// --- Phase 2: warehousing ---------------------------------------------------
+
+model Warehouse {
+  id                 String              @id @default(uuid()) @db.Uuid
+  tenantId           String              @map("tenant_id") @db.Uuid
+  code               String
+  name               String
+  warehouseType      WarehouseType       @default(WAREHOUSE) @map("warehouse_type")
+  addressJson        Json?               @map("address_json")
+  isDefault          Boolean             @default(false) @map("is_default")
+  allowNegativeStock Boolean             @default(false) @map("allow_negative_stock")
+  isActive           Boolean             @default(true) @map("is_active")
+  createdAt          DateTime            @default(now()) @map("created_at")
+  updatedAt          DateTime            @updatedAt @map("updated_at")
+  deletedAt          DateTime?           @map("deleted_at")
+  tenant             TenantAccount       @relation(fields: [tenantId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  locations          WarehouseLocation[]
+
+  @@unique([tenantId, code], map: "warehouses_tenant_code_unique")
+  @@index([tenantId, warehouseType], map: "warehouses_tenant_type_idx")
+  @@index([tenantId, isActive], map: "warehouses_tenant_active_idx")
+  @@map("warehouses")
+}
+
+model WarehouseLocation {
+  id           String              @id @default(uuid()) @db.Uuid
+  tenantId     String              @map("tenant_id") @db.Uuid
+  warehouseId  String              @map("warehouse_id") @db.Uuid
+  parentId     String?             @map("parent_id") @db.Uuid
+  code         String
+  name         String
+  locationType LocationType        @default(BIN) @map("location_type")
+  path         String?
+  depth        Int                 @default(0)
+  isStockable  Boolean             @default(true) @map("is_stockable")
+  isPickable   Boolean             @default(true) @map("is_pickable")
+  pickSequence Int?                @map("pick_sequence")
+  isActive     Boolean             @default(true) @map("is_active")
+  createdAt    DateTime            @default(now()) @map("created_at")
+  updatedAt    DateTime            @updatedAt @map("updated_at")
+  deletedAt    DateTime?           @map("deleted_at")
+  tenant       TenantAccount       @relation(fields: [tenantId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  warehouse    Warehouse           @relation(fields: [warehouseId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  parent       WarehouseLocation?  @relation("WarehouseLocationHierarchy", fields: [parentId], references: [id], onDelete: SetNull, onUpdate: Cascade)
+  children     WarehouseLocation[] @relation("WarehouseLocationHierarchy")
+
+  @@unique([tenantId, warehouseId, code], map: "warehouse_locations_wh_code_unique")
+  @@index([tenantId, warehouseId], map: "warehouse_locations_tenant_wh_idx")
+  @@index([tenantId, parentId], map: "warehouse_locations_tenant_parent_idx")
+  @@map("warehouse_locations")
+}
+
+// --- Phase 3: inventory ledger core -----------------------------------------
+
+model StockBalance {
+  id             String        @id @default(uuid()) @db.Uuid
+  tenantId       String        @map("tenant_id") @db.Uuid
+  productId      String        @map("product_id") @db.Uuid
+  variantId      String?       @map("variant_id") @db.Uuid
+  variantKey     String        @default("-") @map("variant_key")
+  warehouseId    String        @map("warehouse_id") @db.Uuid
+  locationId     String        @map("location_id") @db.Uuid
+  lotId          String?       @map("lot_id") @db.Uuid
+  lotKey         String        @default("-") @map("lot_key")
+  serialId       String?       @map("serial_id") @db.Uuid
+  serialKey      String        @default("-") @map("serial_key")
+  onHand         Decimal       @default(0) @map("on_hand") @db.Decimal(18, 4)
+  reserved       Decimal       @default(0) @db.Decimal(18, 4)
+  allocated      Decimal       @default(0) @db.Decimal(18, 4)
+  damaged        Decimal       @default(0) @db.Decimal(18, 4)
+  expired        Decimal       @default(0) @db.Decimal(18, 4)
+  inTransit      Decimal       @default(0) @map("in_transit") @db.Decimal(18, 4)
+  returned       Decimal       @default(0) @db.Decimal(18, 4)
+  avgUnitCost    Decimal       @default(0) @map("avg_unit_cost") @db.Decimal(19, 6)
+  totalValue     Decimal       @default(0) @map("total_value") @db.Decimal(19, 4)
+  version        Int           @default(0)
+  lastMovementAt DateTime?     @map("last_movement_at")
+  createdAt      DateTime      @default(now()) @map("created_at")
+  updatedAt      DateTime      @updatedAt @map("updated_at")
+  tenant         TenantAccount @relation(fields: [tenantId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+
+  @@unique([tenantId, productId, variantKey, locationId, lotKey, serialKey], map: "stock_balances_grain_unique")
+  @@index([tenantId, productId, warehouseId], map: "stock_balances_product_wh_idx")
+  @@index([tenantId, locationId], map: "stock_balances_location_idx")
+  @@index([tenantId, warehouseId], map: "stock_balances_wh_idx")
+  @@map("stock_balances")
+}
+
+model InventoryMovement {
+  id                     String        @id @default(uuid()) @db.Uuid
+  tenantId               String        @map("tenant_id") @db.Uuid
+  movementType           MovementType  @map("movement_type")
+  productId              String        @map("product_id") @db.Uuid
+  variantId              String?       @map("variant_id") @db.Uuid
+  warehouseId            String        @map("warehouse_id") @db.Uuid
+  locationId             String        @map("location_id") @db.Uuid
+  counterpartyLocationId String?       @map("counterparty_location_id") @db.Uuid
+  lotId                  String?       @map("lot_id") @db.Uuid
+  serialId               String?       @map("serial_id") @db.Uuid
+  qtyDelta               Decimal       @map("qty_delta") @db.Decimal(18, 4)
+  uomId                  String        @map("uom_id") @db.Uuid
+  qtyInBaseUom           Decimal       @map("qty_in_base_uom") @db.Decimal(18, 4)
+  unitCost               Decimal       @map("unit_cost") @db.Decimal(19, 6)
+  totalCost              Decimal       @map("total_cost") @db.Decimal(19, 4)
+  runningOnHand          Decimal       @map("running_on_hand") @db.Decimal(18, 4)
+  runningAvgCost         Decimal       @map("running_avg_cost") @db.Decimal(19, 6)
+  sourceDocType          SourceDocType @map("source_doc_type")
+  sourceDocId            String?       @map("source_doc_id") @db.Uuid
+  sourceDocLineId        String?       @map("source_doc_line_id") @db.Uuid
+  sourceDocNumber        String?       @map("source_doc_number")
+  performedByProfileId   String        @map("performed_by_profile_id") @db.Uuid
+  occurredAt             DateTime      @default(now()) @map("occurred_at")
+  postedAt               DateTime      @default(now()) @map("posted_at")
+  reversalOfMovementId   String?       @map("reversal_of_movement_id") @db.Uuid
+  reversedByMovementId   String?       @map("reversed_by_movement_id") @db.Uuid
+  correlationId          String?       @map("correlation_id") @db.Uuid
+  notes                  String?
+  tenant                 TenantAccount @relation(fields: [tenantId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+
+  @@index([tenantId, productId, occurredAt], map: "movements_product_time_idx")
+  @@index([tenantId, warehouseId, occurredAt], map: "movements_wh_time_idx")
+  @@index([tenantId, sourceDocType, sourceDocId], map: "movements_doc_idx")
+  @@index([tenantId, movementType, occurredAt], map: "movements_type_time_idx")
+  @@index([tenantId, lotId], map: "movements_lot_idx")
+  @@index([tenantId, serialId], map: "movements_serial_idx")
+  @@map("inventory_movements")
+}
+
+model CostLayer {
+  id                String        @id @default(uuid()) @db.Uuid
+  tenantId          String        @map("tenant_id") @db.Uuid
+  productId         String        @map("product_id") @db.Uuid
+  variantId         String?       @map("variant_id") @db.Uuid
+  locationId        String        @map("location_id") @db.Uuid
+  lotId             String?       @map("lot_id") @db.Uuid
+  sourceMovementId  String        @map("source_movement_id") @db.Uuid
+  receivedAt        DateTime      @map("received_at")
+  originalQty       Decimal       @map("original_qty") @db.Decimal(18, 4)
+  remainingQty      Decimal       @map("remaining_qty") @db.Decimal(18, 4)
+  unitCost          Decimal       @map("unit_cost") @db.Decimal(19, 6)
+  landedCostPerUnit Decimal       @default(0) @map("landed_cost_per_unit") @db.Decimal(19, 6)
+  isDepleted        Boolean       @default(false) @map("is_depleted")
+  createdAt         DateTime      @default(now()) @map("created_at")
+  updatedAt         DateTime      @updatedAt @map("updated_at")
+  tenant            TenantAccount @relation(fields: [tenantId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+
+  @@index([tenantId, productId, locationId, receivedAt], map: "cost_layers_fifo_idx")
+  @@index([tenantId, sourceMovementId], map: "cost_layers_source_idx")
+  @@map("cost_layers")
+}
+
+// --- Phase 3: stock adjustment document -------------------------------------
+
+model StockAdjustment {
+  id                  String                @id @default(uuid()) @db.Uuid
+  tenantId            String                @map("tenant_id") @db.Uuid
+  documentNumber      String                @map("document_number")
+  warehouseId         String                @map("warehouse_id") @db.Uuid
+  status              AdjustmentStatus      @default(DRAFT)
+  reasonCode          AdjustmentReason      @map("reason_code")
+  notes               String?
+  isPosted            Boolean               @default(false) @map("is_posted")
+  postedAt            DateTime?             @map("posted_at")
+  postedByProfileId   String?               @map("posted_by_profile_id") @db.Uuid
+  approvedByProfileId String?               @map("approved_by_profile_id") @db.Uuid
+  createdByProfileId  String?               @map("created_by_profile_id") @db.Uuid
+  correlationId       String?               @map("correlation_id") @db.Uuid
+  createdAt           DateTime              @default(now()) @map("created_at")
+  updatedAt           DateTime              @updatedAt @map("updated_at")
+  tenant              TenantAccount         @relation(fields: [tenantId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  lines               StockAdjustmentLine[]
+
+  @@unique([tenantId, documentNumber], map: "stock_adjustments_tenant_number_unique")
+  @@index([tenantId, status], map: "stock_adjustments_tenant_status_idx")
+  @@index([tenantId, warehouseId], map: "stock_adjustments_tenant_wh_idx")
+  @@map("stock_adjustments")
+}
+
+model StockAdjustmentLine {
+  id           String          @id @default(uuid()) @db.Uuid
+  tenantId     String          @map("tenant_id") @db.Uuid
+  adjustmentId String          @map("adjustment_id") @db.Uuid
+  lineNo       Int             @map("line_no")
+  productId    String          @map("product_id") @db.Uuid
+  variantId    String?         @map("variant_id") @db.Uuid
+  locationId   String          @map("location_id") @db.Uuid
+  lotId        String?         @map("lot_id") @db.Uuid
+  serialId     String?         @map("serial_id") @db.Uuid
+  uomId        String          @map("uom_id") @db.Uuid
+  systemQty    Decimal         @default(0) @map("system_qty") @db.Decimal(18, 4)
+  adjustedQty  Decimal         @map("adjusted_qty") @db.Decimal(18, 4)
+  qtyDelta     Decimal         @map("qty_delta") @db.Decimal(18, 4)
+  unitCost     Decimal?        @map("unit_cost") @db.Decimal(19, 6)
+  reason       String?
+  createdAt    DateTime        @default(now()) @map("created_at")
+  tenant       TenantAccount   @relation(fields: [tenantId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  adjustment   StockAdjustment @relation(fields: [adjustmentId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+
+  @@index([tenantId, adjustmentId], map: "stock_adjustment_lines_adjustment_idx")
+  @@map("stock_adjustment_lines")
+}
+
+// ---------------------------------------------------------------------------
+// Owner tier (platform / SaaS-operator level). These tables are global — they
+// carry no tenant_id and are seeded by unique `code` from
+// `src/features/owner/owner-catalog.ts`.
+// ---------------------------------------------------------------------------
+
+model OwnerActivityOption {
+  id                   String                      @id @default(uuid()) @db.Uuid
+  code                 String                      @unique
+  name                 String
+  nameAr               String?                     @map("name_ar")
+  description          String?
+  displayOrder         Int                         @default(0) @map("display_order")
+  isActive             Boolean                     @default(true) @map("is_active")
+  createdAt            DateTime                    @default(now()) @map("created_at")
+  updatedAt            DateTime                    @updatedAt @map("updated_at")
+  deletedAt            DateTime?                   @map("deleted_at")
+  tenants              TenantAccount[]
+  registrationRequests TenantRegistrationRequest[]
+
+  @@index([isActive, displayOrder], map: "owner_activity_options_active_order_idx")
+  @@map("owner_activity_options")
+}
+
+model OwnerSubscriptionPlan {
+  id            String                         @id @default(uuid()) @db.Uuid
+  code          String                         @unique
+  name          String
+  description   String?
+  priceMonthly  Decimal                        @default(0) @map("price_monthly") @db.Decimal(12, 2)
+  priceYearly   Decimal?                       @map("price_yearly") @db.Decimal(12, 2)
+  currency      String                         @default("USD")
+  trialDays     Int                            @default(0) @map("trial_days")
+  isActive      Boolean                        @default(true) @map("is_active")
+  isDefault     Boolean                        @default(false) @map("is_default")
+  displayOrder  Int                            @default(0) @map("display_order")
+  createdAt     DateTime                       @default(now()) @map("created_at")
+  updatedAt     DateTime                       @updatedAt @map("updated_at")
+  deletedAt     DateTime?                      @map("deleted_at")
+  features      OwnerSubscriptionPlanFeature[]
+  subscriptions OwnerTenantSubscription[]
+
+  @@index([isActive, displayOrder], map: "owner_subscription_plans_active_order_idx")
+  @@map("owner_subscription_plans")
+}
+
+model OwnerSubscriptionPlanFeature {
+  id           String                @id @default(uuid()) @db.Uuid
+  planId       String                @map("plan_id") @db.Uuid
+  code         String
+  name         String
+  description  String?
+  isIncluded   Boolean               @default(true) @map("is_included")
+  limitValue   Int?                  @map("limit_value")
+  displayOrder Int                   @default(0) @map("display_order")
+  createdAt    DateTime              @default(now()) @map("created_at")
+  updatedAt    DateTime              @updatedAt @map("updated_at")
+  plan         OwnerSubscriptionPlan @relation(fields: [planId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+
+  @@unique([planId, code], map: "owner_plan_features_plan_code_unique")
+  @@map("owner_subscription_plans_features")
+}
+
+model OwnerTenantSubscription {
+  id               String                  @id @default(uuid()) @db.Uuid
+  tenantId         String                  @unique @map("tenant_id") @db.Uuid
+  planId           String                  @map("plan_id") @db.Uuid
+  status           OwnerSubscriptionStatus @default(TRIALING)
+  billingCycle     OwnerBillingCycle       @default(MONTHLY) @map("billing_cycle")
+  startedAt        DateTime                @default(now()) @map("started_at")
+  trialEndsAt      DateTime?               @map("trial_ends_at")
+  currentPeriodEnd DateTime?               @map("current_period_end")
+  canceledAt       DateTime?               @map("canceled_at")
+  createdAt        DateTime                @default(now()) @map("created_at")
+  updatedAt        DateTime                @updatedAt @map("updated_at")
+  tenant           TenantAccount           @relation(fields: [tenantId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  plan             OwnerSubscriptionPlan   @relation(fields: [planId], references: [id], onDelete: Restrict, onUpdate: Cascade)
+
+  @@index([planId], map: "owner_tenant_subscriptions_plan_idx")
+  @@map("owner_tenant_subscriptions")
 }

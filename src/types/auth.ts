@@ -217,6 +217,25 @@ export type RolesPermissionsPayload = {
   users: Array<TenantUserAccessSummary>
 }
 
+export type EffectivePermissionSource = 'role' | 'granted' | 'denied'
+
+export type EffectivePermissionEntry = {
+  code: string
+  name: string
+  moduleKey: string
+  source: EffectivePermissionSource
+  effective: boolean
+}
+
+export type TenantUserEffectiveAccess = {
+  tenantUserId: string
+  displayName: string
+  email: string
+  roleCodes: Array<string>
+  roleLabels: Array<string>
+  effectivePermissions: Array<EffectivePermissionEntry>
+}
+
 export type SetUserPermissionOverrideInput = {
   tenantId: string
   tenantUserId: string

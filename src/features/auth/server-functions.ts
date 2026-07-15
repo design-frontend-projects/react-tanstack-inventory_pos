@@ -19,6 +19,7 @@ import {
   resendTenantInvitation,
   updateTenantUserStatus,
 } from '#/server/auth/user-management'
+import { getTenantUserEffectiveAccess } from '#/server/auth/effective-access'
 import { getNavigationTree } from '#/server/auth/navigation'
 import {
   createRole,
@@ -33,6 +34,7 @@ import {
   setScreenVisibility,
 } from '#/server/auth/module-management'
 import { getSecurityOverview } from '#/server/auth/security-management'
+import { listPublicActivityOptions } from '#/server/owner/activity-options'
 import { bootstrapSession, getCurrentUserContext } from '#/server/auth/session'
 import {
   requireAuth,
@@ -183,6 +185,13 @@ export const startTenantRegistrationServerFn = createServerFn({
   .handler(async ({ data }) => {
     return startTenantRegistration(data)
   })
+
+// Public (unauthenticated) — powers the activity dropdown on the sign-up page.
+export const listActivityOptionsServerFn = createServerFn({
+  method: 'GET',
+}).handler(async () => {
+  return listPublicActivityOptions()
+})
 
 export const inviteTenantUserServerFn = createServerFn({
   method: 'POST',
@@ -517,6 +526,31 @@ export const getSecurityOverviewServerFn = createServerFn({
     )
 
     return getSecurityOverview(context, data.tenantId)
+  })
+
+export const getTenantUserEffectiveAccessServerFn = createServerFn({
+  method: 'POST',
+})
+  .inputValidator(
+    z.object({
+      accessToken: accessTokenSchema,
+      tenantId: tenantIdSchema,
+      tenantUserId: z.string().uuid(),
+    })
+  )
+  .handler(async ({ data }) => {
+    const context = requirePermission(
+      requireTenantAccess(
+        await getCurrentUserContext({
+          accessToken: data.accessToken,
+          tenantId: data.tenantId,
+        }),
+        data.tenantId
+      ),
+      ['user.view', 'user.assign_permission']
+    )
+
+    return getTenantUserEffectiveAccess(context, data.tenantId, data.tenantUserId)
   })
 
 export const getNavigationTreeServerFn = createServerFn({

@@ -48,6 +48,7 @@ export async function createRegistrationRequest(input: {
   lastName: string
   phone?: string | null
   activity: string
+  activityOptionId?: string | null
   isOwner?: boolean
   defaultRoleCode: string
   authUserId?: string | null
@@ -63,6 +64,7 @@ export async function createRegistrationRequest(input: {
       lastName: input.lastName,
       phone: input.phone ?? null,
       activity: input.activity,
+      activityOptionId: input.activityOptionId ?? null,
       isOwner: input.isOwner ?? true,
       defaultRoleCode: input.defaultRoleCode,
       authUserId: input.authUserId ?? null,

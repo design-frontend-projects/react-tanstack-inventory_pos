@@ -5,6 +5,7 @@ import { Loader2, ShieldCheck } from 'lucide-react'
 import { AccessGuard } from '#/features/auth/access-guard'
 import { hasPermission } from '#/features/auth/permissions'
 import {
+  getTenantUserEffectiveAccessServerFn,
   listRolesPermissionsServerFn,
   setUserPermissionOverrideServerFn,
 } from '#/features/auth/server-functions'
@@ -75,6 +76,21 @@ function AccessManagementPage() {
         queryKey: ACCESS_QUERY_KEY,
       })
     },
+  })
+
+  const effectiveQuery = useQuery({
+    enabled: !!tenantId && !!selectedTenantUserId,
+    queryKey: [...ACCESS_QUERY_KEY, 'effective', tenantId, selectedTenantUserId],
+    queryFn: async () =>
+      withAccessToken((accessToken) =>
+        getTenantUserEffectiveAccessServerFn({
+          data: {
+            accessToken,
+            tenantId: tenantId!,
+            tenantUserId: selectedTenantUserId!,
+          },
+        })
+      ),
   })
 
   if (!tenantId) {
@@ -299,6 +315,72 @@ function AccessManagementPage() {
               })()}
             </div>
           )}
+        </WorkspacePanel>
+
+        <WorkspacePanel
+          eyebrow="Effective access"
+          title="Resolved permissions for the selected user"
+          description="The final permission set after merging every assigned role with direct overrides. 'Denied' rows are removed by an override; 'granted' rows are added directly on top of the role."
+        >
+          {!selectedTenantUserId ? (
+            <WorkspaceEmptyState
+              title="No user selected"
+              description="Select a tenant user in the panel above to review their effective permissions."
+            />
+          ) : effectiveQuery.isPending ? (
+            <div className="flex min-h-32 items-center justify-center">
+              <Loader2 className="animate-spin text-muted-foreground" />
+            </div>
+          ) : effectiveQuery.data ? (
+            <div className="grid gap-3">
+              <div className="flex flex-wrap items-center gap-2">
+                <p className="text-sm font-semibold">{effectiveQuery.data.displayName}</p>
+                {effectiveQuery.data.roleLabels.map((roleLabel) => (
+                  <Badge key={roleLabel} variant="outline">
+                    {roleLabel}
+                  </Badge>
+                ))}
+                <span className="text-xs text-muted-foreground">
+                  {effectiveQuery.data.effectivePermissions.filter((entry) => entry.effective).length}{' '}
+                  effective
+                </span>
+              </div>
+
+              <div className="grid gap-2">
+                {effectiveQuery.data.effectivePermissions.map((entry) => (
+                  <div
+                    key={entry.code}
+                    className={
+                      entry.effective
+                        ? 'flex flex-wrap items-center justify-between gap-3 rounded-[1rem] border border-border/55 bg-background/60 p-3'
+                        : 'flex flex-wrap items-center justify-between gap-3 rounded-[1rem] border border-destructive/30 bg-destructive/5 p-3'
+                    }
+                  >
+                    <div>
+                      <p className="text-sm font-medium">{entry.code}</p>
+                      <p className="text-xs text-muted-foreground">{entry.name}</p>
+                    </div>
+                    <div className="flex items-center gap-2">
+                      <Badge
+                        variant={
+                          entry.source === 'denied'
+                            ? 'destructive'
+                            : entry.source === 'granted'
+                              ? 'default'
+                              : 'secondary'
+                        }
+                      >
+                        {entry.source}
+                      </Badge>
+                      <Badge variant={entry.effective ? 'outline' : 'secondary'}>
+                        {entry.effective ? 'effective' : 'blocked'}
+                      </Badge>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+          ) : null}
         </WorkspacePanel>
       </WorkspacePage>
     </AccessGuard>

@@ -1,4 +1,5 @@
 import * as React from 'react'
+import { useTranslation } from 'react-i18next'
 import { Link, createFileRoute } from '@tanstack/react-router'
 import { Loader2, MailCheck, ShieldCheck, Store } from 'lucide-react'
 import { Button } from '#/components/ui/button'
@@ -6,7 +7,8 @@ import { Card } from '#/components/ui/card'
 import { Input } from '#/components/ui/input'
 import { startTenantRegistrationServerFn } from '#/features/auth/server-functions'
 import { useSessionBootstrap } from '#/features/auth/use-session-bootstrap'
-import { ACTIVITY_OPTIONS, signUpSchema } from '#/features/auth/validation'
+import { signUpSchema } from '#/features/auth/validation'
+import { useActivityOptions } from '#/features/owner/use-activity-options'
 
 export const Route = createFileRoute('/_auth/sign-up')({
   component: SignUpPage,
@@ -17,22 +19,35 @@ type SignUpFormState = {
   lastName: string
   email: string
   phone: string
-  activity: (typeof ACTIVITY_OPTIONS)[number]
+  activity: string
 }
 
 function SignUpPage() {
   const navigate = Route.useNavigate()
   const session = useSessionBootstrap()
+  const { i18n } = useTranslation()
+  const { data: activityOptions } = useActivityOptions()
   const [form, setForm] = React.useState<SignUpFormState>({
     firstName: '',
     lastName: '',
     email: '',
     phone: '',
-    activity: ACTIVITY_OPTIONS[0],
+    activity: '',
   })
   const [error, setError] = React.useState<string | null>(null)
   const [successMessage, setSuccessMessage] = React.useState<string | null>(null)
   const [isSubmitting, setIsSubmitting] = React.useState(false)
+
+  const isArabic = i18n.language.startsWith('ar')
+
+  // Select the first available option once the list resolves (or on fallback).
+  React.useEffect(() => {
+    if (form.activity || activityOptions.length === 0) {
+      return
+    }
+
+    setForm((current) => ({ ...current, activity: activityOptions[0].code }))
+  }, [activityOptions, form.activity])
 
   React.useEffect(() => {
     if (session.isPending || !session.isAuthenticated) {
@@ -187,16 +202,17 @@ function SignUpPage() {
           <select
             className="h-10 rounded-xl border border-input bg-background px-3 text-sm"
             value={form.activity}
+            disabled={activityOptions.length === 0}
             onChange={(event) =>
               setForm((current) => ({
                 ...current,
-                activity: event.target.value as (typeof ACTIVITY_OPTIONS)[number],
+                activity: event.target.value,
               }))
             }
           >
-            {ACTIVITY_OPTIONS.map((activity) => (
-              <option key={activity} value={activity}>
-                {activity}
+            {activityOptions.map((option) => (
+              <option key={option.code} value={option.code}>
+                {isArabic ? (option.nameAr ?? option.name) : option.name}
               </option>
             ))}
           </select>

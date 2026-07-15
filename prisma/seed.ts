@@ -12,6 +12,10 @@ import {
   SCREEN_ACTION_DEFINITIONS,
   SCREEN_DEFINITIONS,
 } from '#/features/auth/module-catalog'
+import {
+  ACTIVITY_OPTION_DEFINITIONS,
+  SUBSCRIPTION_PLAN_DEFINITIONS,
+} from '#/features/owner/owner-catalog'
 
 const PERMISSION_KIND_BY_CODE: Record<PermissionKindCode, PermissionKind> = {
   screen: PermissionKind.SCREEN,
@@ -570,6 +574,91 @@ async function cleanupStalePermissions() {
   })
 }
 
+async function seedOwnerActivityOptions() {
+  for (const definition of ACTIVITY_OPTION_DEFINITIONS) {
+    await prisma.ownerActivityOption.upsert({
+      where: {
+        code: definition.code,
+      },
+      update: {
+        name: definition.name,
+        nameAr: definition.nameAr,
+        description: definition.description,
+        displayOrder: definition.displayOrder,
+        isActive: true,
+        deletedAt: null,
+      },
+      create: {
+        code: definition.code,
+        name: definition.name,
+        nameAr: definition.nameAr,
+        description: definition.description,
+        displayOrder: definition.displayOrder,
+      },
+    })
+  }
+}
+
+async function seedOwnerSubscriptionPlans() {
+  for (const planDefinition of SUBSCRIPTION_PLAN_DEFINITIONS) {
+    const plan = await prisma.ownerSubscriptionPlan.upsert({
+      where: {
+        code: planDefinition.code,
+      },
+      update: {
+        name: planDefinition.name,
+        description: planDefinition.description,
+        priceMonthly: planDefinition.priceMonthly,
+        priceYearly: planDefinition.priceYearly,
+        currency: planDefinition.currency,
+        trialDays: planDefinition.trialDays,
+        isDefault: planDefinition.isDefault,
+        displayOrder: planDefinition.displayOrder,
+        isActive: true,
+        deletedAt: null,
+      },
+      create: {
+        code: planDefinition.code,
+        name: planDefinition.name,
+        description: planDefinition.description,
+        priceMonthly: planDefinition.priceMonthly,
+        priceYearly: planDefinition.priceYearly,
+        currency: planDefinition.currency,
+        trialDays: planDefinition.trialDays,
+        isDefault: planDefinition.isDefault,
+        displayOrder: planDefinition.displayOrder,
+      },
+    })
+
+    for (const featureDefinition of planDefinition.features) {
+      await prisma.ownerSubscriptionPlanFeature.upsert({
+        where: {
+          planId_code: {
+            planId: plan.id,
+            code: featureDefinition.code,
+          },
+        },
+        update: {
+          name: featureDefinition.name,
+          description: featureDefinition.description,
+          isIncluded: featureDefinition.isIncluded,
+          limitValue: featureDefinition.limitValue,
+          displayOrder: featureDefinition.displayOrder,
+        },
+        create: {
+          planId: plan.id,
+          code: featureDefinition.code,
+          name: featureDefinition.name,
+          description: featureDefinition.description,
+          isIncluded: featureDefinition.isIncluded,
+          limitValue: featureDefinition.limitValue,
+          displayOrder: featureDefinition.displayOrder,
+        },
+      })
+    }
+  }
+}
+
 async function main() {
   await seedModules()
   await seedScreens()
@@ -580,8 +669,10 @@ async function main() {
   await migrateLegacyRoles()
   await seedRolePermissions()
   await cleanupStalePermissions()
+  await seedOwnerActivityOptions()
+  await seedOwnerSubscriptionPlans()
 
-  console.log('Seeded auth/RBAC foundation data.')
+  console.log('Seeded auth/RBAC + owner-tier foundation data.')
 }
 
 void main()
