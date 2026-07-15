@@ -1,4 +1,5 @@
 import { ConflictError, NotFoundError } from '#/server/auth/errors'
+import { appendDomainEvent } from '#/server/events/event-outbox'
 import { nextDocumentNumber } from '#/server/inventory/document-number-service'
 import { serializeSalesOrder } from '#/server/inventory/sales-dto'
 import { postMovement } from '#/server/inventory/movement-engine'
@@ -135,15 +136,42 @@ export async function confirmSalesOrder(
   }
 
   assertTransition('salesOrder', order.status.toLowerCase(), 'confirmed')
-  await salesOrderRepo.updateSalesOrderStatus(tenantId, id, 'CONFIRMED')
 
-  await createAuditLog({
-    tenantId,
-    actorProfileId: context.profileId,
-    actorEmail: context.email,
-    actionKey: 'sales.order_confirm',
-    entityType: 'sales_order',
-    entityId: id,
+  await prisma.$transaction(async (tx) => {
+    await salesOrderRepo.updateSalesOrderStatus(tenantId, id, 'CONFIRMED', tx)
+
+    await createAuditLog(
+      {
+        tenantId,
+        actorProfileId: context.profileId,
+        actorEmail: context.email,
+        actionKey: 'sales.order_confirm',
+        entityType: 'sales_order',
+        entityId: id,
+      },
+      tx
+    )
+
+    await appendDomainEvent(tx, {
+      tenantId,
+      eventType: 'sales_order.confirmed',
+      aggregateType: 'sales_order',
+      aggregateId: order.id,
+      customerId: order.customerId,
+      payload: {
+        documentNumber: order.documentNumber,
+        grandTotal: order.grandTotal.toString(),
+        lines: order.lines.map((line) => ({
+          productId: line.productId,
+          variantId: line.variantId,
+          quantity: line.orderedQty.toString(),
+          unitPrice: line.unitPrice.toString(),
+          lineTotal: line.lineTotal.toString(),
+        })),
+      },
+      correlationId: order.correlationId,
+      actorProfileId: context.profileId,
+    })
   })
 
   const refreshed = await salesOrderRepo.findSalesOrderById(tenantId, id)
@@ -298,6 +326,27 @@ export async function fulfillSalesOrder(
         tx
       )
 
+      await appendDomainEvent(tx, {
+        tenantId,
+        eventType: 'sales_order.fulfilled',
+        aggregateType: 'sales_order',
+        aggregateId: order.id,
+        customerId: order.customerId,
+        payload: {
+          documentNumber: order.documentNumber,
+          grandTotal: order.grandTotal.toString(),
+          lines: order.lines.map((line) => ({
+            productId: line.productId,
+            variantId: line.variantId,
+            quantity: line.orderedQty.toString(),
+            unitPrice: line.unitPrice.toString(),
+            lineTotal: line.lineTotal.toString(),
+          })),
+        },
+        correlationId: order.correlationId,
+        actorProfileId: context.profileId,
+      })
+
       const refreshed = await salesOrderRepo.findSalesOrderById(tenantId, id, tx)
 
       return refreshed!
@@ -339,6 +388,17 @@ export async function cancelSalesOrder(
         },
         tx
       )
+
+      await appendDomainEvent(tx, {
+        tenantId,
+        eventType: 'sales_order.cancelled',
+        aggregateType: 'sales_order',
+        aggregateId: order.id,
+        customerId: order.customerId,
+        payload: { documentNumber: order.documentNumber },
+        correlationId: order.correlationId,
+        actorProfileId: context.profileId,
+      })
 
       const refreshed = await salesOrderRepo.findSalesOrderById(tenantId, id, tx)
 

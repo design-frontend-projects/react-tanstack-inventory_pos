@@ -222,6 +222,30 @@ model TenantAccount {
   productionOutputs        ProductionOutput[]
   reorderRules             ReorderRule[]
   stockSnapshots           StockSnapshot[]
+  domainEvents             DomainEvent[]
+  crmCustomerProfiles      CrmCustomerProfile[]
+  crmCustomerContacts      CrmCustomerContact[]
+  crmCustomerAddresses     CrmCustomerAddress[]
+  crmCustomerRelationships CrmCustomerRelationship[]
+  crmCommunicationConsents CrmCommunicationConsent[]
+  crmCustomerPreferences   CrmCustomerPreference[]
+  crmTags                  CrmTag[]
+  crmCustomerTags          CrmCustomerTag[]
+  crmCustomerGroups        CrmCustomerGroup[]
+  crmCustomerGroupMembers  CrmCustomerGroupMember[]
+  crmCustomFieldDefinitions CrmCustomFieldDefinition[]
+  crmCustomFieldValues     CrmCustomFieldValue[]
+  crmTimelineEntries       CrmTimelineEntry[]
+  crmLoyaltySettings       CrmLoyaltySettings[]
+  crmLoyaltyTiers          CrmLoyaltyTier[]
+  crmLoyaltyAccounts       CrmLoyaltyAccount[]
+  crmLoyaltyLedgerEntries  CrmLoyaltyLedgerEntry[]
+  crmLoyaltyEarnRules      CrmLoyaltyEarnRule[]
+  crmCustomerMetrics       CrmCustomerMetrics[]
+  crmCustomerMetricsMonthly CrmCustomerMetricsMonthly[]
+  crmSegments              CrmSegment[]
+  crmSegmentMembers        CrmSegmentMember[]
+  crmCustomerScores        CrmCustomerScore[]
 
   @@map("tenant_accounts")
 }
@@ -2638,4 +2662,639 @@ model StockSnapshot {
   @@index([tenantId, periodKey], map: "stock_snapshots_tenant_period_idx")
   @@index([tenantId, productId], map: "stock_snapshots_tenant_product_idx")
   @@map("stock_snapshots")
+}
+
+// ============================================================================
+// Enterprise CRM — Spec 003 (Phase 0 event infrastructure). DomainEvent is the
+// module-neutral transactional outbox: source services append a typed event row
+// in the SAME transaction as the business write, so an event exists iff the
+// business change committed. Consumers (currently only the CRM projector) read
+// forward over the bigserial `id` with a per-consumer cursor; delivery is
+// at-least-once and every projection is idempotent (unique sourceEventId /
+// monotonic sequence guards). `eventType` is a string validated by the TS
+// catalog in src/server/events/domain-event-types.ts — new event types must not
+// require a migration. Payload Decimals are serialized as strings.
+// CrmProjectionCursor is global consumer state (one row per consumer, no
+// tenantId — the cursor advances over the cross-tenant sequence).
+// ============================================================================
+
+model DomainEvent {
+  id             BigInt        @id @default(autoincrement())
+  eventId        String        @unique(map: "domain_events_event_id_unique") @default(uuid()) @map("event_id") @db.Uuid
+  tenantId       String        @map("tenant_id") @db.Uuid
+  eventType      String        @map("event_type")
+  aggregateType  String        @map("aggregate_type")
+  aggregateId    String        @map("aggregate_id") @db.Uuid
+  customerId     String?       @map("customer_id") @db.Uuid
+  payloadJson    Json          @map("payload_json")
+  correlationId  String?       @map("correlation_id") @db.Uuid
+  actorProfileId String?       @map("actor_profile_id") @db.Uuid
+  occurredAt     DateTime      @default(now()) @map("occurred_at")
+  createdAt      DateTime      @default(now()) @map("created_at")
+  tenant         TenantAccount @relation(fields: [tenantId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+
+  @@index([tenantId, customerId], map: "domain_events_tenant_customer_idx")
+  @@index([eventType], map: "domain_events_type_idx")
+  @@map("domain_events")
+}
+
+model CrmProjectionCursor {
+  id           String   @id @default(uuid()) @db.Uuid
+  consumerName String   @unique(map: "crm_projection_cursors_consumer_unique") @map("consumer_name")
+  lastSequence BigInt   @default(0) @map("last_sequence")
+  updatedAt    DateTime @updatedAt @map("updated_at")
+
+  @@map("crm_projection_cursors")
+}
+
+// ============================================================================
+// Enterprise CRM — Spec 003 (Phase 1 customer management). The existing
+// `customers` table stays the master; every CRM table is a satellite keyed by a
+// bare `customerId` scalar (app-enforced integrity, same as sales documents).
+// The 1:1 CrmCustomerProfile carries identity/preference attributes only — all
+// computed values live in the intelligence tables (crm_customer_metrics,
+// crm_loyalty_accounts, crm_customer_scores). Consents are current-state rows;
+// their history is the timeline (every change emits crm.consent_changed).
+// ============================================================================
+
+enum CrmLifecycleStatus {
+  PROSPECT @map("prospect")
+  ACTIVE   @map("active")
+  AT_RISK  @map("at_risk")
+  INACTIVE @map("inactive")
+  BLOCKED  @map("blocked")
+
+  @@map("CrmLifecycleStatus")
+}
+
+enum CrmContactType {
+  PHONE  @map("phone")
+  EMAIL  @map("email")
+  SOCIAL @map("social")
+  OTHER  @map("other")
+
+  @@map("CrmContactType")
+}
+
+enum CrmAddressType {
+  BILLING  @map("billing")
+  SHIPPING @map("shipping")
+  DELIVERY @map("delivery")
+  OTHER    @map("other")
+
+  @@map("CrmAddressType")
+}
+
+enum CrmRelationType {
+  FAMILY          @map("family")
+  EMERGENCY       @map("emergency")
+  COMPANY_CONTACT @map("company_contact")
+  REFERRER        @map("referrer")
+  OTHER           @map("other")
+
+  @@map("CrmRelationType")
+}
+
+enum ConsentChannel {
+  EMAIL    @map("email")
+  SMS      @map("sms")
+  PUSH     @map("push")
+  WHATSAPP @map("whatsapp")
+  PHONE    @map("phone")
+
+  @@map("ConsentChannel")
+}
+
+enum ConsentPurpose {
+  MARKETING     @map("marketing")
+  TRANSACTIONAL @map("transactional")
+  SURVEY        @map("survey")
+
+  @@map("ConsentPurpose")
+}
+
+enum ConsentStatus {
+  GRANTED   @map("granted")
+  DENIED    @map("denied")
+  WITHDRAWN @map("withdrawn")
+
+  @@map("ConsentStatus")
+}
+
+enum CrmFieldType {
+  TEXT         @map("text")
+  NUMBER       @map("number")
+  DATE         @map("date")
+  BOOLEAN      @map("boolean")
+  SELECT       @map("select")
+  MULTI_SELECT @map("multi_select")
+
+  @@map("CrmFieldType")
+}
+
+model CrmCustomerProfile {
+  id                 String             @id @default(uuid()) @db.Uuid
+  tenantId           String             @map("tenant_id") @db.Uuid
+  customerId         String             @map("customer_id") @db.Uuid
+  dateOfBirth        DateTime?          @map("date_of_birth") @db.Date
+  anniversaryDate    DateTime?          @map("anniversary_date") @db.Date
+  gender             String?
+  languageCode       String?            @map("language_code")
+  currencyCode       String?            @map("currency_code")
+  timezone           String?
+  lifecycleStatus    CrmLifecycleStatus @default(PROSPECT) @map("lifecycle_status")
+  vipLevel           Int                @default(0) @map("vip_level")
+  classification     String?
+  isCorporate        Boolean            @default(false) @map("is_corporate")
+  companyName        String?            @map("company_name")
+  acquisitionChannel String?            @map("acquisition_channel")
+  notes              String?
+  createdAt          DateTime           @default(now()) @map("created_at")
+  updatedAt          DateTime           @updatedAt @map("updated_at")
+  tenant             TenantAccount      @relation(fields: [tenantId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+
+  @@unique([tenantId, customerId], map: "crm_customer_profiles_tenant_customer_unique")
+  @@index([tenantId, lifecycleStatus], map: "crm_customer_profiles_lifecycle_idx")
+  @@map("crm_customer_profiles")
+}
+
+model CrmCustomerContact {
+  id          String         @id @default(uuid()) @db.Uuid
+  tenantId    String         @map("tenant_id") @db.Uuid
+  customerId  String         @map("customer_id") @db.Uuid
+  contactType CrmContactType @map("contact_type")
+  label       String?
+  value       String
+  isPrimary   Boolean        @default(false) @map("is_primary")
+  isVerified  Boolean        @default(false) @map("is_verified")
+  metaJson    Json?          @map("meta_json")
+  createdAt   DateTime       @default(now()) @map("created_at")
+  updatedAt   DateTime       @updatedAt @map("updated_at")
+  tenant      TenantAccount  @relation(fields: [tenantId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+
+  @@index([tenantId, customerId], map: "crm_customer_contacts_tenant_customer_idx")
+  @@map("crm_customer_contacts")
+}
+
+model CrmCustomerAddress {
+  id                   String         @id @default(uuid()) @db.Uuid
+  tenantId             String         @map("tenant_id") @db.Uuid
+  customerId           String         @map("customer_id") @db.Uuid
+  addressType          CrmAddressType @default(OTHER) @map("address_type")
+  label                String?
+  addressJson          Json           @map("address_json")
+  deliveryInstructions String?        @map("delivery_instructions")
+  latitude             Decimal?       @db.Decimal(9, 6)
+  longitude            Decimal?       @db.Decimal(9, 6)
+  isDefault            Boolean        @default(false) @map("is_default")
+  createdAt            DateTime       @default(now()) @map("created_at")
+  updatedAt            DateTime       @updatedAt @map("updated_at")
+  tenant               TenantAccount  @relation(fields: [tenantId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+
+  @@index([tenantId, customerId], map: "crm_customer_addresses_tenant_customer_idx")
+  @@map("crm_customer_addresses")
+}
+
+model CrmCustomerRelationship {
+  id                String          @id @default(uuid()) @db.Uuid
+  tenantId          String          @map("tenant_id") @db.Uuid
+  customerId        String          @map("customer_id") @db.Uuid
+  relatedCustomerId String?         @map("related_customer_id") @db.Uuid
+  relatedName       String?         @map("related_name")
+  relationType      CrmRelationType @map("relation_type")
+  phone             String?
+  note              String?
+  createdAt         DateTime        @default(now()) @map("created_at")
+  updatedAt         DateTime        @updatedAt @map("updated_at")
+  tenant            TenantAccount   @relation(fields: [tenantId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+
+  @@index([tenantId, customerId], map: "crm_customer_relationships_tenant_customer_idx")
+  @@map("crm_customer_relationships")
+}
+
+model CrmCommunicationConsent {
+  id           String         @id @default(uuid()) @db.Uuid
+  tenantId     String         @map("tenant_id") @db.Uuid
+  customerId   String         @map("customer_id") @db.Uuid
+  channel      ConsentChannel
+  purpose      ConsentPurpose
+  status       ConsentStatus
+  source       String?
+  grantedAt    DateTime?      @map("granted_at")
+  withdrawnAt  DateTime?      @map("withdrawn_at")
+  evidenceJson Json?          @map("evidence_json")
+  createdAt    DateTime       @default(now()) @map("created_at")
+  updatedAt    DateTime       @updatedAt @map("updated_at")
+  tenant       TenantAccount  @relation(fields: [tenantId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+
+  @@unique([tenantId, customerId, channel, purpose], map: "crm_consents_tenant_customer_channel_purpose_unique")
+  @@map("crm_communication_consents")
+}
+
+model CrmCustomerPreference {
+  id         String        @id @default(uuid()) @db.Uuid
+  tenantId   String        @map("tenant_id") @db.Uuid
+  customerId String        @map("customer_id") @db.Uuid
+  prefKey    String        @map("pref_key")
+  valueJson  Json          @map("value_json")
+  createdAt  DateTime      @default(now()) @map("created_at")
+  updatedAt  DateTime      @updatedAt @map("updated_at")
+  tenant     TenantAccount @relation(fields: [tenantId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+
+  @@unique([tenantId, customerId, prefKey], map: "crm_preferences_tenant_customer_key_unique")
+  @@map("crm_customer_preferences")
+}
+
+model CrmTag {
+  id        String           @id @default(uuid()) @db.Uuid
+  tenantId  String           @map("tenant_id") @db.Uuid
+  name      String
+  color     String?
+  createdAt DateTime         @default(now()) @map("created_at")
+  updatedAt DateTime         @updatedAt @map("updated_at")
+  deletedAt DateTime?        @map("deleted_at")
+  tenant    TenantAccount    @relation(fields: [tenantId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  customers CrmCustomerTag[]
+
+  @@unique([tenantId, name], map: "crm_tags_tenant_name_unique")
+  @@map("crm_tags")
+}
+
+model CrmCustomerTag {
+  id         String        @id @default(uuid()) @db.Uuid
+  tenantId   String        @map("tenant_id") @db.Uuid
+  customerId String        @map("customer_id") @db.Uuid
+  tagId      String        @map("tag_id") @db.Uuid
+  createdAt  DateTime      @default(now()) @map("created_at")
+  tenant     TenantAccount @relation(fields: [tenantId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  tag        CrmTag        @relation(fields: [tagId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+
+  @@unique([tenantId, customerId, tagId], map: "crm_customer_tags_tenant_customer_tag_unique")
+  @@index([tenantId, tagId], map: "crm_customer_tags_tenant_tag_idx")
+  @@map("crm_customer_tags")
+}
+
+model CrmCustomerGroup {
+  id          String                   @id @default(uuid()) @db.Uuid
+  tenantId    String                   @map("tenant_id") @db.Uuid
+  code        String
+  name        String
+  description String?
+  createdAt   DateTime                 @default(now()) @map("created_at")
+  updatedAt   DateTime                 @updatedAt @map("updated_at")
+  deletedAt   DateTime?                @map("deleted_at")
+  tenant      TenantAccount            @relation(fields: [tenantId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  members     CrmCustomerGroupMember[]
+
+  @@unique([tenantId, code], map: "crm_customer_groups_tenant_code_unique")
+  @@map("crm_customer_groups")
+}
+
+model CrmCustomerGroupMember {
+  id         String           @id @default(uuid()) @db.Uuid
+  tenantId   String           @map("tenant_id") @db.Uuid
+  groupId    String           @map("group_id") @db.Uuid
+  customerId String           @map("customer_id") @db.Uuid
+  createdAt  DateTime         @default(now()) @map("created_at")
+  tenant     TenantAccount    @relation(fields: [tenantId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  group      CrmCustomerGroup @relation(fields: [groupId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+
+  @@unique([tenantId, groupId, customerId], map: "crm_group_members_tenant_group_customer_unique")
+  @@index([tenantId, customerId], map: "crm_group_members_tenant_customer_idx")
+  @@map("crm_customer_group_members")
+}
+
+model CrmCustomFieldDefinition {
+  id           String                @id @default(uuid()) @db.Uuid
+  tenantId     String                @map("tenant_id") @db.Uuid
+  entityType   String                @default("customer") @map("entity_type")
+  fieldKey     String                @map("field_key")
+  label        String
+  fieldType    CrmFieldType          @map("field_type")
+  optionsJson  Json?                 @map("options_json")
+  isRequired   Boolean               @default(false) @map("is_required")
+  displayOrder Int                   @default(0) @map("display_order")
+  createdAt    DateTime              @default(now()) @map("created_at")
+  updatedAt    DateTime              @updatedAt @map("updated_at")
+  deletedAt    DateTime?             @map("deleted_at")
+  tenant       TenantAccount         @relation(fields: [tenantId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  values       CrmCustomFieldValue[]
+
+  @@unique([tenantId, entityType, fieldKey], map: "crm_custom_fields_tenant_entity_key_unique")
+  @@map("crm_custom_field_definitions")
+}
+
+model CrmCustomFieldValue {
+  id           String                   @id @default(uuid()) @db.Uuid
+  tenantId     String                   @map("tenant_id") @db.Uuid
+  definitionId String                   @map("definition_id") @db.Uuid
+  customerId   String                   @map("customer_id") @db.Uuid
+  valueJson    Json                     @map("value_json")
+  createdAt    DateTime                 @default(now()) @map("created_at")
+  updatedAt    DateTime                 @updatedAt @map("updated_at")
+  tenant       TenantAccount            @relation(fields: [tenantId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  definition   CrmCustomFieldDefinition @relation(fields: [definitionId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+
+  @@unique([tenantId, definitionId, customerId], map: "crm_custom_field_values_tenant_def_customer_unique")
+  @@index([tenantId, customerId], map: "crm_custom_field_values_tenant_customer_idx")
+  @@map("crm_custom_field_values")
+}
+
+// ============================================================================
+// Enterprise CRM — Spec 003 (Phase 2 timeline). Append-only chronological feed
+// per customer, written by the projector from domain events (sourceEventId is
+// the idempotency key — replaying an event is a no-op) plus manual notes
+// (sourceEventId null, createdByProfileId set). summaryJson is a small display
+// payload; refType/refId deep-link to the owning aggregate. Never the source of
+// truth for anything — safe to rebuild from the outbox.
+// ============================================================================
+
+model CrmTimelineEntry {
+  id                 String        @id @default(uuid()) @db.Uuid
+  tenantId           String        @map("tenant_id") @db.Uuid
+  customerId         String        @map("customer_id") @db.Uuid
+  entryType          String        @map("entry_type")
+  title              String
+  summaryJson        Json?         @map("summary_json")
+  refType            String?       @map("ref_type")
+  refId              String?       @map("ref_id") @db.Uuid
+  sourceEventId      String?       @unique(map: "crm_timeline_entries_source_event_unique") @map("source_event_id") @db.Uuid
+  occurredAt         DateTime      @map("occurred_at")
+  createdByProfileId String?       @map("created_by_profile_id") @db.Uuid
+  createdAt          DateTime      @default(now()) @map("created_at")
+  tenant             TenantAccount @relation(fields: [tenantId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+
+  @@index([tenantId, customerId, occurredAt(sort: Desc)], map: "crm_timeline_tenant_customer_time_idx")
+  @@map("crm_timeline_entries")
+}
+
+// ============================================================================
+// Enterprise CRM — Spec 003 (Phase 3 loyalty). The ledger is the source of
+// truth: every balance change appends a signed CrmLoyaltyLedgerEntry and
+// mutates CrmLoyaltyAccount.pointsBalance in the SAME transaction under a row
+// lock (invariant: sum(ledger.points) == account.pointsBalance). Redemption is
+// synchronous (a customer cannot spend the same points twice); earning is
+// folded from domain events by the projector, deduplicated by the unique
+// sourceEventId. EARN/BONUS rows are FIFO expiry lots: remainingPoints tracks
+// what redemption/expiry has not yet consumed. Customer.loyaltyPoints is a
+// DEPRECATED read cache mirrored from the account by the projector.
+// ============================================================================
+
+enum LoyaltyEntryType {
+  EARN     @map("earn")
+  REDEEM   @map("redeem")
+  ADJUST   @map("adjust")
+  EXPIRE   @map("expire")
+  BONUS    @map("bonus")
+  REVERSAL @map("reversal")
+
+  @@map("LoyaltyEntryType")
+}
+
+enum LoyaltyRuleType {
+  BASE           @map("base")
+  CATEGORY_BONUS @map("category_bonus")
+  PRODUCT_BONUS  @map("product_bonus")
+  BIRTHDAY       @map("birthday")
+  ANNIVERSARY    @map("anniversary")
+  CHANNEL        @map("channel")
+
+  @@map("LoyaltyRuleType")
+}
+
+model CrmLoyaltySettings {
+  id                      String        @id @default(uuid()) @db.Uuid
+  tenantId                String        @map("tenant_id") @db.Uuid
+  pointsPerCurrencyUnit   Decimal       @default(1) @map("points_per_currency_unit") @db.Decimal(9, 6)
+  redemptionValuePerPoint Decimal       @default(0.01) @map("redemption_value_per_point") @db.Decimal(9, 6)
+  minRedeemPoints         Int           @default(0) @map("min_redeem_points")
+  expiryMonths            Int?          @map("expiry_months")
+  birthdayBonusPoints     Int           @default(0) @map("birthday_bonus_points")
+  anniversaryBonusPoints  Int           @default(0) @map("anniversary_bonus_points")
+  isActive                Boolean       @default(true) @map("is_active")
+  createdAt               DateTime      @default(now()) @map("created_at")
+  updatedAt               DateTime      @updatedAt @map("updated_at")
+  tenant                  TenantAccount @relation(fields: [tenantId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+
+  @@unique([tenantId], map: "crm_loyalty_settings_tenant_unique")
+  @@map("crm_loyalty_settings")
+}
+
+model CrmLoyaltyTier {
+  id                String        @id @default(uuid()) @db.Uuid
+  tenantId          String        @map("tenant_id") @db.Uuid
+  code              String
+  name              String
+  rank              Int           @default(0)
+  minLifetimePoints Int           @default(0) @map("min_lifetime_points")
+  minAnnualSpend    Decimal?      @map("min_annual_spend") @db.Decimal(19, 4)
+  earnMultiplier    Decimal       @default(1) @map("earn_multiplier") @db.Decimal(9, 6)
+  benefitsJson      Json?         @map("benefits_json")
+  createdAt         DateTime      @default(now()) @map("created_at")
+  updatedAt         DateTime      @updatedAt @map("updated_at")
+  deletedAt         DateTime?     @map("deleted_at")
+  tenant            TenantAccount @relation(fields: [tenantId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+
+  @@unique([tenantId, code], map: "crm_loyalty_tiers_tenant_code_unique")
+  @@index([tenantId, rank], map: "crm_loyalty_tiers_tenant_rank_idx")
+  @@map("crm_loyalty_tiers")
+}
+
+model CrmLoyaltyAccount {
+  id             String                  @id @default(uuid()) @db.Uuid
+  tenantId       String                  @map("tenant_id") @db.Uuid
+  customerId     String                  @map("customer_id") @db.Uuid
+  tierId         String?                 @map("tier_id") @db.Uuid
+  pointsBalance  Int                     @default(0) @map("points_balance")
+  lifetimePoints Int                     @default(0) @map("lifetime_points")
+  walletBalance  Decimal                 @default(0) @map("wallet_balance") @db.Decimal(19, 4)
+  tierAchievedAt DateTime?               @map("tier_achieved_at")
+  createdAt      DateTime                @default(now()) @map("created_at")
+  updatedAt      DateTime                @updatedAt @map("updated_at")
+  tenant         TenantAccount           @relation(fields: [tenantId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  ledgerEntries  CrmLoyaltyLedgerEntry[]
+
+  @@unique([tenantId, customerId], map: "crm_loyalty_accounts_tenant_customer_unique")
+  @@map("crm_loyalty_accounts")
+}
+
+model CrmLoyaltyLedgerEntry {
+  id                 String            @id @default(uuid()) @db.Uuid
+  tenantId           String            @map("tenant_id") @db.Uuid
+  accountId          String            @map("account_id") @db.Uuid
+  customerId         String            @map("customer_id") @db.Uuid
+  entryType          LoyaltyEntryType  @map("entry_type")
+  points             Int
+  walletAmount       Decimal?          @map("wallet_amount") @db.Decimal(19, 4)
+  sourceEventId      String?           @unique(map: "crm_loyalty_ledger_source_event_unique") @map("source_event_id") @db.Uuid
+  refType            String?           @map("ref_type")
+  refId              String?           @map("ref_id") @db.Uuid
+  expiresAt          DateTime?         @map("expires_at")
+  remainingPoints    Int?              @map("remaining_points")
+  note               String?
+  createdByProfileId String?           @map("created_by_profile_id") @db.Uuid
+  createdAt          DateTime          @default(now()) @map("created_at")
+  tenant             TenantAccount     @relation(fields: [tenantId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  account            CrmLoyaltyAccount @relation(fields: [accountId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+
+  @@index([tenantId, customerId, createdAt], map: "crm_loyalty_ledger_tenant_customer_time_idx")
+  @@index([tenantId, expiresAt], map: "crm_loyalty_ledger_tenant_expiry_idx")
+  @@map("crm_loyalty_ledger")
+}
+
+model CrmLoyaltyEarnRule {
+  id             String          @id @default(uuid()) @db.Uuid
+  tenantId       String          @map("tenant_id") @db.Uuid
+  name           String
+  ruleType       LoyaltyRuleType @map("rule_type")
+  conditionsJson Json?           @map("conditions_json")
+  multiplier     Decimal?        @db.Decimal(9, 6)
+  fixedPoints    Int?            @map("fixed_points")
+  validFrom      DateTime?       @map("valid_from")
+  validTo        DateTime?       @map("valid_to")
+  priority       Int             @default(0)
+  isActive       Boolean         @default(true) @map("is_active")
+  createdAt      DateTime        @default(now()) @map("created_at")
+  updatedAt      DateTime        @updatedAt @map("updated_at")
+  deletedAt      DateTime?       @map("deleted_at")
+  tenant         TenantAccount   @relation(fields: [tenantId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+
+  @@index([tenantId, isActive], map: "crm_loyalty_earn_rules_tenant_active_idx")
+  @@map("crm_loyalty_earn_rules")
+}
+
+// ============================================================================
+// Enterprise CRM — Spec 003 (Phase 4 customer intelligence). CrmCustomerMetrics
+// is the per-customer materialized projection (the StockBalance of CRM): folded
+// incrementally per domain event by the metrics projection, guarded by the
+// monotonic lastEventSequence (an event with id <= lastEventSequence is a
+// replay and is skipped). favoritesJson holds the top-N counters the favorite_*
+// columns are derived from. Monthly rows provide trend series per periodKey
+// (YYYY-MM) without ledger replay. Dashboards read these tables only.
+// ============================================================================
+
+model CrmCustomerMetrics {
+  id                    String        @id @default(uuid()) @db.Uuid
+  tenantId              String        @map("tenant_id") @db.Uuid
+  customerId            String        @map("customer_id") @db.Uuid
+  firstPurchaseAt       DateTime?     @map("first_purchase_at")
+  lastPurchaseAt        DateTime?     @map("last_purchase_at")
+  ordersCount           Int           @default(0) @map("orders_count")
+  totalSpend            Decimal       @default(0) @map("total_spend") @db.Decimal(19, 4)
+  avgOrderValue         Decimal       @default(0) @map("avg_order_value") @db.Decimal(19, 4)
+  returnsCount          Int           @default(0) @map("returns_count")
+  returnsValue          Decimal       @default(0) @map("returns_value") @db.Decimal(19, 4)
+  visitCount            Int           @default(0) @map("visit_count")
+  favoriteProductId     String?       @map("favorite_product_id") @db.Uuid
+  favoriteCategoryId    String?       @map("favorite_category_id") @db.Uuid
+  favoriteWarehouseId   String?       @map("favorite_warehouse_id") @db.Uuid
+  favoritePaymentMethod String?       @map("favorite_payment_method")
+  favoritesJson         Json?         @map("favorites_json")
+  rfmRecency            Int?          @map("rfm_recency")
+  rfmFrequency          Int?          @map("rfm_frequency")
+  rfmMonetary           Int?          @map("rfm_monetary")
+  rfmSegment            String?       @map("rfm_segment")
+  churnScore            Decimal?      @map("churn_score") @db.Decimal(9, 6)
+  clvEstimate           Decimal?      @map("clv_estimate") @db.Decimal(19, 4)
+  lastEventSequence     BigInt        @default(0) @map("last_event_sequence")
+  updatedAt             DateTime      @updatedAt @map("updated_at")
+  tenant                TenantAccount @relation(fields: [tenantId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+
+  @@unique([tenantId, customerId], map: "crm_customer_metrics_tenant_customer_unique")
+  @@index([tenantId, totalSpend(sort: Desc)], map: "crm_customer_metrics_tenant_spend_idx")
+  @@index([tenantId, lastPurchaseAt], map: "crm_customer_metrics_tenant_recency_idx")
+  @@map("crm_customer_metrics")
+}
+
+model CrmCustomerMetricsMonthly {
+  id           String        @id @default(uuid()) @db.Uuid
+  tenantId     String        @map("tenant_id") @db.Uuid
+  customerId   String        @map("customer_id") @db.Uuid
+  periodKey    String        @map("period_key")
+  ordersCount  Int           @default(0) @map("orders_count")
+  spend        Decimal       @default(0) @db.Decimal(19, 4)
+  pointsEarned Int           @default(0) @map("points_earned")
+  createdAt    DateTime      @default(now()) @map("created_at")
+  updatedAt    DateTime      @updatedAt @map("updated_at")
+  tenant       TenantAccount @relation(fields: [tenantId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+
+  @@unique([tenantId, customerId, periodKey], map: "crm_metrics_monthly_tenant_customer_period_unique")
+  @@index([tenantId, periodKey], map: "crm_metrics_monthly_tenant_period_idx")
+  @@map("crm_customer_metrics_monthly")
+}
+
+// ============================================================================
+// Enterprise CRM — Spec 003 (Phase 5 segmentation). A segment is a declarative
+// rule (ruleJson: a tree of and/or over comparison conditions on the flat
+// CustomerFacts projection). Membership is materialized in CrmSegmentMember and
+// kept current by the segment projection: after each event folds into metrics,
+// the affected customer is re-evaluated and enter/exit transitions emit
+// crm.segment_entered/.exited events (which flow to the timeline). memberCount
+// is a cache; a full rebuild recomputes it.
+// ============================================================================
+
+model CrmSegment {
+  id            String             @id @default(uuid()) @db.Uuid
+  tenantId      String             @map("tenant_id") @db.Uuid
+  code          String
+  name          String
+  description   String?
+  ruleJson      Json               @map("rule_json")
+  isSystem      Boolean            @default(false) @map("is_system")
+  isActive      Boolean            @default(true) @map("is_active")
+  memberCount   Int                @default(0) @map("member_count")
+  lastRebuiltAt DateTime?          @map("last_rebuilt_at")
+  createdAt     DateTime           @default(now()) @map("created_at")
+  updatedAt     DateTime           @updatedAt @map("updated_at")
+  deletedAt     DateTime?          @map("deleted_at")
+  tenant        TenantAccount      @relation(fields: [tenantId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  members       CrmSegmentMember[]
+
+  @@unique([tenantId, code], map: "crm_segments_tenant_code_unique")
+  @@index([tenantId, isActive], map: "crm_segments_tenant_active_idx")
+  @@map("crm_segments")
+}
+
+model CrmSegmentMember {
+  id         String        @id @default(uuid()) @db.Uuid
+  tenantId   String        @map("tenant_id") @db.Uuid
+  segmentId  String        @map("segment_id") @db.Uuid
+  customerId String        @map("customer_id") @db.Uuid
+  addedAt    DateTime      @default(now()) @map("added_at")
+  tenant     TenantAccount @relation(fields: [tenantId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  segment    CrmSegment    @relation(fields: [segmentId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+
+  @@unique([tenantId, segmentId, customerId], map: "crm_segment_members_tenant_segment_customer_unique")
+  @@index([tenantId, customerId], map: "crm_segment_members_tenant_customer_idx")
+  @@map("crm_segment_members")
+}
+
+// ============================================================================
+// Enterprise CRM — Spec 003 (Phase 6 AI-ready scores). Model-agnostic
+// prediction store: one row per (tenant, customer, scoreType). Producers upsert
+// (`score` for scalar risk, `payloadJson` for ranked recommendations); model
+// metadata + featuresJson snapshot make predictions auditable/reproducible.
+// The Phase 4 churn heuristic writes scoreType='churn', modelName='heuristic-v1'
+// as the proof-of-contract; future ML pipelines write the same shape without a
+// migration.
+// ============================================================================
+
+model CrmCustomerScore {
+  id           String        @id @default(uuid()) @db.Uuid
+  tenantId     String        @map("tenant_id") @db.Uuid
+  customerId   String        @map("customer_id") @db.Uuid
+  scoreType    String        @map("score_type")
+  score        Decimal?      @db.Decimal(9, 6)
+  payloadJson  Json?         @map("payload_json")
+  modelName    String        @map("model_name")
+  modelVersion String        @map("model_version")
+  featuresJson Json?         @map("features_json")
+  computedAt   DateTime      @default(now()) @map("computed_at")
+  createdAt    DateTime      @default(now()) @map("created_at")
+  updatedAt    DateTime      @updatedAt @map("updated_at")
+  tenant       TenantAccount @relation(fields: [tenantId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+
+  @@unique([tenantId, customerId, scoreType], map: "crm_customer_scores_tenant_customer_type_unique")
+  @@index([tenantId, scoreType, score(sort: Desc)], map: "crm_customer_scores_tenant_type_score_idx")
+  @@map("crm_customer_scores")
 }

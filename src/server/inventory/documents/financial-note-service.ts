@@ -1,4 +1,5 @@
 import { ConflictError, NotFoundError } from '#/server/auth/errors'
+import { appendDomainEvent } from '#/server/events/event-outbox'
 import { nextDocumentNumber } from '#/server/inventory/document-number-service'
 import { serializeFinancialNote } from '#/server/inventory/returns-dto'
 import { assertTransition } from '#/server/inventory/state-machine'
@@ -54,6 +55,19 @@ export async function createCreditNoteFromReturn(
     // The return has been financially settled by the note.
     if (salesReturn.status.toLowerCase() === 'received') {
       await salesReturnRepo.updateSalesReturnStatus(tenantId, salesReturn.id, 'CREDITED', tx)
+
+      await appendDomainEvent(tx, {
+        tenantId,
+        eventType: 'sales_return.credited',
+        aggregateType: 'sales_return',
+        aggregateId: salesReturn.id,
+        customerId: salesReturn.customerId,
+        payload: {
+          documentNumber: salesReturn.documentNumber,
+          refundTotal: salesReturn.grandTotal.toString(),
+        },
+        actorProfileId: context.profileId,
+      })
     }
 
     await createAuditLog(
@@ -155,15 +169,35 @@ export async function issueNote(
   }
 
   assertTransition('note', note.status.toLowerCase(), 'issued')
-  await noteRepo.issueNote(tenantId, id)
 
-  await createAuditLog({
-    tenantId,
-    actorProfileId: context.profileId,
-    actorEmail: context.email,
-    actionKey: 'note.issue',
-    entityType: 'financial_note',
-    entityId: id,
+  await prisma.$transaction(async (tx) => {
+    await noteRepo.issueNote(tenantId, id, tx)
+
+    await createAuditLog(
+      {
+        tenantId,
+        actorProfileId: context.profileId,
+        actorEmail: context.email,
+        actionKey: 'note.issue',
+        entityType: 'financial_note',
+        entityId: id,
+      },
+      tx
+    )
+
+    await appendDomainEvent(tx, {
+      tenantId,
+      eventType: 'financial_note.issued',
+      aggregateType: 'financial_note',
+      aggregateId: note.id,
+      customerId: note.customerId,
+      payload: {
+        documentNumber: note.documentNumber,
+        noteType: note.noteType,
+        amount: note.amount.toString(),
+      },
+      actorProfileId: context.profileId,
+    })
   })
 
   const refreshed = await noteRepo.findNoteById(tenantId, id)

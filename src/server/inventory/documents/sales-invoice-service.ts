@@ -1,4 +1,5 @@
 import { ConflictError, NotFoundError } from '#/server/auth/errors'
+import { appendDomainEvent } from '#/server/events/event-outbox'
 import { nextDocumentNumber } from '#/server/inventory/document-number-service'
 import { serializeSalesInvoice } from '#/server/inventory/sales-dto'
 import { assertTransition } from '#/server/inventory/state-machine'
@@ -99,15 +100,34 @@ export async function issueInvoice(
   }
 
   assertTransition('salesInvoice', invoice.status.toLowerCase(), 'issued')
-  await invoiceRepo.updateInvoiceStatus(tenantId, id, 'ISSUED')
 
-  await createAuditLog({
-    tenantId,
-    actorProfileId: context.profileId,
-    actorEmail: context.email,
-    actionKey: 'sales.invoice_issue',
-    entityType: 'sales_invoice',
-    entityId: id,
+  await prisma.$transaction(async (tx) => {
+    await invoiceRepo.updateInvoiceStatus(tenantId, id, 'ISSUED', tx)
+
+    await createAuditLog(
+      {
+        tenantId,
+        actorProfileId: context.profileId,
+        actorEmail: context.email,
+        actionKey: 'sales.invoice_issue',
+        entityType: 'sales_invoice',
+        entityId: id,
+      },
+      tx
+    )
+
+    await appendDomainEvent(tx, {
+      tenantId,
+      eventType: 'sales_invoice.issued',
+      aggregateType: 'sales_invoice',
+      aggregateId: invoice.id,
+      customerId: invoice.customerId,
+      payload: {
+        documentNumber: invoice.documentNumber,
+        grandTotal: invoice.grandTotal.toString(),
+      },
+      actorProfileId: context.profileId,
+    })
   })
 
   const refreshed = await invoiceRepo.findInvoiceById(tenantId, id)
@@ -161,6 +181,22 @@ export async function recordInvoicePayment(
       },
       tx
     )
+
+    if (target === 'paid') {
+      await appendDomainEvent(tx, {
+        tenantId,
+        eventType: 'sales_invoice.paid',
+        aggregateType: 'sales_invoice',
+        aggregateId: invoice.id,
+        customerId: invoice.customerId,
+        payload: {
+          documentNumber: invoice.documentNumber,
+          grandTotal: grandTotal.toString(),
+          amountPaid: newAmountPaid.toString(),
+        },
+        actorProfileId: context.profileId,
+      })
+    }
 
     const refreshed = await invoiceRepo.findInvoiceById(tenantId, id, tx)
 

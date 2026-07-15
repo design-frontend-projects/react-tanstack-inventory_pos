@@ -1,4 +1,5 @@
 import { NotFoundError } from '#/server/auth/errors'
+import { appendDomainEvent } from '#/server/events/event-outbox'
 import {
   serializeCustomer,
   serializeProduct,
@@ -6,6 +7,7 @@ import {
   serializeSupplier,
   serializeTaxRate,
 } from '#/server/inventory/catalog-dto'
+import { prisma } from '#/server/db/client'
 import { createAuditLog } from '#/server/repos/audit-log-repo'
 import * as brandRepo from '#/server/repos/brand-repo'
 import * as categoryRepo from '#/server/repos/category-repo'
@@ -336,9 +338,39 @@ export async function createCustomer(
   tenantId: string,
   input: customerRepo.CustomerWriteInput
 ) {
-  const customer = await customerRepo.createCustomer(tenantId, input)
-  await audit(context, tenantId, 'customer.manage', 'customer', customer.id, {
-    code: customer.code,
+  const customer = await prisma.$transaction(async (tx) => {
+    const created = await customerRepo.createCustomer(tenantId, input, tx)
+
+    await createAuditLog(
+      {
+        tenantId,
+        actorProfileId: context.profileId,
+        actorEmail: context.email,
+        actionKey: 'customer.manage',
+        entityType: 'customer',
+        entityId: created.id,
+        newValues: { code: created.code },
+      },
+      tx
+    )
+
+    await appendDomainEvent(tx, {
+      tenantId,
+      eventType: 'customer.created',
+      aggregateType: 'customer',
+      aggregateId: created.id,
+      customerId: created.id,
+      payload: {
+        code: created.code,
+        name: created.name,
+        customerType: created.customerType,
+        email: created.email,
+        phone: created.phone,
+      },
+      actorProfileId: context.profileId,
+    })
+
+    return created
   })
 
   return serializeCustomer(customer)
@@ -350,13 +382,44 @@ export async function updateCustomer(
   id: string,
   input: Partial<customerRepo.CustomerWriteInput>
 ) {
-  const customer = await customerRepo.updateCustomer(tenantId, id, input)
+  const customer = await prisma.$transaction(async (tx) => {
+    const updated = await customerRepo.updateCustomer(tenantId, id, input, tx)
 
-  if (!customer) {
-    throw new NotFoundError('Customer not found.')
-  }
+    if (!updated) {
+      throw new NotFoundError('Customer not found.')
+    }
 
-  await audit(context, tenantId, 'customer.manage', 'customer', customer.id, null)
+    await createAuditLog(
+      {
+        tenantId,
+        actorProfileId: context.profileId,
+        actorEmail: context.email,
+        actionKey: 'customer.manage',
+        entityType: 'customer',
+        entityId: updated.id,
+        newValues: null,
+      },
+      tx
+    )
+
+    await appendDomainEvent(tx, {
+      tenantId,
+      eventType: 'customer.updated',
+      aggregateType: 'customer',
+      aggregateId: updated.id,
+      customerId: updated.id,
+      payload: {
+        code: updated.code,
+        name: updated.name,
+        customerType: updated.customerType,
+        email: updated.email,
+        phone: updated.phone,
+      },
+      actorProfileId: context.profileId,
+    })
+
+    return updated
+  })
 
   return serializeCustomer(customer)
 }

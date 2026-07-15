@@ -1,4 +1,5 @@
 import { ConflictError, NotFoundError } from '#/server/auth/errors'
+import { appendDomainEvent } from '#/server/events/event-outbox'
 import { nextDocumentNumber } from '#/server/inventory/document-number-service'
 import { serializePosSale } from '#/server/inventory/sales-dto'
 import { postMovement } from '#/server/inventory/movement-engine'
@@ -205,6 +206,35 @@ export async function completePosSale(
         tx
       )
 
+      await appendDomainEvent(tx, {
+        tenantId,
+        eventType: 'pos_sale.completed',
+        aggregateType: 'pos_sale',
+        aggregateId: sale.id,
+        customerId: sale.customerId,
+        payload: {
+          documentNumber: sale.documentNumber,
+          warehouseId: sale.warehouseId,
+          orderType: sale.orderType,
+          currencyCode: sale.currencyCode,
+          subtotal: sale.subtotal.toString(),
+          discountTotal: sale.discountTotal.toString(),
+          taxTotal: sale.taxTotal.toString(),
+          grandTotal: sale.grandTotal.toString(),
+          amountPaid: amountPaid.toString(),
+          paymentMethods: payments.map((payment) => payment.method),
+          lines: sale.lines.map((line) => ({
+            productId: line.productId,
+            variantId: line.variantId,
+            quantity: line.quantity.toString(),
+            unitPrice: line.unitPrice.toString(),
+            lineTotal: line.lineTotal.toString(),
+          })),
+        },
+        correlationId: sale.correlationId,
+        actorProfileId: context.profileId,
+      })
+
       const refreshed = await saleRepo.findSaleById(tenantId, id, tx)
 
       return refreshed!
@@ -227,15 +257,32 @@ export async function voidPosSale(
   }
 
   assertTransition('posSale', sale.status.toLowerCase(), 'voided')
-  await saleRepo.updateSaleStatus(tenantId, id, 'VOIDED')
 
-  await createAuditLog({
-    tenantId,
-    actorProfileId: context.profileId,
-    actorEmail: context.email,
-    actionKey: 'pos.sale_void',
-    entityType: 'pos_sale',
-    entityId: id,
+  await prisma.$transaction(async (tx) => {
+    await saleRepo.updateSaleStatus(tenantId, id, 'VOIDED', tx)
+
+    await createAuditLog(
+      {
+        tenantId,
+        actorProfileId: context.profileId,
+        actorEmail: context.email,
+        actionKey: 'pos.sale_void',
+        entityType: 'pos_sale',
+        entityId: id,
+      },
+      tx
+    )
+
+    await appendDomainEvent(tx, {
+      tenantId,
+      eventType: 'pos_sale.voided',
+      aggregateType: 'pos_sale',
+      aggregateId: sale.id,
+      customerId: sale.customerId,
+      payload: { documentNumber: sale.documentNumber },
+      correlationId: sale.correlationId,
+      actorProfileId: context.profileId,
+    })
   })
 
   const refreshed = await saleRepo.findSaleById(tenantId, id)

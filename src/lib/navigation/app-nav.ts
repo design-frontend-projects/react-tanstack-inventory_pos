@@ -1,9 +1,12 @@
 import type { LucideIcon } from 'lucide-react'
 import {
+  Award,
   BellRing,
   Boxes,
+  ChartSpline,
   ChefHat,
   ClipboardList,
+  HeartHandshake,
   LayoutDashboard,
   MapPinned,
   PackageSearch,
@@ -27,6 +30,10 @@ export type AppNavRouteTo =
   | '/pos'
   | '/pos/orders'
   | '/pos/returns'
+  | '/crm/customers'
+  | '/crm/loyalty'
+  | '/crm/segments'
+  | '/crm/analytics'
   | '/profile'
   | '/settings/security'
   | '/settings/roles'
@@ -41,6 +48,7 @@ export type AppNavSectionId =
   | 'inventory'
   | 'restaurant'
   | 'pos'
+  | 'crm'
   | 'systemAdmin'
 
 export type AppCommandGroup = 'navigation' | 'pages' | 'workspaces'
@@ -222,6 +230,57 @@ export const appNavSections: AppNavSection[] = [
         fallbackTitle: 'Returns',
         keywords: ['returns', 'refunds', 'voids', 'exceptions'],
         permissions: ['dashboard.view', 'res.orders.cancel'],
+      },
+    ],
+  },
+  {
+    id: 'crm',
+    icon: HeartHandshake,
+    titleKey: 'nav.crm',
+    fallbackTitle: 'CRM',
+    rootTo: '/crm/customers',
+    keywords: ['crm', 'customers', 'loyalty', 'segments', 'analytics'],
+    permissions: ['crm.view', 'crm.loyalty_view'],
+    items: [
+      {
+        id: 'crm-customers',
+        sectionId: 'crm',
+        to: '/crm/customers',
+        icon: HeartHandshake,
+        titleKey: 'nav.crmCustomers',
+        fallbackTitle: 'Customers 360',
+        keywords: ['crm', 'customers', '360', 'profiles', 'timeline', 'consent'],
+        permissions: ['crm.view'],
+      },
+      {
+        id: 'crm-loyalty',
+        sectionId: 'crm',
+        to: '/crm/loyalty',
+        icon: Award,
+        titleKey: 'nav.crmLoyalty',
+        fallbackTitle: 'Loyalty',
+        keywords: ['loyalty', 'points', 'tiers', 'rewards', 'wallet'],
+        permissions: ['crm.loyalty_view'],
+      },
+      {
+        id: 'crm-segments',
+        sectionId: 'crm',
+        to: '/crm/segments',
+        icon: UsersRound,
+        titleKey: 'nav.crmSegments',
+        fallbackTitle: 'Segments',
+        keywords: ['segments', 'audiences', 'targeting', 'rules'],
+        permissions: ['crm.segment_view'],
+      },
+      {
+        id: 'crm-analytics',
+        sectionId: 'crm',
+        to: '/crm/analytics',
+        icon: ChartSpline,
+        titleKey: 'nav.crmAnalytics',
+        fallbackTitle: 'Customer Analytics',
+        keywords: ['analytics', 'clv', 'rfm', 'churn', 'retention', 'kpis'],
+        permissions: ['crm.analytics_view'],
       },
     ],
   },

@@ -39,6 +39,10 @@ import { Route as AppPosReturnsRouteImport } from './routes/_app/pos/returns'
 import { Route as AppPosOrdersRouteImport } from './routes/_app/pos/orders'
 import { Route as AppInventoryStockRouteImport } from './routes/_app/inventory/stock'
 import { Route as AppInventoryCatalogRouteImport } from './routes/_app/inventory/catalog'
+import { Route as AppCrmSegmentsRouteImport } from './routes/_app/crm/segments'
+import { Route as AppCrmLoyaltyRouteImport } from './routes/_app/crm/loyalty'
+import { Route as AppCrmCustomersRouteImport } from './routes/_app/crm/customers'
+import { Route as AppCrmAnalyticsRouteImport } from './routes/_app/crm/analytics'
 
 const AboutRoute = AboutRouteImport.update({
   id: '/about',
@@ -189,6 +193,26 @@ const AppInventoryCatalogRoute = AppInventoryCatalogRouteImport.update({
   path: '/inventory/catalog',
   getParentRoute: () => AppRoute,
 } as any)
+const AppCrmSegmentsRoute = AppCrmSegmentsRouteImport.update({
+  id: '/crm/segments',
+  path: '/crm/segments',
+  getParentRoute: () => AppRoute,
+} as any)
+const AppCrmLoyaltyRoute = AppCrmLoyaltyRouteImport.update({
+  id: '/crm/loyalty',
+  path: '/crm/loyalty',
+  getParentRoute: () => AppRoute,
+} as any)
+const AppCrmCustomersRoute = AppCrmCustomersRouteImport.update({
+  id: '/crm/customers',
+  path: '/crm/customers',
+  getParentRoute: () => AppRoute,
+} as any)
+const AppCrmAnalyticsRoute = AppCrmAnalyticsRouteImport.update({
+  id: '/crm/analytics',
+  path: '/crm/analytics',
+  getParentRoute: () => AppRoute,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
@@ -202,6 +226,10 @@ export interface FileRoutesByFullPath {
   '/select-tenant': typeof AuthSelectTenantRoute
   '/sign-in': typeof AuthSignInRoute
   '/sign-up': typeof AuthSignUpRoute
+  '/crm/analytics': typeof AppCrmAnalyticsRoute
+  '/crm/customers': typeof AppCrmCustomersRoute
+  '/crm/loyalty': typeof AppCrmLoyaltyRoute
+  '/crm/segments': typeof AppCrmSegmentsRoute
   '/inventory/catalog': typeof AppInventoryCatalogRoute
   '/inventory/stock': typeof AppInventoryStockRoute
   '/pos/orders': typeof AppPosOrdersRoute
@@ -232,6 +260,10 @@ export interface FileRoutesByTo {
   '/select-tenant': typeof AuthSelectTenantRoute
   '/sign-in': typeof AuthSignInRoute
   '/sign-up': typeof AuthSignUpRoute
+  '/crm/analytics': typeof AppCrmAnalyticsRoute
+  '/crm/customers': typeof AppCrmCustomersRoute
+  '/crm/loyalty': typeof AppCrmLoyaltyRoute
+  '/crm/segments': typeof AppCrmSegmentsRoute
   '/inventory/catalog': typeof AppInventoryCatalogRoute
   '/inventory/stock': typeof AppInventoryStockRoute
   '/pos/orders': typeof AppPosOrdersRoute
@@ -265,6 +297,10 @@ export interface FileRoutesById {
   '/_auth/select-tenant': typeof AuthSelectTenantRoute
   '/_auth/sign-in': typeof AuthSignInRoute
   '/_auth/sign-up': typeof AuthSignUpRoute
+  '/_app/crm/analytics': typeof AppCrmAnalyticsRoute
+  '/_app/crm/customers': typeof AppCrmCustomersRoute
+  '/_app/crm/loyalty': typeof AppCrmLoyaltyRoute
+  '/_app/crm/segments': typeof AppCrmSegmentsRoute
   '/_app/inventory/catalog': typeof AppInventoryCatalogRoute
   '/_app/inventory/stock': typeof AppInventoryStockRoute
   '/_app/pos/orders': typeof AppPosOrdersRoute
@@ -297,6 +333,10 @@ export interface FileRouteTypes {
     | '/select-tenant'
     | '/sign-in'
     | '/sign-up'
+    | '/crm/analytics'
+    | '/crm/customers'
+    | '/crm/loyalty'
+    | '/crm/segments'
     | '/inventory/catalog'
     | '/inventory/stock'
     | '/pos/orders'
@@ -327,6 +367,10 @@ export interface FileRouteTypes {
     | '/select-tenant'
     | '/sign-in'
     | '/sign-up'
+    | '/crm/analytics'
+    | '/crm/customers'
+    | '/crm/loyalty'
+    | '/crm/segments'
     | '/inventory/catalog'
     | '/inventory/stock'
     | '/pos/orders'
@@ -359,6 +403,10 @@ export interface FileRouteTypes {
     | '/_auth/select-tenant'
     | '/_auth/sign-in'
     | '/_auth/sign-up'
+    | '/_app/crm/analytics'
+    | '/_app/crm/customers'
+    | '/_app/crm/loyalty'
+    | '/_app/crm/segments'
     | '/_app/inventory/catalog'
     | '/_app/inventory/stock'
     | '/_app/pos/orders'
@@ -597,12 +645,44 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AppInventoryCatalogRouteImport
       parentRoute: typeof AppRoute
     }
+    '/_app/crm/segments': {
+      id: '/_app/crm/segments'
+      path: '/crm/segments'
+      fullPath: '/crm/segments'
+      preLoaderRoute: typeof AppCrmSegmentsRouteImport
+      parentRoute: typeof AppRoute
+    }
+    '/_app/crm/loyalty': {
+      id: '/_app/crm/loyalty'
+      path: '/crm/loyalty'
+      fullPath: '/crm/loyalty'
+      preLoaderRoute: typeof AppCrmLoyaltyRouteImport
+      parentRoute: typeof AppRoute
+    }
+    '/_app/crm/customers': {
+      id: '/_app/crm/customers'
+      path: '/crm/customers'
+      fullPath: '/crm/customers'
+      preLoaderRoute: typeof AppCrmCustomersRouteImport
+      parentRoute: typeof AppRoute
+    }
+    '/_app/crm/analytics': {
+      id: '/_app/crm/analytics'
+      path: '/crm/analytics'
+      fullPath: '/crm/analytics'
+      preLoaderRoute: typeof AppCrmAnalyticsRouteImport
+      parentRoute: typeof AppRoute
+    }
   }
 }
 
 interface AppRouteChildren {
   AppDashboardRoute: typeof AppDashboardRoute
   AppProfileRoute: typeof AppProfileRoute
+  AppCrmAnalyticsRoute: typeof AppCrmAnalyticsRoute
+  AppCrmCustomersRoute: typeof AppCrmCustomersRoute
+  AppCrmLoyaltyRoute: typeof AppCrmLoyaltyRoute
+  AppCrmSegmentsRoute: typeof AppCrmSegmentsRoute
   AppInventoryCatalogRoute: typeof AppInventoryCatalogRoute
   AppInventoryStockRoute: typeof AppInventoryStockRoute
   AppPosOrdersRoute: typeof AppPosOrdersRoute
@@ -625,6 +705,10 @@ interface AppRouteChildren {
 const AppRouteChildren: AppRouteChildren = {
   AppDashboardRoute: AppDashboardRoute,
   AppProfileRoute: AppProfileRoute,
+  AppCrmAnalyticsRoute: AppCrmAnalyticsRoute,
+  AppCrmCustomersRoute: AppCrmCustomersRoute,
+  AppCrmLoyaltyRoute: AppCrmLoyaltyRoute,
+  AppCrmSegmentsRoute: AppCrmSegmentsRoute,
   AppInventoryCatalogRoute: AppInventoryCatalogRoute,
   AppInventoryStockRoute: AppInventoryStockRoute,
   AppPosOrdersRoute: AppPosOrdersRoute,

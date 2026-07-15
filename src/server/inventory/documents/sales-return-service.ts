@@ -1,4 +1,5 @@
 import { ConflictError, NotFoundError, ValidationError } from '#/server/auth/errors'
+import { appendDomainEvent } from '#/server/events/event-outbox'
 import { nextDocumentNumber } from '#/server/inventory/document-number-service'
 import { serializeSalesReturn } from '#/server/inventory/returns-dto'
 import { postMovement } from '#/server/inventory/movement-engine'
@@ -517,6 +518,20 @@ export async function refundPosSale(
         },
         tx
       )
+
+      await appendDomainEvent(tx, {
+        tenantId,
+        eventType: 'pos_sale.refunded',
+        aggregateType: 'pos_sale',
+        aggregateId: sale.id,
+        customerId: sale.customerId,
+        payload: {
+          documentNumber: sale.documentNumber,
+          amount: totals.grandTotal.toString(),
+        },
+        correlationId: sale.correlationId,
+        actorProfileId: context.profileId,
+      })
 
       const refreshed = await returnRepo.findSalesReturnById(tenantId, created.id, tx)
 
