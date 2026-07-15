@@ -1,0 +1,75 @@
+{
+  "app": {
+    "title": "غرفة تحكم ميريديان",
+    "subtitle": "تشغيل متعدد المستأجرين للمخزون والمطعم ونقطة البيع وإدارة النظام",
+    "deckTitle": "منصة عمليات ميريديان"
+  },
+  "actions": {
+    "switchWorkspace": "تبديل مساحة العمل",
+    "language": "اللغة",
+    "theme": "المظهر",
+    "overview": "نظرة عامة",
+    "openBoard": "فتح اللوحة",
+    "continue": "متابعة",
+    "openDashboard": "فتح لوحة التحكم",
+    "chooseWorkspace": "اختيار مساحة العمل",
+    "enterWorkspace": "دخول مساحة العمل",
+    "continueInWorkspace": "المتابعة داخل مساحة العمل"
+  },
+  "header": {
+    "sectionLabel": "السطح النشط",
+    "searchLabel": "فتح سطح الأوامر",
+    "searchPlaceholder": "ابحث عن المسارات والصفحات ومساحات العمل"
+  },
+  "command": {
+    "dialogTitle": "سطح الأوامر",
+    "dialogDescription": "ابحث داخل تنقل التطبيق الداخلي ومساحات العمل المتاحة.",
+    "searchPlaceholder": "اكتب مسارًا أو صفحة أو مساحة عمل",
+    "noResults": "لا توجد نتائج مطابقة.",
+    "current": "الحالي",
+    "groups": {
+      "navigation": "التنقل",
+      "pages": "الصفحات",
+      "workspaces": "مساحات العمل"
+    }
+  },
+  "theme": {
+    "current": {
+      "day": "وضع النهار",
+      "night": "وضع الليل"
+    },
+    "options": {
+      "light": "فاتح",
+      "dark": "داكن",
+      "system": "النظام"
+    }
+  },
+  "nav": {
+    "dashboard": "لوحة القيادة",
+    "inventory": "المخزون",
+    "inventoryOverview": "نظرة عامة",
+    "inventoryCatalog": "الكتالوج",
+    "inventoryOutlets": "الفروع",
+    "inventoryStock": "دفتر المخزون",
+    "restaurant": "المطعم",
+    "restaurantKitchen": "لوحة المطبخ",
+    "restaurantMenu": "هندسة القائمة",
+    "restaurantTables": "خدمة الطاولات",
+    "pos": "نقطة البيع",
+    "posCheckout": "البيع المباشر",
+    "posOrders": "الطلبات",
+    "posReturns": "المرتجعات",
+    "crm": "إدارة العملاء",
+    "crmCustomers": "ملف العميل 360",
+    "crmLoyalty": "الولاء",
+    "crmSegments": "الشرائح",
+    "crmAnalytics": "تحليلات العملاء",
+    "systemAdmin": "إدارة النظام",
+    "systemSecurity": "مركز الأمان",
+    "systemRoles": "الأدوار",
+    "systemModules": "الوحدات",
+    "systemUsers": "المستخدمون والصلاحيات",
+    "systemNotifications": "الإشعارات",
+    "systemIntegrations": "التكاملات"
+  }
+}

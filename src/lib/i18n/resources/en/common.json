@@ -1,0 +1,75 @@
+{
+  "app": {
+    "title": "Meridian Control Room",
+    "subtitle": "Multitenant inventory, restaurant, POS, and system operations",
+    "deckTitle": "Meridian Operations Deck"
+  },
+  "actions": {
+    "switchWorkspace": "Switch workspace",
+    "language": "Language",
+    "theme": "Theme",
+    "overview": "Overview",
+    "openBoard": "Open board",
+    "continue": "Continue",
+    "openDashboard": "Open dashboard",
+    "chooseWorkspace": "Choose workspace",
+    "enterWorkspace": "Enter workspace",
+    "continueInWorkspace": "Continue in workspace"
+  },
+  "header": {
+    "sectionLabel": "Active surface",
+    "searchLabel": "Open command surface",
+    "searchPlaceholder": "Search routes, pages, and workspaces"
+  },
+  "command": {
+    "dialogTitle": "Command surface",
+    "dialogDescription": "Search the internal navigation manifest and available workspaces.",
+    "searchPlaceholder": "Type a route, page, or workspace",
+    "noResults": "No matching destinations.",
+    "current": "Current",
+    "groups": {
+      "navigation": "Navigation",
+      "pages": "Pages",
+      "workspaces": "Workspaces"
+    }
+  },
+  "theme": {
+    "current": {
+      "day": "Day mode",
+      "night": "Night mode"
+    },
+    "options": {
+      "light": "Light",
+      "dark": "Dark",
+      "system": "System"
+    }
+  },
+  "nav": {
+    "dashboard": "Dashboard",
+    "inventory": "Inventory",
+    "inventoryOverview": "Overview",
+    "inventoryCatalog": "Catalog",
+    "inventoryOutlets": "Outlets",
+    "inventoryStock": "Stock Ledger",
+    "restaurant": "Restaurant",
+    "restaurantKitchen": "Kitchen Board",
+    "restaurantMenu": "Menu Engineering",
+    "restaurantTables": "Table Service",
+    "pos": "POS",
+    "posCheckout": "Checkout",
+    "posOrders": "Orders",
+    "posReturns": "Returns",
+    "crm": "CRM",
+    "crmCustomers": "Customers 360",
+    "crmLoyalty": "Loyalty",
+    "crmSegments": "Segments",
+    "crmAnalytics": "Customer Analytics",
+    "systemAdmin": "System Admin",
+    "systemSecurity": "Security Center",
+    "systemRoles": "Roles",
+    "systemModules": "Modules",
+    "systemUsers": "Users & Roles",
+    "systemNotifications": "Notifications",
+    "systemIntegrations": "Integrations"
+  }
+}
