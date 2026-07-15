@@ -47,6 +47,7 @@ export interface PostMovementInput {
 
 export interface PostMovementResult {
   movementId: string
+  movementUnitCost: Prisma.Decimal
   onHand: Prisma.Decimal
   avgUnitCost: Prisma.Decimal
   totalValue: Prisma.Decimal
@@ -174,6 +175,7 @@ export async function postMovement(
 
   return {
     movementId: movement.id,
+    movementUnitCost,
     onHand: state.onHand,
     avgUnitCost: state.avgUnitCost,
     totalValue: state.totalValue,

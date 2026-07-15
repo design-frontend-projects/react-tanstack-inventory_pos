@@ -40,9 +40,33 @@ model and its build status.
 - **StockAdjustment** / **StockAdjustmentLine** — first document that posts movements. Enums AdjustmentStatus, AdjustmentReason.
 - Engine: `movement-engine.ts` `postMovement` (oversell guard, WAC via `costing.ts`), `stock-adjustment-service.ts` (transactional post), `stock-query-service.ts` (balances/movements/summary).
 
+## Implemented — Phase 4 (transfers) + Phase 5 (purchasing)
+
+- **StockTransfer** / **StockTransferLine** (`TransferStatus`) — two-leg: ship posts `TRANSFER_OUT` at the source, receive posts `TRANSFER_IN` at the destination valued at the out-leg's issue cost (value conserved).
+- **PurchaseRequisition** / line (`RequisitionStatus`) — create → submit → approve → convert to a draft PO.
+- **PurchaseOrder** / line (`PurchaseOrderStatus`) — records intent only; **no inventory effect**. Header stores subtotal/taxTotal/grandTotal; lines track ordered vs received qty.
+- **GoodsReceipt** / line (`ReceiptStatus`) — posting emits `PURCHASE_RECEIPT` (IN) per accepted line, increments PO line received qty, and reconciles PO status to PARTIALLY_RECEIVED/RECEIVED.
+- **PurchaseReturn** / line (`PurchaseReturnStatus`) — posting emits `PURCHASE_RETURN` (OUT).
+- All posting services run in one `$transaction` (RepeatableRead) and route through `postMovement`.
+
+## Implemented — Phase 6 (sales / POS)
+
+- **SalesOrder** / line (`SalesOrderStatus`) — create → confirm → **fulfil** (posts `SALE` OUT per line at its pick location, stamps `costAtSale` from WAC) → invoiced. Reduces stock only at fulfilment.
+- **SalesInvoice** / line (`InvoiceStatus`) — built from a fulfilled order (or direct); issue → record payment → PARTIALLY_PAID/PAID.
+- **PosSale** / line + **PosPayment** (`PosSaleStatus`, `PosOrderType`, `PaymentMethod`) — **complete** posts `SALE` (OUT) immediately, stamps `costAtSale`, captures payments, computes change; void supported.
+- **PosSession** (`PosSessionStatus`) — open/close with cash reconciliation (expected = opening float + cash taken on completed sales; variance computed).
+- All posting runs through `postMovement` in one `$transaction` (RepeatableRead).
+
+**Ops note:** `profiles.auth_user_id` drift resolved — the schema now declares `@default(dbgenerated("auth.uid()"))` and a shadow-DB-safe migration seeds a guarded `auth.uid()` stub, so `prisma migrate dev` runs cleanly (no reset).
+
+## Implemented — Phase 7 (returns + credit/debit notes)
+
+- **SalesReturn** / line (`SalesReturnStatus`, `SalesReturnReason`) — lifecycle draft → requested → approved → (in_transit) → **received** → credited → closed. **Receiving** posts a `SALES_RETURN` (IN) per *restockable* line, re-entering stock at the line's `costAtReturn` (the original `costAtSale`, so returns don't leak margin into WAC; falls back to current WAC when unknown) and stamps `restockValue`. Non-restock lines (damaged/scrapped) still credit the customer but post no movement. Reuses `postMovement` in one `$transaction` (RepeatableRead).
+- **POS refund** (`refundPosSale`) — one-shot counter refund sourced from a completed `PosSale`: creates an already-approved `SalesReturn` (origin POS_SALE), re-enters stock immediately, increments `PosSaleLine.refundedQty`, and advances the sale to `REFUNDED` / `PARTIALLY_REFUNDED` (supports repeated partial refunds up to the sold quantity).
+- **FinancialNote** (`NoteType` CREDIT/DEBIT, `NoteStatus`) — unified AR credit note (from a received sales return, carries its grand total, flips the return to CREDITED) and AP debit note (from a shipped purchase return, valued Σ qty×unitCost). No inventory effect; issue → apply (partial keeps ISSUED, full → APPLIED) → cancel. Cross-aggregate links (`salesReturnId`, `purchaseReturnId`, `customerId`, `supplierId`, `salesInvoiceId`) are scalar lookups with app-enforced integrity.
+
 ## Planned — later phases (see plan.md)
 
-- **Phase 4–7 Documents:** StockTransfer; PurchaseRequisition/PurchaseOrder/GoodsReceipt/PurchaseReturn/DebitNote; SalesOrder/SalesInvoice/PosSale/PosSession/Payment/SalesReturn/CreditNote.
 - **Phase 8–11:** StockReservation; Lot/SerialNumber; BillOfMaterials/ProductionOrder/MaterialConsumption/FinishedGoodsReceipt; ReorderRule/StockSnapshot/valuation views.
 
 ## Superseded from feature 001 (never migrated)

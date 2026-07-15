@@ -31,7 +31,7 @@ export const DOCUMENT_STATE_MACHINES = {
     cancelled: [],
   },
   goodsReceipt: {
-    draft: ['received', 'rejected'],
+    draft: ['received', 'completed', 'rejected'],
     received: ['quality_check', 'put_away', 'completed'],
     quality_check: ['put_away', 'rejected'],
     put_away: ['completed'],
@@ -40,7 +40,14 @@ export const DOCUMENT_STATE_MACHINES = {
   },
   salesOrder: {
     draft: ['confirmed', 'cancelled'],
-    confirmed: ['reserved', 'partially_fulfilled', 'on_hold', 'backordered', 'cancelled'],
+    confirmed: [
+      'reserved',
+      'partially_fulfilled',
+      'fulfilled',
+      'on_hold',
+      'backordered',
+      'cancelled',
+    ],
     reserved: ['partially_fulfilled', 'fulfilled', 'cancelled'],
     partially_fulfilled: ['partially_fulfilled', 'fulfilled', 'cancelled'],
     fulfilled: ['invoiced', 'closed'],
@@ -78,7 +85,7 @@ export const DOCUMENT_STATE_MACHINES = {
     cancelled: [],
   },
   purchaseReturn: {
-    draft: ['requested', 'cancelled'],
+    draft: ['requested', 'shipped', 'cancelled'],
     requested: ['approved', 'rejected'],
     approved: ['shipped'],
     shipped: ['received'],
@@ -89,7 +96,7 @@ export const DOCUMENT_STATE_MACHINES = {
     cancelled: [],
   },
   stockTransfer: {
-    draft: ['confirmed', 'cancelled'],
+    draft: ['confirmed', 'shipped', 'cancelled'],
     confirmed: ['shipped', 'cancelled'],
     shipped: ['in_transit', 'partially_received', 'received'],
     in_transit: ['partially_received', 'received'],

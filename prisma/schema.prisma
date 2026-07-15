@@ -113,7 +113,7 @@ enum HttpMethod {
 
 model Profile {
   id                   String                      @id @default(uuid()) @db.Uuid
-  authUserId           String                      @unique @map("auth_user_id") @db.Uuid
+  authUserId           String                      @unique @default(dbgenerated("auth.uid()")) @map("auth_user_id") @db.Uuid
   email                String
   firstName            String?                     @map("first_name")
   lastName             String?                     @map("last_name")
@@ -139,58 +139,80 @@ model Profile {
 }
 
 model TenantAccount {
-  id                     String                  @id @default(uuid()) @db.Uuid
-  name                   String
-  slug                   String                  @unique
-  activity               String?
-  activityOptionId       String?                 @map("activity_option_id") @db.Uuid
-  timezone               String?
-  status                 TenantAccountStatus     @default(ACTIVE)
-  ownerProfileId         String?                 @map("owner_profile_id") @db.Uuid
-  createdAt              DateTime                @default(now()) @map("created_at")
-  updatedAt              DateTime                @updatedAt @map("updated_at")
-  ownerProfile           Profile?                @relation("TenantOwnerProfile", fields: [ownerProfileId], references: [id], onDelete: SetNull, onUpdate: Cascade)
-  activityOption         OwnerActivityOption?    @relation(fields: [activityOptionId], references: [id], onDelete: SetNull, onUpdate: Cascade)
-  subscription           OwnerTenantSubscription?
-  memberships            TenantUser[]
-  roles                  Role[]
-  invitations            user_invitations[]
-  auditLogs              AuditLog[]
-  preferenceProfiles     PreferenceProfile[]     @relation("DefaultTenantPreference")
-  modules                Module[]
-  screens                Screen[]
-  screenActions          ScreenAction[]
-  permissions            Permission[]
-  tenantModules          TenantModule[]
-  tenantScreens          TenantScreen[]
-  documentSequences      DocumentSequence[]
-  brands                 Brand[]
-  productCategories      ProductCategory[]
-  unitsOfMeasure         UnitOfMeasure[]
-  uomConversions         UomConversion[]
-  products               Product[]
-  productVariants        ProductVariant[]
-  productBarcodes        ProductBarcode[]
-  productImages          ProductImage[]
-  productSuppliers       ProductSupplier[]
-  priceLists             PriceList[]
-  productPrices          ProductPrice[]
-  bundleComponents       BundleComponent[]
-  attributes             Attribute[]
-  attributeOptions       AttributeOption[]
-  productAttributeValues ProductAttributeValue[]
-  productTags            ProductTag[]
-  productTagLinks        ProductTagLink[]
-  suppliers              Supplier[]
-  customers              Customer[]
-  taxRates               TaxRate[]
-  warehouses             Warehouse[]
-  warehouseLocations     WarehouseLocation[]
-  stockBalances          StockBalance[]
-  inventoryMovements     InventoryMovement[]
-  costLayers             CostLayer[]
-  stockAdjustments       StockAdjustment[]
-  stockAdjustmentLines   StockAdjustmentLine[]
+  id                       String                    @id @default(uuid()) @db.Uuid
+  name                     String
+  slug                     String                    @unique
+  activity                 String?
+  activityOptionId         String?                   @map("activity_option_id") @db.Uuid
+  timezone                 String?
+  status                   TenantAccountStatus       @default(ACTIVE)
+  ownerProfileId           String?                   @map("owner_profile_id") @db.Uuid
+  createdAt                DateTime                  @default(now()) @map("created_at")
+  updatedAt                DateTime                  @updatedAt @map("updated_at")
+  ownerProfile             Profile?                  @relation("TenantOwnerProfile", fields: [ownerProfileId], references: [id], onDelete: SetNull, onUpdate: Cascade)
+  activityOption           OwnerActivityOption?      @relation(fields: [activityOptionId], references: [id], onDelete: SetNull, onUpdate: Cascade)
+  subscription             OwnerTenantSubscription?
+  memberships              TenantUser[]
+  roles                    Role[]
+  invitations              user_invitations[]
+  auditLogs                AuditLog[]
+  preferenceProfiles       PreferenceProfile[]       @relation("DefaultTenantPreference")
+  modules                  Module[]
+  screens                  Screen[]
+  screenActions            ScreenAction[]
+  permissions              Permission[]
+  tenantModules            TenantModule[]
+  tenantScreens            TenantScreen[]
+  documentSequences        DocumentSequence[]
+  brands                   Brand[]
+  productCategories        ProductCategory[]
+  unitsOfMeasure           UnitOfMeasure[]
+  uomConversions           UomConversion[]
+  products                 Product[]
+  productVariants          ProductVariant[]
+  productBarcodes          ProductBarcode[]
+  productImages            ProductImage[]
+  productSuppliers         ProductSupplier[]
+  priceLists               PriceList[]
+  productPrices            ProductPrice[]
+  bundleComponents         BundleComponent[]
+  attributes               Attribute[]
+  attributeOptions         AttributeOption[]
+  productAttributeValues   ProductAttributeValue[]
+  productTags              ProductTag[]
+  productTagLinks          ProductTagLink[]
+  suppliers                Supplier[]
+  customers                Customer[]
+  taxRates                 TaxRate[]
+  warehouses               Warehouse[]
+  warehouseLocations       WarehouseLocation[]
+  stockBalances            StockBalance[]
+  inventoryMovements       InventoryMovement[]
+  costLayers               CostLayer[]
+  stockAdjustments         StockAdjustment[]
+  stockAdjustmentLines     StockAdjustmentLine[]
+  stockTransfers           StockTransfer[]
+  stockTransferLines       StockTransferLine[]
+  purchaseRequisitions     PurchaseRequisition[]
+  purchaseRequisitionLines PurchaseRequisitionLine[]
+  purchaseOrders           PurchaseOrder[]
+  purchaseOrderLines       PurchaseOrderLine[]
+  goodsReceipts            GoodsReceipt[]
+  goodsReceiptLines        GoodsReceiptLine[]
+  purchaseReturns          PurchaseReturn[]
+  purchaseReturnLines      PurchaseReturnLine[]
+  salesOrders              SalesOrder[]
+  salesOrderLines          SalesOrderLine[]
+  salesInvoices            SalesInvoice[]
+  salesInvoiceLines        SalesInvoiceLine[]
+  posSessions              PosSession[]
+  posSales                 PosSale[]
+  posSaleLines             PosSaleLine[]
+  posPayments              PosPayment[]
+  salesReturns             SalesReturn[]
+  salesReturnLines         SalesReturnLine[]
+  financialNotes           FinancialNote[]
+  stockReservations        StockReservation[]
 
   @@map("tenant_accounts")
 }
@@ -396,10 +418,10 @@ model PreferenceProfile {
 }
 
 model TenantRegistrationRequest {
-  id              String                   @id @default(uuid()) @db.Uuid
-  email           String
-  firstName       String                   @map("first_name")
-  lastName        String                   @map("last_name")
+  id               String                   @id @default(uuid()) @db.Uuid
+  email            String
+  firstName        String                   @map("first_name")
+  lastName         String                   @map("last_name")
   phone            String?
   activity         String
   activityOptionId String?                  @map("activity_option_id") @db.Uuid
@@ -1508,4 +1530,768 @@ model OwnerTenantSubscription {
 
   @@index([planId], map: "owner_tenant_subscriptions_plan_idx")
   @@map("owner_tenant_subscriptions")
+}
+
+// ============================================================================
+// Enterprise Inventory — Spec 002 (Phase 4 transfers + Phase 5 purchasing).
+// Documents own their lifecycle (status enums + state-machine.ts guard) and POST
+// movements through the engine: transfer ship/receive => TRANSFER_OUT/IN,
+// goods receipt => PURCHASE_RECEIPT, purchase return => PURCHASE_RETURN.
+// ============================================================================
+
+enum TransferStatus {
+  DRAFT              @map("draft")
+  CONFIRMED          @map("confirmed")
+  SHIPPED            @map("shipped")
+  IN_TRANSIT         @map("in_transit")
+  PARTIALLY_RECEIVED @map("partially_received")
+  RECEIVED           @map("received")
+  CLOSED             @map("closed")
+  CANCELLED          @map("cancelled")
+
+  @@map("TransferStatus")
+}
+
+enum RequisitionStatus {
+  DRAFT     @map("draft")
+  SUBMITTED @map("submitted")
+  APPROVED  @map("approved")
+  CONVERTED @map("converted")
+  CLOSED    @map("closed")
+  REJECTED  @map("rejected")
+  CANCELLED @map("cancelled")
+
+  @@map("RequisitionStatus")
+}
+
+enum PurchaseOrderStatus {
+  DRAFT              @map("draft")
+  PENDING_APPROVAL   @map("pending_approval")
+  APPROVED           @map("approved")
+  CONFIRMED          @map("confirmed")
+  PARTIALLY_RECEIVED @map("partially_received")
+  RECEIVED           @map("received")
+  CLOSED             @map("closed")
+  CANCELLED          @map("cancelled")
+  REJECTED           @map("rejected")
+
+  @@map("PurchaseOrderStatus")
+}
+
+enum ReceiptStatus {
+  DRAFT         @map("draft")
+  RECEIVED      @map("received")
+  QUALITY_CHECK @map("quality_check")
+  PUT_AWAY      @map("put_away")
+  COMPLETED     @map("completed")
+  REJECTED      @map("rejected")
+
+  @@map("ReceiptStatus")
+}
+
+enum PurchaseReturnStatus {
+  DRAFT     @map("draft")
+  REQUESTED @map("requested")
+  APPROVED  @map("approved")
+  SHIPPED   @map("shipped")
+  RECEIVED  @map("received")
+  REFUNDED  @map("refunded")
+  CLOSED    @map("closed")
+  REJECTED  @map("rejected")
+  CANCELLED @map("cancelled")
+
+  @@map("PurchaseReturnStatus")
+}
+
+// --- Phase 4: stock transfers -----------------------------------------------
+
+model StockTransfer {
+  id                  String              @id @default(uuid()) @db.Uuid
+  tenantId            String              @map("tenant_id") @db.Uuid
+  documentNumber      String              @map("document_number")
+  fromWarehouseId     String              @map("from_warehouse_id") @db.Uuid
+  toWarehouseId       String              @map("to_warehouse_id") @db.Uuid
+  status              TransferStatus      @default(DRAFT)
+  notes               String?
+  shipDate            DateTime?           @map("ship_date")
+  receiveDate         DateTime?           @map("receive_date")
+  shippedByProfileId  String?             @map("shipped_by_profile_id") @db.Uuid
+  receivedByProfileId String?             @map("received_by_profile_id") @db.Uuid
+  createdByProfileId  String?             @map("created_by_profile_id") @db.Uuid
+  correlationId       String?             @map("correlation_id") @db.Uuid
+  createdAt           DateTime            @default(now()) @map("created_at")
+  updatedAt           DateTime            @updatedAt @map("updated_at")
+  tenant              TenantAccount       @relation(fields: [tenantId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  lines               StockTransferLine[]
+
+  @@unique([tenantId, documentNumber], map: "stock_transfers_tenant_number_unique")
+  @@index([tenantId, status], map: "stock_transfers_tenant_status_idx")
+  @@map("stock_transfers")
+}
+
+model StockTransferLine {
+  id             String        @id @default(uuid()) @db.Uuid
+  tenantId       String        @map("tenant_id") @db.Uuid
+  transferId     String        @map("transfer_id") @db.Uuid
+  lineNo         Int           @map("line_no")
+  productId      String        @map("product_id") @db.Uuid
+  variantId      String?       @map("variant_id") @db.Uuid
+  fromLocationId String        @map("from_location_id") @db.Uuid
+  toLocationId   String        @map("to_location_id") @db.Uuid
+  uomId          String        @map("uom_id") @db.Uuid
+  requestedQty   Decimal       @map("requested_qty") @db.Decimal(18, 4)
+  shippedQty     Decimal       @default(0) @map("shipped_qty") @db.Decimal(18, 4)
+  receivedQty    Decimal       @default(0) @map("received_qty") @db.Decimal(18, 4)
+  lotId          String?       @map("lot_id") @db.Uuid
+  serialId       String?       @map("serial_id") @db.Uuid
+  createdAt      DateTime      @default(now()) @map("created_at")
+  tenant         TenantAccount @relation(fields: [tenantId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  transfer       StockTransfer @relation(fields: [transferId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+
+  @@index([tenantId, transferId], map: "stock_transfer_lines_transfer_idx")
+  @@map("stock_transfer_lines")
+}
+
+// --- Phase 5: purchasing ----------------------------------------------------
+
+model PurchaseRequisition {
+  id                   String                    @id @default(uuid()) @db.Uuid
+  tenantId             String                    @map("tenant_id") @db.Uuid
+  documentNumber       String                    @map("document_number")
+  warehouseId          String?                   @map("warehouse_id") @db.Uuid
+  status               RequisitionStatus         @default(DRAFT)
+  notes                String?
+  requestedByProfileId String?                   @map("requested_by_profile_id") @db.Uuid
+  approvedByProfileId  String?                   @map("approved_by_profile_id") @db.Uuid
+  convertedToPoId      String?                   @map("converted_to_po_id") @db.Uuid
+  createdAt            DateTime                  @default(now()) @map("created_at")
+  updatedAt            DateTime                  @updatedAt @map("updated_at")
+  tenant               TenantAccount             @relation(fields: [tenantId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  lines                PurchaseRequisitionLine[]
+
+  @@unique([tenantId, documentNumber], map: "purchase_requisitions_tenant_number_unique")
+  @@index([tenantId, status], map: "purchase_requisitions_tenant_status_idx")
+  @@map("purchase_requisitions")
+}
+
+model PurchaseRequisitionLine {
+  id            String              @id @default(uuid()) @db.Uuid
+  tenantId      String              @map("tenant_id") @db.Uuid
+  requisitionId String              @map("requisition_id") @db.Uuid
+  lineNo        Int                 @map("line_no")
+  productId     String              @map("product_id") @db.Uuid
+  variantId     String?             @map("variant_id") @db.Uuid
+  uomId         String              @map("uom_id") @db.Uuid
+  quantity      Decimal             @db.Decimal(18, 4)
+  notes         String?
+  createdAt     DateTime            @default(now()) @map("created_at")
+  tenant        TenantAccount       @relation(fields: [tenantId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  requisition   PurchaseRequisition @relation(fields: [requisitionId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+
+  @@index([tenantId, requisitionId], map: "purchase_requisition_lines_req_idx")
+  @@map("purchase_requisition_lines")
+}
+
+model PurchaseOrder {
+  id                  String              @id @default(uuid()) @db.Uuid
+  tenantId            String              @map("tenant_id") @db.Uuid
+  documentNumber      String              @map("document_number")
+  supplierId          String              @map("supplier_id") @db.Uuid
+  warehouseId         String              @map("warehouse_id") @db.Uuid
+  status              PurchaseOrderStatus @default(DRAFT)
+  orderDate           DateTime            @default(now()) @map("order_date")
+  expectedDate        DateTime?           @map("expected_date")
+  currencyCode        String              @default("USD") @map("currency_code")
+  subtotal            Decimal             @default(0) @db.Decimal(19, 4)
+  taxTotal            Decimal             @default(0) @map("tax_total") @db.Decimal(19, 4)
+  grandTotal          Decimal             @default(0) @map("grand_total") @db.Decimal(19, 4)
+  notes               String?
+  paymentTerms        String?             @map("payment_terms")
+  approvedByProfileId String?             @map("approved_by_profile_id") @db.Uuid
+  requisitionId       String?             @map("requisition_id") @db.Uuid
+  createdByProfileId  String?             @map("created_by_profile_id") @db.Uuid
+  correlationId       String?             @map("correlation_id") @db.Uuid
+  createdAt           DateTime            @default(now()) @map("created_at")
+  updatedAt           DateTime            @updatedAt @map("updated_at")
+  tenant              TenantAccount       @relation(fields: [tenantId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  lines               PurchaseOrderLine[]
+  goodsReceipts       GoodsReceipt[]
+
+  @@unique([tenantId, documentNumber], map: "purchase_orders_tenant_number_unique")
+  @@index([tenantId, status, orderDate], map: "purchase_orders_tenant_status_idx")
+  @@index([tenantId, supplierId], map: "purchase_orders_tenant_supplier_idx")
+  @@map("purchase_orders")
+}
+
+model PurchaseOrderLine {
+  id              String        @id @default(uuid()) @db.Uuid
+  tenantId        String        @map("tenant_id") @db.Uuid
+  purchaseOrderId String        @map("purchase_order_id") @db.Uuid
+  lineNo          Int           @map("line_no")
+  productId       String        @map("product_id") @db.Uuid
+  variantId       String?       @map("variant_id") @db.Uuid
+  uomId           String        @map("uom_id") @db.Uuid
+  orderedQty      Decimal       @map("ordered_qty") @db.Decimal(18, 4)
+  receivedQty     Decimal       @default(0) @map("received_qty") @db.Decimal(18, 4)
+  unitCost        Decimal       @map("unit_cost") @db.Decimal(19, 6)
+  taxRateId       String?       @map("tax_rate_id") @db.Uuid
+  taxAmount       Decimal       @default(0) @map("tax_amount") @db.Decimal(19, 4)
+  lineTotal       Decimal       @map("line_total") @db.Decimal(19, 4)
+  expectedDate    DateTime?     @map("expected_date")
+  createdAt       DateTime      @default(now()) @map("created_at")
+  tenant          TenantAccount @relation(fields: [tenantId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  purchaseOrder   PurchaseOrder @relation(fields: [purchaseOrderId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+
+  @@index([tenantId, purchaseOrderId], map: "purchase_order_lines_po_idx")
+  @@index([tenantId, productId], map: "purchase_order_lines_product_idx")
+  @@map("purchase_order_lines")
+}
+
+model GoodsReceipt {
+  id                   String             @id @default(uuid()) @db.Uuid
+  tenantId             String             @map("tenant_id") @db.Uuid
+  documentNumber       String             @map("document_number")
+  purchaseOrderId      String?            @map("purchase_order_id") @db.Uuid
+  supplierId           String             @map("supplier_id") @db.Uuid
+  warehouseId          String             @map("warehouse_id") @db.Uuid
+  status               ReceiptStatus      @default(DRAFT)
+  receiptDate          DateTime           @default(now()) @map("receipt_date")
+  supplierDeliveryNote String?            @map("supplier_delivery_note")
+  isPosted             Boolean            @default(false) @map("is_posted")
+  postedAt             DateTime?          @map("posted_at")
+  postedByProfileId    String?            @map("posted_by_profile_id") @db.Uuid
+  createdByProfileId   String?            @map("created_by_profile_id") @db.Uuid
+  correlationId        String?            @map("correlation_id") @db.Uuid
+  createdAt            DateTime           @default(now()) @map("created_at")
+  updatedAt            DateTime           @updatedAt @map("updated_at")
+  tenant               TenantAccount      @relation(fields: [tenantId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  purchaseOrder        PurchaseOrder?     @relation(fields: [purchaseOrderId], references: [id], onDelete: SetNull, onUpdate: Cascade)
+  lines                GoodsReceiptLine[]
+
+  @@unique([tenantId, documentNumber], map: "goods_receipts_tenant_number_unique")
+  @@index([tenantId, status], map: "goods_receipts_tenant_status_idx")
+  @@index([tenantId, purchaseOrderId], map: "goods_receipts_po_idx")
+  @@map("goods_receipts")
+}
+
+model GoodsReceiptLine {
+  id                  String        @id @default(uuid()) @db.Uuid
+  tenantId            String        @map("tenant_id") @db.Uuid
+  goodsReceiptId      String        @map("goods_receipt_id") @db.Uuid
+  lineNo              Int           @map("line_no")
+  purchaseOrderLineId String?       @map("purchase_order_line_id") @db.Uuid
+  productId           String        @map("product_id") @db.Uuid
+  variantId           String?       @map("variant_id") @db.Uuid
+  toLocationId        String        @map("to_location_id") @db.Uuid
+  uomId               String        @map("uom_id") @db.Uuid
+  receivedQty         Decimal       @map("received_qty") @db.Decimal(18, 4)
+  acceptedQty         Decimal       @map("accepted_qty") @db.Decimal(18, 4)
+  rejectedQty         Decimal       @default(0) @map("rejected_qty") @db.Decimal(18, 4)
+  unitCost            Decimal       @map("unit_cost") @db.Decimal(19, 6)
+  lotNumber           String?       @map("lot_number")
+  expiryDate          DateTime?     @map("expiry_date")
+  createdAt           DateTime      @default(now()) @map("created_at")
+  tenant              TenantAccount @relation(fields: [tenantId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  goodsReceipt        GoodsReceipt  @relation(fields: [goodsReceiptId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+
+  @@index([tenantId, goodsReceiptId], map: "goods_receipt_lines_receipt_idx")
+  @@map("goods_receipt_lines")
+}
+
+model PurchaseReturn {
+  id                 String               @id @default(uuid()) @db.Uuid
+  tenantId           String               @map("tenant_id") @db.Uuid
+  documentNumber     String               @map("document_number")
+  supplierId         String               @map("supplier_id") @db.Uuid
+  warehouseId        String               @map("warehouse_id") @db.Uuid
+  purchaseOrderId    String?              @map("purchase_order_id") @db.Uuid
+  status             PurchaseReturnStatus @default(DRAFT)
+  reason             String?
+  isPosted           Boolean              @default(false) @map("is_posted")
+  postedAt           DateTime?            @map("posted_at")
+  postedByProfileId  String?              @map("posted_by_profile_id") @db.Uuid
+  createdByProfileId String?              @map("created_by_profile_id") @db.Uuid
+  correlationId      String?              @map("correlation_id") @db.Uuid
+  createdAt          DateTime             @default(now()) @map("created_at")
+  updatedAt          DateTime             @updatedAt @map("updated_at")
+  tenant             TenantAccount        @relation(fields: [tenantId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  lines              PurchaseReturnLine[]
+
+  @@unique([tenantId, documentNumber], map: "purchase_returns_tenant_number_unique")
+  @@index([tenantId, status], map: "purchase_returns_tenant_status_idx")
+  @@map("purchase_returns")
+}
+
+model PurchaseReturnLine {
+  id               String         @id @default(uuid()) @db.Uuid
+  tenantId         String         @map("tenant_id") @db.Uuid
+  purchaseReturnId String         @map("purchase_return_id") @db.Uuid
+  lineNo           Int            @map("line_no")
+  productId        String         @map("product_id") @db.Uuid
+  variantId        String?        @map("variant_id") @db.Uuid
+  fromLocationId   String         @map("from_location_id") @db.Uuid
+  uomId            String         @map("uom_id") @db.Uuid
+  quantity         Decimal        @db.Decimal(18, 4)
+  unitCost         Decimal?       @map("unit_cost") @db.Decimal(19, 6)
+  lotId            String?        @map("lot_id") @db.Uuid
+  serialId         String?        @map("serial_id") @db.Uuid
+  createdAt        DateTime       @default(now()) @map("created_at")
+  tenant           TenantAccount  @relation(fields: [tenantId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  purchaseReturn   PurchaseReturn @relation(fields: [purchaseReturnId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+
+  @@index([tenantId, purchaseReturnId], map: "purchase_return_lines_return_idx")
+  @@map("purchase_return_lines")
+}
+
+// ============================================================================
+// Enterprise Inventory — Spec 002 (Phase 6 sales / POS). PosSale complete and
+// SalesOrder fulfil POST a SALE (OUT) movement through the engine; each sold line
+// snapshots the WAC issue cost (costAtSale) for margin. Purchase orders never
+// touched inventory; sales orders reduce it only at fulfilment.
+// ============================================================================
+
+enum SalesOrderStatus {
+  DRAFT               @map("draft")
+  CONFIRMED           @map("confirmed")
+  RESERVED            @map("reserved")
+  PARTIALLY_FULFILLED @map("partially_fulfilled")
+  FULFILLED           @map("fulfilled")
+  INVOICED            @map("invoiced")
+  CLOSED              @map("closed")
+  CANCELLED           @map("cancelled")
+  ON_HOLD             @map("on_hold")
+  BACKORDERED         @map("backordered")
+
+  @@map("SalesOrderStatus")
+}
+
+enum InvoiceStatus {
+  DRAFT          @map("draft")
+  ISSUED         @map("issued")
+  PARTIALLY_PAID @map("partially_paid")
+  PAID           @map("paid")
+  OVERDUE        @map("overdue")
+  CANCELLED      @map("cancelled")
+
+  @@map("InvoiceStatus")
+}
+
+enum PosSaleStatus {
+  OPEN               @map("open")
+  PARKED             @map("parked")
+  COMPLETED          @map("completed")
+  REFUNDED           @map("refunded")
+  PARTIALLY_REFUNDED @map("partially_refunded")
+  VOIDED             @map("voided")
+
+  @@map("PosSaleStatus")
+}
+
+enum PosSessionStatus {
+  OPEN       @map("open")
+  CLOSED     @map("closed")
+  RECONCILED @map("reconciled")
+
+  @@map("PosSessionStatus")
+}
+
+enum PosOrderType {
+  COUNTER  @map("counter")
+  DINE_IN  @map("dine_in")
+  TAKEAWAY @map("takeaway")
+  DELIVERY @map("delivery")
+
+  @@map("PosOrderType")
+}
+
+enum PaymentMethod {
+  CASH          @map("cash")
+  CARD          @map("card")
+  BANK_TRANSFER @map("bank_transfer")
+  WALLET        @map("wallet")
+  CREDIT        @map("credit")
+  CHEQUE        @map("cheque")
+
+  @@map("PaymentMethod")
+}
+
+enum SalesReturnStatus {
+  DRAFT      @map("draft")
+  REQUESTED  @map("requested")
+  APPROVED   @map("approved")
+  IN_TRANSIT @map("in_transit")
+  RECEIVED   @map("received")
+  CREDITED   @map("credited")
+  CLOSED     @map("closed")
+  REJECTED   @map("rejected")
+  CANCELLED  @map("cancelled")
+
+  @@map("SalesReturnStatus")
+}
+
+enum SalesReturnReason {
+  DAMAGED               @map("damaged")
+  DEFECTIVE             @map("defective")
+  WRONG_ITEM            @map("wrong_item")
+  NOT_AS_DESCRIBED      @map("not_as_described")
+  EXPIRED               @map("expired")
+  CUSTOMER_CHANGED_MIND @map("customer_changed_mind")
+  OTHER                 @map("other")
+
+  @@map("SalesReturnReason")
+}
+
+enum NoteType {
+  CREDIT @map("credit")
+  DEBIT  @map("debit")
+
+  @@map("NoteType")
+}
+
+enum NoteStatus {
+  DRAFT     @map("draft")
+  ISSUED    @map("issued")
+  APPLIED   @map("applied")
+  CLOSED    @map("closed")
+  CANCELLED @map("cancelled")
+
+  @@map("NoteStatus")
+}
+
+enum ReservationStatus {
+  ACTIVE              @map("active")
+  PARTIALLY_FULFILLED @map("partially_fulfilled")
+  FULFILLED           @map("fulfilled")
+  RELEASED            @map("released")
+  EXPIRED             @map("expired")
+
+  @@map("ReservationStatus")
+}
+
+enum ReservationType {
+  SALES_ORDER @map("sales_order")
+  TRANSFER    @map("transfer")
+  PRODUCTION  @map("production")
+  MANUAL      @map("manual")
+
+  @@map("ReservationType")
+}
+
+// --- Phase 6: sales orders + invoices ---------------------------------------
+
+model SalesOrder {
+  id                    String           @id @default(uuid()) @db.Uuid
+  tenantId              String           @map("tenant_id") @db.Uuid
+  documentNumber        String           @map("document_number")
+  customerId            String?          @map("customer_id") @db.Uuid
+  warehouseId           String           @map("warehouse_id") @db.Uuid
+  status                SalesOrderStatus @default(DRAFT)
+  orderDate             DateTime         @default(now()) @map("order_date")
+  requestedDeliveryDate DateTime?        @map("requested_delivery_date")
+  currencyCode          String           @default("USD") @map("currency_code")
+  subtotal              Decimal          @default(0) @db.Decimal(19, 4)
+  discountTotal         Decimal          @default(0) @map("discount_total") @db.Decimal(19, 4)
+  taxTotal              Decimal          @default(0) @map("tax_total") @db.Decimal(19, 4)
+  grandTotal            Decimal          @default(0) @map("grand_total") @db.Decimal(19, 4)
+  notes                 String?
+  priceListId           String?          @map("price_list_id") @db.Uuid
+  salesRepProfileId     String?          @map("sales_rep_profile_id") @db.Uuid
+  createdByProfileId    String?          @map("created_by_profile_id") @db.Uuid
+  correlationId         String?          @map("correlation_id") @db.Uuid
+  createdAt             DateTime         @default(now()) @map("created_at")
+  updatedAt             DateTime         @updatedAt @map("updated_at")
+  tenant                TenantAccount    @relation(fields: [tenantId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  lines                 SalesOrderLine[]
+  invoices              SalesInvoice[]
+
+  @@unique([tenantId, documentNumber], map: "sales_orders_tenant_number_unique")
+  @@index([tenantId, status, orderDate], map: "sales_orders_tenant_status_idx")
+  @@index([tenantId, customerId], map: "sales_orders_tenant_customer_idx")
+  @@map("sales_orders")
+}
+
+model SalesOrderLine {
+  id           String        @id @default(uuid()) @db.Uuid
+  tenantId     String        @map("tenant_id") @db.Uuid
+  salesOrderId String        @map("sales_order_id") @db.Uuid
+  lineNo       Int           @map("line_no")
+  productId    String        @map("product_id") @db.Uuid
+  variantId    String?       @map("variant_id") @db.Uuid
+  locationId   String        @map("location_id") @db.Uuid
+  uomId        String        @map("uom_id") @db.Uuid
+  orderedQty   Decimal       @map("ordered_qty") @db.Decimal(18, 4)
+  reservedQty  Decimal       @default(0) @map("reserved_qty") @db.Decimal(18, 4)
+  fulfilledQty Decimal       @default(0) @map("fulfilled_qty") @db.Decimal(18, 4)
+  invoicedQty  Decimal       @default(0) @map("invoiced_qty") @db.Decimal(18, 4)
+  unitPrice    Decimal       @map("unit_price") @db.Decimal(19, 4)
+  discount     Decimal       @default(0) @db.Decimal(19, 4)
+  taxAmount    Decimal       @default(0) @map("tax_amount") @db.Decimal(19, 4)
+  lineTotal    Decimal       @map("line_total") @db.Decimal(19, 4)
+  costAtSale   Decimal?      @map("cost_at_sale") @db.Decimal(19, 6)
+  createdAt    DateTime      @default(now()) @map("created_at")
+  tenant       TenantAccount @relation(fields: [tenantId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  salesOrder   SalesOrder    @relation(fields: [salesOrderId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+
+  @@index([tenantId, salesOrderId], map: "sales_order_lines_order_idx")
+  @@index([tenantId, productId], map: "sales_order_lines_product_idx")
+  @@map("sales_order_lines")
+}
+
+model SalesInvoice {
+  id                 String             @id @default(uuid()) @db.Uuid
+  tenantId           String             @map("tenant_id") @db.Uuid
+  documentNumber     String             @map("document_number")
+  salesOrderId       String?            @map("sales_order_id") @db.Uuid
+  customerId         String?            @map("customer_id") @db.Uuid
+  status             InvoiceStatus      @default(DRAFT)
+  invoiceDate        DateTime           @default(now()) @map("invoice_date")
+  dueDate            DateTime?          @map("due_date")
+  currencyCode       String             @default("USD") @map("currency_code")
+  subtotal           Decimal            @default(0) @db.Decimal(19, 4)
+  discountTotal      Decimal            @default(0) @map("discount_total") @db.Decimal(19, 4)
+  taxTotal           Decimal            @default(0) @map("tax_total") @db.Decimal(19, 4)
+  grandTotal         Decimal            @default(0) @map("grand_total") @db.Decimal(19, 4)
+  amountPaid         Decimal            @default(0) @map("amount_paid") @db.Decimal(19, 4)
+  notes              String?
+  createdByProfileId String?            @map("created_by_profile_id") @db.Uuid
+  createdAt          DateTime           @default(now()) @map("created_at")
+  updatedAt          DateTime           @updatedAt @map("updated_at")
+  tenant             TenantAccount      @relation(fields: [tenantId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  salesOrder         SalesOrder?        @relation(fields: [salesOrderId], references: [id], onDelete: SetNull, onUpdate: Cascade)
+  lines              SalesInvoiceLine[]
+
+  @@unique([tenantId, documentNumber], map: "sales_invoices_tenant_number_unique")
+  @@index([tenantId, status], map: "sales_invoices_tenant_status_idx")
+  @@index([tenantId, customerId], map: "sales_invoices_tenant_customer_idx")
+  @@map("sales_invoices")
+}
+
+model SalesInvoiceLine {
+  id                  String        @id @default(uuid()) @db.Uuid
+  tenantId            String        @map("tenant_id") @db.Uuid
+  salesInvoiceId      String        @map("sales_invoice_id") @db.Uuid
+  lineNo              Int           @map("line_no")
+  productId           String        @map("product_id") @db.Uuid
+  variantId           String?       @map("variant_id") @db.Uuid
+  uomId               String        @map("uom_id") @db.Uuid
+  quantity            Decimal       @db.Decimal(18, 4)
+  unitPrice           Decimal       @map("unit_price") @db.Decimal(19, 4)
+  discount            Decimal       @default(0) @db.Decimal(19, 4)
+  taxAmount           Decimal       @default(0) @map("tax_amount") @db.Decimal(19, 4)
+  lineTotal           Decimal       @map("line_total") @db.Decimal(19, 4)
+  descriptionSnapshot String?       @map("description_snapshot")
+  skuSnapshot         String?       @map("sku_snapshot")
+  createdAt           DateTime      @default(now()) @map("created_at")
+  tenant              TenantAccount @relation(fields: [tenantId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  invoice             SalesInvoice  @relation(fields: [salesInvoiceId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+
+  @@index([tenantId, salesInvoiceId], map: "sales_invoice_lines_invoice_idx")
+  @@map("sales_invoice_lines")
+}
+
+// --- Phase 6: point of sale -------------------------------------------------
+
+model PosSession {
+  id               String           @id @default(uuid()) @db.Uuid
+  tenantId         String           @map("tenant_id") @db.Uuid
+  registerId       String           @map("register_id")
+  cashierProfileId String           @map("cashier_profile_id") @db.Uuid
+  warehouseId      String?          @map("warehouse_id") @db.Uuid
+  openingFloat     Decimal          @default(0) @map("opening_float") @db.Decimal(19, 4)
+  closingCash      Decimal?         @map("closing_cash") @db.Decimal(19, 4)
+  expectedCash     Decimal?         @map("expected_cash") @db.Decimal(19, 4)
+  variance         Decimal?         @db.Decimal(19, 4)
+  status           PosSessionStatus @default(OPEN)
+  openedAt         DateTime         @default(now()) @map("opened_at")
+  closedAt         DateTime?        @map("closed_at")
+  createdAt        DateTime         @default(now()) @map("created_at")
+  updatedAt        DateTime         @updatedAt @map("updated_at")
+  tenant           TenantAccount    @relation(fields: [tenantId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  sales            PosSale[]
+
+  @@index([tenantId, status], map: "pos_sessions_tenant_status_idx")
+  @@index([tenantId, cashierProfileId], map: "pos_sessions_tenant_cashier_idx")
+  @@map("pos_sessions")
+}
+
+model PosSale {
+  id                 String        @id @default(uuid()) @db.Uuid
+  tenantId           String        @map("tenant_id") @db.Uuid
+  documentNumber     String        @map("document_number")
+  posSessionId       String?       @map("pos_session_id") @db.Uuid
+  customerId         String?       @map("customer_id") @db.Uuid
+  warehouseId        String        @map("warehouse_id") @db.Uuid
+  locationId         String        @map("location_id") @db.Uuid
+  cashierProfileId   String        @map("cashier_profile_id") @db.Uuid
+  orderType          PosOrderType  @default(COUNTER) @map("order_type")
+  status             PosSaleStatus @default(OPEN)
+  saleDate           DateTime      @default(now()) @map("sale_date")
+  currencyCode       String        @default("USD") @map("currency_code")
+  subtotal           Decimal       @default(0) @db.Decimal(19, 4)
+  discountTotal      Decimal       @default(0) @map("discount_total") @db.Decimal(19, 4)
+  taxTotal           Decimal       @default(0) @map("tax_total") @db.Decimal(19, 4)
+  grandTotal         Decimal       @default(0) @map("grand_total") @db.Decimal(19, 4)
+  amountPaid         Decimal       @default(0) @map("amount_paid") @db.Decimal(19, 4)
+  changeDue          Decimal       @default(0) @map("change_due") @db.Decimal(19, 4)
+  notes              String?
+  completedAt        DateTime?     @map("completed_at")
+  createdByProfileId String?       @map("created_by_profile_id") @db.Uuid
+  correlationId      String?       @map("correlation_id") @db.Uuid
+  createdAt          DateTime      @default(now()) @map("created_at")
+  updatedAt          DateTime      @updatedAt @map("updated_at")
+  tenant             TenantAccount @relation(fields: [tenantId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  session            PosSession?   @relation(fields: [posSessionId], references: [id], onDelete: SetNull, onUpdate: Cascade)
+  lines              PosSaleLine[]
+  payments           PosPayment[]
+
+  @@unique([tenantId, documentNumber], map: "pos_sales_tenant_number_unique")
+  @@index([tenantId, status, saleDate], map: "pos_sales_tenant_status_idx")
+  @@index([tenantId, posSessionId], map: "pos_sales_tenant_session_idx")
+  @@map("pos_sales")
+}
+
+model PosSaleLine {
+  id               String        @id @default(uuid()) @db.Uuid
+  tenantId         String        @map("tenant_id") @db.Uuid
+  posSaleId        String        @map("pos_sale_id") @db.Uuid
+  lineNo           Int           @map("line_no")
+  productId        String        @map("product_id") @db.Uuid
+  variantId        String?       @map("variant_id") @db.Uuid
+  uomId            String        @map("uom_id") @db.Uuid
+  quantity         Decimal       @db.Decimal(18, 4)
+  unitPrice        Decimal       @map("unit_price") @db.Decimal(19, 4)
+  discount         Decimal       @default(0) @db.Decimal(19, 4)
+  taxAmount        Decimal       @default(0) @map("tax_amount") @db.Decimal(19, 4)
+  lineTotal        Decimal       @map("line_total") @db.Decimal(19, 4)
+  costAtSale       Decimal?      @map("cost_at_sale") @db.Decimal(19, 6)
+  refundedQty      Decimal       @default(0) @map("refunded_qty") @db.Decimal(18, 4)
+  itemNameSnapshot String?       @map("item_name_snapshot")
+  skuSnapshot      String?       @map("sku_snapshot")
+  createdAt        DateTime      @default(now()) @map("created_at")
+  tenant           TenantAccount @relation(fields: [tenantId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  posSale          PosSale       @relation(fields: [posSaleId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+
+  @@index([tenantId, posSaleId], map: "pos_sale_lines_sale_idx")
+  @@index([tenantId, productId], map: "pos_sale_lines_product_idx")
+  @@map("pos_sale_lines")
+}
+
+model PosPayment {
+  id        String        @id @default(uuid()) @db.Uuid
+  tenantId  String        @map("tenant_id") @db.Uuid
+  posSaleId String        @map("pos_sale_id") @db.Uuid
+  method    PaymentMethod
+  amount    Decimal       @db.Decimal(19, 4)
+  reference String?
+  cardLast4 String?       @map("card_last4")
+  createdAt DateTime      @default(now()) @map("created_at")
+  tenant    TenantAccount @relation(fields: [tenantId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  posSale   PosSale       @relation(fields: [posSaleId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+
+  @@index([tenantId, posSaleId], map: "pos_payments_sale_idx")
+  @@map("pos_payments")
+}
+
+// ============================================================================
+// Enterprise Inventory — Spec 002 (Phase 7 returns + credit/debit notes).
+// A SalesReturn receipt POSTS a SALES_RETURN (IN) movement per restockable line,
+// re-entering stock at the original costAtSale (captured on the origin sale line)
+// so returned goods do not leak margin into the weighted-average cost. POS refunds
+// drive a SalesReturn sourced from the completed sale. FinancialNote models the
+// AR credit note (from a sales return) and the AP debit note (from a purchase
+// return) as a single financial document with no inventory effect.
+// ============================================================================
+
+model SalesReturn {
+  id                 String            @id @default(uuid()) @db.Uuid
+  tenantId           String            @map("tenant_id") @db.Uuid
+  documentNumber     String            @map("document_number")
+  customerId         String?           @map("customer_id") @db.Uuid
+  warehouseId        String            @map("warehouse_id") @db.Uuid
+  originType         SourceDocType?    @map("origin_type")
+  salesOrderId       String?           @map("sales_order_id") @db.Uuid
+  posSaleId          String?           @map("pos_sale_id") @db.Uuid
+  status             SalesReturnStatus @default(DRAFT)
+  reason             SalesReturnReason @default(OTHER)
+  returnDate         DateTime          @default(now()) @map("return_date")
+  currencyCode       String            @default("USD") @map("currency_code")
+  subtotal           Decimal           @default(0) @db.Decimal(19, 4)
+  discountTotal      Decimal           @default(0) @map("discount_total") @db.Decimal(19, 4)
+  taxTotal           Decimal           @default(0) @map("tax_total") @db.Decimal(19, 4)
+  grandTotal         Decimal           @default(0) @map("grand_total") @db.Decimal(19, 4)
+  restockValue       Decimal           @default(0) @map("restock_value") @db.Decimal(19, 4)
+  refundMethod       PaymentMethod?    @map("refund_method")
+  notes              String?
+  isPosted           Boolean           @default(false) @map("is_posted")
+  postedAt           DateTime?         @map("posted_at")
+  postedByProfileId  String?           @map("posted_by_profile_id") @db.Uuid
+  createdByProfileId String?           @map("created_by_profile_id") @db.Uuid
+  correlationId      String?           @map("correlation_id") @db.Uuid
+  createdAt          DateTime          @default(now()) @map("created_at")
+  updatedAt          DateTime          @updatedAt @map("updated_at")
+  tenant             TenantAccount     @relation(fields: [tenantId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  lines              SalesReturnLine[]
+
+  @@unique([tenantId, documentNumber], map: "sales_returns_tenant_number_unique")
+  @@index([tenantId, status], map: "sales_returns_tenant_status_idx")
+  @@index([tenantId, customerId], map: "sales_returns_tenant_customer_idx")
+  @@index([tenantId, posSaleId], map: "sales_returns_tenant_pos_sale_idx")
+  @@map("sales_returns")
+}
+
+model SalesReturnLine {
+  id            String        @id @default(uuid()) @db.Uuid
+  tenantId      String        @map("tenant_id") @db.Uuid
+  salesReturnId String        @map("sales_return_id") @db.Uuid
+  lineNo        Int           @map("line_no")
+  productId     String        @map("product_id") @db.Uuid
+  variantId     String?       @map("variant_id") @db.Uuid
+  locationId    String        @map("location_id") @db.Uuid
+  uomId         String        @map("uom_id") @db.Uuid
+  quantity      Decimal       @db.Decimal(18, 4)
+  unitPrice     Decimal       @map("unit_price") @db.Decimal(19, 4)
+  discount      Decimal       @default(0) @db.Decimal(19, 4)
+  taxAmount     Decimal       @default(0) @map("tax_amount") @db.Decimal(19, 4)
+  lineTotal     Decimal       @map("line_total") @db.Decimal(19, 4)
+  costAtReturn  Decimal?      @map("cost_at_return") @db.Decimal(19, 6)
+  restock       Boolean       @default(true)
+  originLineId  String?       @map("origin_line_id") @db.Uuid
+  lotId         String?       @map("lot_id") @db.Uuid
+  serialId      String?       @map("serial_id") @db.Uuid
+  createdAt     DateTime      @default(now()) @map("created_at")
+  tenant        TenantAccount @relation(fields: [tenantId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  salesReturn   SalesReturn   @relation(fields: [salesReturnId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+
+  @@index([tenantId, salesReturnId], map: "sales_return_lines_return_idx")
+  @@index([tenantId, productId], map: "sales_return_lines_product_idx")
+  @@map("sales_return_lines")
+}
+
+model FinancialNote {
+  id                 String        @id @default(uuid()) @db.Uuid
+  tenantId           String        @map("tenant_id") @db.Uuid
+  documentNumber     String        @map("document_number")
+  noteType           NoteType      @map("note_type")
+  status             NoteStatus    @default(DRAFT)
+  customerId         String?       @map("customer_id") @db.Uuid
+  supplierId         String?       @map("supplier_id") @db.Uuid
+  salesReturnId      String?       @map("sales_return_id") @db.Uuid
+  purchaseReturnId   String?       @map("purchase_return_id") @db.Uuid
+  salesInvoiceId     String?       @map("sales_invoice_id") @db.Uuid
+  reason             String?
+  currencyCode       String        @default("USD") @map("currency_code")
+  amount             Decimal       @default(0) @db.Decimal(19, 4)
+  appliedAmount      Decimal       @default(0) @map("applied_amount") @db.Decimal(19, 4)
+  noteDate           DateTime      @default(now()) @map("note_date")
+  issuedAt           DateTime?     @map("issued_at")
+  createdByProfileId String?       @map("created_by_profile_id") @db.Uuid
+  createdAt          DateTime      @default(now()) @map("created_at")
+  updatedAt          DateTime      @updatedAt @map("updated_at")
+  tenant             TenantAccount @relation(fields: [tenantId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+
+  @@unique([tenantId, documentNumber], map: "financial_notes_tenant_number_unique")
+  @@index([tenantId, noteType, status], map: "financial_notes_tenant_type_status_idx")
+  @@index([tenantId, customerId], map: "financial_notes_tenant_customer_idx")
+  @@index([tenantId, supplierId], map: "financial_notes_tenant_supplier_idx")
+  @@map("financial_notes")
 }

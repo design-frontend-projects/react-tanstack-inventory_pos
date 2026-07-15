@@ -99,6 +99,22 @@ export function listMovements(
   })
 }
 
+// Finds the most recent movement posted for a specific document line + type —
+// e.g. a transfer's receive leg looks up its TRANSFER_OUT leg to inherit the
+// source issue cost, keeping value conserved across the transfer.
+export function findDocLineMovement(
+  tenantId: string,
+  sourceDocId: string,
+  sourceDocLineId: string,
+  movementType: MovementType,
+  client: PrismaClientLike = prisma
+) {
+  return client.inventoryMovement.findFirst({
+    where: { tenantId, sourceDocId, sourceDocLineId, movementType },
+    orderBy: { occurredAt: 'desc' },
+  })
+}
+
 // Reconciliation helper: the ledger sum for a grain must equal the balance.
 export async function sumQtyDelta(
   tenantId: string,
