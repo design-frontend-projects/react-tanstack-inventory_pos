@@ -1,4 +1,4 @@
-import type { User } from '@supabase/supabase-js'
+import type { JwtPayload, User, UserMetadata } from '@supabase/supabase-js'
 import { getRoleRank } from '#/features/auth/rbac-catalog'
 import { mergePermissions } from '#/features/auth/permissions'
 import type {
@@ -10,7 +10,7 @@ import type {
 } from '#/types/auth'
 import { parseCompletionFlow } from '#/server/auth/completion-flow'
 import { createServerSupabaseClient } from '#/server/auth/supabase-server'
-import { UnauthorizedError } from '#/server/auth/errors'
+import { ServiceUnavailableError, UnauthorizedError } from '#/server/auth/errors'
 import { buildDisplayName, normalizeEmail } from '#/server/auth/normalization'
 import { resolveActiveTenantId } from '#/server/db/tenant-context'
 import { listTenantUsersForProfile, findTenantUserByTenantAndProfile } from '#/server/repos/membership-repo'
@@ -156,15 +156,112 @@ export function getAccessTokenFromHeaders(headers: HeadersInit | undefined) {
   return authorization.slice('Bearer '.length).trim()
 }
 
-export async function getAuthenticatedSupabaseUser(accessToken: string) {
-  const supabase = createServerSupabaseClient(accessToken)
-  const { data, error } = await supabase.auth.getUser(accessToken)
+/**
+ * The trusted, verified identity of a caller, derived from a validated Supabase
+ * access token. Field names mirror the subset of the Supabase `User` shape that
+ * the session/account layers actually consume so downstream code is unaffected
+ * by the underlying verification mechanism.
+ */
+export interface AuthenticatedUser {
+  id: string
+  email: string | null
+  phone: string | null
+  isAnonymous: boolean
+  user_metadata: UserMetadata
+}
+
+const JWT_SEGMENT_COUNT = 3
+
+/**
+ * Normalizes and structurally validates a bearer access token before any
+ * cryptographic work, failing fast (401) on obviously invalid input rather than
+ * paying for a JWKS/network round trip on garbage.
+ */
+function normalizeAccessToken(accessToken: string | null | undefined): string {
+  const token = accessToken?.trim() ?? ''
+
+  if (token.length === 0) {
+    throw new UnauthorizedError('A Supabase access token is required.')
+  }
+
+  // A JWS compact serialization is exactly three base64url segments
+  // (header.payload.signature). Anything else can never be a valid token.
+  if (token.split('.').length !== JWT_SEGMENT_COUNT) {
+    throw new UnauthorizedError('The Supabase access token is malformed.')
+  }
+
+  return token
+}
+
+function mapClaimsToAuthenticatedUser(claims: JwtPayload): AuthenticatedUser {
+  return {
+    id: claims.sub,
+    email: claims.email ?? null,
+    phone: claims.phone ?? null,
+    isAnonymous: claims.is_anonymous ?? false,
+    user_metadata: claims.user_metadata ?? {},
+  }
+}
+
+/**
+ * Validates a Supabase access token and returns the trusted caller identity.
+ *
+ * Verification is delegated to `supabase.auth.getClaims`, which verifies the
+ * JWT signature and `exp` locally against the project's JWKS (asymmetric
+ * signing keys) — avoiding a network round trip per request. For legacy
+ * symmetric (HS256) tokens the SDK transparently falls back to a server-side
+ * `getUser` call, so correctness holds regardless of the project's key type.
+ *
+ * The token is passed explicitly, so the client needs no `Authorization`
+ * header — this removes the previous double token-passing.
+ *
+ * Failures are classified rather than collapsed: a bad/expired/malformed token
+ * surfaces as {@link UnauthorizedError} (401), while an unreachable or failing
+ * Auth service surfaces as {@link ServiceUnavailableError} (503) so outages are
+ * never mistaken for authentication failures. Underlying errors are preserved
+ * as `cause` for observability instead of being swallowed.
+ */
+export async function getAuthenticatedSupabaseUser(
+  accessToken: string
+): Promise<AuthenticatedUser> {
+  const token = normalizeAccessToken(accessToken)
+  const supabase = createServerSupabaseClient()
+
+  let result: Awaited<ReturnType<typeof supabase.auth.getClaims>>
+
+  try {
+    result = await supabase.auth.getClaims(token)
+  } catch (cause) {
+    // Thrown errors here are transport-level (JWKS fetch / Auth API network
+    // failure), never a verdict on the token itself.
+    throw new ServiceUnavailableError(
+      'Unable to reach the authentication service.',
+      { cause }
+    )
+  }
+
+  const { data, error } = result
 
   if (error) {
+    // Only a clear upstream 5xx counts as an outage; every other auth error
+    // (invalid signature, expired, undefined status) fails closed as 401.
+    if (typeof error.status === 'number' && error.status >= 500) {
+      throw new ServiceUnavailableError(
+        'Unable to reach the authentication service.',
+        { cause: error }
+      )
+    }
+
+    throw new UnauthorizedError('Unable to validate the Supabase session.', {
+      cause: error,
+    })
+  }
+
+  if (!data || !data.claims.sub) {
     throw new UnauthorizedError('Unable to validate the Supabase session.')
   }
 
-  return data.user
+  return mapClaimsToAuthenticatedUser(data.claims)
 }
 
 export async function bootstrapSession(options: {

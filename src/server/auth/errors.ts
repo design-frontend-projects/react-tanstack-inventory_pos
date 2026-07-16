@@ -4,13 +4,19 @@ export type DomainErrorCode =
   | 'NOT_FOUND'
   | 'CONFLICT'
   | 'VALIDATION'
+  | 'SERVICE_UNAVAILABLE'
 
 export class DomainError extends Error {
   readonly code: DomainErrorCode
   readonly statusCode: number
 
-  constructor(code: DomainErrorCode, message: string, statusCode: number) {
-    super(message)
+  constructor(
+    code: DomainErrorCode,
+    message: string,
+    statusCode: number,
+    options?: ErrorOptions
+  ) {
+    super(message, options)
     this.name = 'DomainError'
     this.code = code
     this.statusCode = statusCode
@@ -18,8 +24,8 @@ export class DomainError extends Error {
 }
 
 export class UnauthorizedError extends DomainError {
-  constructor(message = 'Unauthorized') {
-    super('UNAUTHORIZED', message, 401)
+  constructor(message = 'Unauthorized', options?: ErrorOptions) {
+    super('UNAUTHORIZED', message, 401, options)
   }
 }
 
@@ -44,6 +50,18 @@ export class ConflictError extends DomainError {
 export class ValidationError extends DomainError {
   constructor(message = 'Validation failed') {
     super('VALIDATION', message, 422)
+  }
+}
+
+/**
+ * Raised when a dependency the request relies on (e.g. the Supabase Auth
+ * service or its JWKS endpoint) is unreachable or failing. Kept distinct from
+ * {@link UnauthorizedError} so a transient outage is never reported to the
+ * client as an authentication failure.
+ */
+export class ServiceUnavailableError extends DomainError {
+  constructor(message = 'Service unavailable', options?: ErrorOptions) {
+    super('SERVICE_UNAVAILABLE', message, 503, options)
   }
 }
 
