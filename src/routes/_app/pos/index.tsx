@@ -1,40 +1,108 @@
 import { Link, createFileRoute } from '@tanstack/react-router'
 import {
-  CreditCard,
-  PackageSearch,
-  ReceiptText,
+  Coffee,
+  CroissantIcon,
+  CupSoda,
+  Minus,
+  Plus,
+  Sandwich,
   ScanLine,
   SearchIcon,
+  Trash2,
 } from 'lucide-react'
+import type { LucideIcon } from 'lucide-react'
 import { Button } from '#/components/ui/button'
-import {
-  WorkspaceEmptyState,
-  WorkspacePage,
-  WorkspacePanel,
-  WorkspaceTimelineItem,
-} from '#/components/layout/workspace-page'
+import { Input } from '#/components/ui/input'
+import { Badge } from '#/components/ui/badge'
+import { WorkspacePage } from '#/components/layout/workspace-page'
 
 export const Route = createFileRoute('/_app/pos/')({
   component: PosCheckoutPage,
 })
+
+type Product = {
+  name: string
+  price: string
+  icon: LucideIcon
+  swatch: string
+}
+
+const categories = ['All', 'Coffee', 'Cold drinks', 'Bakery', 'Food'] as const
+
+const products: Array<Product> = [
+  {
+    name: 'Espresso',
+    price: 'EGP 35',
+    icon: Coffee,
+    swatch: 'from-amber-200 to-amber-400',
+  },
+  {
+    name: 'Cappuccino',
+    price: 'EGP 55',
+    icon: Coffee,
+    swatch: 'from-orange-200 to-orange-400',
+  },
+  {
+    name: 'Iced Latte',
+    price: 'EGP 65',
+    icon: CupSoda,
+    swatch: 'from-sky-200 to-sky-400',
+  },
+  {
+    name: 'Croissant',
+    price: 'EGP 45',
+    icon: CroissantIcon,
+    swatch: 'from-yellow-200 to-yellow-400',
+  },
+  {
+    name: 'Club Sandwich',
+    price: 'EGP 120',
+    icon: Sandwich,
+    swatch: 'from-rose-200 to-rose-400',
+  },
+  {
+    name: 'Cold Brew',
+    price: 'EGP 70',
+    icon: CupSoda,
+    swatch: 'from-teal-200 to-teal-400',
+  },
+  {
+    name: 'Flat White',
+    price: 'EGP 60',
+    icon: Coffee,
+    swatch: 'from-stone-200 to-stone-400',
+  },
+  {
+    name: 'Lemonade',
+    price: 'EGP 40',
+    icon: CupSoda,
+    swatch: 'from-lime-200 to-lime-400',
+  },
+]
+
+const cartLines = [
+  { name: 'Cappuccino', qty: 2, price: 'EGP 110' },
+  { name: 'Croissant', qty: 1, price: 'EGP 45' },
+  { name: 'Iced Latte', qty: 1, price: 'EGP 65' },
+]
 
 function PosCheckoutPage() {
   return (
     <WorkspacePage
       variant="compact"
       eyebrow="POS checkout"
-      title="Checkout runs better when draft entry, queue posture, and totals stay in one clear transaction frame."
-      description="This shell reserves space for barcode lookup, draft basket editing, and the payment rail without collapsing back into a generic dashboard."
+      title="A fast, tactile checkout: scan, tap a tile, and settle without leaving the frame."
+      description="Product tiles on the left, a persistent basket on the right — tuned for speed on tablet and counter screens."
       metrics={[
         {
           label: 'Open baskets',
           value: '14',
           hint: 'Across current lanes',
-          tone: 'teal',
+          tone: 'red',
         },
         {
           label: 'Average ticket',
-          value: '$28.40',
+          value: 'EGP 218',
           hint: 'Rolling 2 hour window',
           tone: 'neutral',
         },
@@ -42,172 +110,139 @@ function PosCheckoutPage() {
           label: 'Void risk',
           value: '2',
           hint: 'Transactions require review',
-          tone: 'amber',
+          tone: 'accent',
         },
       ]}
       actions={
-        <Button asChild size="lg" className="rounded-full px-5">
+        <Button asChild size="lg">
           <Link to="/pos/orders">Review order queue</Link>
         </Button>
       }
     >
-      <div className="grid gap-6 xl:grid-cols-[1.2fr_0.8fr]">
-        <WorkspacePanel
-          eyebrow="Checkout frame"
-          title="Draft basket and lookup lane"
-          description="A realistic placeholder for product search, scan actions, draft lines, and modifier review."
-        >
-          <div className="grid gap-4">
-            <div className="flex flex-wrap items-center gap-3 rounded-[1.2rem] border border-border/70 bg-background/75 px-4 py-3">
-              <div className="flex min-w-0 flex-1 items-center gap-3">
-                <SearchIcon className="text-muted-foreground" />
-                <span className="truncate text-sm text-muted-foreground">
-                  Search products, scan SKU, or resume a saved basket
-                </span>
-              </div>
-              <div className="flex items-center gap-2">
-                <span className="rounded-full border border-border/70 bg-muted/65 px-2.5 py-1 text-[0.68rem] font-semibold uppercase tracking-[0.16em] text-muted-foreground">
-                  F2 Search
-                </span>
-                <span className="rounded-full border border-border/70 bg-muted/65 px-2.5 py-1 text-[0.68rem] font-semibold uppercase tracking-[0.16em] text-muted-foreground">
-                  F4 Scan
-                </span>
-              </div>
+      <div className="grid gap-5 xl:grid-cols-[1fr_22rem]">
+        {/* Product catalogue */}
+        <div className="flex flex-col gap-4">
+          <div className="flex flex-col gap-3 sm:flex-row sm:items-center">
+            <div className="relative flex-1">
+              <SearchIcon className="pointer-events-none absolute inset-y-0 inset-s-3.5 my-auto size-4 text-muted-foreground" />
+              <Input
+                placeholder="Search products or scan a barcode"
+                className="ps-10"
+              />
             </div>
-
-            <div className="grid gap-4 lg:grid-cols-[1.05fr_0.95fr]">
-              <WorkspaceEmptyState
-                title="Draft basket lane"
-                description="Line items, modifiers, discounts, and quantity edits land here with room for scanning and assisted lookup."
-              >
-                <div className="grid gap-3">
-                  {[
-                    {
-                      title: 'Search queue',
-                      description: 'Quick add draft items',
-                      icon: SearchIcon,
-                    },
-                    {
-                      title: 'Barcode scan',
-                      description: 'Ready for handheld input',
-                      icon: ScanLine,
-                    },
-                    {
-                      title: 'Frequent products',
-                      description: 'Pin fast-moving SKUs',
-                      icon: PackageSearch,
-                    },
-                  ].map(({ title, description, icon: Icon }) => (
-                    <div
-                      key={title}
-                      className="flex items-center gap-3 rounded-[1rem] border border-border/65 bg-background/75 px-4 py-3"
-                    >
-                      <Icon className="text-muted-foreground" />
-                      <div>
-                        <p className="text-sm font-medium">{title}</p>
-                        <p className="text-xs text-muted-foreground">
-                          {description}
-                        </p>
-                      </div>
-                    </div>
-                  ))}
-                </div>
-              </WorkspaceEmptyState>
-
-              <WorkspaceEmptyState
-                title="Modifier and receipt preview"
-                description="Once a line is selected, modifiers, notes, and tax-aware receipt details can occupy this side of the draft lane."
-              >
-                <div className="grid gap-3">
-                  {[
-                    {
-                      title: 'Modifier stack',
-                      description: 'No item selected yet',
-                    },
-                    {
-                      title: 'Kitchen note',
-                      description: 'Awaiting line focus',
-                    },
-                    {
-                      title: 'Receipt preview',
-                      description: 'Tax and tender summary locked to draft',
-                    },
-                  ].map(({ title, description }) => (
-                    <div
-                      key={title}
-                      className="rounded-[1rem] border border-border/65 bg-background/75 px-4 py-3"
-                    >
-                      <p className="text-sm font-medium">{title}</p>
-                      <p className="mt-1 text-xs text-muted-foreground">
-                        {description}
-                      </p>
-                    </div>
-                  ))}
-                </div>
-              </WorkspaceEmptyState>
-            </div>
+            <Button variant="secondary" className="gap-2">
+              <ScanLine className="size-4" />
+              Scan
+            </Button>
           </div>
-        </WorkspacePanel>
 
-        <WorkspacePanel
-          eyebrow="Receipt rail"
-          title="Totals and payment posture"
-          description="The payment side stays narrow, persistent, and ready for tender decisions."
-        >
-          <div className="flex flex-col gap-3">
-            {[
-              {
-                label: 'Subtotal',
-                value: '$24.80',
-                icon: ReceiptText,
-              },
-              {
-                label: 'Service and tax',
-                value: '$3.60',
-                icon: ReceiptText,
-              },
-              {
-                label: 'Tender options',
-                value: 'Cash, card, split',
-                icon: CreditCard,
-              },
-            ].map(({ label, value, icon: Icon }) => (
-              <div
-                key={label}
-                className="flex items-center gap-3 rounded-[1.1rem] border border-border/65 bg-background/75 px-4 py-3"
+          <div className="flex flex-wrap gap-2">
+            {categories.map((category, index) => (
+              <button
+                key={category}
+                type="button"
+                className={`pin-pill px-4 py-1.5 text-sm font-semibold transition-colors ${
+                  index === 0
+                    ? 'bg-foreground text-background'
+                    : 'bg-muted text-muted-foreground hover:bg-secondary'
+                }`}
               >
-                <Icon className="text-muted-foreground" />
-                <div className="flex-1">
-                  <p className="text-sm font-medium">{label}</p>
-                  <p className="text-xs text-muted-foreground">
-                    {typeof value === 'string' ? value : ''}
-                  </p>
+                {category}
+              </button>
+            ))}
+          </div>
+
+          <div className="grid grid-cols-2 gap-3 sm:grid-cols-3 xl:grid-cols-4">
+            {products.map(({ name, price, icon: Icon, swatch }) => (
+              <button
+                key={name}
+                type="button"
+                className="pin-card group/tile text-start"
+              >
+                <div
+                  className={`flex aspect-square items-center justify-center bg-linear-to-br ${swatch}`}
+                >
+                  <Icon className="size-9 text-black/45" />
                 </div>
-                {label !== 'Tender options' ? (
-                  <span className="text-sm font-semibold">{value}</span>
-                ) : null}
+                <div className="flex items-center justify-between gap-2 p-3">
+                  <div className="min-w-0">
+                    <p className="truncate text-sm font-semibold">{name}</p>
+                    <p className="text-xs text-muted-foreground">{price}</p>
+                  </div>
+                  <span className="flex size-7 shrink-0 items-center justify-center rounded-full bg-primary text-primary-foreground transition-transform group-hover/tile:scale-110">
+                    <Plus className="size-4" />
+                  </span>
+                </div>
+              </button>
+            ))}
+          </div>
+        </div>
+
+        {/* Basket rail */}
+        <aside className="pin-card h-fit p-5 xl:sticky xl:top-24">
+          <div className="flex items-center justify-between">
+            <p className="ops-panel-label">Current basket</p>
+            <Badge variant="secondary">Lane 3</Badge>
+          </div>
+
+          <div className="mt-4 flex flex-col gap-3">
+            {cartLines.map((line) => (
+              <div key={line.name} className="flex items-center gap-3">
+                <div className="flex items-center gap-1 rounded-full border border-border p-0.5">
+                  <span className="flex size-6 items-center justify-center rounded-full text-muted-foreground hover:bg-muted">
+                    <Minus className="size-3.5" />
+                  </span>
+                  <span className="min-w-4 text-center text-sm font-semibold tabular-nums">
+                    {line.qty}
+                  </span>
+                  <span className="flex size-6 items-center justify-center rounded-full text-muted-foreground hover:bg-muted">
+                    <Plus className="size-3.5" />
+                  </span>
+                </div>
+                <div className="min-w-0 flex-1">
+                  <p className="truncate text-sm font-medium">{line.name}</p>
+                </div>
+                <span className="text-sm font-semibold">{line.price}</span>
               </div>
             ))}
-
-            <div className="rounded-[1.2rem] border border-primary/25 bg-primary/[0.08] p-4">
-              <p className="ops-panel-label">Net due</p>
-              <div className="mt-3 flex items-end justify-between gap-3">
-                <strong className="text-3xl font-semibold tracking-tight">
-                  $28.40
-                </strong>
-                <span className="text-xs text-muted-foreground">
-                  Ready for payment
-                </span>
-              </div>
-            </div>
-
-            <WorkspaceTimelineItem
-              leading="Queue"
-              title="2 tickets need manual review"
-              description="Use the orders screen to resolve exceptions"
-            />
           </div>
-        </WorkspacePanel>
+
+          <div className="my-4 h-px bg-border" />
+
+          <dl className="flex flex-col gap-2 text-sm">
+            <div className="flex justify-between text-muted-foreground">
+              <dt>Subtotal</dt>
+              <dd>EGP 220</dd>
+            </div>
+            <div className="flex justify-between text-muted-foreground">
+              <dt>Service &amp; tax</dt>
+              <dd>EGP 31</dd>
+            </div>
+            <div className="mt-1 flex items-end justify-between">
+              <dt className="text-base font-bold">Total</dt>
+              <dd className="text-2xl font-bold tracking-tight text-primary">
+                EGP 251
+              </dd>
+            </div>
+          </dl>
+
+          <Button size="lg" className="mt-5 w-full">
+            Charge EGP 251
+          </Button>
+          <div className="mt-2 grid grid-cols-2 gap-2">
+            <Button variant="secondary" size="sm">
+              Hold
+            </Button>
+            <Button
+              variant="ghost"
+              size="sm"
+              className="gap-1.5 text-muted-foreground"
+            >
+              <Trash2 className="size-4" />
+              Clear
+            </Button>
+          </div>
+        </aside>
       </div>
     </WorkspacePage>
   )

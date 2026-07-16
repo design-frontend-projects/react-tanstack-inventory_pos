@@ -22,13 +22,13 @@ function KitchenBoardPage() {
           label: 'Live tickets',
           value: '31',
           hint: 'Across lunch and prep queues',
-          tone: 'teal',
+          tone: 'red',
         },
         {
           label: 'Delayed items',
           value: '4',
           hint: 'Beyond target hold window',
-          tone: 'amber',
+          tone: 'accent',
         },
         {
           label: 'Prep stations',

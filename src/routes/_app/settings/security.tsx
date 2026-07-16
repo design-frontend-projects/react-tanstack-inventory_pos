@@ -179,13 +179,13 @@ function SecurityControlCenterPage() {
             label: 'Screens',
             value: String(counts?.screens ?? 0),
             hint: 'Registered pages',
-            tone: 'teal',
+            tone: 'red',
           },
           {
             label: 'Permissions',
             value: String(counts?.permissions ?? 0),
             hint: 'Granular access keys',
-            tone: 'amber',
+            tone: 'accent',
           },
         ]}
       >

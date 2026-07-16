@@ -1,4 +1,4 @@
-"use client"
+'use client'
 
 import type { LucideIcon } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
@@ -13,7 +13,11 @@ import {
   SidebarMenuSubButton,
   SidebarMenuSubItem,
 } from '#/components/ui/sidebar'
-import { Collapsible, CollapsibleContent, CollapsibleTrigger } from '#/components/ui/collapsible'
+import {
+  Collapsible,
+  CollapsibleContent,
+  CollapsibleTrigger,
+} from '#/components/ui/collapsible'
 import type { AppNavRouteTo } from '#/lib/navigation/app-nav'
 import {
   appNavSections,
@@ -76,7 +80,7 @@ export function SidebarNav() {
     .filter(
       (section) =>
         !section.permissions?.length ||
-        hasAnyPermission(context?.permissions ?? [], section.permissions)
+        hasAnyPermission(context?.permissions ?? [], section.permissions),
     )
     .map((section) => ({
       id: section.id,
@@ -87,7 +91,7 @@ export function SidebarNav() {
         .filter(
           (item) =>
             !item.permissions?.length ||
-            hasAnyPermission(context?.permissions ?? [], item.permissions)
+            hasAnyPermission(context?.permissions ?? [], item.permissions),
         )
         .map((item) => ({
           id: item.id,
@@ -110,11 +114,13 @@ export function SidebarNav() {
               asChild
               size="lg"
               isActive={isAppPathActive(pathname, dashboardNavItem.to)}
-              className="rounded-[1rem] border border-transparent px-3 text-sidebar-foreground/88 data-[active=true]:border-sidebar-border/50 data-[active=true]:bg-sidebar-accent/80"
+              className="rounded-xl border border-transparent px-3 text-sidebar-foreground/90 hover:bg-sidebar-accent data-[active=true]:border-primary/20 data-[active=true]:bg-primary/10 data-[active=true]:text-primary"
             >
               <Link to={dashboardNavItem.to}>
                 <dashboardNavItem.icon />
-                <span>{t(dashboardNavItem.titleKey, dashboardNavItem.fallbackTitle)}</span>
+                <span>
+                  {t(dashboardNavItem.titleKey, dashboardNavItem.fallbackTitle)}
+                </span>
                 <span className="ms-auto size-2 rounded-full bg-sidebar-primary" />
               </Link>
             </SidebarMenuButton>
@@ -124,7 +130,7 @@ export function SidebarNav() {
 
       {sections.map((section) => {
         const hasActiveChild = section.items.some((item) =>
-          isAppPathActive(pathname, item.to)
+          isAppPathActive(pathname, item.to),
         )
         const SectionIcon = section.icon
 
@@ -132,21 +138,23 @@ export function SidebarNav() {
           <SidebarGroup key={section.id} className="py-0">
             <Collapsible defaultOpen className="group/collapsible">
               <SidebarMenu>
-                <SidebarMenuItem className="rounded-[1.15rem] border border-transparent bg-white/[0.02] transition-colors hover:border-white/[0.06]">
+                <SidebarMenuItem className="rounded-xl border border-transparent transition-colors hover:border-sidebar-border">
                   <CollapsibleTrigger asChild>
                     <SidebarMenuButton
                       size="lg"
-                      className="rounded-[1rem] px-3 text-sidebar-foreground/82 hover:text-sidebar-foreground"
+                      className="rounded-xl px-3 text-sidebar-foreground/85 hover:bg-sidebar-accent hover:text-sidebar-foreground data-[active=true]:text-primary"
                       isActive={hasActiveChild}
                     >
                       <SectionIcon />
-                      <span>{label(section.fallbackTitle, section.titleKey)}</span>
+                      <span>
+                        {label(section.fallbackTitle, section.titleKey)}
+                      </span>
                       <ChevronDown className="ms-auto text-sidebar-foreground/45 transition-transform group-data-[state=open]/collapsible:rotate-180" />
                     </SidebarMenuButton>
                   </CollapsibleTrigger>
 
                   <CollapsibleContent>
-                    <SidebarMenuSub className="mx-3 mb-3 mt-1 border-sidebar-border/45 px-2">
+                    <SidebarMenuSub className="mx-3 mb-3 mt-1 border-sidebar-border px-2">
                       {section.items.map((item) => {
                         const ItemIcon = item.icon
                         const isActive = isAppPathActive(pathname, item.to)
@@ -156,11 +164,13 @@ export function SidebarNav() {
                             <SidebarMenuSubButton
                               asChild
                               isActive={isActive}
-                              className="rounded-[0.95rem] px-2.5 text-sidebar-foreground/72 data-[active=true]:bg-sidebar-accent/70 data-[active=true]:text-sidebar-foreground"
+                              className="rounded-lg px-2.5 text-sidebar-foreground/75 hover:bg-sidebar-accent hover:text-sidebar-foreground data-[active=true]:bg-primary/10 data-[active=true]:font-semibold data-[active=true]:text-primary"
                             >
                               <Link to={item.to}>
                                 <ItemIcon />
-                                <span>{label(item.fallbackTitle, item.titleKey)}</span>
+                                <span>
+                                  {label(item.fallbackTitle, item.titleKey)}
+                                </span>
                               </Link>
                             </SidebarMenuSubButton>
                           </SidebarMenuSubItem>

@@ -17,13 +17,13 @@ function CrmCustomersPage() {
           label: 'Active customers',
           value: '—',
           hint: 'Lifecycle status: active',
-          tone: 'teal',
+          tone: 'red',
         },
         {
           label: 'At risk',
           value: '—',
           hint: 'No purchase in the at-risk window',
-          tone: 'amber',
+          tone: 'accent',
         },
         {
           label: 'VIP members',

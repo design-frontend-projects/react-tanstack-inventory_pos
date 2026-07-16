@@ -22,13 +22,13 @@ function PosOrdersPage() {
           label: 'Completed today',
           value: '286',
           hint: 'Across all active lanes',
-          tone: 'teal',
+          tone: 'red',
         },
         {
           label: 'Pending review',
           value: '6',
           hint: 'Discounts or manual overrides',
-          tone: 'amber',
+          tone: 'accent',
         },
         {
           label: 'Refunded',

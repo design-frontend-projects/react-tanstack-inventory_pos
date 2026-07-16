@@ -130,7 +130,7 @@ function AccessManagementPage() {
             label: 'Permissions',
             value: String(accessQuery.data?.permissions.length ?? 0),
             hint: 'Granular action keys',
-            tone: 'teal',
+            tone: 'red',
           },
           {
             label: 'Users with overrides',
@@ -138,7 +138,7 @@ function AccessManagementPage() {
               accessQuery.data?.users.filter((user) => user.permissionOverrides.length > 0).length ?? 0
             ),
             hint: 'Direct allow or deny rules',
-            tone: 'amber',
+            tone: 'accent',
           },
         ]}
       >

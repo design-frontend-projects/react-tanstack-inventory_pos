@@ -29,13 +29,13 @@ function PosReturnsPage() {
           label: 'Approval needed',
           value: '1',
           hint: 'High-value basket',
-          tone: 'amber',
+          tone: 'accent',
         },
         {
           label: 'Restocked lines',
           value: '8',
           hint: 'Ready to sync into stock movements',
-          tone: 'teal',
+          tone: 'red',
         },
       ]}
     >

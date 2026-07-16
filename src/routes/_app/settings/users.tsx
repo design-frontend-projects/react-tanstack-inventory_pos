@@ -265,7 +265,7 @@ function UsersAccessPage() {
       label: 'Active members',
       value: String(users.filter((user) => user.status === 'active').length),
       hint: 'Tenant users with current access',
-      tone: 'teal' as const,
+      tone: 'red' as const,
     },
     {
       label: 'Pending invites',
@@ -281,7 +281,7 @@ function UsersAccessPage() {
         ).length
       ),
       hint: 'Blocked from tenant features',
-      tone: 'amber' as const,
+      tone: 'accent' as const,
     },
   ]
 

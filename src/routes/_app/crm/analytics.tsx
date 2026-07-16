@@ -17,13 +17,13 @@ function CrmAnalyticsPage() {
           label: 'Avg order value',
           value: '—',
           hint: 'Across active customers',
-          tone: 'teal',
+          tone: 'red',
         },
         {
           label: 'Churn risk',
           value: '—',
           hint: 'Customers above threshold',
-          tone: 'amber',
+          tone: 'accent',
         },
         {
           label: 'Repeat rate',

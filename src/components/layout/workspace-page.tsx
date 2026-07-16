@@ -5,15 +5,16 @@ export type WorkspaceMetric = {
   label: string
   value: string
   hint: string
-  tone?: 'teal' | 'amber' | 'neutral'
+  tone?: 'red' | 'accent' | 'neutral'
 }
 
 export type WorkspacePageVariant = 'hero' | 'compact'
 
 const toneClassName: Record<NonNullable<WorkspaceMetric['tone']>, string> = {
-  teal: 'border-primary/25 bg-primary/[0.08]',
-  amber: 'border-[color:var(--ops-amber-soft)] bg-[color:var(--ops-amber-soft)]',
-  neutral: 'border-border/65 bg-background/70',
+  red: 'border-primary/25 bg-primary/[0.06]',
+  accent:
+    'border-[color:var(--ops-amber-soft)] bg-[color:var(--ops-amber-soft)]',
+  neutral: 'border-border bg-card',
 }
 
 function WorkspaceMetricStrip({
@@ -29,15 +30,15 @@ function WorkspaceMetricStrip({
         'grid gap-3',
         variant === 'hero'
           ? 'md:grid-cols-3 xl:grid-cols-1'
-          : 'md:grid-cols-3 xl:grid-cols-1'
+          : 'md:grid-cols-3 xl:grid-cols-1',
       )}
     >
       {metrics.map((metric) => (
         <article
           key={metric.label}
           className={cn(
-            'ops-panel rounded-[1.35rem] px-4 py-4',
-            toneClassName[metric.tone ?? 'neutral']
+            'rounded-xl border px-4 py-4',
+            toneClassName[metric.tone ?? 'neutral'],
           )}
         >
           <p className="ops-panel-label">{metric.label}</p>
@@ -45,7 +46,7 @@ function WorkspaceMetricStrip({
             <strong
               className={cn(
                 'font-semibold tracking-tight',
-                variant === 'hero' ? 'text-3xl' : 'text-[1.9rem]'
+                variant === 'hero' ? 'text-3xl' : 'text-[1.9rem]',
               )}
             >
               {metric.value}
@@ -83,29 +84,29 @@ export function WorkspacePage({
     <div className="flex flex-col gap-6">
       <section
         className={cn(
-          'relative overflow-hidden rounded-[1.85rem]',
+          'relative overflow-hidden rounded-2xl',
           isHero
             ? 'ops-shell px-6 py-7 md:px-8 md:py-8'
-            : 'ops-panel px-5 py-5 md:px-6 md:py-6'
+            : 'ops-panel px-5 py-5 md:px-6 md:py-6',
         )}
       >
-        <div className="pointer-events-none absolute inset-x-1/3 top-0 h-px bg-gradient-to-r from-transparent via-primary/75 to-transparent" />
-        <div className="pointer-events-none absolute right-0 top-0 size-40 rounded-full bg-primary/10 blur-3xl" />
+        <div className="pointer-events-none absolute inset-x-8 top-0 h-px bg-linear-to-r from-transparent via-primary/50 to-transparent" />
         <div
           className={cn(
             'grid gap-6',
             isHero
               ? 'xl:grid-cols-[1.15fr_0.85fr]'
-              : 'xl:grid-cols-[minmax(0,1fr)_minmax(17rem,22rem)]'
+              : 'xl:grid-cols-[minmax(0,1fr)_minmax(17rem,22rem)]',
           )}
         >
           <div className="flex flex-col gap-4">
             <span className="ops-kicker">{eyebrow}</span>
             <h1
               className={cn(
+                'text-balance',
                 isHero
-                  ? 'ops-title max-w-4xl text-4xl md:text-6xl'
-                  : 'max-w-4xl text-2xl font-semibold tracking-tight md:text-4xl'
+                  ? 'ops-title max-w-4xl text-3xl md:text-5xl'
+                  : 'max-w-4xl text-2xl font-semibold tracking-tight md:text-4xl',
               )}
             >
               {title}
@@ -113,12 +114,14 @@ export function WorkspacePage({
             <p
               className={cn(
                 'max-w-3xl text-sm leading-7 text-muted-foreground',
-                isHero ? 'md:text-base' : 'md:text-[0.95rem]'
+                isHero ? 'md:text-base' : 'md:text-[0.95rem]',
               )}
             >
               {description}
             </p>
-            {actions ? <div className="flex flex-wrap gap-3">{actions}</div> : null}
+            {actions ? (
+              <div className="flex flex-wrap gap-3">{actions}</div>
+            ) : null}
           </div>
           <WorkspaceMetricStrip metrics={metrics} variant={variant} />
         </div>
@@ -143,7 +146,7 @@ export function WorkspacePanel({
   className?: string
 }) {
   return (
-    <section className={cn('ops-panel rounded-[1.55rem] p-5 md:p-6', className)}>
+    <section className={cn('ops-panel rounded-2xl p-5 md:p-6', className)}>
       <div className="flex flex-col gap-3">
         <span className="ops-kicker">{eyebrow}</span>
         <div className="ops-rule" />
@@ -175,12 +178,7 @@ export function WorkspaceDetailCard({
   className?: string
 }) {
   return (
-    <article
-      className={cn(
-        'rounded-[1.2rem] border border-border/65 bg-background/72 p-4 shadow-[0_10px_28px_-24px_rgba(15,23,42,0.45)]',
-        className
-      )}
-    >
+    <article className={cn('pin-card p-4', className)}>
       <p className="text-sm font-semibold text-foreground">{title}</p>
       <p className="mt-2 text-sm leading-6 text-muted-foreground">
         {description}
@@ -208,8 +206,8 @@ export function WorkspaceTimelineItem({
   return (
     <div
       className={cn(
-        'flex items-center gap-4 rounded-[1.1rem] border border-border/65 bg-background/70 px-4 py-3',
-        className
+        'flex items-center gap-4 rounded-lg border border-border bg-card px-4 py-3',
+        className,
       )}
     >
       <div className="min-w-14 text-sm font-semibold">{leading}</div>
@@ -235,8 +233,8 @@ export function WorkspaceEmptyState({
   return (
     <div
       className={cn(
-        'rounded-[1.25rem] border border-dashed border-border/80 bg-background/65 p-5 text-sm',
-        className
+        'rounded-xl border border-dashed border-border bg-muted/60 p-5 text-sm',
+        className,
       )}
     >
       <p className="font-semibold text-foreground">{title}</p>

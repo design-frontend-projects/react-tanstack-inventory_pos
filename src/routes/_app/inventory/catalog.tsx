@@ -22,13 +22,13 @@ function CatalogPage() {
           label: 'Active lines',
           value: '1,482',
           hint: 'Sellable or trackable items',
-          tone: 'teal',
+          tone: 'red',
         },
         {
           label: 'Hybrid items',
           value: '126',
           hint: 'Shared by restaurant + POS',
-          tone: 'amber',
+          tone: 'accent',
         },
         {
           label: 'Draft changes',

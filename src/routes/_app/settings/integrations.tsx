@@ -22,7 +22,7 @@ function IntegrationsPage() {
           label: 'Connected services',
           value: '4',
           hint: 'Auth, DB, maps, messaging',
-          tone: 'teal',
+          tone: 'red',
         },
         {
           label: 'Secrets exposed',
@@ -34,7 +34,7 @@ function IntegrationsPage() {
           label: 'Pending keys',
           value: '2',
           hint: 'Maps and OneSignal placeholders',
-          tone: 'amber',
+          tone: 'accent',
         },
       ]}
     >

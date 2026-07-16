@@ -223,13 +223,13 @@ function RoleManagementPage() {
             label: 'Custom roles',
             value: String(customRoleCount),
             hint: 'Editable in this tenant',
-            tone: 'teal',
+            tone: 'red',
           },
           {
             label: 'Your authority',
             value: String(data?.actorRank ?? 0),
             hint: 'Max rank you can grant below',
-            tone: 'amber',
+            tone: 'accent',
           },
         ]}
       >

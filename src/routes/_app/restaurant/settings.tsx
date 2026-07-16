@@ -17,7 +17,7 @@ function RestaurantSettingsPage() {
       title="Configure restaurants, branches, and the floor from one surface."
       description="This screen manages the restaurant master data — restaurants and branches, dining areas and tables, service types, kitchen stations, tax and service-charge rules, and per-branch numbering — all backed by the res_ tables and the restaurant master-data server functions."
       metrics={[
-        { label: 'Restaurants', value: '—', hint: 'Brands under this tenant', tone: 'teal' },
+        { label: 'Restaurants', value: '—', hint: 'Brands under this tenant', tone: 'red' },
         { label: 'Active branches', value: '—', hint: 'Operational outlets', tone: 'neutral' },
         { label: 'Service types', value: '—', hint: 'Dine-in, delivery, takeaway…', tone: 'neutral' },
       ]}

@@ -22,13 +22,13 @@ function TableServicePage() {
           label: 'Occupied tables',
           value: '21',
           hint: 'Peak lunch seating',
-          tone: 'teal',
+          tone: 'red',
         },
         {
           label: 'Turn targets missed',
           value: '3',
           hint: 'Requires floor manager input',
-          tone: 'amber',
+          tone: 'accent',
         },
         {
           label: 'Average dwell',

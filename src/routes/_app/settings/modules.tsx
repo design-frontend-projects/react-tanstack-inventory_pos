@@ -147,7 +147,7 @@ function ModuleManagementPage() {
             label: 'Enabled',
             value: String(enabledCount),
             hint: 'Visible in this tenant',
-            tone: 'teal',
+            tone: 'red',
           },
         ]}
       >

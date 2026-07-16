@@ -17,7 +17,7 @@ function CrmSegmentsPage() {
           label: 'Active segments',
           value: '—',
           hint: 'Rule-based audiences',
-          tone: 'teal',
+          tone: 'red',
         },
         {
           label: 'Largest segment',
@@ -29,7 +29,7 @@ function CrmSegmentsPage() {
           label: 'Last rebuild',
           value: '—',
           hint: 'Full membership recompute',
-          tone: 'amber',
+          tone: 'accent',
         },
       ]}
     >

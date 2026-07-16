@@ -1,4 +1,4 @@
-"use client"
+'use client'
 
 import { useTranslation } from 'react-i18next'
 import { useNavigate, useRouterState } from '@tanstack/react-router'
@@ -38,7 +38,7 @@ export function AppShell({ children }: { children: React.ReactNode }) {
   const setSidebarOpen = useLayoutStore((state) => state.setSidebarOpen)
   const sidebarOpenMobile = useLayoutStore((state) => state.sidebarOpenMobile)
   const setSidebarOpenMobile = useLayoutStore(
-    (state) => state.setSidebarOpenMobile
+    (state) => state.setSidebarOpenMobile,
   )
   const pathname = useRouterState({
     select: (state) => state.location.pathname,
@@ -54,13 +54,19 @@ export function AppShell({ children }: { children: React.ReactNode }) {
 
   const activeLabel = activeNav
     ? label(activeNav.screenFallback, activeNav.screenTitleKey)
-    : t(staticContext.activeItem.titleKey, staticContext.activeItem.fallbackTitle)
+    : t(
+        staticContext.activeItem.titleKey,
+        staticContext.activeItem.fallbackTitle,
+      )
   const activeSectionLabel = activeNav
     ? activeNav.moduleFallback
       ? label(activeNav.moduleFallback, activeNav.moduleTitleKey)
       : t('actions.overview')
     : staticContext.activeSection
-      ? t(staticContext.activeSection.titleKey, staticContext.activeSection.fallbackTitle)
+      ? t(
+          staticContext.activeSection.titleKey,
+          staticContext.activeSection.fallbackTitle,
+        )
       : t('actions.overview')
   const sidebarSide = direction === 'rtl' ? 'right' : 'left'
   const activeTenantName = activeMembership?.tenantName ?? 'No active workspace'
@@ -80,16 +86,14 @@ export function AppShell({ children }: { children: React.ReactNode }) {
         variant="inset"
         className="border-e-0 md:p-3"
       >
-        <div className="ops-sidebar-shell flex size-full flex-col rounded-[1.65rem] border border-white/[0.06]">
+        <div className="ops-sidebar-shell flex size-full flex-col rounded-2xl border border-sidebar-border">
           <SidebarHeader className="gap-4 px-3 pt-3">
-            <div className="rounded-[1.35rem] border border-white/[0.08] bg-white/[0.03] px-3 py-4">
-              <p className="ops-kicker text-sidebar-foreground/52">
-                {t('app.title')}
-              </p>
+            <div className="rounded-xl border border-sidebar-border bg-sidebar-accent px-3 py-4">
+              <p className="ops-kicker">{t('app.title')}</p>
               <h1 className="mt-2 text-base font-semibold text-sidebar-foreground md:text-lg">
                 {t('app.deckTitle')}
               </h1>
-              <p className="mt-1 text-sm leading-6 text-sidebar-foreground/62">
+              <p className="mt-1 text-sm leading-6 text-sidebar-foreground/70">
                 {t('app.subtitle')}
               </p>
             </div>
@@ -101,10 +105,10 @@ export function AppShell({ children }: { children: React.ReactNode }) {
           </SidebarContent>
 
           <SidebarFooter className="gap-3 px-3 pb-3">
-            <div className="rounded-[1.35rem] border border-white/[0.08] bg-white/[0.03] p-3 text-sidebar-foreground">
+            <div className="rounded-xl border border-sidebar-border bg-sidebar-accent p-3 text-sidebar-foreground">
               <div className="flex items-center gap-3">
-                <Avatar className="size-10 rounded-xl border border-white/[0.08] bg-white/[0.06]">
-                  <AvatarFallback className="rounded-xl bg-transparent text-sidebar-foreground">
+                <Avatar className="size-10 rounded-full border border-sidebar-border bg-primary/10">
+                  <AvatarFallback className="rounded-full bg-transparent font-semibold text-primary">
                     AK
                   </AvatarFallback>
                 </Avatar>
@@ -112,23 +116,23 @@ export function AppShell({ children }: { children: React.ReactNode }) {
                   <p className="truncate text-sm font-semibold">
                     {user?.displayName ?? 'Signed-out user'}
                   </p>
-                  <p className="truncate text-xs text-sidebar-foreground/62">
+                  <p className="truncate text-xs text-sidebar-foreground/70">
                     {user?.email ?? 'No email'}
                   </p>
                 </div>
               </div>
-              <div className="mt-3 flex items-center justify-between gap-2 border-t border-white/[0.08] pt-3">
+              <div className="mt-3 flex items-center justify-between gap-2 border-t border-sidebar-border pt-3">
                 <Badge variant="secondary" className="capitalize">
                   {activeRoleLabel}
                 </Badge>
-                <span className="truncate text-xs text-sidebar-foreground/62">
+                <span className="truncate text-xs text-sidebar-foreground/70">
                   {activeTenantName}
                 </span>
               </div>
               <Button
                 type="button"
                 variant="ghost"
-                className="mt-3 w-full justify-between rounded-xl text-sidebar-foreground/78 hover:bg-white/[0.06] hover:text-sidebar-foreground"
+                className="mt-3 w-full justify-between text-sidebar-foreground/80 hover:bg-sidebar-accent-foreground/5 hover:text-sidebar-foreground"
                 onClick={async () => {
                   await signOut()
                   void navigate({ to: '/sign-in' })
@@ -146,7 +150,7 @@ export function AppShell({ children }: { children: React.ReactNode }) {
 
       <SidebarInset className="min-h-svh bg-transparent">
         <header className="ops-topbar sticky top-0 z-20 px-4 py-3 md:px-8 md:py-4">
-          <div className="grid grid-cols-[minmax(0,1fr)_auto] items-center gap-3 md:grid-cols-[minmax(0,1fr)_minmax(22rem,32rem)_auto]">
+          <div className="grid grid-cols-[minmax(0,1fr)_auto] items-center gap-3 lg:grid-cols-[minmax(0,1fr)_minmax(16rem,30rem)_auto]">
             <div className="flex min-w-0 items-center gap-3">
               <SidebarTrigger className="rounded-full border border-border/70 bg-background/75 shadow-none" />
               <div className="min-w-0">
@@ -171,7 +175,7 @@ export function AppShell({ children }: { children: React.ReactNode }) {
               activeTenantId={activeMembership?.tenantId ?? ''}
               onNavigate={(to) => void navigate({ to })}
               onSelectWorkspace={setActiveTenantId}
-              className="order-3 col-span-full md:order-2 md:col-span-1 md:max-w-[32rem] md:justify-self-center"
+              className="order-3 col-span-full lg:order-2 lg:col-span-1 lg:max-w-120 lg:justify-self-center"
             />
 
             <div className="order-2 flex flex-wrap items-center justify-end gap-2 md:order-3">

@@ -22,13 +22,13 @@ function MenuEngineeringPage() {
           label: 'Signature items',
           value: '18',
           hint: 'High velocity + high margin',
-          tone: 'teal',
+          tone: 'red',
         },
         {
           label: 'Menu edits',
           value: '5',
           hint: 'Pending approval this week',
-          tone: 'amber',
+          tone: 'accent',
         },
         {
           label: 'Crossovers',

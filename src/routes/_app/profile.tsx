@@ -103,7 +103,7 @@ function ProfilePage() {
           label: 'Profile state',
           value: session.user.profileCompleted ? 'Complete' : 'Pending',
           hint: 'Profile completion flag',
-          tone: 'teal',
+          tone: 'red',
         },
         {
           label: 'Tenant role',

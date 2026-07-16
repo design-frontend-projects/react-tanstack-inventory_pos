@@ -23,7 +23,7 @@ function NotificationsSettingsPage() {
           label: 'Active subscriptions',
           value: '29',
           hint: 'Browser-level test fixture',
-          tone: 'teal',
+          tone: 'red',
         },
         {
           label: 'Queued sends',
@@ -35,7 +35,7 @@ function NotificationsSettingsPage() {
           label: 'Denied browsers',
           value: '11',
           hint: 'Needs enablement campaign',
-          tone: 'amber',
+          tone: 'accent',
         },
       ]}
     >

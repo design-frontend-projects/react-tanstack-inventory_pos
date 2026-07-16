@@ -22,13 +22,13 @@ function StockLedgerPage() {
           label: 'Movement rows today',
           value: '842',
           hint: 'Sales, restocks, and adjustments',
-          tone: 'teal',
+          tone: 'red',
         },
         {
           label: 'Variance flags',
           value: '7',
           hint: 'Needs manager review',
-          tone: 'amber',
+          tone: 'accent',
         },
         {
           label: 'Auto updates',

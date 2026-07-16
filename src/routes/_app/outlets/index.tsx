@@ -23,7 +23,7 @@ function OutletsPage() {
           label: 'Mapped outlets',
           value: '12',
           hint: '9 active + 3 pilot',
-          tone: 'teal',
+          tone: 'red',
         },
         {
           label: 'Timezone splits',
@@ -35,7 +35,7 @@ function OutletsPage() {
           label: 'Missing coords',
           value: '1',
           hint: 'Needs geocoding completion',
-          tone: 'amber',
+          tone: 'accent',
         },
       ]}
     >

@@ -17,13 +17,13 @@ function CrmLoyaltyPage() {
           label: 'Points liability',
           value: '—',
           hint: 'Outstanding redeemable points',
-          tone: 'amber',
+          tone: 'accent',
         },
         {
           label: 'Members',
           value: '—',
           hint: 'Customers with loyalty accounts',
-          tone: 'teal',
+          tone: 'red',
         },
         {
           label: 'Redemptions (30d)',

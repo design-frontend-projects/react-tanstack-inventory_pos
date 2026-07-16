@@ -1,4 +1,4 @@
-"use client"
+'use client'
 
 import { useTranslation } from 'react-i18next'
 import {
@@ -15,7 +15,8 @@ import { ChevronDown, Crown, Store } from 'lucide-react'
 
 export function WorkspaceSwitcher() {
   const { t } = useTranslation()
-  const { memberships, activeMembership, setActiveTenantId } = useSessionBootstrap()
+  const { memberships, activeMembership, setActiveTenantId } =
+    useSessionBootstrap()
 
   if (!activeMembership) {
     return null
@@ -26,7 +27,7 @@ export function WorkspaceSwitcher() {
       <DropdownMenuTrigger asChild>
         <Button
           variant="outline"
-          className="h-auto w-full justify-between rounded-[1.1rem] border-white/[0.08] bg-white/[0.04] px-3 py-2.5 text-start text-sidebar-foreground shadow-none hover:bg-white/[0.07]"
+          className="h-auto w-full justify-between rounded-xl border-sidebar-border bg-sidebar-accent px-3 py-2.5 text-start text-sidebar-foreground shadow-none hover:bg-sidebar-accent/70"
         >
           <span className="flex min-w-0 items-center gap-3">
             <span className="flex size-9 items-center justify-center rounded-xl bg-sidebar-primary/[0.16] text-sidebar-primary">
@@ -60,7 +61,9 @@ export function WorkspaceSwitcher() {
                   {membership.tenantName}
                 </span>
                 <span className="truncate text-xs text-muted-foreground">
-                  {membership.status === 'active' ? 'Active workspace access' : 'Pending workspace access'}
+                  {membership.status === 'active'
+                    ? 'Active workspace access'
+                    : 'Pending workspace access'}
                 </span>
               </span>
               <div className="flex flex-col items-end gap-2">
