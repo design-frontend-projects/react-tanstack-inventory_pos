@@ -107,7 +107,7 @@ export const appNavSections: AppNavSection[] = [
     fallbackTitle: 'Inventory',
     rootTo: '/inventory',
     keywords: ['inventory', 'stock', 'catalog', 'supply', 'outlets'],
-    permissions: ['tenant.view', 'res.dashboard.view'],
+    permissions: ['inventory.view_stock', 'product.view', 'warehouse.view'],
     items: [
       {
         id: 'inventory-overview',
@@ -117,7 +117,7 @@ export const appNavSections: AppNavSection[] = [
         titleKey: 'nav.inventoryOverview',
         fallbackTitle: 'Overview',
         keywords: ['inventory overview', 'coverage', 'reorder', 'stock'],
-        permissions: ['tenant.view', 'res.dashboard.view'],
+        permissions: ['inventory.view_stock'],
       },
       {
         id: 'inventory-catalog',
@@ -127,7 +127,7 @@ export const appNavSections: AppNavSection[] = [
         titleKey: 'nav.inventoryCatalog',
         fallbackTitle: 'Catalog',
         keywords: ['catalog', 'products', 'assortment', 'sku'],
-        permissions: ['tenant.view', 'res.dashboard.view'],
+        permissions: ['product.view'],
       },
       {
         id: 'inventory-outlets',
@@ -137,7 +137,7 @@ export const appNavSections: AppNavSection[] = [
         titleKey: 'nav.inventoryOutlets',
         fallbackTitle: 'Outlets',
         keywords: ['outlets', 'stores', 'locations', 'coverage'],
-        permissions: ['tenant.view', 'res.dashboard.view'],
+        permissions: ['warehouse.view'],
       },
       {
         id: 'inventory-stock',
@@ -147,7 +147,7 @@ export const appNavSections: AppNavSection[] = [
         titleKey: 'nav.inventoryStock',
         fallbackTitle: 'Stock Ledger',
         keywords: ['stock ledger', 'movements', 'thresholds', 'balance'],
-        permissions: ['tenant.view', 'res.dashboard.view'],
+        permissions: ['inventory.view_stock', 'inventory.view_movements'],
       },
     ],
   },
@@ -249,7 +249,14 @@ export const appNavSections: AppNavSection[] = [
         icon: HeartHandshake,
         titleKey: 'nav.crmCustomers',
         fallbackTitle: 'Customers 360',
-        keywords: ['crm', 'customers', '360', 'profiles', 'timeline', 'consent'],
+        keywords: [
+          'crm',
+          'customers',
+          '360',
+          'profiles',
+          'timeline',
+          'consent',
+        ],
         permissions: ['crm.view'],
       },
       {
@@ -310,8 +317,19 @@ export const appNavSections: AppNavSection[] = [
         icon: ShieldCheck,
         titleKey: 'nav.systemSecurity',
         fallbackTitle: 'Security Center',
-        keywords: ['security', 'rbac', 'modules', 'screens', 'registry', 'audit'],
-        permissions: ['tenant.manage_settings', 'res.settings.manage', 'user.view'],
+        keywords: [
+          'security',
+          'rbac',
+          'modules',
+          'screens',
+          'registry',
+          'audit',
+        ],
+        permissions: [
+          'tenant.manage_settings',
+          'res.settings.manage',
+          'user.view',
+        ],
       },
       {
         id: 'settings-roles',
@@ -396,7 +414,7 @@ export function getAppNavSection(sectionId: AppNavSectionId) {
 
 export function findActiveNavItem(pathname: string) {
   const rankedItems = [...flatAppNavItems].sort(
-    (left, right) => right.to.length - left.to.length
+    (left, right) => right.to.length - left.to.length,
   )
 
   return rankedItems.find((item) => isAppPathActive(pathname, item.to))

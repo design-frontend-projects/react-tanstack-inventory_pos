@@ -142,7 +142,7 @@ export const SCREEN_DEFINITIONS: ReadonlyArray<ScreenDefinition> = [
     icon: 'PackageSearch',
     displayOrder: 0,
     keywords: ['inventory overview', 'coverage', 'reorder', 'stock'],
-    defaultPermissionCode: 'tenant.view',
+    defaultPermissionCode: 'inventory.view_stock',
   },
   {
     moduleCode: 'inventory',
@@ -153,7 +153,7 @@ export const SCREEN_DEFINITIONS: ReadonlyArray<ScreenDefinition> = [
     icon: 'ClipboardList',
     displayOrder: 1,
     keywords: ['catalog', 'products', 'assortment', 'sku'],
-    defaultPermissionCode: 'tenant.view',
+    defaultPermissionCode: 'product.view',
   },
   {
     moduleCode: 'inventory',
@@ -164,7 +164,7 @@ export const SCREEN_DEFINITIONS: ReadonlyArray<ScreenDefinition> = [
     icon: 'MapPinned',
     displayOrder: 2,
     keywords: ['outlets', 'stores', 'locations', 'coverage'],
-    defaultPermissionCode: 'tenant.view',
+    defaultPermissionCode: 'warehouse.view',
   },
   {
     moduleCode: 'inventory',
@@ -175,7 +175,7 @@ export const SCREEN_DEFINITIONS: ReadonlyArray<ScreenDefinition> = [
     icon: 'ReceiptText',
     displayOrder: 3,
     keywords: ['stock ledger', 'movements', 'thresholds', 'balance'],
-    defaultPermissionCode: 'tenant.view',
+    defaultPermissionCode: 'inventory.view_stock',
   },
   {
     moduleCode: 'purchase',

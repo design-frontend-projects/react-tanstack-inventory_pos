@@ -53,7 +53,7 @@ export type ProductWithVariants = Prisma.ProductGetPayload<{
 export function findProductById(
   tenantId: string,
   id: string,
-  client: PrismaClientLike = prisma
+  client: PrismaClientLike = prisma,
 ): Promise<ProductWithVariants | null> {
   return client.product.findFirst({
     where: { id, tenantId, deletedAt: null },
@@ -74,7 +74,7 @@ export interface ListProductsFilters {
 export function listProducts(
   tenantId: string,
   filters: ListProductsFilters = {},
-  client: PrismaClientLike = prisma
+  client: PrismaClientLike = prisma,
 ) {
   return client.product.findMany({
     where: {
@@ -103,7 +103,7 @@ export function listProducts(
 export function countProducts(
   tenantId: string,
   filters: ListProductsFilters = {},
-  client: PrismaClientLike = prisma
+  client: PrismaClientLike = prisma,
 ) {
   return client.product.count({
     where: {
@@ -113,6 +113,15 @@ export function countProducts(
       ...(filters.brandId ? { brandId: filters.brandId } : {}),
       ...(filters.productType ? { productType: filters.productType } : {}),
       ...(filters.status ? { status: filters.status } : {}),
+      ...(filters.search
+        ? {
+            OR: [
+              { name: { contains: filters.search, mode: 'insensitive' } },
+              { sku: { contains: filters.search, mode: 'insensitive' } },
+              { barcode: { contains: filters.search, mode: 'insensitive' } },
+            ],
+          }
+        : {}),
     },
   })
 }
@@ -120,7 +129,7 @@ export function countProducts(
 export function createProduct(
   tenantId: string,
   input: ProductWriteInput,
-  client: PrismaClientLike = prisma
+  client: PrismaClientLike = prisma,
 ) {
   return client.product.create({
     data: {
@@ -161,7 +170,7 @@ export async function updateProduct(
   tenantId: string,
   id: string,
   data: Partial<ProductWriteInput>,
-  client: PrismaClientLike = prisma
+  client: PrismaClientLike = prisma,
 ) {
   const result = await client.product.updateMany({
     where: { id, tenantId, deletedAt: null },
@@ -169,28 +178,64 @@ export async function updateProduct(
       ...(data.sku !== undefined ? { sku: data.sku.trim() } : {}),
       ...(data.name !== undefined ? { name: data.name.trim() } : {}),
       ...(data.slug !== undefined ? { slug: data.slug ?? null } : {}),
-      ...(data.description !== undefined ? { description: data.description ?? null } : {}),
-      ...(data.productType !== undefined ? { productType: data.productType } : {}),
-      ...(data.trackingPolicy !== undefined ? { trackingPolicy: data.trackingPolicy } : {}),
-      ...(data.isStockTracked !== undefined ? { isStockTracked: data.isStockTracked } : {}),
+      ...(data.description !== undefined
+        ? { description: data.description ?? null }
+        : {}),
+      ...(data.productType !== undefined
+        ? { productType: data.productType }
+        : {}),
+      ...(data.trackingPolicy !== undefined
+        ? { trackingPolicy: data.trackingPolicy }
+        : {}),
+      ...(data.isStockTracked !== undefined
+        ? { isStockTracked: data.isStockTracked }
+        : {}),
       ...(data.hasExpiry !== undefined ? { hasExpiry: data.hasExpiry } : {}),
-      ...(data.shelfLifeDays !== undefined ? { shelfLifeDays: data.shelfLifeDays ?? null } : {}),
-      ...(data.categoryId !== undefined ? { categoryId: data.categoryId ?? null } : {}),
+      ...(data.shelfLifeDays !== undefined
+        ? { shelfLifeDays: data.shelfLifeDays ?? null }
+        : {}),
+      ...(data.categoryId !== undefined
+        ? { categoryId: data.categoryId ?? null }
+        : {}),
       ...(data.brandId !== undefined ? { brandId: data.brandId ?? null } : {}),
       ...(data.baseUomId !== undefined ? { baseUomId: data.baseUomId } : {}),
-      ...(data.salesUomId !== undefined ? { salesUomId: data.salesUomId ?? null } : {}),
-      ...(data.purchaseUomId !== undefined ? { purchaseUomId: data.purchaseUomId ?? null } : {}),
-      ...(data.costingMethod !== undefined ? { costingMethod: data.costingMethod } : {}),
-      ...(data.standardCost !== undefined ? { standardCost: data.standardCost ?? null } : {}),
-      ...(data.defaultPrice !== undefined ? { defaultPrice: data.defaultPrice ?? null } : {}),
-      ...(data.taxRateId !== undefined ? { taxRateId: data.taxRateId ?? null } : {}),
+      ...(data.salesUomId !== undefined
+        ? { salesUomId: data.salesUomId ?? null }
+        : {}),
+      ...(data.purchaseUomId !== undefined
+        ? { purchaseUomId: data.purchaseUomId ?? null }
+        : {}),
+      ...(data.costingMethod !== undefined
+        ? { costingMethod: data.costingMethod }
+        : {}),
+      ...(data.standardCost !== undefined
+        ? { standardCost: data.standardCost ?? null }
+        : {}),
+      ...(data.defaultPrice !== undefined
+        ? { defaultPrice: data.defaultPrice ?? null }
+        : {}),
+      ...(data.taxRateId !== undefined
+        ? { taxRateId: data.taxRateId ?? null }
+        : {}),
       ...(data.barcode !== undefined ? { barcode: data.barcode ?? null } : {}),
-      ...(data.reorderPoint !== undefined ? { reorderPoint: data.reorderPoint ?? null } : {}),
-      ...(data.reorderQty !== undefined ? { reorderQty: data.reorderQty ?? null } : {}),
-      ...(data.minStock !== undefined ? { minStock: data.minStock ?? null } : {}),
-      ...(data.maxStock !== undefined ? { maxStock: data.maxStock ?? null } : {}),
-      ...(data.safetyStock !== undefined ? { safetyStock: data.safetyStock ?? null } : {}),
-      ...(data.leadTimeDays !== undefined ? { leadTimeDays: data.leadTimeDays ?? null } : {}),
+      ...(data.reorderPoint !== undefined
+        ? { reorderPoint: data.reorderPoint ?? null }
+        : {}),
+      ...(data.reorderQty !== undefined
+        ? { reorderQty: data.reorderQty ?? null }
+        : {}),
+      ...(data.minStock !== undefined
+        ? { minStock: data.minStock ?? null }
+        : {}),
+      ...(data.maxStock !== undefined
+        ? { maxStock: data.maxStock ?? null }
+        : {}),
+      ...(data.safetyStock !== undefined
+        ? { safetyStock: data.safetyStock ?? null }
+        : {}),
+      ...(data.leadTimeDays !== undefined
+        ? { leadTimeDays: data.leadTimeDays ?? null }
+        : {}),
       ...(data.preferredSupplierId !== undefined
         ? { preferredSupplierId: data.preferredSupplierId ?? null }
         : {}),
@@ -209,7 +254,7 @@ export async function updateProduct(
 export async function softDeleteProduct(
   tenantId: string,
   id: string,
-  client: PrismaClientLike = prisma
+  client: PrismaClientLike = prisma,
 ) {
   const result = await client.product.updateMany({
     where: { id, tenantId, deletedAt: null },
@@ -232,7 +277,7 @@ export interface ProductTracking {
 export async function getProductTracking(
   tenantId: string,
   productId: string,
-  client: PrismaClientLike = prisma
+  client: PrismaClientLike = prisma,
 ): Promise<ProductTracking | null> {
   const product = await client.product.findFirst({
     where: { id: productId, tenantId },

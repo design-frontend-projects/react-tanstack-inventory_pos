@@ -38,6 +38,8 @@ import { Route as AppRestaurantSettingsRouteImport } from './routes/_app/restaur
 import { Route as AppRestaurantMenuRouteImport } from './routes/_app/restaurant/menu'
 import { Route as AppRestaurantKitchenRouteImport } from './routes/_app/restaurant/kitchen'
 import { Route as AppPurchaseSuppliersRouteImport } from './routes/_app/purchase/suppliers'
+import { Route as AppPurchaseRfqsRouteImport } from './routes/_app/purchase/rfqs'
+import { Route as AppPurchaseQuotationsRouteImport } from './routes/_app/purchase/quotations'
 import { Route as AppPosReturnsRouteImport } from './routes/_app/pos/returns'
 import { Route as AppPosOrdersRouteImport } from './routes/_app/pos/orders'
 import { Route as AppInventoryStockRouteImport } from './routes/_app/inventory/stock'
@@ -191,6 +193,16 @@ const AppPurchaseSuppliersRoute = AppPurchaseSuppliersRouteImport.update({
   path: '/purchase/suppliers',
   getParentRoute: () => AppRoute,
 } as any)
+const AppPurchaseRfqsRoute = AppPurchaseRfqsRouteImport.update({
+  id: '/purchase/rfqs',
+  path: '/purchase/rfqs',
+  getParentRoute: () => AppRoute,
+} as any)
+const AppPurchaseQuotationsRoute = AppPurchaseQuotationsRouteImport.update({
+  id: '/purchase/quotations',
+  path: '/purchase/quotations',
+  getParentRoute: () => AppRoute,
+} as any)
 const AppPosReturnsRoute = AppPosReturnsRouteImport.update({
   id: '/pos/returns',
   path: '/pos/returns',
@@ -252,6 +264,8 @@ export interface FileRoutesByFullPath {
   '/inventory/stock': typeof AppInventoryStockRoute
   '/pos/orders': typeof AppPosOrdersRoute
   '/pos/returns': typeof AppPosReturnsRoute
+  '/purchase/quotations': typeof AppPurchaseQuotationsRoute
+  '/purchase/rfqs': typeof AppPurchaseRfqsRoute
   '/purchase/suppliers': typeof AppPurchaseSuppliersRoute
   '/restaurant/kitchen': typeof AppRestaurantKitchenRoute
   '/restaurant/menu': typeof AppRestaurantMenuRoute
@@ -289,6 +303,8 @@ export interface FileRoutesByTo {
   '/inventory/stock': typeof AppInventoryStockRoute
   '/pos/orders': typeof AppPosOrdersRoute
   '/pos/returns': typeof AppPosReturnsRoute
+  '/purchase/quotations': typeof AppPurchaseQuotationsRoute
+  '/purchase/rfqs': typeof AppPurchaseRfqsRoute
   '/purchase/suppliers': typeof AppPurchaseSuppliersRoute
   '/restaurant/kitchen': typeof AppRestaurantKitchenRoute
   '/restaurant/menu': typeof AppRestaurantMenuRoute
@@ -329,6 +345,8 @@ export interface FileRoutesById {
   '/_app/inventory/stock': typeof AppInventoryStockRoute
   '/_app/pos/orders': typeof AppPosOrdersRoute
   '/_app/pos/returns': typeof AppPosReturnsRoute
+  '/_app/purchase/quotations': typeof AppPurchaseQuotationsRoute
+  '/_app/purchase/rfqs': typeof AppPurchaseRfqsRoute
   '/_app/purchase/suppliers': typeof AppPurchaseSuppliersRoute
   '/_app/restaurant/kitchen': typeof AppRestaurantKitchenRoute
   '/_app/restaurant/menu': typeof AppRestaurantMenuRoute
@@ -368,6 +386,8 @@ export interface FileRouteTypes {
     | '/inventory/stock'
     | '/pos/orders'
     | '/pos/returns'
+    | '/purchase/quotations'
+    | '/purchase/rfqs'
     | '/purchase/suppliers'
     | '/restaurant/kitchen'
     | '/restaurant/menu'
@@ -405,6 +425,8 @@ export interface FileRouteTypes {
     | '/inventory/stock'
     | '/pos/orders'
     | '/pos/returns'
+    | '/purchase/quotations'
+    | '/purchase/rfqs'
     | '/purchase/suppliers'
     | '/restaurant/kitchen'
     | '/restaurant/menu'
@@ -444,6 +466,8 @@ export interface FileRouteTypes {
     | '/_app/inventory/stock'
     | '/_app/pos/orders'
     | '/_app/pos/returns'
+    | '/_app/purchase/quotations'
+    | '/_app/purchase/rfqs'
     | '/_app/purchase/suppliers'
     | '/_app/restaurant/kitchen'
     | '/_app/restaurant/menu'
@@ -674,6 +698,20 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AppPurchaseSuppliersRouteImport
       parentRoute: typeof AppRoute
     }
+    '/_app/purchase/rfqs': {
+      id: '/_app/purchase/rfqs'
+      path: '/purchase/rfqs'
+      fullPath: '/purchase/rfqs'
+      preLoaderRoute: typeof AppPurchaseRfqsRouteImport
+      parentRoute: typeof AppRoute
+    }
+    '/_app/purchase/quotations': {
+      id: '/_app/purchase/quotations'
+      path: '/purchase/quotations'
+      fullPath: '/purchase/quotations'
+      preLoaderRoute: typeof AppPurchaseQuotationsRouteImport
+      parentRoute: typeof AppRoute
+    }
     '/_app/pos/returns': {
       id: '/_app/pos/returns'
       path: '/pos/returns'
@@ -744,6 +782,8 @@ interface AppRouteChildren {
   AppInventoryStockRoute: typeof AppInventoryStockRoute
   AppPosOrdersRoute: typeof AppPosOrdersRoute
   AppPosReturnsRoute: typeof AppPosReturnsRoute
+  AppPurchaseQuotationsRoute: typeof AppPurchaseQuotationsRoute
+  AppPurchaseRfqsRoute: typeof AppPurchaseRfqsRoute
   AppPurchaseSuppliersRoute: typeof AppPurchaseSuppliersRoute
   AppRestaurantKitchenRoute: typeof AppRestaurantKitchenRoute
   AppRestaurantMenuRoute: typeof AppRestaurantMenuRoute
@@ -773,6 +813,8 @@ const AppRouteChildren: AppRouteChildren = {
   AppInventoryStockRoute: AppInventoryStockRoute,
   AppPosOrdersRoute: AppPosOrdersRoute,
   AppPosReturnsRoute: AppPosReturnsRoute,
+  AppPurchaseQuotationsRoute: AppPurchaseQuotationsRoute,
+  AppPurchaseRfqsRoute: AppPurchaseRfqsRoute,
   AppPurchaseSuppliersRoute: AppPurchaseSuppliersRoute,
   AppRestaurantKitchenRoute: AppRestaurantKitchenRoute,
   AppRestaurantMenuRoute: AppRestaurantMenuRoute,

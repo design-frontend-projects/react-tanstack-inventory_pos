@@ -15,14 +15,34 @@ type PurchaseLane = {
   meta: string
 }
 
-// Only Suppliers is wired to a route in this phase; the rest are upcoming lanes.
-const AVAILABLE_LANE: PurchaseLane & { to: '/purchase/suppliers' } = {
-  to: '/purchase/suppliers',
-  title: 'Suppliers',
-  description:
-    'Vendor master with contacts, addresses, bank accounts, categories, rating, and running balance.',
-  meta: 'Master data',
-}
+// Lanes with shipped routes; the rest render as upcoming.
+const AVAILABLE_LANES: Array<
+  PurchaseLane & {
+    to: '/purchase/suppliers' | '/purchase/rfqs' | '/purchase/quotations'
+  }
+> = [
+  {
+    to: '/purchase/suppliers',
+    title: 'Suppliers',
+    description:
+      'Vendor master with contacts, addresses, bank accounts, categories, rating, and running balance.',
+    meta: 'Master data',
+  },
+  {
+    to: '/purchase/rfqs',
+    title: 'RFQs',
+    description:
+      'Invite suppliers, track responses and revisions, and award from the comparison matrix.',
+    meta: 'Sourcing',
+  },
+  {
+    to: '/purchase/quotations',
+    title: 'Quotations',
+    description:
+      'Supplier quotations with tax, freight, and insurance — reviewed, approved, and converted to POs.',
+    meta: 'Sourcing',
+  },
+]
 
 const UPCOMING_LANES: Array<PurchaseLane> = [
   {
@@ -30,12 +50,6 @@ const UPCOMING_LANES: Array<PurchaseLane> = [
     description:
       'Internal purchase requests with priority, department, and approval routing before they become orders.',
     meta: 'Demand intake',
-  },
-  {
-    title: 'RFQs & Quotations',
-    description:
-      'Invite suppliers, collect quotations, compare on a single matrix, and award the winner.',
-    meta: 'Sourcing',
   },
   {
     title: 'Purchase Orders',
@@ -91,13 +105,15 @@ function PurchaseOverviewPage() {
         description="Each lane is permission-gated and shares the supplier, numbering, approval, and audit backbone."
       >
         <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-3">
-          <Link to={AVAILABLE_LANE.to} className="block">
-            <WorkspaceDetailCard
-              title={AVAILABLE_LANE.title}
-              description={AVAILABLE_LANE.description}
-              meta={AVAILABLE_LANE.meta}
-            />
-          </Link>
+          {AVAILABLE_LANES.map((lane) => (
+            <Link key={lane.to} to={lane.to} className="block">
+              <WorkspaceDetailCard
+                title={lane.title}
+                description={lane.description}
+                meta={lane.meta}
+              />
+            </Link>
+          ))}
           {UPCOMING_LANES.map((lane) => (
             <WorkspaceDetailCard
               key={lane.title}

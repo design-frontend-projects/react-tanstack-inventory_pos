@@ -14,10 +14,25 @@ export const productTypeSchema = z.enum([
   'SERVICE',
   'COMPOSITE',
 ])
-export const trackingPolicySchema = z.enum(['NONE', 'LOT', 'SERIAL', 'LOT_SERIAL'])
-export const costingMethodSchema = z.enum(['WEIGHTED_AVERAGE', 'FIFO', 'STANDARD'])
+export const trackingPolicySchema = z.enum([
+  'NONE',
+  'LOT',
+  'SERIAL',
+  'LOT_SERIAL',
+])
+export const costingMethodSchema = z.enum([
+  'WEIGHTED_AVERAGE',
+  'FIFO',
+  'STANDARD',
+])
 export const productStatusSchema = z.enum(['ACTIVE', 'INACTIVE', 'ARCHIVED'])
-export const uomTypeSchema = z.enum(['COUNT', 'WEIGHT', 'VOLUME', 'LENGTH', 'TIME'])
+export const uomTypeSchema = z.enum([
+  'COUNT',
+  'WEIGHT',
+  'VOLUME',
+  'LENGTH',
+  'TIME',
+])
 export const taxTypeSchema = z.enum(['VAT', 'GST', 'SALES', 'NONE'])
 export const customerTypeSchema = z.enum(['RETAIL', 'WHOLESALE', 'B2B'])
 

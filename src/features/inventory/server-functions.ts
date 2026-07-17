@@ -7,7 +7,10 @@ import * as reservationService from '#/server/inventory/reservation-service'
 import * as stockQuery from '#/server/inventory/stock-query-service'
 import * as valuationService from '#/server/inventory/valuation-service'
 import { getCurrentUserContext } from '#/server/auth/session'
-import { requirePermission, requireTenantAccess } from '#/server/auth/tenant-guard'
+import {
+  requirePermission,
+  requireTenantAccess,
+} from '#/server/auth/tenant-guard'
 import type { CurrentUserContext } from '#/types/auth'
 import {
   adjustmentCreateSchema,
@@ -21,7 +24,7 @@ const idSchema = z.string().uuid()
 
 async function resolveContext(
   data: { accessToken: string; tenantId: string },
-  permission: Array<string> | string
+  permission: Array<string> | string,
 ): Promise<CurrentUserContext> {
   return requirePermission(
     requireTenantAccess(
@@ -29,9 +32,9 @@ async function resolveContext(
         accessToken: data.accessToken,
         tenantId: data.tenantId,
       }),
-      data.tenantId
+      data.tenantId,
     ),
-    permission
+    permission,
   )
 }
 
@@ -43,7 +46,7 @@ export const listStockServerFn = createServerFn({ method: 'POST' })
       accessToken: accessTokenSchema,
       tenantId: tenantIdSchema,
       filters: stockFilterSchema.optional(),
-    })
+    }),
   )
   .handler(async ({ data }) => {
     const context = await resolveContext(data, 'inventory.view_stock')
@@ -57,7 +60,7 @@ export const listMovementsServerFn = createServerFn({ method: 'POST' })
       accessToken: accessTokenSchema,
       tenantId: tenantIdSchema,
       filters: movementFilterSchema.optional(),
-    })
+    }),
   )
   .handler(async ({ data }) => {
     const context = await resolveContext(data, 'inventory.view_movements')
@@ -71,18 +74,24 @@ export const getProductStockSummaryServerFn = createServerFn({ method: 'POST' })
       accessToken: accessTokenSchema,
       tenantId: tenantIdSchema,
       productId: idSchema,
-    })
+    }),
   )
   .handler(async ({ data }) => {
     const context = await resolveContext(data, 'inventory.view_stock')
 
-    return stockQuery.getProductStockSummary(context, data.tenantId, data.productId)
+    return stockQuery.getProductStockSummary(
+      context,
+      data.tenantId,
+      data.productId,
+    )
   })
 
 // --- Stock adjustments ------------------------------------------------------
 
 export const listAdjustmentsServerFn = createServerFn({ method: 'POST' })
-  .inputValidator(z.object({ accessToken: accessTokenSchema, tenantId: tenantIdSchema }))
+  .inputValidator(
+    z.object({ accessToken: accessTokenSchema, tenantId: tenantIdSchema }),
+  )
   .handler(async ({ data }) => {
     const context = await resolveContext(data, 'adjustment.view')
 
@@ -91,7 +100,11 @@ export const listAdjustmentsServerFn = createServerFn({ method: 'POST' })
 
 export const getAdjustmentServerFn = createServerFn({ method: 'POST' })
   .inputValidator(
-    z.object({ accessToken: accessTokenSchema, tenantId: tenantIdSchema, id: idSchema })
+    z.object({
+      accessToken: accessTokenSchema,
+      tenantId: tenantIdSchema,
+      id: idSchema,
+    }),
   )
   .handler(async ({ data }) => {
     const context = await resolveContext(data, 'adjustment.view')
@@ -105,17 +118,25 @@ export const createAdjustmentServerFn = createServerFn({ method: 'POST' })
       accessToken: accessTokenSchema,
       tenantId: tenantIdSchema,
       input: adjustmentCreateSchema,
-    })
+    }),
   )
   .handler(async ({ data }) => {
     const context = await resolveContext(data, 'adjustment.create')
 
-    return adjustmentService.createAdjustment(context, data.tenantId, data.input)
+    return adjustmentService.createAdjustment(
+      context,
+      data.tenantId,
+      data.input,
+    )
   })
 
 export const postAdjustmentServerFn = createServerFn({ method: 'POST' })
   .inputValidator(
-    z.object({ accessToken: accessTokenSchema, tenantId: tenantIdSchema, id: idSchema })
+    z.object({
+      accessToken: accessTokenSchema,
+      tenantId: tenantIdSchema,
+      id: idSchema,
+    }),
   )
   .handler(async ({ data }) => {
     const context = await resolveContext(data, 'adjustment.post')
@@ -126,7 +147,9 @@ export const postAdjustmentServerFn = createServerFn({ method: 'POST' })
 // --- Reservations -----------------------------------------------------------
 
 export const listReservationsServerFn = createServerFn({ method: 'POST' })
-  .inputValidator(z.object({ accessToken: accessTokenSchema, tenantId: tenantIdSchema }))
+  .inputValidator(
+    z.object({ accessToken: accessTokenSchema, tenantId: tenantIdSchema }),
+  )
   .handler(async ({ data }) => {
     const context = await resolveContext(data, 'inventory.view_stock')
 
@@ -135,7 +158,9 @@ export const listReservationsServerFn = createServerFn({ method: 'POST' })
 
 // Sweep stale (expired) holds back to available. Intended for a scheduled job.
 export const expireReservationsServerFn = createServerFn({ method: 'POST' })
-  .inputValidator(z.object({ accessToken: accessTokenSchema, tenantId: tenantIdSchema }))
+  .inputValidator(
+    z.object({ accessToken: accessTokenSchema, tenantId: tenantIdSchema }),
+  )
   .handler(async ({ data }) => {
     const context = await resolveContext(data, 'inventory.reserve')
 
@@ -144,7 +169,13 @@ export const expireReservationsServerFn = createServerFn({ method: 'POST' })
 
 // --- Lots & serials ---------------------------------------------------------
 
-const lotStatusSchema = z.enum(['ACTIVE', 'QUARANTINE', 'EXPIRED', 'RECALLED', 'DEPLETED'])
+const lotStatusSchema = z.enum([
+  'ACTIVE',
+  'QUARANTINE',
+  'EXPIRED',
+  'RECALLED',
+  'DEPLETED',
+])
 const serialStatusSchema = z.enum([
   'IN_STOCK',
   'RESERVED',
@@ -156,7 +187,9 @@ const serialStatusSchema = z.enum([
 ])
 
 export const listLotsServerFn = createServerFn({ method: 'POST' })
-  .inputValidator(z.object({ accessToken: accessTokenSchema, tenantId: tenantIdSchema }))
+  .inputValidator(
+    z.object({ accessToken: accessTokenSchema, tenantId: tenantIdSchema }),
+  )
   .handler(async ({ data }) => {
     const context = await resolveContext(data, 'inventory.view_stock')
 
@@ -164,7 +197,9 @@ export const listLotsServerFn = createServerFn({ method: 'POST' })
   })
 
 export const listSerialsServerFn = createServerFn({ method: 'POST' })
-  .inputValidator(z.object({ accessToken: accessTokenSchema, tenantId: tenantIdSchema }))
+  .inputValidator(
+    z.object({ accessToken: accessTokenSchema, tenantId: tenantIdSchema }),
+  )
   .handler(async ({ data }) => {
     const context = await resolveContext(data, 'inventory.view_stock')
 
@@ -173,7 +208,11 @@ export const listSerialsServerFn = createServerFn({ method: 'POST' })
 
 export const pickFefoServerFn = createServerFn({ method: 'POST' })
   .inputValidator(
-    z.object({ accessToken: accessTokenSchema, tenantId: tenantIdSchema, productId: idSchema })
+    z.object({
+      accessToken: accessTokenSchema,
+      tenantId: tenantIdSchema,
+      productId: idSchema,
+    }),
   )
   .handler(async ({ data }) => {
     const context = await resolveContext(data, 'inventory.view_stock')
@@ -188,16 +227,23 @@ export const setLotStatusServerFn = createServerFn({ method: 'POST' })
       tenantId: tenantIdSchema,
       id: idSchema,
       status: lotStatusSchema,
-    })
+    }),
   )
   .handler(async ({ data }) => {
     const context = await resolveContext(data, 'inventory.manage_lots')
 
-    return lotSerialService.setLotStatus(context, data.tenantId, data.id, data.status)
+    return lotSerialService.setLotStatus(
+      context,
+      data.tenantId,
+      data.id,
+      data.status,
+    )
   })
 
 export const expireLotsServerFn = createServerFn({ method: 'POST' })
-  .inputValidator(z.object({ accessToken: accessTokenSchema, tenantId: tenantIdSchema }))
+  .inputValidator(
+    z.object({ accessToken: accessTokenSchema, tenantId: tenantIdSchema }),
+  )
   .handler(async ({ data }) => {
     const context = await resolveContext(data, 'inventory.manage_lots')
 
@@ -211,12 +257,17 @@ export const setSerialStatusServerFn = createServerFn({ method: 'POST' })
       tenantId: tenantIdSchema,
       id: idSchema,
       status: serialStatusSchema,
-    })
+    }),
   )
   .handler(async ({ data }) => {
     const context = await resolveContext(data, 'inventory.manage_serials')
 
-    return lotSerialService.setSerialStatus(context, data.tenantId, data.id, data.status)
+    return lotSerialService.setSerialStatus(
+      context,
+      data.tenantId,
+      data.id,
+      data.status,
+    )
   })
 
 // --- Reorder rules & suggestions --------------------------------------------
@@ -241,7 +292,9 @@ const reorderRuleSchema = z.object({
 })
 
 export const listReorderRulesServerFn = createServerFn({ method: 'POST' })
-  .inputValidator(z.object({ accessToken: accessTokenSchema, tenantId: tenantIdSchema }))
+  .inputValidator(
+    z.object({ accessToken: accessTokenSchema, tenantId: tenantIdSchema }),
+  )
   .handler(async ({ data }) => {
     const context = await resolveContext(data, 'inventory.view_stock')
 
@@ -250,7 +303,11 @@ export const listReorderRulesServerFn = createServerFn({ method: 'POST' })
 
 export const upsertReorderRuleServerFn = createServerFn({ method: 'POST' })
   .inputValidator(
-    z.object({ accessToken: accessTokenSchema, tenantId: tenantIdSchema, input: reorderRuleSchema })
+    z.object({
+      accessToken: accessTokenSchema,
+      tenantId: tenantIdSchema,
+      input: reorderRuleSchema,
+    }),
   )
   .handler(async ({ data }) => {
     const context = await resolveContext(data, 'inventory.manage_reorder')
@@ -260,7 +317,11 @@ export const upsertReorderRuleServerFn = createServerFn({ method: 'POST' })
 
 export const deleteReorderRuleServerFn = createServerFn({ method: 'POST' })
   .inputValidator(
-    z.object({ accessToken: accessTokenSchema, tenantId: tenantIdSchema, id: idSchema })
+    z.object({
+      accessToken: accessTokenSchema,
+      tenantId: tenantIdSchema,
+      id: idSchema,
+    }),
   )
   .handler(async ({ data }) => {
     const context = await resolveContext(data, 'inventory.manage_reorder')
@@ -274,12 +335,16 @@ export const reorderSuggestionsServerFn = createServerFn({ method: 'POST' })
       accessToken: accessTokenSchema,
       tenantId: tenantIdSchema,
       warehouseId: idSchema.optional(),
-    })
+    }),
   )
   .handler(async ({ data }) => {
     const context = await resolveContext(data, 'inventory.view_stock')
 
-    return reorderService.getReorderSuggestions(context, data.tenantId, data.warehouseId)
+    return reorderService.getReorderSuggestions(
+      context,
+      data.tenantId,
+      data.warehouseId,
+    )
   })
 
 // --- Valuation & snapshots --------------------------------------------------
@@ -290,12 +355,16 @@ export const valuationSummaryServerFn = createServerFn({ method: 'POST' })
       accessToken: accessTokenSchema,
       tenantId: tenantIdSchema,
       warehouseId: idSchema.optional(),
-    })
+    }),
   )
   .handler(async ({ data }) => {
     const context = await resolveContext(data, 'inventory.view_valuation')
 
-    return valuationService.getValuationSummary(context, data.tenantId, data.warehouseId)
+    return valuationService.getValuationSummary(
+      context,
+      data.tenantId,
+      data.warehouseId,
+    )
   })
 
 export const listSnapshotsServerFn = createServerFn({ method: 'POST' })
@@ -304,12 +373,16 @@ export const listSnapshotsServerFn = createServerFn({ method: 'POST' })
       accessToken: accessTokenSchema,
       tenantId: tenantIdSchema,
       periodKey: periodKeySchema.optional(),
-    })
+    }),
   )
   .handler(async ({ data }) => {
     const context = await resolveContext(data, 'inventory.view_valuation')
 
-    return valuationService.listSnapshots(context, data.tenantId, data.periodKey)
+    return valuationService.listSnapshots(
+      context,
+      data.tenantId,
+      data.periodKey,
+    )
   })
 
 // Materialize the period valuation snapshot (monthly job).
@@ -319,7 +392,7 @@ export const takeSnapshotServerFn = createServerFn({ method: 'POST' })
       accessToken: accessTokenSchema,
       tenantId: tenantIdSchema,
       periodKey: periodKeySchema,
-    })
+    }),
   )
   .handler(async ({ data }) => {
     const context = await resolveContext(data, 'inventory.manage_reorder')

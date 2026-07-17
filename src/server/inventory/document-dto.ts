@@ -18,7 +18,7 @@ function dec(value: { toString: () => string } | null): string | null {
 }
 
 export function serializeTransfer(
-  transfer: StockTransfer & { lines: Array<StockTransferLine> }
+  transfer: StockTransfer & { lines: Array<StockTransferLine> },
 ) {
   return {
     ...transfer,
@@ -32,13 +32,16 @@ export function serializeTransfer(
 }
 
 export function serializePurchaseOrder(
-  po: PurchaseOrder & { lines: Array<PurchaseOrderLine> }
+  po: PurchaseOrder & { lines: Array<PurchaseOrderLine> },
 ) {
   return {
     ...po,
     subtotal: po.subtotal.toString(),
     taxTotal: po.taxTotal.toString(),
     grandTotal: po.grandTotal.toString(),
+    // Spec 005 header extensions (Decimal → string for the wire)
+    exchangeRate: po.exchangeRate.toString(),
+    discountTotal: po.discountTotal.toString(),
     lines: po.lines.map((line) => ({
       ...line,
       orderedQty: line.orderedQty.toString(),
@@ -46,12 +49,21 @@ export function serializePurchaseOrder(
       unitCost: line.unitCost.toString(),
       taxAmount: line.taxAmount.toString(),
       lineTotal: line.lineTotal.toString(),
+      // Spec 005 line extensions
+      rejectedQty: line.rejectedQty.toString(),
+      returnedQty: line.returnedQty.toString(),
+      cancelledQty: line.cancelledQty.toString(),
+      discountPct: dec(line.discountPct),
+      discountAmount: line.discountAmount.toString(),
+      netAmount: line.netAmount.toString(),
+      grossAmount: line.grossAmount.toString(),
+      remainingQty: dec(line.remainingQty),
     })),
   }
 }
 
 export function serializeGoodsReceipt(
-  receipt: GoodsReceipt & { lines: Array<GoodsReceiptLine> }
+  receipt: GoodsReceipt & { lines: Array<GoodsReceiptLine> },
 ) {
   return {
     ...receipt,
@@ -66,7 +78,7 @@ export function serializeGoodsReceipt(
 }
 
 export function serializePurchaseReturn(
-  ret: PurchaseReturn & { lines: Array<PurchaseReturnLine> }
+  ret: PurchaseReturn & { lines: Array<PurchaseReturnLine> },
 ) {
   return {
     ...ret,
@@ -79,7 +91,7 @@ export function serializePurchaseReturn(
 }
 
 export function serializeRequisition(
-  requisition: PurchaseRequisition & { lines: Array<PurchaseRequisitionLine> }
+  requisition: PurchaseRequisition & { lines: Array<PurchaseRequisitionLine> },
 ) {
   return {
     ...requisition,

@@ -12,7 +12,7 @@ import type {
 // Date fields intact. Consumers parse the numeric strings as needed.
 
 function decimalToString<T extends { toString: () => string }>(
-  value: T | null
+  value: T | null,
 ): string | null {
   return value === null ? null : value.toString()
 }
@@ -41,7 +41,7 @@ export function serializeProductVariant(variant: ProductVariant) {
 }
 
 export function serializeProductWithVariants(
-  product: Product & { variants: Array<ProductVariant> }
+  product: Product & { variants: Array<ProductVariant> },
 ) {
   return {
     ...serializeProduct(product),
@@ -53,6 +53,9 @@ export function serializeSupplier(supplier: Supplier) {
   return {
     ...supplier,
     creditLimit: decimalToString(supplier.creditLimit),
+    // Spec 005 supplier extensions (Decimal → string for the wire)
+    currentBalance: supplier.currentBalance.toString(),
+    rating: decimalToString(supplier.rating),
   }
 }
 

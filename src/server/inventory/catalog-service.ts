@@ -29,7 +29,7 @@ function audit(
   actionKey: string,
   entityType: string,
   entityId: string | null,
-  newValues?: Record<string, unknown> | null
+  newValues?: Record<string, unknown> | null,
 ) {
   return createAuditLog({
     tenantId,
@@ -47,17 +47,32 @@ function audit(
 export async function listProducts(
   _context: CurrentUserContext,
   tenantId: string,
-  filters: productRepo.ListProductsFilters
+  filters: productRepo.ListProductsFilters,
 ) {
   const products = await productRepo.listProducts(tenantId, filters)
 
   return products.map(serializeProduct)
 }
 
+// Paged variant for the products workspace: items plus a filtered total so the
+// client can render page controls. Same filters contract as listProducts.
+export async function listProductsPage(
+  _context: CurrentUserContext,
+  tenantId: string,
+  filters: productRepo.ListProductsFilters,
+) {
+  const [products, total] = await Promise.all([
+    productRepo.listProducts(tenantId, filters),
+    productRepo.countProducts(tenantId, filters),
+  ])
+
+  return { items: products.map(serializeProduct), total }
+}
+
 export async function getProduct(
   _context: CurrentUserContext,
   tenantId: string,
-  id: string
+  id: string,
 ) {
   const product = await productRepo.findProductById(tenantId, id)
 
@@ -71,7 +86,7 @@ export async function getProduct(
 export async function createProduct(
   context: CurrentUserContext,
   tenantId: string,
-  input: productRepo.ProductWriteInput
+  input: productRepo.ProductWriteInput,
 ) {
   const product = await productRepo.createProduct(tenantId, input)
   await audit(context, tenantId, 'product.create', 'product', product.id, {
@@ -86,7 +101,7 @@ export async function updateProduct(
   context: CurrentUserContext,
   tenantId: string,
   id: string,
-  input: Partial<productRepo.ProductWriteInput>
+  input: Partial<productRepo.ProductWriteInput>,
 ) {
   const product = await productRepo.updateProduct(tenantId, id, input)
 
@@ -104,7 +119,7 @@ export async function updateProduct(
 export async function deleteProduct(
   context: CurrentUserContext,
   tenantId: string,
-  id: string
+  id: string,
 ) {
   const deleted = await productRepo.softDeleteProduct(tenantId, id)
 
@@ -126,12 +141,19 @@ export function listBrands(_context: CurrentUserContext, tenantId: string) {
 export async function createBrand(
   context: CurrentUserContext,
   tenantId: string,
-  input: brandRepo.BrandWriteInput
+  input: brandRepo.BrandWriteInput,
 ) {
   const brand = await brandRepo.createBrand(tenantId, input)
-  await audit(context, tenantId, 'product.manage_categories', 'brand', brand.id, {
-    code: brand.code,
-  })
+  await audit(
+    context,
+    tenantId,
+    'product.manage_categories',
+    'brand',
+    brand.id,
+    {
+      code: brand.code,
+    },
+  )
 
   return brand
 }
@@ -140,7 +162,7 @@ export async function updateBrand(
   context: CurrentUserContext,
   tenantId: string,
   id: string,
-  input: Partial<brandRepo.BrandWriteInput>
+  input: Partial<brandRepo.BrandWriteInput>,
 ) {
   const brand = await brandRepo.updateBrand(tenantId, id, input)
 
@@ -148,7 +170,14 @@ export async function updateBrand(
     throw new NotFoundError('Brand not found.')
   }
 
-  await audit(context, tenantId, 'product.manage_categories', 'brand', brand.id, null)
+  await audit(
+    context,
+    tenantId,
+    'product.manage_categories',
+    'brand',
+    brand.id,
+    null,
+  )
 
   return brand
 }
@@ -156,7 +185,7 @@ export async function updateBrand(
 export async function deleteBrand(
   context: CurrentUserContext,
   tenantId: string,
-  id: string
+  id: string,
 ) {
   const deleted = await brandRepo.softDeleteBrand(tenantId, id)
 
@@ -178,12 +207,19 @@ export function listCategories(_context: CurrentUserContext, tenantId: string) {
 export async function createCategory(
   context: CurrentUserContext,
   tenantId: string,
-  input: categoryRepo.CategoryWriteInput
+  input: categoryRepo.CategoryWriteInput,
 ) {
   const category = await categoryRepo.createCategory(tenantId, input)
-  await audit(context, tenantId, 'product.manage_categories', 'category', category.id, {
-    code: category.code,
-  })
+  await audit(
+    context,
+    tenantId,
+    'product.manage_categories',
+    'category',
+    category.id,
+    {
+      code: category.code,
+    },
+  )
 
   return category
 }
@@ -192,7 +228,7 @@ export async function updateCategory(
   context: CurrentUserContext,
   tenantId: string,
   id: string,
-  input: Partial<categoryRepo.CategoryWriteInput>
+  input: Partial<categoryRepo.CategoryWriteInput>,
 ) {
   const category = await categoryRepo.updateCategory(tenantId, id, input)
 
@@ -200,7 +236,14 @@ export async function updateCategory(
     throw new NotFoundError('Category not found.')
   }
 
-  await audit(context, tenantId, 'product.manage_categories', 'category', category.id, null)
+  await audit(
+    context,
+    tenantId,
+    'product.manage_categories',
+    'category',
+    category.id,
+    null,
+  )
 
   return category
 }
@@ -208,7 +251,7 @@ export async function updateCategory(
 export async function deleteCategory(
   context: CurrentUserContext,
   tenantId: string,
-  id: string
+  id: string,
 ) {
   const deleted = await categoryRepo.softDeleteCategory(tenantId, id)
 
@@ -216,7 +259,14 @@ export async function deleteCategory(
     throw new NotFoundError('Category not found.')
   }
 
-  await audit(context, tenantId, 'product.manage_categories', 'category', id, null)
+  await audit(
+    context,
+    tenantId,
+    'product.manage_categories',
+    'category',
+    id,
+    null,
+  )
 
   return { id, deleted: true }
 }
@@ -230,12 +280,19 @@ export function listUoms(_context: CurrentUserContext, tenantId: string) {
 export async function createUom(
   context: CurrentUserContext,
   tenantId: string,
-  input: uomRepo.UomWriteInput
+  input: uomRepo.UomWriteInput,
 ) {
   const uom = await uomRepo.createUom(tenantId, input)
-  await audit(context, tenantId, 'product.manage_categories', 'unit_of_measure', uom.id, {
-    code: uom.code,
-  })
+  await audit(
+    context,
+    tenantId,
+    'product.manage_categories',
+    'unit_of_measure',
+    uom.id,
+    {
+      code: uom.code,
+    },
+  )
 
   return uom
 }
@@ -244,7 +301,7 @@ export async function updateUom(
   context: CurrentUserContext,
   tenantId: string,
   id: string,
-  input: Partial<uomRepo.UomWriteInput>
+  input: Partial<uomRepo.UomWriteInput>,
 ) {
   const uom = await uomRepo.updateUom(tenantId, id, input)
 
@@ -252,7 +309,14 @@ export async function updateUom(
     throw new NotFoundError('Unit of measure not found.')
   }
 
-  await audit(context, tenantId, 'product.manage_categories', 'unit_of_measure', uom.id, null)
+  await audit(
+    context,
+    tenantId,
+    'product.manage_categories',
+    'unit_of_measure',
+    uom.id,
+    null,
+  )
 
   return uom
 }
@@ -262,7 +326,7 @@ export async function updateUom(
 export async function listSuppliers(
   _context: CurrentUserContext,
   tenantId: string,
-  search?: string
+  search?: string,
 ) {
   const suppliers = await supplierRepo.listSuppliers(tenantId, {
     search,
@@ -275,7 +339,7 @@ export async function listSuppliers(
 export async function createSupplier(
   context: CurrentUserContext,
   tenantId: string,
-  input: supplierRepo.SupplierWriteInput
+  input: supplierRepo.SupplierWriteInput,
 ) {
   const supplier = await supplierRepo.createSupplier(tenantId, input)
   await audit(context, tenantId, 'supplier.manage', 'supplier', supplier.id, {
@@ -289,7 +353,7 @@ export async function updateSupplier(
   context: CurrentUserContext,
   tenantId: string,
   id: string,
-  input: Partial<supplierRepo.SupplierWriteInput>
+  input: Partial<supplierRepo.SupplierWriteInput>,
 ) {
   const supplier = await supplierRepo.updateSupplier(tenantId, id, input)
 
@@ -297,7 +361,14 @@ export async function updateSupplier(
     throw new NotFoundError('Supplier not found.')
   }
 
-  await audit(context, tenantId, 'supplier.manage', 'supplier', supplier.id, null)
+  await audit(
+    context,
+    tenantId,
+    'supplier.manage',
+    'supplier',
+    supplier.id,
+    null,
+  )
 
   return serializeSupplier(supplier)
 }
@@ -305,7 +376,7 @@ export async function updateSupplier(
 export async function deleteSupplier(
   context: CurrentUserContext,
   tenantId: string,
-  id: string
+  id: string,
 ) {
   const deleted = await supplierRepo.softDeleteSupplier(tenantId, id)
 
@@ -323,7 +394,7 @@ export async function deleteSupplier(
 export async function listCustomers(
   _context: CurrentUserContext,
   tenantId: string,
-  search?: string
+  search?: string,
 ) {
   const customers = await customerRepo.listCustomers(tenantId, {
     search,
@@ -336,7 +407,7 @@ export async function listCustomers(
 export async function createCustomer(
   context: CurrentUserContext,
   tenantId: string,
-  input: customerRepo.CustomerWriteInput
+  input: customerRepo.CustomerWriteInput,
 ) {
   const customer = await prisma.$transaction(async (tx) => {
     const created = await customerRepo.createCustomer(tenantId, input, tx)
@@ -351,7 +422,7 @@ export async function createCustomer(
         entityId: created.id,
         newValues: { code: created.code },
       },
-      tx
+      tx,
     )
 
     await appendDomainEvent(tx, {
@@ -380,7 +451,7 @@ export async function updateCustomer(
   context: CurrentUserContext,
   tenantId: string,
   id: string,
-  input: Partial<customerRepo.CustomerWriteInput>
+  input: Partial<customerRepo.CustomerWriteInput>,
 ) {
   const customer = await prisma.$transaction(async (tx) => {
     const updated = await customerRepo.updateCustomer(tenantId, id, input, tx)
@@ -399,7 +470,7 @@ export async function updateCustomer(
         entityId: updated.id,
         newValues: null,
       },
-      tx
+      tx,
     )
 
     await appendDomainEvent(tx, {
@@ -427,7 +498,7 @@ export async function updateCustomer(
 export async function deleteCustomer(
   context: CurrentUserContext,
   tenantId: string,
-  id: string
+  id: string,
 ) {
   const deleted = await customerRepo.softDeleteCustomer(tenantId, id)
 
@@ -442,8 +513,13 @@ export async function deleteCustomer(
 
 // --- Tax rates --------------------------------------------------------------
 
-export async function listTaxRates(_context: CurrentUserContext, tenantId: string) {
-  const taxRates = await taxRateRepo.listTaxRates(tenantId, { includeInactive: true })
+export async function listTaxRates(
+  _context: CurrentUserContext,
+  tenantId: string,
+) {
+  const taxRates = await taxRateRepo.listTaxRates(tenantId, {
+    includeInactive: true,
+  })
 
   return taxRates.map(serializeTaxRate)
 }
@@ -451,10 +527,12 @@ export async function listTaxRates(_context: CurrentUserContext, tenantId: strin
 export async function createTaxRate(
   context: CurrentUserContext,
   tenantId: string,
-  input: taxRateRepo.TaxRateWriteInput
+  input: taxRateRepo.TaxRateWriteInput,
 ) {
   const taxRate = await taxRateRepo.createTaxRate(tenantId, input)
-  await audit(context, tenantId, 'tax.manage', 'tax_rate', taxRate.id, { code: taxRate.code })
+  await audit(context, tenantId, 'tax.manage', 'tax_rate', taxRate.id, {
+    code: taxRate.code,
+  })
 
   return serializeTaxRate(taxRate)
 }
@@ -463,7 +541,7 @@ export async function updateTaxRate(
   context: CurrentUserContext,
   tenantId: string,
   id: string,
-  input: Partial<taxRateRepo.TaxRateWriteInput>
+  input: Partial<taxRateRepo.TaxRateWriteInput>,
 ) {
   const taxRate = await taxRateRepo.updateTaxRate(tenantId, id, input)
 

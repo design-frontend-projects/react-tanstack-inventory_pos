@@ -165,7 +165,7 @@ export function SupplierFormDialog({
     }
   }, [open, supplier])
 
-  const set = <K extends keyof FormState>(key: K, value: FormState[K]) =>
+  const set = <TKey extends keyof FormState>(key: TKey, value: FormState[TKey]) =>
     setForm((previous) => ({ ...previous, [key]: value }))
 
   async function handleSubmit(event: React.FormEvent) {

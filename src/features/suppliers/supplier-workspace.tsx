@@ -8,9 +8,10 @@ import {
 } from '#/components/layout/workspace-page'
 import { Button } from '#/components/ui/button'
 import {
-  SupplierFormDialog,
-  type SupplierFormValues,
+  SupplierFormDialog
+  
 } from '#/features/suppliers/supplier-form-dialog'
+import type {SupplierFormValues} from '#/features/suppliers/supplier-form-dialog';
 import { useSuppliers } from '#/features/suppliers/use-suppliers'
 
 function StatusBadge({ statusCode }: { statusCode: string }) {

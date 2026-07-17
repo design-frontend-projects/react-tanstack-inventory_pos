@@ -19,7 +19,11 @@ export interface ConsumeOrderInput {
     warehouseId: string | null
     locationId: string | null
   }
-  items: ReadonlyArray<{ id: string; menuItemId: string; quantity: Prisma.Decimal | string }>
+  items: ReadonlyArray<{
+    id: string
+    menuItemId: string
+    quantity: Prisma.Decimal | string
+  }>
   performedByProfileId: string
 }
 
@@ -32,7 +36,7 @@ const ONE = new Prisma.Decimal(1)
 
 export async function consumeOrderInventory(
   tx: Prisma.TransactionClient,
-  input: ConsumeOrderInput
+  input: ConsumeOrderInput,
 ): Promise<ConsumeResult> {
   const result: ConsumeResult = { movements: [], skipped: [] }
 
@@ -47,7 +51,7 @@ export async function consumeOrderInventory(
     const recipes = await recipeRepo.listRecipes(
       input.tenantId,
       { menuItemId: item.menuItemId, status: 'APPROVED' },
-      tx
+      tx,
     )
     if (recipes.length === 0) {
       continue // no recipe -> nothing to consume (e.g. a non-stock menu item)
@@ -57,7 +61,11 @@ export async function consumeOrderInventory(
       continue
     }
 
-    const lines = await recipeRepo.listLines(input.tenantId, active.currentVersionId, tx)
+    const lines = await recipeRepo.listLines(
+      input.tenantId,
+      active.currentVersionId,
+      tx,
+    )
     if (lines.length === 0) {
       continue
     }
@@ -65,7 +73,12 @@ export async function consumeOrderInventory(
     const productIds = [...new Set(lines.map((l) => l.productId))]
     const products = await tx.product.findMany({
       where: { id: { in: productIds }, tenantId: input.tenantId },
-      select: { id: true, baseUomId: true, trackingPolicy: true, isStockTracked: true },
+      select: {
+        id: true,
+        baseUomId: true,
+        trackingPolicy: true,
+        isStockTracked: true,
+      },
     })
     const productById = new Map(products.map((p) => [p.id, p]))
 
@@ -95,6 +108,7 @@ export async function consumeOrderInventory(
         tenantId: input.tenantId,
         productId: line.productId,
         variantId: line.variantId ?? null,
+        movementType: 'SALE',
         direction: 'OUT',
         quantity: consumeQty,
         uomId: line.uomId ?? product.baseUomId,

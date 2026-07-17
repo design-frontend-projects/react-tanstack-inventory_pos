@@ -35,7 +35,7 @@ export interface CreatePurchaseOrderInput {
 export async function createPurchaseOrder(
   context: CurrentUserContext,
   tenantId: string,
-  input: CreatePurchaseOrderInput
+  input: CreatePurchaseOrderInput,
 ) {
   if (input.lines.length === 0) {
     throw new ConflictError('A purchase order requires at least one line.')
@@ -85,7 +85,7 @@ export async function createPurchaseOrder(
         createdByProfileId: context.profileId,
         lines,
       },
-      tx
+      tx,
     )
 
     await createAuditLog(
@@ -98,7 +98,7 @@ export async function createPurchaseOrder(
         entityId: created.id,
         newValues: { documentNumber, grandTotal: subtotal.toString() },
       },
-      tx
+      tx,
     )
 
     return created
@@ -112,7 +112,7 @@ async function transitionPurchaseOrder(
   tenantId: string,
   id: string,
   target: 'approved' | 'confirmed' | 'cancelled',
-  actionKey: string
+  actionKey: string,
 ) {
   const po = await poRepo.findPurchaseOrderById(tenantId, id)
 
@@ -131,7 +131,7 @@ async function transitionPurchaseOrder(
     tenantId,
     id,
     statusValue,
-    target === 'approved' ? { approvedByProfileId: context.profileId } : {}
+    target === 'approved' ? { approvedByProfileId: context.profileId } : {},
   )
 
   await createAuditLog({
@@ -151,30 +151,48 @@ async function transitionPurchaseOrder(
 export function approvePurchaseOrder(
   context: CurrentUserContext,
   tenantId: string,
-  id: string
+  id: string,
 ) {
-  return transitionPurchaseOrder(context, tenantId, id, 'approved', 'purchase.po_approve')
+  return transitionPurchaseOrder(
+    context,
+    tenantId,
+    id,
+    'approved',
+    'purchase.po_approve',
+  )
 }
 
 export function confirmPurchaseOrder(
   context: CurrentUserContext,
   tenantId: string,
-  id: string
+  id: string,
 ) {
-  return transitionPurchaseOrder(context, tenantId, id, 'confirmed', 'purchase.po_confirm')
+  return transitionPurchaseOrder(
+    context,
+    tenantId,
+    id,
+    'confirmed',
+    'purchase.po_confirm',
+  )
 }
 
 export function cancelPurchaseOrder(
   context: CurrentUserContext,
   tenantId: string,
-  id: string
+  id: string,
 ) {
-  return transitionPurchaseOrder(context, tenantId, id, 'cancelled', 'purchase.po_cancel')
+  return transitionPurchaseOrder(
+    context,
+    tenantId,
+    id,
+    'cancelled',
+    'purchase.po_cancel',
+  )
 }
 
 export async function listPurchaseOrders(
   _context: CurrentUserContext,
-  tenantId: string
+  tenantId: string,
 ) {
   const orders = await poRepo.listPurchaseOrders(tenantId, {})
 
@@ -183,13 +201,16 @@ export async function listPurchaseOrders(
     subtotal: po.subtotal.toString(),
     taxTotal: po.taxTotal.toString(),
     grandTotal: po.grandTotal.toString(),
+    // Spec 005 header extensions (Decimal → string for the wire)
+    exchangeRate: po.exchangeRate.toString(),
+    discountTotal: po.discountTotal.toString(),
   }))
 }
 
 export async function getPurchaseOrder(
   _context: CurrentUserContext,
   tenantId: string,
-  id: string
+  id: string,
 ) {
   const po = await poRepo.findPurchaseOrderById(tenantId, id)
 
