@@ -73,7 +73,7 @@ function isIssue(direction: 'IN' | 'OUT'): boolean {
 
 export async function postMovement(
   tx: Prisma.TransactionClient,
-  input: PostMovementInput
+  input: PostMovementInput,
 ): Promise<PostMovementResult> {
   const quantity = new Prisma.Decimal(input.quantity)
 
@@ -85,7 +85,8 @@ export async function postMovement(
   // serial at qty 1). Look the policy up only when the caller did not supply it.
   const trackingPolicy =
     input.trackingPolicy ??
-    (await getProductTracking(input.tenantId, input.productId, tx))?.trackingPolicy ??
+    (await getProductTracking(input.tenantId, input.productId, tx))
+      ?.trackingPolicy ??
     'NONE'
 
   assertTrackingCompliance(trackingPolicy, {
@@ -111,11 +112,13 @@ export async function postMovement(
   // Oversell guard: an issue may not drive available (onHand - reserved -
   // allocated) below zero unless explicitly allowed.
   if (isIssue(input.direction) && !input.allowNegative) {
-    const available = balance.onHand.minus(balance.reserved).minus(balance.allocated)
+    const available = balance.onHand
+      .minus(balance.reserved)
+      .minus(balance.allocated)
 
     if (quantity.gt(available)) {
       throw new InsufficientStockError(
-        `Requested ${quantity.toString()} exceeds available ${available.toString()}.`
+        `Requested ${quantity.toString()} exceeds available ${available.toString()}.`,
       )
     }
   }
@@ -130,7 +133,7 @@ export async function postMovement(
     qtyInBaseUom,
     input.unitCost === undefined || input.unitCost === null
       ? null
-      : new Prisma.Decimal(input.unitCost)
+      : new Prisma.Decimal(input.unitCost),
   )
 
   const signedQtyDelta =
@@ -165,7 +168,7 @@ export async function postMovement(
       correlationId: input.correlationId,
       notes: input.notes,
     },
-    tx
+    tx,
   )
 
   await tx.stockBalance.update({
@@ -193,7 +196,7 @@ export async function postMovement(
         originalQty: qtyInBaseUom,
         unitCost: movementUnitCost,
       },
-      tx
+      tx,
     )
   }
 
@@ -211,7 +214,7 @@ export async function postMovement(
         currentLocationId: transition.toTarget ? input.locationId : null,
         soldAt: transition.sold ? occurredAt : undefined,
       },
-      tx
+      tx,
     )
   }
 
@@ -221,5 +224,119 @@ export async function postMovement(
     onHand: state.onHand,
     avgUnitCost: state.avgUnitCost,
     totalValue: state.totalValue,
+  }
+}
+
+export interface PostValueAdjustmentInput {
+  tenantId: string
+  productId: string
+  variantId?: string | null
+  warehouseId: string
+  locationId: string
+  lotId?: string | null
+  serialId?: string | null
+  movementType: MovementType // e.g. LANDED_COST_ADJUSTMENT, REVALUATION
+  valueDelta: Prisma.Decimal | string | number // signed; qty is untouched
+  uomId: string
+  sourceDocType: SourceDocType
+  sourceDocId?: string | null
+  sourceDocLineId?: string | null
+  sourceDocNumber?: string | null
+  performedByProfileId: string
+  occurredAt?: Date
+  correlationId?: string | null
+  notes?: string | null
+}
+
+export interface PostValueAdjustmentResult {
+  movementId: string
+  /** false when nothing is on hand — the value could not be absorbed into stock. */
+  absorbed: boolean
+  onHand: Prisma.Decimal
+  avgUnitCost: Prisma.Decimal
+  totalValue: Prisma.Decimal
+}
+
+// Value-only revaluation (landed cost, cost corrections): adjusts the balance's
+// totalValue/avgUnitCost without moving quantity, recorded as a zero-qty
+// movement row for the audit trail. When nothing is on hand the value cannot be
+// absorbed (the goods have already been issued at the old cost) — the movement
+// is still recorded and `absorbed: false` lets the caller expense the residual.
+export async function postValueAdjustment(
+  tx: Prisma.TransactionClient,
+  input: PostValueAdjustmentInput,
+): Promise<PostValueAdjustmentResult> {
+  const valueDelta = new Prisma.Decimal(input.valueDelta)
+
+  if (valueDelta.eq(ZERO)) {
+    throw new ValidationError('Value adjustment must be non-zero.')
+  }
+
+  const balance = await ensureAndLockBalance(tx, {
+    tenantId: input.tenantId,
+    productId: input.productId,
+    variantId: input.variantId,
+    warehouseId: input.warehouseId,
+    locationId: input.locationId,
+    lotId: input.lotId,
+    serialId: input.serialId,
+  })
+
+  const absorbed = balance.onHand.gt(ZERO)
+  const newTotalValue = absorbed
+    ? balance.totalValue.plus(valueDelta)
+    : balance.totalValue
+  const newAvgCost = absorbed
+    ? newTotalValue.div(balance.onHand)
+    : balance.avgUnitCost
+  const occurredAt = input.occurredAt ?? new Date()
+
+  const movement = await createMovement(
+    {
+      tenantId: input.tenantId,
+      movementType: input.movementType,
+      productId: input.productId,
+      variantId: input.variantId,
+      warehouseId: input.warehouseId,
+      locationId: input.locationId,
+      lotId: input.lotId,
+      serialId: input.serialId,
+      qtyDelta: ZERO,
+      uomId: input.uomId,
+      qtyInBaseUom: ZERO,
+      unitCost: ZERO,
+      totalCost: valueDelta,
+      runningOnHand: balance.onHand,
+      runningAvgCost: newAvgCost,
+      sourceDocType: input.sourceDocType,
+      sourceDocId: input.sourceDocId,
+      sourceDocLineId: input.sourceDocLineId,
+      sourceDocNumber: input.sourceDocNumber,
+      performedByProfileId: input.performedByProfileId,
+      occurredAt,
+      correlationId: input.correlationId,
+      notes: input.notes,
+    },
+    tx,
+  )
+
+  if (absorbed) {
+    await tx.stockBalance.update({
+      where: { id: balance.id },
+      data: {
+        totalValue: newTotalValue,
+        avgUnitCost: newAvgCost,
+        version: { increment: 1 },
+        lastMovementAt: occurredAt,
+      },
+    })
+  }
+
+  return {
+    movementId: movement.id,
+    absorbed,
+    onHand: balance.onHand,
+    avgUnitCost: newAvgCost,
+    totalValue: newTotalValue,
   }
 }

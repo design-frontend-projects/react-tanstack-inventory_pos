@@ -16,46 +16,46 @@ purchasing infrastructure.
 - [x] Map new `DocumentType` prefixes in `document-number-service.ts`.
 - [x] Update `tests/unit/purchasing-transfers.test.ts` for the repointed module + new codes.
 - [x] Author spec-kit docs (`spec/plan/data-model/erd/state-diagrams/sequence-diagrams/integration/api/business-rules/performance/tasks`).
-- [ ] Apply: `pnpm prisma migrate deploy` → `pnpm prisma generate` → `pnpm db:seed` (user-confirmed; mutates DB).
-- [ ] Seed a default per-tenant approval workflow in `prisma/seed.ts` (`pod_approval_workflows` is `tenant_id NOT NULL`).
+- [x] Apply: `pnpm prisma migrate deploy` → `pnpm prisma generate` → `pnpm db:seed` (user-confirmed; mutates DB).
+- [x] Seed a default per-tenant approval workflow in `prisma/seed.ts` (`pod_approval_workflows` is `tenant_id NOT NULL`).
 
 ## Phase 1 — Supplier CRM
 
-- [ ] Repos: `supplier-repo.ts` (extend), `pod-supplier-contact-repo.ts`, `pod-supplier-address-repo.ts`, `pod-supplier-bank-repo.ts`, `pod-supplier-category-repo.ts`.
-- [ ] DTO serializers in `document-dto.ts` (Decimal→string for `current_balance`, `rating`).
-- [ ] Feature module `src/features/suppliers/` — server functions + Zod `validation.ts`.
-- [ ] Routes `src/routes/_app/purchase/suppliers.tsx` (+ detail) using `WorkspacePage`.
-- [ ] Unit tests: repo tenant-scoping, soft-delete, validation.
+- [x] Repos: `supplier-repo.ts` (extend), `pod-supplier-contact-repo.ts`, `pod-supplier-address-repo.ts`, `pod-supplier-bank-repo.ts`, `pod-supplier-category-repo.ts`.
+- [x] DTO serializers in `document-dto.ts` (Decimal→string for `current_balance`, `rating`).
+- [x] Feature module `src/features/suppliers/` — server functions + Zod `validation.ts`.
+- [x] Routes `src/routes/_app/purchase/suppliers.tsx` (+ detail) using `WorkspacePage`.
+- [x] Unit tests: repo tenant-scoping, soft-delete, validation.
 
 ## Phase 2 — RFQ → Quotation → award
 
-- [ ] Repos: `pod-rfq-repo.ts`, `pod-supplier-quotation-repo.ts`.
-- [ ] Services: `rfq-service.ts` (create/revise/issue/award), `quotation-service.ts` (record/submit/approve/compare) — numbering, `pod_status_transitions` validation, `appendDomainEvent`, `createAuditLog`.
-- [ ] Comparison-matrix query per RFQ.
-- [ ] Server functions + routes `purchase/rfqs.tsx`, `purchase/quotations.tsx`.
-- [ ] Tests: RFQ lifecycle, award→PO conversion, comparison matrix.
+- [x] Repos: `pod-rfq-repo.ts`, `pod-supplier-quotation-repo.ts`.
+- [x] Services: `rfq-service.ts` (create/revise/issue/award), `quotation-service.ts` (record/submit/approve/compare) — numbering, `pod_status_transitions` validation, `appendDomainEvent`, `createAuditLog`.
+- [x] Comparison-matrix query per RFQ.
+- [x] Server functions + routes `purchase/rfqs.tsx`, `purchase/quotations.tsx`.
+- [x] Tests: RFQ lifecycle, award→PO conversion, comparison matrix.
 
 ## Phase 3 — Generic approval engine
 
-- [ ] Repos: `pod-approval-workflow-repo.ts`, `pod-approval-request-repo.ts`, `pod-approval-action-repo.ts`.
-- [ ] `approval-service.ts` — open request (amount/entity routing), act (approve/reject/delegate/escalate), advance `current_step_order`, escalation timer semantics, emit `purchase_approval.decided`.
-- [ ] Wire PR/PO/invoice submit flows to open approval requests.
-- [ ] Routes: `purchase/approvals.tsx` (my-approvals inbox).
-- [ ] Tests: multi-level routing, amount thresholds, delegation, escalation.
+- [x] Repos: `pod-approval-workflow-repo.ts`, `pod-approval-request-repo.ts`, `pod-approval-action-repo.ts`.
+- [x] `approval-service.ts` — open request (amount/entity routing), act (approve/reject/delegate/escalate), advance `current_step_order`, escalation timer semantics, emit `purchase_approval.decided`.
+- [x] Wire PR/PO/invoice submit flows to open approval requests.
+- [x] Routes: `purchase/approvals.tsx` (my-approvals inbox).
+- [x] Tests: multi-level routing, amount thresholds, delegation, escalation.
 
 ## Phase 4 — Supplier invoices + 3-way match (AP)
 
-- [ ] Repos: `pod-supplier-invoice-repo.ts`, `pod-supplier-invoice-match-repo.ts`.
-- [ ] `supplier-invoice-service.ts` — create (numbering, trigger totals), match (`pod_three_way_match`), approve, post (supplier balance, emit `supplier_invoice.posted`/`.matched`).
-- [ ] Debit-note extension: `pod_debit_note_lines` on `financial_notes`.
-- [ ] Routes: `purchase/invoices.tsx`.
-- [ ] Tests: 3-way match variance/tolerance, partial invoicing, outstanding recompute.
+- [x] Repos: `pod-supplier-invoice-repo.ts`, `pod-supplier-invoice-match-repo.ts`.
+- [x] `supplier-invoice-service.ts` — create (numbering, trigger totals), match (`pod_three_way_match`), approve, post (supplier balance, emit `supplier_invoice.posted`/`.matched`).
+- [x] Debit-note extension: `pod_debit_note_lines` on `financial_notes`.
+- [x] Routes: `purchase/invoices.tsx`.
+- [x] Tests: 3-way match variance/tolerance, partial invoicing, outstanding recompute.
 
 ## Phase 5 — Landed cost
 
-- [ ] Repos: `pod-landed-cost-*-repo.ts`.
-- [ ] `landed-cost-service.ts` — voucher + charges, `pod_allocate_landed_cost`, post → update inventory average/FIFO cost via costing service, emit `landed_cost.posted`.
-- [ ] Tests: allocation by quantity/weight/volume/value/manual; cost update correctness.
+- [x] Repos: `pod-landed-cost-*-repo.ts`.
+- [x] `landed-cost-service.ts` — voucher + charges, `pod_allocate_landed_cost`, post → update inventory average/FIFO cost via costing service, emit `landed_cost.posted`.
+- [x] Tests: allocation by quantity/weight/volume/value/manual; cost update correctness.
 
 ## Phase 6 — Supplier payments (AP)
 
