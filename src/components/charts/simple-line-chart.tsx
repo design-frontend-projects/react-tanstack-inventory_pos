@@ -59,9 +59,9 @@ export function SimpleLineChart({
           <Tooltip
             contentStyle={CHART_TOOLTIP_STYLE}
             cursor={{ stroke: 'var(--ops-line)' }}
-            formatter={(value: number | string, name: string) => [
-              formatCompactNumber(value),
-              name,
+            formatter={(value, name) => [
+              formatCompactNumber(Array.isArray(value) ? value[0] : value),
+              String(name),
             ]}
           />
           <Legend

@@ -12,7 +12,9 @@ const BASE_EVENT: TimelineSourceEvent = {
   payloadJson: {
     documentNumber: 'POS-000042',
     grandTotal: '150.0000',
-    lines: [{ productId: 'p1', quantity: '1', unitPrice: '150', lineTotal: '150' }],
+    lines: [
+      { productId: 'p1', quantity: '1', unitPrice: '150', lineTotal: '150' },
+    ],
   },
   occurredAt: new Date('2026-07-15T12:00:00Z'),
 }
@@ -39,17 +41,40 @@ describe('timeline mapper', () => {
   })
 
   it('skips events without a customer', () => {
-    expect(mapEventToTimelineEntry({ ...BASE_EVENT, customerId: null })).toBeNull()
+    expect(
+      mapEventToTimelineEntry({ ...BASE_EVENT, customerId: null }),
+    ).toBeNull()
   })
 
   it('skips unknown event types', () => {
     expect(
-      mapEventToTimelineEntry({ ...BASE_EVENT, eventType: 'warehouse.rebalanced' })
+      mapEventToTimelineEntry({
+        ...BASE_EVENT,
+        eventType: 'warehouse.rebalanced',
+      }),
     ).toBeNull()
   })
 
-  it('maps every catalog event type when a customer is attached', () => {
-    for (const eventType of DOMAIN_EVENT_TYPES) {
+  // Procurement events (Spec 005) are supplier/tenant-scoped, not customer
+  // events, so they legitimately do not project onto a customer timeline.
+  const NON_CUSTOMER_EVENT_PREFIXES = [
+    'rfq.',
+    'supplier_quotation.',
+    'supplier_invoice.',
+    'supplier_payment.',
+    'landed_cost.',
+    'purchase_approval.',
+  ]
+
+  it('maps every customer-facing catalog event type when a customer is attached', () => {
+    const customerFacing = DOMAIN_EVENT_TYPES.filter(
+      (eventType) =>
+        !NON_CUSTOMER_EVENT_PREFIXES.some((prefix) =>
+          eventType.startsWith(prefix),
+        ),
+    )
+
+    for (const eventType of customerFacing) {
       const draft = mapEventToTimelineEntry({ ...BASE_EVENT, eventType })
 
       expect(draft, eventType).not.toBeNull()
@@ -57,15 +82,35 @@ describe('timeline mapper', () => {
     }
   })
 
+  it('does not project procurement events onto a customer timeline', () => {
+    for (const eventType of DOMAIN_EVENT_TYPES.filter((type) =>
+      NON_CUSTOMER_EVENT_PREFIXES.some((prefix) => type.startsWith(prefix)),
+    )) {
+      expect(
+        mapEventToTimelineEntry({ ...BASE_EVENT, eventType }),
+        eventType,
+      ).toBeNull()
+    }
+  })
+
   it('classifies loyalty, consent, and segment events', () => {
     expect(
-      mapEventToTimelineEntry({ ...BASE_EVENT, eventType: 'crm.loyalty_earned' })?.entryType
+      mapEventToTimelineEntry({
+        ...BASE_EVENT,
+        eventType: 'crm.loyalty_earned',
+      })?.entryType,
     ).toBe('loyalty')
     expect(
-      mapEventToTimelineEntry({ ...BASE_EVENT, eventType: 'crm.consent_changed' })?.entryType
+      mapEventToTimelineEntry({
+        ...BASE_EVENT,
+        eventType: 'crm.consent_changed',
+      })?.entryType,
     ).toBe('consent')
     expect(
-      mapEventToTimelineEntry({ ...BASE_EVENT, eventType: 'crm.segment_entered' })?.entryType
+      mapEventToTimelineEntry({
+        ...BASE_EVENT,
+        eventType: 'crm.segment_entered',
+      })?.entryType,
     ).toBe('segment')
   })
 })

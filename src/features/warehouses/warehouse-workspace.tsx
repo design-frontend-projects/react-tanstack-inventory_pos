@@ -7,17 +7,11 @@ import {
   WorkspacePanel,
 } from '#/components/layout/workspace-page'
 import { Button } from '#/components/ui/button'
-import {
-  LocationFormDialog
-  
-} from '#/features/warehouses/location-form-dialog'
-import type {LocationFormValues} from '#/features/warehouses/location-form-dialog';
+import { LocationFormDialog } from '#/features/warehouses/location-form-dialog'
+import type { LocationFormValues } from '#/features/warehouses/location-form-dialog'
 import { useWarehouseSummaries } from '#/features/inventory/use-inventory-analytics'
-import {
-  WarehouseFormDialog
-  
-} from '#/features/warehouses/warehouse-form-dialog'
-import type {WarehouseFormValues} from '#/features/warehouses/warehouse-form-dialog';
+import { WarehouseFormDialog } from '#/features/warehouses/warehouse-form-dialog'
+import type { WarehouseFormValues } from '#/features/warehouses/warehouse-form-dialog'
 import { WarehouseAnalyticsPanel } from '#/features/warehouses/warehouse-analytics-panel'
 import {
   useLocations,

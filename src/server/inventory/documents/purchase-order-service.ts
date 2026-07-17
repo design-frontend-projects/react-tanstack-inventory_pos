@@ -2,6 +2,7 @@ import { ConflictError, NotFoundError } from '#/server/auth/errors'
 import { nextDocumentNumber } from '#/server/inventory/document-number-service'
 import { serializePurchaseOrder } from '#/server/inventory/document-dto'
 import { assertTransition } from '#/server/inventory/state-machine'
+import { openApprovalRequest } from '#/server/purchasing/approval-engine'
 import { prisma } from '#/server/db/client'
 import { Prisma } from '#/server/db/generated/prisma/client'
 import { createAuditLog } from '#/server/repos/audit-log-repo'
@@ -188,6 +189,74 @@ export function cancelPurchaseOrder(
     'cancelled',
     'purchase.po_cancel',
   )
+}
+
+// Routes a draft PO through the approval engine. If a workflow matches and needs
+// human sign-off the PO moves to `pending_approval` and an approval request is
+// opened; otherwise (no workflow / auto-approve) it goes straight to `approved`.
+export async function submitPurchaseOrderForApproval(
+  context: CurrentUserContext,
+  tenantId: string,
+  id: string,
+) {
+  const po = await poRepo.findPurchaseOrderById(tenantId, id)
+
+  if (!po) {
+    throw new NotFoundError('Purchase order not found.')
+  }
+
+  const refreshed = await prisma.$transaction(async (tx) => {
+    const decision = await openApprovalRequest(context, tenantId, tx, {
+      entityType: 'purchase_order',
+      entityId: id,
+      amount: po.grandTotal.toString(),
+      currencyCode: po.currencyCode,
+    })
+
+    if (decision.statusCode === 'approved') {
+      assertTransition('purchaseOrder', po.status.toLowerCase(), 'approved')
+      await poRepo.updatePurchaseOrderStatus(
+        tenantId,
+        id,
+        'APPROVED',
+        { approvedByProfileId: context.profileId },
+        tx,
+      )
+    } else {
+      assertTransition(
+        'purchaseOrder',
+        po.status.toLowerCase(),
+        'pending_approval',
+      )
+      await poRepo.updatePurchaseOrderStatus(
+        tenantId,
+        id,
+        'PENDING_APPROVAL',
+        {},
+        tx,
+      )
+    }
+
+    await createAuditLog(
+      {
+        tenantId,
+        actorProfileId: context.profileId,
+        actorEmail: context.email,
+        actionKey: 'purchase.po_submit',
+        entityType: 'purchase_order',
+        entityId: id,
+        newValues: {
+          approvalStatus: decision.statusCode,
+          approvalRequestId: decision.requestId,
+        },
+      },
+      tx,
+    )
+
+    return (await poRepo.findPurchaseOrderById(tenantId, id, tx))!
+  })
+
+  return serializePurchaseOrder(refreshed)
 }
 
 export async function listPurchaseOrders(

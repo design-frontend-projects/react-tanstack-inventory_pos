@@ -84,9 +84,9 @@ export function SimpleBarChart({
           <Tooltip
             contentStyle={CHART_TOOLTIP_STYLE}
             cursor={{ fill: 'var(--ops-teal-soft)' }}
-            formatter={(value: number | string, name: string) => [
-              formatCompactNumber(value),
-              name,
+            formatter={(value, name) => [
+              formatCompactNumber(Array.isArray(value) ? value[0] : value),
+              String(name),
             ]}
           />
           {series.map((entry, index) => (

@@ -18,7 +18,12 @@ type PurchaseLane = {
 // Lanes with shipped routes; the rest render as upcoming.
 const AVAILABLE_LANES: Array<
   PurchaseLane & {
-    to: '/purchase/suppliers' | '/purchase/rfqs' | '/purchase/quotations'
+    to:
+      | '/purchase/suppliers'
+      | '/purchase/rfqs'
+      | '/purchase/quotations'
+      | '/purchase/approvals'
+      | '/purchase/invoices'
   }
 > = [
   {
@@ -42,6 +47,20 @@ const AVAILABLE_LANES: Array<
       'Supplier quotations with tax, freight, and insurance — reviewed, approved, and converted to POs.',
     meta: 'Sourcing',
   },
+  {
+    to: '/purchase/approvals',
+    title: 'Approvals',
+    description:
+      'Your amount-gated approval inbox — approve, reject, or delegate purchase orders and more.',
+    meta: 'Governance',
+  },
+  {
+    to: '/purchase/invoices',
+    title: 'Supplier Invoices',
+    description:
+      'Three-way match against PO and GRN, then post to payables with retention and withholding.',
+    meta: 'Payables',
+  },
 ]
 
 const UPCOMING_LANES: Array<PurchaseLane> = [
@@ -56,12 +75,6 @@ const UPCOMING_LANES: Array<PurchaseLane> = [
     description:
       'Approved orders with currency, incoterms, delivery terms, and partial receiving tracked to the line.',
     meta: 'Commitment',
-  },
-  {
-    title: 'Supplier Invoices',
-    description:
-      'Three-way match against PO and GRN, then post to payables with retention and withholding.',
-    meta: 'Payables',
   },
   {
     title: 'Payments',

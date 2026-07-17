@@ -117,7 +117,7 @@ async function seedScreens() {
 
     if (!moduleId) {
       throw new Error(
-        `Missing module "${definition.moduleCode}" for screen "${definition.code}"`
+        `Missing module "${definition.moduleCode}" for screen "${definition.code}"`,
       )
     }
 
@@ -173,7 +173,7 @@ async function seedScreenActions() {
 
     if (!screenId) {
       throw new Error(
-        `Missing screen "${definition.screenCode}" for action "${definition.code}"`
+        `Missing screen "${definition.screenCode}" for action "${definition.code}"`,
       )
     }
 
@@ -230,7 +230,7 @@ async function seedPermissions() {
     },
   })
   const actionIdByCode = new Map(
-    screenActions.map((action) => [action.code, action.id])
+    screenActions.map((action) => [action.code, action.id]),
   )
 
   for (const definition of PERMISSION_DEFINITIONS) {
@@ -278,7 +278,7 @@ async function linkScreenDefaultPermissions() {
     },
   })
   const permissionIdByCode = new Map(
-    permissions.map((permission) => [permission.code, permission.id])
+    permissions.map((permission) => [permission.code, permission.id]),
   )
 
   for (const definition of SCREEN_DEFINITIONS) {
@@ -287,7 +287,9 @@ async function linkScreenDefaultPermissions() {
     }
 
     const screenId = screenIdByCode.get(definition.code)
-    const permissionId = permissionIdByCode.get(definition.defaultPermissionCode)
+    const permissionId = permissionIdByCode.get(
+      definition.defaultPermissionCode,
+    )
 
     if (!screenId || !permissionId) {
       continue
@@ -342,7 +344,10 @@ async function seedRoles() {
   }
 }
 
-async function reassignRoleReferences(sourceRoleId: string, targetRoleId: string) {
+async function reassignRoleReferences(
+  sourceRoleId: string,
+  targetRoleId: string,
+) {
   const tenantUserRoles = await prisma.tenantUserRole.findMany({
     where: {
       roleId: sourceRoleId,
@@ -366,7 +371,8 @@ async function reassignRoleReferences(sourceRoleId: string, targetRoleId: string
           data: {
             isPrimary: true,
             assignedByProfileId:
-              existingTargetRole.assignedByProfileId ?? tenantUserRole.assignedByProfileId,
+              existingTargetRole.assignedByProfileId ??
+              tenantUserRole.assignedByProfileId,
             assignedAt:
               existingTargetRole.assignedAt > tenantUserRole.assignedAt
                 ? existingTargetRole.assignedAt
@@ -417,7 +423,7 @@ async function migrateLegacyRoles() {
     },
   })
   const canonicalRoleIdByCode = new Map(
-    canonicalRoles.map((role) => [role.code, role.id])
+    canonicalRoles.map((role) => [role.code, role.id]),
   )
 
   const staleSystemRoles = await prisma.role.findMany({
@@ -440,7 +446,8 @@ async function migrateLegacyRoles() {
 
   for (const staleRole of staleSystemRoles) {
     const mappedRoleCode = LEGACY_ROLE_CODE_MAP[staleRole.code] ?? 'res:user'
-    const targetRoleId = canonicalRoleIdByCode.get(mappedRoleCode) ?? fallbackRoleId
+    const targetRoleId =
+      canonicalRoleIdByCode.get(mappedRoleCode) ?? fallbackRoleId
 
     if (staleRole.code === 'tenant_owner') {
       const ownerAssignments = await prisma.tenantUserRole.findMany({
@@ -499,7 +506,7 @@ async function seedRolePermissions() {
   })
 
   const permissionIdByCode = new Map(
-    permissions.map((permission) => [permission.code, permission.id])
+    permissions.map((permission) => [permission.code, permission.id]),
   )
 
   for (const role of roles) {
@@ -532,7 +539,7 @@ async function seedRolePermissions() {
 
 async function cleanupStalePermissions() {
   const currentPermissionCodes = PERMISSION_DEFINITIONS.map(
-    (definition) => definition.code
+    (definition) => definition.code,
   )
   const stalePermissions = await prisma.permission.findMany({
     where: {
@@ -659,6 +666,52 @@ async function seedOwnerSubscriptionPlans() {
   }
 }
 
+// Spec 005: a default per-tenant purchase-order approval workflow so procurement
+// has amount-gated sign-off out of the box. Idempotent by (tenantId, code); the
+// step routes to the tenant admin role above a threshold.
+async function seedDefaultApprovalWorkflows() {
+  const tenants = await prisma.tenantAccount.findMany({
+    where: { status: 'ACTIVE' },
+    select: { id: true },
+  })
+
+  for (const tenant of tenants) {
+    const existing = await prisma.podApprovalWorkflow.findFirst({
+      where: { tenantId: tenant.id, code: 'PO-DEFAULT', deletedAt: null },
+      select: { id: true },
+    })
+
+    if (existing) {
+      continue
+    }
+
+    await prisma.podApprovalWorkflow.create({
+      data: {
+        tenantId: tenant.id,
+        code: 'PO-DEFAULT',
+        name: 'Purchase Order Approval',
+        entityType: 'purchase_order',
+        autoApprove: false,
+        notes:
+          'Default single-level approval; POs of 1,000+ require admin sign-off.',
+        steps: {
+          create: [
+            {
+              tenantId: tenant.id,
+              stepOrder: 1,
+              name: 'Admin approval',
+              approverRoleCode: 'admin',
+              minAmount: 1000,
+              isFinal: true,
+              allowDelegate: true,
+            },
+          ],
+        },
+      },
+    })
+  }
+}
+
 async function main() {
   await seedModules()
   await seedScreens()
@@ -671,6 +724,7 @@ async function main() {
   await cleanupStalePermissions()
   await seedOwnerActivityOptions()
   await seedOwnerSubscriptionPlans()
+  await seedDefaultApprovalWorkflows()
 
   console.log('Seeded auth/RBAC + owner-tier foundation data.')
 }

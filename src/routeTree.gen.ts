@@ -40,6 +40,8 @@ import { Route as AppRestaurantKitchenRouteImport } from './routes/_app/restaura
 import { Route as AppPurchaseSuppliersRouteImport } from './routes/_app/purchase/suppliers'
 import { Route as AppPurchaseRfqsRouteImport } from './routes/_app/purchase/rfqs'
 import { Route as AppPurchaseQuotationsRouteImport } from './routes/_app/purchase/quotations'
+import { Route as AppPurchaseInvoicesRouteImport } from './routes/_app/purchase/invoices'
+import { Route as AppPurchaseApprovalsRouteImport } from './routes/_app/purchase/approvals'
 import { Route as AppPosReturnsRouteImport } from './routes/_app/pos/returns'
 import { Route as AppPosOrdersRouteImport } from './routes/_app/pos/orders'
 import { Route as AppInventoryStockRouteImport } from './routes/_app/inventory/stock'
@@ -203,6 +205,16 @@ const AppPurchaseQuotationsRoute = AppPurchaseQuotationsRouteImport.update({
   path: '/purchase/quotations',
   getParentRoute: () => AppRoute,
 } as any)
+const AppPurchaseInvoicesRoute = AppPurchaseInvoicesRouteImport.update({
+  id: '/purchase/invoices',
+  path: '/purchase/invoices',
+  getParentRoute: () => AppRoute,
+} as any)
+const AppPurchaseApprovalsRoute = AppPurchaseApprovalsRouteImport.update({
+  id: '/purchase/approvals',
+  path: '/purchase/approvals',
+  getParentRoute: () => AppRoute,
+} as any)
 const AppPosReturnsRoute = AppPosReturnsRouteImport.update({
   id: '/pos/returns',
   path: '/pos/returns',
@@ -264,6 +276,8 @@ export interface FileRoutesByFullPath {
   '/inventory/stock': typeof AppInventoryStockRoute
   '/pos/orders': typeof AppPosOrdersRoute
   '/pos/returns': typeof AppPosReturnsRoute
+  '/purchase/approvals': typeof AppPurchaseApprovalsRoute
+  '/purchase/invoices': typeof AppPurchaseInvoicesRoute
   '/purchase/quotations': typeof AppPurchaseQuotationsRoute
   '/purchase/rfqs': typeof AppPurchaseRfqsRoute
   '/purchase/suppliers': typeof AppPurchaseSuppliersRoute
@@ -303,6 +317,8 @@ export interface FileRoutesByTo {
   '/inventory/stock': typeof AppInventoryStockRoute
   '/pos/orders': typeof AppPosOrdersRoute
   '/pos/returns': typeof AppPosReturnsRoute
+  '/purchase/approvals': typeof AppPurchaseApprovalsRoute
+  '/purchase/invoices': typeof AppPurchaseInvoicesRoute
   '/purchase/quotations': typeof AppPurchaseQuotationsRoute
   '/purchase/rfqs': typeof AppPurchaseRfqsRoute
   '/purchase/suppliers': typeof AppPurchaseSuppliersRoute
@@ -345,6 +361,8 @@ export interface FileRoutesById {
   '/_app/inventory/stock': typeof AppInventoryStockRoute
   '/_app/pos/orders': typeof AppPosOrdersRoute
   '/_app/pos/returns': typeof AppPosReturnsRoute
+  '/_app/purchase/approvals': typeof AppPurchaseApprovalsRoute
+  '/_app/purchase/invoices': typeof AppPurchaseInvoicesRoute
   '/_app/purchase/quotations': typeof AppPurchaseQuotationsRoute
   '/_app/purchase/rfqs': typeof AppPurchaseRfqsRoute
   '/_app/purchase/suppliers': typeof AppPurchaseSuppliersRoute
@@ -386,6 +404,8 @@ export interface FileRouteTypes {
     | '/inventory/stock'
     | '/pos/orders'
     | '/pos/returns'
+    | '/purchase/approvals'
+    | '/purchase/invoices'
     | '/purchase/quotations'
     | '/purchase/rfqs'
     | '/purchase/suppliers'
@@ -425,6 +445,8 @@ export interface FileRouteTypes {
     | '/inventory/stock'
     | '/pos/orders'
     | '/pos/returns'
+    | '/purchase/approvals'
+    | '/purchase/invoices'
     | '/purchase/quotations'
     | '/purchase/rfqs'
     | '/purchase/suppliers'
@@ -466,6 +488,8 @@ export interface FileRouteTypes {
     | '/_app/inventory/stock'
     | '/_app/pos/orders'
     | '/_app/pos/returns'
+    | '/_app/purchase/approvals'
+    | '/_app/purchase/invoices'
     | '/_app/purchase/quotations'
     | '/_app/purchase/rfqs'
     | '/_app/purchase/suppliers'
@@ -712,6 +736,20 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AppPurchaseQuotationsRouteImport
       parentRoute: typeof AppRoute
     }
+    '/_app/purchase/invoices': {
+      id: '/_app/purchase/invoices'
+      path: '/purchase/invoices'
+      fullPath: '/purchase/invoices'
+      preLoaderRoute: typeof AppPurchaseInvoicesRouteImport
+      parentRoute: typeof AppRoute
+    }
+    '/_app/purchase/approvals': {
+      id: '/_app/purchase/approvals'
+      path: '/purchase/approvals'
+      fullPath: '/purchase/approvals'
+      preLoaderRoute: typeof AppPurchaseApprovalsRouteImport
+      parentRoute: typeof AppRoute
+    }
     '/_app/pos/returns': {
       id: '/_app/pos/returns'
       path: '/pos/returns'
@@ -782,6 +820,8 @@ interface AppRouteChildren {
   AppInventoryStockRoute: typeof AppInventoryStockRoute
   AppPosOrdersRoute: typeof AppPosOrdersRoute
   AppPosReturnsRoute: typeof AppPosReturnsRoute
+  AppPurchaseApprovalsRoute: typeof AppPurchaseApprovalsRoute
+  AppPurchaseInvoicesRoute: typeof AppPurchaseInvoicesRoute
   AppPurchaseQuotationsRoute: typeof AppPurchaseQuotationsRoute
   AppPurchaseRfqsRoute: typeof AppPurchaseRfqsRoute
   AppPurchaseSuppliersRoute: typeof AppPurchaseSuppliersRoute
@@ -813,6 +853,8 @@ const AppRouteChildren: AppRouteChildren = {
   AppInventoryStockRoute: AppInventoryStockRoute,
   AppPosOrdersRoute: AppPosOrdersRoute,
   AppPosReturnsRoute: AppPosReturnsRoute,
+  AppPurchaseApprovalsRoute: AppPurchaseApprovalsRoute,
+  AppPurchaseInvoicesRoute: AppPurchaseInvoicesRoute,
   AppPurchaseQuotationsRoute: AppPurchaseQuotationsRoute,
   AppPurchaseRfqsRoute: AppPurchaseRfqsRoute,
   AppPurchaseSuppliersRoute: AppPurchaseSuppliersRoute,

@@ -9,11 +9,8 @@ import {
 import { Button } from '#/components/ui/button'
 import { SimpleBarChart } from '#/components/charts/simple-bar-chart'
 import { SimpleLineChart } from '#/components/charts/simple-line-chart'
-import {
-  ReorderRuleDialog
-  
-} from '#/features/inventory/reorder-rule-dialog'
-import type {ReorderRulePrefill} from '#/features/inventory/reorder-rule-dialog';
+import { ReorderRuleDialog } from '#/features/inventory/reorder-rule-dialog'
+import type { ReorderRulePrefill } from '#/features/inventory/reorder-rule-dialog'
 import {
   useInventoryKpis,
   useMovementTrend,

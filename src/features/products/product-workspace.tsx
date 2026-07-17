@@ -9,17 +9,11 @@ import {
 import { Button } from '#/components/ui/button'
 import { useInventoryKpis } from '#/features/inventory/use-inventory-analytics'
 import { MasterDataPanel } from '#/features/products/master-data-panel'
-import {
-  ProductFormDialog
-  
-} from '#/features/products/product-form-dialog'
-import type {ProductFormValues} from '#/features/products/product-form-dialog';
+import { ProductFormDialog } from '#/features/products/product-form-dialog'
+import type { ProductFormValues } from '#/features/products/product-form-dialog'
 import { useBrands, useCategories } from '#/features/products/use-master-data'
-import {
-  useProductsPage
-  
-} from '#/features/products/use-products'
-import type {ProductListFilters} from '#/features/products/use-products';
+import { useProductsPage } from '#/features/products/use-products'
+import type { ProductListFilters } from '#/features/products/use-products'
 
 const PAGE_SIZE = 25
 const PRODUCT_STATUSES = ['ACTIVE', 'INACTIVE', 'ARCHIVED']

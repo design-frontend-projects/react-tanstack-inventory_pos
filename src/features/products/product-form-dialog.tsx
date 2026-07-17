@@ -302,8 +302,10 @@ export function ProductFormDialog({
     }
   }, [open, product])
 
-  const set = <TKey extends keyof FormState>(key: TKey, value: FormState[TKey]) =>
-    setForm((previous) => ({ ...previous, [key]: value }))
+  const set = <TKey extends keyof FormState>(
+    key: TKey,
+    value: FormState[TKey],
+  ) => setForm((previous) => ({ ...previous, [key]: value }))
 
   const uoms = uomsQuery.data ?? []
 
