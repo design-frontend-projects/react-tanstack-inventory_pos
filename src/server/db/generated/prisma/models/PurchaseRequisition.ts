@@ -34,6 +34,13 @@ export type PurchaseRequisitionMinAggregateOutputType = {
   requestedByProfileId: string | null
   approvedByProfileId: string | null
   convertedToPoId: string | null
+  priority: string | null
+  requiredDate: Date | null
+  department: string | null
+  sourceType: string | null
+  branchId: string | null
+  companyId: string | null
+  approvalRequestId: string | null
   createdAt: Date | null
   updatedAt: Date | null
 }
@@ -48,6 +55,13 @@ export type PurchaseRequisitionMaxAggregateOutputType = {
   requestedByProfileId: string | null
   approvedByProfileId: string | null
   convertedToPoId: string | null
+  priority: string | null
+  requiredDate: Date | null
+  department: string | null
+  sourceType: string | null
+  branchId: string | null
+  companyId: string | null
+  approvalRequestId: string | null
   createdAt: Date | null
   updatedAt: Date | null
 }
@@ -62,6 +76,13 @@ export type PurchaseRequisitionCountAggregateOutputType = {
   requestedByProfileId: number
   approvedByProfileId: number
   convertedToPoId: number
+  priority: number
+  requiredDate: number
+  department: number
+  sourceType: number
+  branchId: number
+  companyId: number
+  approvalRequestId: number
   createdAt: number
   updatedAt: number
   _all: number
@@ -78,6 +99,13 @@ export type PurchaseRequisitionMinAggregateInputType = {
   requestedByProfileId?: true
   approvedByProfileId?: true
   convertedToPoId?: true
+  priority?: true
+  requiredDate?: true
+  department?: true
+  sourceType?: true
+  branchId?: true
+  companyId?: true
+  approvalRequestId?: true
   createdAt?: true
   updatedAt?: true
 }
@@ -92,6 +120,13 @@ export type PurchaseRequisitionMaxAggregateInputType = {
   requestedByProfileId?: true
   approvedByProfileId?: true
   convertedToPoId?: true
+  priority?: true
+  requiredDate?: true
+  department?: true
+  sourceType?: true
+  branchId?: true
+  companyId?: true
+  approvalRequestId?: true
   createdAt?: true
   updatedAt?: true
 }
@@ -106,6 +141,13 @@ export type PurchaseRequisitionCountAggregateInputType = {
   requestedByProfileId?: true
   approvedByProfileId?: true
   convertedToPoId?: true
+  priority?: true
+  requiredDate?: true
+  department?: true
+  sourceType?: true
+  branchId?: true
+  companyId?: true
+  approvalRequestId?: true
   createdAt?: true
   updatedAt?: true
   _all?: true
@@ -193,6 +235,13 @@ export type PurchaseRequisitionGroupByOutputType = {
   requestedByProfileId: string | null
   approvedByProfileId: string | null
   convertedToPoId: string | null
+  priority: string | null
+  requiredDate: Date | null
+  department: string | null
+  sourceType: string | null
+  branchId: string | null
+  companyId: string | null
+  approvalRequestId: string | null
   createdAt: Date
   updatedAt: Date
   _count: PurchaseRequisitionCountAggregateOutputType | null
@@ -228,6 +277,13 @@ export type PurchaseRequisitionWhereInput = {
   requestedByProfileId?: Prisma.UuidNullableFilter<"PurchaseRequisition"> | string | null
   approvedByProfileId?: Prisma.UuidNullableFilter<"PurchaseRequisition"> | string | null
   convertedToPoId?: Prisma.UuidNullableFilter<"PurchaseRequisition"> | string | null
+  priority?: Prisma.StringNullableFilter<"PurchaseRequisition"> | string | null
+  requiredDate?: Prisma.DateTimeNullableFilter<"PurchaseRequisition"> | Date | string | null
+  department?: Prisma.StringNullableFilter<"PurchaseRequisition"> | string | null
+  sourceType?: Prisma.StringNullableFilter<"PurchaseRequisition"> | string | null
+  branchId?: Prisma.UuidNullableFilter<"PurchaseRequisition"> | string | null
+  companyId?: Prisma.UuidNullableFilter<"PurchaseRequisition"> | string | null
+  approvalRequestId?: Prisma.UuidNullableFilter<"PurchaseRequisition"> | string | null
   createdAt?: Prisma.DateTimeFilter<"PurchaseRequisition"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"PurchaseRequisition"> | Date | string
   tenant?: Prisma.XOR<Prisma.TenantAccountScalarRelationFilter, Prisma.TenantAccountWhereInput>
@@ -244,6 +300,13 @@ export type PurchaseRequisitionOrderByWithRelationInput = {
   requestedByProfileId?: Prisma.SortOrderInput | Prisma.SortOrder
   approvedByProfileId?: Prisma.SortOrderInput | Prisma.SortOrder
   convertedToPoId?: Prisma.SortOrderInput | Prisma.SortOrder
+  priority?: Prisma.SortOrderInput | Prisma.SortOrder
+  requiredDate?: Prisma.SortOrderInput | Prisma.SortOrder
+  department?: Prisma.SortOrderInput | Prisma.SortOrder
+  sourceType?: Prisma.SortOrderInput | Prisma.SortOrder
+  branchId?: Prisma.SortOrderInput | Prisma.SortOrder
+  companyId?: Prisma.SortOrderInput | Prisma.SortOrder
+  approvalRequestId?: Prisma.SortOrderInput | Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   tenant?: Prisma.TenantAccountOrderByWithRelationInput
@@ -264,6 +327,13 @@ export type PurchaseRequisitionWhereUniqueInput = Prisma.AtLeast<{
   requestedByProfileId?: Prisma.UuidNullableFilter<"PurchaseRequisition"> | string | null
   approvedByProfileId?: Prisma.UuidNullableFilter<"PurchaseRequisition"> | string | null
   convertedToPoId?: Prisma.UuidNullableFilter<"PurchaseRequisition"> | string | null
+  priority?: Prisma.StringNullableFilter<"PurchaseRequisition"> | string | null
+  requiredDate?: Prisma.DateTimeNullableFilter<"PurchaseRequisition"> | Date | string | null
+  department?: Prisma.StringNullableFilter<"PurchaseRequisition"> | string | null
+  sourceType?: Prisma.StringNullableFilter<"PurchaseRequisition"> | string | null
+  branchId?: Prisma.UuidNullableFilter<"PurchaseRequisition"> | string | null
+  companyId?: Prisma.UuidNullableFilter<"PurchaseRequisition"> | string | null
+  approvalRequestId?: Prisma.UuidNullableFilter<"PurchaseRequisition"> | string | null
   createdAt?: Prisma.DateTimeFilter<"PurchaseRequisition"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"PurchaseRequisition"> | Date | string
   tenant?: Prisma.XOR<Prisma.TenantAccountScalarRelationFilter, Prisma.TenantAccountWhereInput>
@@ -280,6 +350,13 @@ export type PurchaseRequisitionOrderByWithAggregationInput = {
   requestedByProfileId?: Prisma.SortOrderInput | Prisma.SortOrder
   approvedByProfileId?: Prisma.SortOrderInput | Prisma.SortOrder
   convertedToPoId?: Prisma.SortOrderInput | Prisma.SortOrder
+  priority?: Prisma.SortOrderInput | Prisma.SortOrder
+  requiredDate?: Prisma.SortOrderInput | Prisma.SortOrder
+  department?: Prisma.SortOrderInput | Prisma.SortOrder
+  sourceType?: Prisma.SortOrderInput | Prisma.SortOrder
+  branchId?: Prisma.SortOrderInput | Prisma.SortOrder
+  companyId?: Prisma.SortOrderInput | Prisma.SortOrder
+  approvalRequestId?: Prisma.SortOrderInput | Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   _count?: Prisma.PurchaseRequisitionCountOrderByAggregateInput
@@ -300,6 +377,13 @@ export type PurchaseRequisitionScalarWhereWithAggregatesInput = {
   requestedByProfileId?: Prisma.UuidNullableWithAggregatesFilter<"PurchaseRequisition"> | string | null
   approvedByProfileId?: Prisma.UuidNullableWithAggregatesFilter<"PurchaseRequisition"> | string | null
   convertedToPoId?: Prisma.UuidNullableWithAggregatesFilter<"PurchaseRequisition"> | string | null
+  priority?: Prisma.StringNullableWithAggregatesFilter<"PurchaseRequisition"> | string | null
+  requiredDate?: Prisma.DateTimeNullableWithAggregatesFilter<"PurchaseRequisition"> | Date | string | null
+  department?: Prisma.StringNullableWithAggregatesFilter<"PurchaseRequisition"> | string | null
+  sourceType?: Prisma.StringNullableWithAggregatesFilter<"PurchaseRequisition"> | string | null
+  branchId?: Prisma.UuidNullableWithAggregatesFilter<"PurchaseRequisition"> | string | null
+  companyId?: Prisma.UuidNullableWithAggregatesFilter<"PurchaseRequisition"> | string | null
+  approvalRequestId?: Prisma.UuidNullableWithAggregatesFilter<"PurchaseRequisition"> | string | null
   createdAt?: Prisma.DateTimeWithAggregatesFilter<"PurchaseRequisition"> | Date | string
   updatedAt?: Prisma.DateTimeWithAggregatesFilter<"PurchaseRequisition"> | Date | string
 }
@@ -313,6 +397,13 @@ export type PurchaseRequisitionCreateInput = {
   requestedByProfileId?: string | null
   approvedByProfileId?: string | null
   convertedToPoId?: string | null
+  priority?: string | null
+  requiredDate?: Date | string | null
+  department?: string | null
+  sourceType?: string | null
+  branchId?: string | null
+  companyId?: string | null
+  approvalRequestId?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
   tenant: Prisma.TenantAccountCreateNestedOneWithoutPurchaseRequisitionsInput
@@ -329,6 +420,13 @@ export type PurchaseRequisitionUncheckedCreateInput = {
   requestedByProfileId?: string | null
   approvedByProfileId?: string | null
   convertedToPoId?: string | null
+  priority?: string | null
+  requiredDate?: Date | string | null
+  department?: string | null
+  sourceType?: string | null
+  branchId?: string | null
+  companyId?: string | null
+  approvalRequestId?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
   lines?: Prisma.PurchaseRequisitionLineUncheckedCreateNestedManyWithoutRequisitionInput
@@ -343,6 +441,13 @@ export type PurchaseRequisitionUpdateInput = {
   requestedByProfileId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   approvedByProfileId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   convertedToPoId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  priority?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  requiredDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  department?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  sourceType?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  branchId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  companyId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  approvalRequestId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   tenant?: Prisma.TenantAccountUpdateOneRequiredWithoutPurchaseRequisitionsNestedInput
@@ -359,6 +464,13 @@ export type PurchaseRequisitionUncheckedUpdateInput = {
   requestedByProfileId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   approvedByProfileId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   convertedToPoId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  priority?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  requiredDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  department?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  sourceType?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  branchId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  companyId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  approvalRequestId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   lines?: Prisma.PurchaseRequisitionLineUncheckedUpdateManyWithoutRequisitionNestedInput
@@ -374,6 +486,13 @@ export type PurchaseRequisitionCreateManyInput = {
   requestedByProfileId?: string | null
   approvedByProfileId?: string | null
   convertedToPoId?: string | null
+  priority?: string | null
+  requiredDate?: Date | string | null
+  department?: string | null
+  sourceType?: string | null
+  branchId?: string | null
+  companyId?: string | null
+  approvalRequestId?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
 }
@@ -387,6 +506,13 @@ export type PurchaseRequisitionUpdateManyMutationInput = {
   requestedByProfileId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   approvedByProfileId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   convertedToPoId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  priority?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  requiredDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  department?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  sourceType?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  branchId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  companyId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  approvalRequestId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -401,6 +527,13 @@ export type PurchaseRequisitionUncheckedUpdateManyInput = {
   requestedByProfileId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   approvedByProfileId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   convertedToPoId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  priority?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  requiredDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  department?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  sourceType?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  branchId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  companyId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  approvalRequestId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -430,6 +563,13 @@ export type PurchaseRequisitionCountOrderByAggregateInput = {
   requestedByProfileId?: Prisma.SortOrder
   approvedByProfileId?: Prisma.SortOrder
   convertedToPoId?: Prisma.SortOrder
+  priority?: Prisma.SortOrder
+  requiredDate?: Prisma.SortOrder
+  department?: Prisma.SortOrder
+  sourceType?: Prisma.SortOrder
+  branchId?: Prisma.SortOrder
+  companyId?: Prisma.SortOrder
+  approvalRequestId?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
 }
@@ -444,6 +584,13 @@ export type PurchaseRequisitionMaxOrderByAggregateInput = {
   requestedByProfileId?: Prisma.SortOrder
   approvedByProfileId?: Prisma.SortOrder
   convertedToPoId?: Prisma.SortOrder
+  priority?: Prisma.SortOrder
+  requiredDate?: Prisma.SortOrder
+  department?: Prisma.SortOrder
+  sourceType?: Prisma.SortOrder
+  branchId?: Prisma.SortOrder
+  companyId?: Prisma.SortOrder
+  approvalRequestId?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
 }
@@ -458,6 +605,13 @@ export type PurchaseRequisitionMinOrderByAggregateInput = {
   requestedByProfileId?: Prisma.SortOrder
   approvedByProfileId?: Prisma.SortOrder
   convertedToPoId?: Prisma.SortOrder
+  priority?: Prisma.SortOrder
+  requiredDate?: Prisma.SortOrder
+  department?: Prisma.SortOrder
+  sourceType?: Prisma.SortOrder
+  branchId?: Prisma.SortOrder
+  companyId?: Prisma.SortOrder
+  approvalRequestId?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
 }
@@ -536,6 +690,13 @@ export type PurchaseRequisitionCreateWithoutTenantInput = {
   requestedByProfileId?: string | null
   approvedByProfileId?: string | null
   convertedToPoId?: string | null
+  priority?: string | null
+  requiredDate?: Date | string | null
+  department?: string | null
+  sourceType?: string | null
+  branchId?: string | null
+  companyId?: string | null
+  approvalRequestId?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
   lines?: Prisma.PurchaseRequisitionLineCreateNestedManyWithoutRequisitionInput
@@ -550,6 +711,13 @@ export type PurchaseRequisitionUncheckedCreateWithoutTenantInput = {
   requestedByProfileId?: string | null
   approvedByProfileId?: string | null
   convertedToPoId?: string | null
+  priority?: string | null
+  requiredDate?: Date | string | null
+  department?: string | null
+  sourceType?: string | null
+  branchId?: string | null
+  companyId?: string | null
+  approvalRequestId?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
   lines?: Prisma.PurchaseRequisitionLineUncheckedCreateNestedManyWithoutRequisitionInput
@@ -594,6 +762,13 @@ export type PurchaseRequisitionScalarWhereInput = {
   requestedByProfileId?: Prisma.UuidNullableFilter<"PurchaseRequisition"> | string | null
   approvedByProfileId?: Prisma.UuidNullableFilter<"PurchaseRequisition"> | string | null
   convertedToPoId?: Prisma.UuidNullableFilter<"PurchaseRequisition"> | string | null
+  priority?: Prisma.StringNullableFilter<"PurchaseRequisition"> | string | null
+  requiredDate?: Prisma.DateTimeNullableFilter<"PurchaseRequisition"> | Date | string | null
+  department?: Prisma.StringNullableFilter<"PurchaseRequisition"> | string | null
+  sourceType?: Prisma.StringNullableFilter<"PurchaseRequisition"> | string | null
+  branchId?: Prisma.UuidNullableFilter<"PurchaseRequisition"> | string | null
+  companyId?: Prisma.UuidNullableFilter<"PurchaseRequisition"> | string | null
+  approvalRequestId?: Prisma.UuidNullableFilter<"PurchaseRequisition"> | string | null
   createdAt?: Prisma.DateTimeFilter<"PurchaseRequisition"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"PurchaseRequisition"> | Date | string
 }
@@ -607,6 +782,13 @@ export type PurchaseRequisitionCreateWithoutLinesInput = {
   requestedByProfileId?: string | null
   approvedByProfileId?: string | null
   convertedToPoId?: string | null
+  priority?: string | null
+  requiredDate?: Date | string | null
+  department?: string | null
+  sourceType?: string | null
+  branchId?: string | null
+  companyId?: string | null
+  approvalRequestId?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
   tenant: Prisma.TenantAccountCreateNestedOneWithoutPurchaseRequisitionsInput
@@ -622,6 +804,13 @@ export type PurchaseRequisitionUncheckedCreateWithoutLinesInput = {
   requestedByProfileId?: string | null
   approvedByProfileId?: string | null
   convertedToPoId?: string | null
+  priority?: string | null
+  requiredDate?: Date | string | null
+  department?: string | null
+  sourceType?: string | null
+  branchId?: string | null
+  companyId?: string | null
+  approvalRequestId?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
 }
@@ -651,6 +840,13 @@ export type PurchaseRequisitionUpdateWithoutLinesInput = {
   requestedByProfileId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   approvedByProfileId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   convertedToPoId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  priority?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  requiredDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  department?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  sourceType?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  branchId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  companyId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  approvalRequestId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   tenant?: Prisma.TenantAccountUpdateOneRequiredWithoutPurchaseRequisitionsNestedInput
@@ -666,6 +862,13 @@ export type PurchaseRequisitionUncheckedUpdateWithoutLinesInput = {
   requestedByProfileId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   approvedByProfileId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   convertedToPoId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  priority?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  requiredDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  department?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  sourceType?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  branchId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  companyId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  approvalRequestId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -679,6 +882,13 @@ export type PurchaseRequisitionCreateManyTenantInput = {
   requestedByProfileId?: string | null
   approvedByProfileId?: string | null
   convertedToPoId?: string | null
+  priority?: string | null
+  requiredDate?: Date | string | null
+  department?: string | null
+  sourceType?: string | null
+  branchId?: string | null
+  companyId?: string | null
+  approvalRequestId?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
 }
@@ -692,6 +902,13 @@ export type PurchaseRequisitionUpdateWithoutTenantInput = {
   requestedByProfileId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   approvedByProfileId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   convertedToPoId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  priority?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  requiredDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  department?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  sourceType?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  branchId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  companyId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  approvalRequestId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   lines?: Prisma.PurchaseRequisitionLineUpdateManyWithoutRequisitionNestedInput
@@ -706,6 +923,13 @@ export type PurchaseRequisitionUncheckedUpdateWithoutTenantInput = {
   requestedByProfileId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   approvedByProfileId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   convertedToPoId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  priority?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  requiredDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  department?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  sourceType?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  branchId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  companyId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  approvalRequestId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   lines?: Prisma.PurchaseRequisitionLineUncheckedUpdateManyWithoutRequisitionNestedInput
@@ -720,6 +944,13 @@ export type PurchaseRequisitionUncheckedUpdateManyWithoutTenantInput = {
   requestedByProfileId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   approvedByProfileId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   convertedToPoId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  priority?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  requiredDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  department?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  sourceType?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  branchId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  companyId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  approvalRequestId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -765,6 +996,13 @@ export type PurchaseRequisitionSelect<ExtArgs extends runtime.Types.Extensions.I
   requestedByProfileId?: boolean
   approvedByProfileId?: boolean
   convertedToPoId?: boolean
+  priority?: boolean
+  requiredDate?: boolean
+  department?: boolean
+  sourceType?: boolean
+  branchId?: boolean
+  companyId?: boolean
+  approvalRequestId?: boolean
   createdAt?: boolean
   updatedAt?: boolean
   tenant?: boolean | Prisma.TenantAccountDefaultArgs<ExtArgs>
@@ -782,6 +1020,13 @@ export type PurchaseRequisitionSelectCreateManyAndReturn<ExtArgs extends runtime
   requestedByProfileId?: boolean
   approvedByProfileId?: boolean
   convertedToPoId?: boolean
+  priority?: boolean
+  requiredDate?: boolean
+  department?: boolean
+  sourceType?: boolean
+  branchId?: boolean
+  companyId?: boolean
+  approvalRequestId?: boolean
   createdAt?: boolean
   updatedAt?: boolean
   tenant?: boolean | Prisma.TenantAccountDefaultArgs<ExtArgs>
@@ -797,6 +1042,13 @@ export type PurchaseRequisitionSelectUpdateManyAndReturn<ExtArgs extends runtime
   requestedByProfileId?: boolean
   approvedByProfileId?: boolean
   convertedToPoId?: boolean
+  priority?: boolean
+  requiredDate?: boolean
+  department?: boolean
+  sourceType?: boolean
+  branchId?: boolean
+  companyId?: boolean
+  approvalRequestId?: boolean
   createdAt?: boolean
   updatedAt?: boolean
   tenant?: boolean | Prisma.TenantAccountDefaultArgs<ExtArgs>
@@ -812,11 +1064,18 @@ export type PurchaseRequisitionSelectScalar = {
   requestedByProfileId?: boolean
   approvedByProfileId?: boolean
   convertedToPoId?: boolean
+  priority?: boolean
+  requiredDate?: boolean
+  department?: boolean
+  sourceType?: boolean
+  branchId?: boolean
+  companyId?: boolean
+  approvalRequestId?: boolean
   createdAt?: boolean
   updatedAt?: boolean
 }
 
-export type PurchaseRequisitionOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "tenantId" | "documentNumber" | "warehouseId" | "status" | "notes" | "requestedByProfileId" | "approvedByProfileId" | "convertedToPoId" | "createdAt" | "updatedAt", ExtArgs["result"]["purchaseRequisition"]>
+export type PurchaseRequisitionOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "tenantId" | "documentNumber" | "warehouseId" | "status" | "notes" | "requestedByProfileId" | "approvedByProfileId" | "convertedToPoId" | "priority" | "requiredDate" | "department" | "sourceType" | "branchId" | "companyId" | "approvalRequestId" | "createdAt" | "updatedAt", ExtArgs["result"]["purchaseRequisition"]>
 export type PurchaseRequisitionInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   tenant?: boolean | Prisma.TenantAccountDefaultArgs<ExtArgs>
   lines?: boolean | Prisma.PurchaseRequisition$linesArgs<ExtArgs>
@@ -845,6 +1104,13 @@ export type $PurchaseRequisitionPayload<ExtArgs extends runtime.Types.Extensions
     requestedByProfileId: string | null
     approvedByProfileId: string | null
     convertedToPoId: string | null
+    priority: string | null
+    requiredDate: Date | null
+    department: string | null
+    sourceType: string | null
+    branchId: string | null
+    companyId: string | null
+    approvalRequestId: string | null
     createdAt: Date
     updatedAt: Date
   }, ExtArgs["result"]["purchaseRequisition"]>
@@ -1281,6 +1547,13 @@ export interface PurchaseRequisitionFieldRefs {
   readonly requestedByProfileId: Prisma.FieldRef<"PurchaseRequisition", 'String'>
   readonly approvedByProfileId: Prisma.FieldRef<"PurchaseRequisition", 'String'>
   readonly convertedToPoId: Prisma.FieldRef<"PurchaseRequisition", 'String'>
+  readonly priority: Prisma.FieldRef<"PurchaseRequisition", 'String'>
+  readonly requiredDate: Prisma.FieldRef<"PurchaseRequisition", 'DateTime'>
+  readonly department: Prisma.FieldRef<"PurchaseRequisition", 'String'>
+  readonly sourceType: Prisma.FieldRef<"PurchaseRequisition", 'String'>
+  readonly branchId: Prisma.FieldRef<"PurchaseRequisition", 'String'>
+  readonly companyId: Prisma.FieldRef<"PurchaseRequisition", 'String'>
+  readonly approvalRequestId: Prisma.FieldRef<"PurchaseRequisition", 'String'>
   readonly createdAt: Prisma.FieldRef<"PurchaseRequisition", 'DateTime'>
   readonly updatedAt: Prisma.FieldRef<"PurchaseRequisition", 'DateTime'>
 }

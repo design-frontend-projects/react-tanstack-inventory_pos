@@ -9,8 +9,13 @@ import type { DocumentType } from '#/server/db/generated/prisma/client'
 
 const DEFAULT_PREFIX: Record<DocumentType, string> = {
   PURCHASE_REQUISITION: 'PR',
+  RFQ: 'RFQ',
+  SUPPLIER_QUOTATION: 'SQ',
   PURCHASE_ORDER: 'PO',
   GOODS_RECEIPT: 'GRN',
+  SUPPLIER_INVOICE: 'PINV',
+  SUPPLIER_PAYMENT: 'PAY',
+  LANDED_COST: 'LC',
   PURCHASE_RETURN: 'PRT',
   DEBIT_NOTE: 'DN',
   SALES_ORDER: 'SO',
@@ -35,7 +40,7 @@ export interface NextDocumentNumberInput {
 
 export async function nextDocumentNumber(
   tx: Prisma.TransactionClient,
-  input: NextDocumentNumberInput
+  input: NextDocumentNumberInput,
 ): Promise<string> {
   const scope = input.scope ?? 'default'
   const periodKey = input.periodKey ?? 'all'

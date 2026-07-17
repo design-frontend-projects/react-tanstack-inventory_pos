@@ -207,7 +207,39 @@ export const ModelName = {
   ResOrderTransfer: 'ResOrderTransfer',
   ResOrderEvent: 'ResOrderEvent',
   ResVoidReason: 'ResVoidReason',
-  ResCancelReason: 'ResCancelReason'
+  ResCancelReason: 'ResCancelReason',
+  PodDocumentStatus: 'PodDocumentStatus',
+  PodStatusTransition: 'PodStatusTransition',
+  PodSupplierCategory: 'PodSupplierCategory',
+  PodReturnReason: 'PodReturnReason',
+  PodPaymentMethod: 'PodPaymentMethod',
+  PodLandedCostType: 'PodLandedCostType',
+  PodIncoterm: 'PodIncoterm',
+  PodDebitNoteReason: 'PodDebitNoteReason',
+  PodSupplierContact: 'PodSupplierContact',
+  PodSupplierAddress: 'PodSupplierAddress',
+  PodSupplierBankAccount: 'PodSupplierBankAccount',
+  PodRfq: 'PodRfq',
+  PodRfqItem: 'PodRfqItem',
+  PodRfqSupplier: 'PodRfqSupplier',
+  PodSupplierQuotation: 'PodSupplierQuotation',
+  PodSupplierQuotationItem: 'PodSupplierQuotationItem',
+  PodApprovalWorkflow: 'PodApprovalWorkflow',
+  PodApprovalWorkflowStep: 'PodApprovalWorkflowStep',
+  PodApprovalRequest: 'PodApprovalRequest',
+  PodApprovalAction: 'PodApprovalAction',
+  PodSupplierInvoice: 'PodSupplierInvoice',
+  PodSupplierInvoiceItem: 'PodSupplierInvoiceItem',
+  PodSupplierInvoiceMatch: 'PodSupplierInvoiceMatch',
+  PodDebitNoteLine: 'PodDebitNoteLine',
+  PodLandedCostVoucher: 'PodLandedCostVoucher',
+  PodLandedCostCharge: 'PodLandedCostCharge',
+  PodLandedCostAllocation: 'PodLandedCostAllocation',
+  PodSupplierPayment: 'PodSupplierPayment',
+  PodSupplierPaymentAllocation: 'PodSupplierPaymentAllocation',
+  PodAttachment: 'PodAttachment',
+  PodCustomFieldDefinition: 'PodCustomFieldDefinition',
+  PodCustomFieldValue: 'PodCustomFieldValue'
 } as const
 
 export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -863,6 +895,19 @@ export const SupplierScalarFieldEnum = {
   paymentTerms: 'paymentTerms',
   currencyCode: 'currencyCode',
   creditLimit: 'creditLimit',
+  categoryId: 'categoryId',
+  statusCode: 'statusCode',
+  rating: 'rating',
+  leadTimeDays: 'leadTimeDays',
+  isPreferred: 'isPreferred',
+  currentBalance: 'currentBalance',
+  tags: 'tags',
+  companyId: 'companyId',
+  branchId: 'branchId',
+  versionNumber: 'versionNumber',
+  createdBy: 'createdBy',
+  updatedBy: 'updatedBy',
+  deletedBy: 'deletedBy',
   isActive: 'isActive',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt',
@@ -1202,6 +1247,13 @@ export const PurchaseRequisitionScalarFieldEnum = {
   requestedByProfileId: 'requestedByProfileId',
   approvedByProfileId: 'approvedByProfileId',
   convertedToPoId: 'convertedToPoId',
+  priority: 'priority',
+  requiredDate: 'requiredDate',
+  department: 'department',
+  sourceType: 'sourceType',
+  branchId: 'branchId',
+  companyId: 'companyId',
+  approvalRequestId: 'approvalRequestId',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
 } as const
@@ -1244,6 +1296,17 @@ export const PurchaseOrderScalarFieldEnum = {
   requisitionId: 'requisitionId',
   createdByProfileId: 'createdByProfileId',
   correlationId: 'correlationId',
+  branchId: 'branchId',
+  companyId: 'companyId',
+  exchangeRate: 'exchangeRate',
+  incoterms: 'incoterms',
+  deliveryAddressJson: 'deliveryAddressJson',
+  billingAddressJson: 'billingAddressJson',
+  buyerProfileId: 'buyerProfileId',
+  discountTotal: 'discountTotal',
+  approvalRequestId: 'approvalRequestId',
+  quotationId: 'quotationId',
+  versionNumber: 'versionNumber',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
 } as const
@@ -1266,6 +1329,14 @@ export const PurchaseOrderLineScalarFieldEnum = {
   taxAmount: 'taxAmount',
   lineTotal: 'lineTotal',
   expectedDate: 'expectedDate',
+  rejectedQty: 'rejectedQty',
+  returnedQty: 'returnedQty',
+  cancelledQty: 'cancelledQty',
+  discountPct: 'discountPct',
+  discountAmount: 'discountAmount',
+  netAmount: 'netAmount',
+  grossAmount: 'grossAmount',
+  remainingQty: 'remainingQty',
   createdAt: 'createdAt'
 } as const
 
@@ -1282,6 +1353,8 @@ export const GoodsReceiptScalarFieldEnum = {
   status: 'status',
   receiptDate: 'receiptDate',
   supplierDeliveryNote: 'supplierDeliveryNote',
+  inspectionStatusCode: 'inspectionStatusCode',
+  branchId: 'branchId',
   isPosted: 'isPosted',
   postedAt: 'postedAt',
   postedByProfileId: 'postedByProfileId',
@@ -3167,6 +3240,653 @@ export const ResCancelReasonScalarFieldEnum = {
 } as const
 
 export type ResCancelReasonScalarFieldEnum = (typeof ResCancelReasonScalarFieldEnum)[keyof typeof ResCancelReasonScalarFieldEnum]
+
+
+export const PodDocumentStatusScalarFieldEnum = {
+  id: 'id',
+  tenantId: 'tenantId',
+  entityType: 'entityType',
+  code: 'code',
+  name: 'name',
+  sortOrder: 'sortOrder',
+  isInitial: 'isInitial',
+  isTerminal: 'isTerminal',
+  color: 'color',
+  isActive: 'isActive',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type PodDocumentStatusScalarFieldEnum = (typeof PodDocumentStatusScalarFieldEnum)[keyof typeof PodDocumentStatusScalarFieldEnum]
+
+
+export const PodStatusTransitionScalarFieldEnum = {
+  id: 'id',
+  tenantId: 'tenantId',
+  entityType: 'entityType',
+  fromCode: 'fromCode',
+  toCode: 'toCode',
+  requiresPermission: 'requiresPermission',
+  createdAt: 'createdAt'
+} as const
+
+export type PodStatusTransitionScalarFieldEnum = (typeof PodStatusTransitionScalarFieldEnum)[keyof typeof PodStatusTransitionScalarFieldEnum]
+
+
+export const PodSupplierCategoryScalarFieldEnum = {
+  id: 'id',
+  tenantId: 'tenantId',
+  parentId: 'parentId',
+  code: 'code',
+  name: 'name',
+  description: 'description',
+  isActive: 'isActive',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt',
+  deletedAt: 'deletedAt'
+} as const
+
+export type PodSupplierCategoryScalarFieldEnum = (typeof PodSupplierCategoryScalarFieldEnum)[keyof typeof PodSupplierCategoryScalarFieldEnum]
+
+
+export const PodReturnReasonScalarFieldEnum = {
+  id: 'id',
+  tenantId: 'tenantId',
+  code: 'code',
+  label: 'label',
+  requiresInspection: 'requiresInspection',
+  isActive: 'isActive',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type PodReturnReasonScalarFieldEnum = (typeof PodReturnReasonScalarFieldEnum)[keyof typeof PodReturnReasonScalarFieldEnum]
+
+
+export const PodPaymentMethodScalarFieldEnum = {
+  id: 'id',
+  tenantId: 'tenantId',
+  code: 'code',
+  label: 'label',
+  isActive: 'isActive',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type PodPaymentMethodScalarFieldEnum = (typeof PodPaymentMethodScalarFieldEnum)[keyof typeof PodPaymentMethodScalarFieldEnum]
+
+
+export const PodLandedCostTypeScalarFieldEnum = {
+  id: 'id',
+  tenantId: 'tenantId',
+  code: 'code',
+  label: 'label',
+  defaultAllocationBasis: 'defaultAllocationBasis',
+  isActive: 'isActive',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type PodLandedCostTypeScalarFieldEnum = (typeof PodLandedCostTypeScalarFieldEnum)[keyof typeof PodLandedCostTypeScalarFieldEnum]
+
+
+export const PodIncotermScalarFieldEnum = {
+  id: 'id',
+  tenantId: 'tenantId',
+  code: 'code',
+  label: 'label',
+  isActive: 'isActive',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type PodIncotermScalarFieldEnum = (typeof PodIncotermScalarFieldEnum)[keyof typeof PodIncotermScalarFieldEnum]
+
+
+export const PodDebitNoteReasonScalarFieldEnum = {
+  id: 'id',
+  tenantId: 'tenantId',
+  code: 'code',
+  label: 'label',
+  isActive: 'isActive',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type PodDebitNoteReasonScalarFieldEnum = (typeof PodDebitNoteReasonScalarFieldEnum)[keyof typeof PodDebitNoteReasonScalarFieldEnum]
+
+
+export const PodSupplierContactScalarFieldEnum = {
+  id: 'id',
+  tenantId: 'tenantId',
+  supplierId: 'supplierId',
+  name: 'name',
+  title: 'title',
+  email: 'email',
+  phone: 'phone',
+  mobile: 'mobile',
+  isPrimary: 'isPrimary',
+  notes: 'notes',
+  isActive: 'isActive',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt',
+  deletedAt: 'deletedAt'
+} as const
+
+export type PodSupplierContactScalarFieldEnum = (typeof PodSupplierContactScalarFieldEnum)[keyof typeof PodSupplierContactScalarFieldEnum]
+
+
+export const PodSupplierAddressScalarFieldEnum = {
+  id: 'id',
+  tenantId: 'tenantId',
+  supplierId: 'supplierId',
+  addressType: 'addressType',
+  line1: 'line1',
+  line2: 'line2',
+  city: 'city',
+  state: 'state',
+  postalCode: 'postalCode',
+  countryCode: 'countryCode',
+  isPrimary: 'isPrimary',
+  isActive: 'isActive',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt',
+  deletedAt: 'deletedAt'
+} as const
+
+export type PodSupplierAddressScalarFieldEnum = (typeof PodSupplierAddressScalarFieldEnum)[keyof typeof PodSupplierAddressScalarFieldEnum]
+
+
+export const PodSupplierBankAccountScalarFieldEnum = {
+  id: 'id',
+  tenantId: 'tenantId',
+  supplierId: 'supplierId',
+  bankName: 'bankName',
+  accountName: 'accountName',
+  accountNumber: 'accountNumber',
+  iban: 'iban',
+  swift: 'swift',
+  currencyCode: 'currencyCode',
+  isPrimary: 'isPrimary',
+  isActive: 'isActive',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt',
+  deletedAt: 'deletedAt'
+} as const
+
+export type PodSupplierBankAccountScalarFieldEnum = (typeof PodSupplierBankAccountScalarFieldEnum)[keyof typeof PodSupplierBankAccountScalarFieldEnum]
+
+
+export const PodRfqScalarFieldEnum = {
+  id: 'id',
+  tenantId: 'tenantId',
+  companyId: 'companyId',
+  branchId: 'branchId',
+  documentNumber: 'documentNumber',
+  statusCode: 'statusCode',
+  title: 'title',
+  requisitionId: 'requisitionId',
+  warehouseId: 'warehouseId',
+  currencyCode: 'currencyCode',
+  issueDate: 'issueDate',
+  expiryDate: 'expiryDate',
+  revision: 'revision',
+  awardedSupplierId: 'awardedSupplierId',
+  awardedQuotationId: 'awardedQuotationId',
+  buyerProfileId: 'buyerProfileId',
+  notes: 'notes',
+  correlationId: 'correlationId',
+  isActive: 'isActive',
+  versionNumber: 'versionNumber',
+  createdBy: 'createdBy',
+  updatedBy: 'updatedBy',
+  deletedBy: 'deletedBy',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt',
+  deletedAt: 'deletedAt'
+} as const
+
+export type PodRfqScalarFieldEnum = (typeof PodRfqScalarFieldEnum)[keyof typeof PodRfqScalarFieldEnum]
+
+
+export const PodRfqItemScalarFieldEnum = {
+  id: 'id',
+  tenantId: 'tenantId',
+  rfqId: 'rfqId',
+  lineNo: 'lineNo',
+  productId: 'productId',
+  variantId: 'variantId',
+  uomId: 'uomId',
+  quantity: 'quantity',
+  requiredDate: 'requiredDate',
+  specification: 'specification',
+  notes: 'notes',
+  createdAt: 'createdAt'
+} as const
+
+export type PodRfqItemScalarFieldEnum = (typeof PodRfqItemScalarFieldEnum)[keyof typeof PodRfqItemScalarFieldEnum]
+
+
+export const PodRfqSupplierScalarFieldEnum = {
+  id: 'id',
+  tenantId: 'tenantId',
+  rfqId: 'rfqId',
+  supplierId: 'supplierId',
+  statusCode: 'statusCode',
+  invitedAt: 'invitedAt',
+  respondedAt: 'respondedAt',
+  createdAt: 'createdAt'
+} as const
+
+export type PodRfqSupplierScalarFieldEnum = (typeof PodRfqSupplierScalarFieldEnum)[keyof typeof PodRfqSupplierScalarFieldEnum]
+
+
+export const PodSupplierQuotationScalarFieldEnum = {
+  id: 'id',
+  tenantId: 'tenantId',
+  companyId: 'companyId',
+  branchId: 'branchId',
+  documentNumber: 'documentNumber',
+  rfqId: 'rfqId',
+  supplierId: 'supplierId',
+  statusCode: 'statusCode',
+  quotationDate: 'quotationDate',
+  validUntil: 'validUntil',
+  currencyCode: 'currencyCode',
+  exchangeRate: 'exchangeRate',
+  leadTimeDays: 'leadTimeDays',
+  paymentTerms: 'paymentTerms',
+  freightAmount: 'freightAmount',
+  insuranceAmount: 'insuranceAmount',
+  discountTotal: 'discountTotal',
+  subtotal: 'subtotal',
+  taxTotal: 'taxTotal',
+  grandTotal: 'grandTotal',
+  remarks: 'remarks',
+  revision: 'revision',
+  approvedByProfileId: 'approvedByProfileId',
+  correlationId: 'correlationId',
+  isActive: 'isActive',
+  versionNumber: 'versionNumber',
+  createdBy: 'createdBy',
+  updatedBy: 'updatedBy',
+  deletedBy: 'deletedBy',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt',
+  deletedAt: 'deletedAt'
+} as const
+
+export type PodSupplierQuotationScalarFieldEnum = (typeof PodSupplierQuotationScalarFieldEnum)[keyof typeof PodSupplierQuotationScalarFieldEnum]
+
+
+export const PodSupplierQuotationItemScalarFieldEnum = {
+  id: 'id',
+  tenantId: 'tenantId',
+  quotationId: 'quotationId',
+  lineNo: 'lineNo',
+  productId: 'productId',
+  variantId: 'variantId',
+  uomId: 'uomId',
+  quantity: 'quantity',
+  unitPrice: 'unitPrice',
+  discountPct: 'discountPct',
+  discountAmount: 'discountAmount',
+  taxRateId: 'taxRateId',
+  taxAmount: 'taxAmount',
+  netAmount: 'netAmount',
+  leadTimeDays: 'leadTimeDays',
+  notes: 'notes',
+  createdAt: 'createdAt'
+} as const
+
+export type PodSupplierQuotationItemScalarFieldEnum = (typeof PodSupplierQuotationItemScalarFieldEnum)[keyof typeof PodSupplierQuotationItemScalarFieldEnum]
+
+
+export const PodApprovalWorkflowScalarFieldEnum = {
+  id: 'id',
+  tenantId: 'tenantId',
+  code: 'code',
+  name: 'name',
+  entityType: 'entityType',
+  minAmount: 'minAmount',
+  maxAmount: 'maxAmount',
+  currencyCode: 'currencyCode',
+  autoApprove: 'autoApprove',
+  notes: 'notes',
+  isActive: 'isActive',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt',
+  deletedAt: 'deletedAt'
+} as const
+
+export type PodApprovalWorkflowScalarFieldEnum = (typeof PodApprovalWorkflowScalarFieldEnum)[keyof typeof PodApprovalWorkflowScalarFieldEnum]
+
+
+export const PodApprovalWorkflowStepScalarFieldEnum = {
+  id: 'id',
+  tenantId: 'tenantId',
+  workflowId: 'workflowId',
+  stepOrder: 'stepOrder',
+  name: 'name',
+  approverRoleCode: 'approverRoleCode',
+  approverProfileId: 'approverProfileId',
+  minAmount: 'minAmount',
+  condition: 'condition',
+  isFinal: 'isFinal',
+  allowDelegate: 'allowDelegate',
+  escalateAfterHours: 'escalateAfterHours',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type PodApprovalWorkflowStepScalarFieldEnum = (typeof PodApprovalWorkflowStepScalarFieldEnum)[keyof typeof PodApprovalWorkflowStepScalarFieldEnum]
+
+
+export const PodApprovalRequestScalarFieldEnum = {
+  id: 'id',
+  tenantId: 'tenantId',
+  companyId: 'companyId',
+  branchId: 'branchId',
+  workflowId: 'workflowId',
+  entityType: 'entityType',
+  entityId: 'entityId',
+  statusCode: 'statusCode',
+  currentStepOrder: 'currentStepOrder',
+  amount: 'amount',
+  currencyCode: 'currencyCode',
+  requestedByProfileId: 'requestedByProfileId',
+  requestedAt: 'requestedAt',
+  completedAt: 'completedAt',
+  correlationId: 'correlationId',
+  versionNumber: 'versionNumber',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type PodApprovalRequestScalarFieldEnum = (typeof PodApprovalRequestScalarFieldEnum)[keyof typeof PodApprovalRequestScalarFieldEnum]
+
+
+export const PodApprovalActionScalarFieldEnum = {
+  id: 'id',
+  tenantId: 'tenantId',
+  requestId: 'requestId',
+  stepOrder: 'stepOrder',
+  actionCode: 'actionCode',
+  actorProfileId: 'actorProfileId',
+  delegatedToProfileId: 'delegatedToProfileId',
+  comment: 'comment',
+  actedAt: 'actedAt',
+  createdAt: 'createdAt'
+} as const
+
+export type PodApprovalActionScalarFieldEnum = (typeof PodApprovalActionScalarFieldEnum)[keyof typeof PodApprovalActionScalarFieldEnum]
+
+
+export const PodSupplierInvoiceScalarFieldEnum = {
+  id: 'id',
+  tenantId: 'tenantId',
+  companyId: 'companyId',
+  branchId: 'branchId',
+  documentNumber: 'documentNumber',
+  supplierInvoiceNumber: 'supplierInvoiceNumber',
+  supplierId: 'supplierId',
+  purchaseOrderId: 'purchaseOrderId',
+  statusCode: 'statusCode',
+  matchStatusCode: 'matchStatusCode',
+  paymentStatusCode: 'paymentStatusCode',
+  invoiceDate: 'invoiceDate',
+  dueDate: 'dueDate',
+  currencyCode: 'currencyCode',
+  exchangeRate: 'exchangeRate',
+  subtotal: 'subtotal',
+  discountTotal: 'discountTotal',
+  taxTotal: 'taxTotal',
+  retentionAmount: 'retentionAmount',
+  withholdingTaxAmount: 'withholdingTaxAmount',
+  freightAmount: 'freightAmount',
+  grandTotal: 'grandTotal',
+  paidAmount: 'paidAmount',
+  outstandingAmount: 'outstandingAmount',
+  notes: 'notes',
+  approvalRequestId: 'approvalRequestId',
+  isPosted: 'isPosted',
+  postedAt: 'postedAt',
+  postedByProfileId: 'postedByProfileId',
+  correlationId: 'correlationId',
+  isActive: 'isActive',
+  versionNumber: 'versionNumber',
+  createdBy: 'createdBy',
+  updatedBy: 'updatedBy',
+  deletedBy: 'deletedBy',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt',
+  deletedAt: 'deletedAt'
+} as const
+
+export type PodSupplierInvoiceScalarFieldEnum = (typeof PodSupplierInvoiceScalarFieldEnum)[keyof typeof PodSupplierInvoiceScalarFieldEnum]
+
+
+export const PodSupplierInvoiceItemScalarFieldEnum = {
+  id: 'id',
+  tenantId: 'tenantId',
+  invoiceId: 'invoiceId',
+  lineNo: 'lineNo',
+  productId: 'productId',
+  variantId: 'variantId',
+  description: 'description',
+  purchaseOrderLineId: 'purchaseOrderLineId',
+  goodsReceiptLineId: 'goodsReceiptLineId',
+  uomId: 'uomId',
+  quantity: 'quantity',
+  unitPrice: 'unitPrice',
+  discountAmount: 'discountAmount',
+  taxRateId: 'taxRateId',
+  taxAmount: 'taxAmount',
+  netAmount: 'netAmount',
+  createdAt: 'createdAt'
+} as const
+
+export type PodSupplierInvoiceItemScalarFieldEnum = (typeof PodSupplierInvoiceItemScalarFieldEnum)[keyof typeof PodSupplierInvoiceItemScalarFieldEnum]
+
+
+export const PodSupplierInvoiceMatchScalarFieldEnum = {
+  id: 'id',
+  tenantId: 'tenantId',
+  invoiceId: 'invoiceId',
+  invoiceItemId: 'invoiceItemId',
+  purchaseOrderLineId: 'purchaseOrderLineId',
+  goodsReceiptLineId: 'goodsReceiptLineId',
+  matchedQty: 'matchedQty',
+  matchedAmount: 'matchedAmount',
+  priceVariance: 'priceVariance',
+  qtyVariance: 'qtyVariance',
+  createdAt: 'createdAt'
+} as const
+
+export type PodSupplierInvoiceMatchScalarFieldEnum = (typeof PodSupplierInvoiceMatchScalarFieldEnum)[keyof typeof PodSupplierInvoiceMatchScalarFieldEnum]
+
+
+export const PodDebitNoteLineScalarFieldEnum = {
+  id: 'id',
+  tenantId: 'tenantId',
+  financialNoteId: 'financialNoteId',
+  lineNo: 'lineNo',
+  reasonId: 'reasonId',
+  productId: 'productId',
+  description: 'description',
+  quantity: 'quantity',
+  unitCost: 'unitCost',
+  amount: 'amount',
+  taxAmount: 'taxAmount',
+  purchaseReturnId: 'purchaseReturnId',
+  createdAt: 'createdAt'
+} as const
+
+export type PodDebitNoteLineScalarFieldEnum = (typeof PodDebitNoteLineScalarFieldEnum)[keyof typeof PodDebitNoteLineScalarFieldEnum]
+
+
+export const PodLandedCostVoucherScalarFieldEnum = {
+  id: 'id',
+  tenantId: 'tenantId',
+  companyId: 'companyId',
+  branchId: 'branchId',
+  documentNumber: 'documentNumber',
+  statusCode: 'statusCode',
+  goodsReceiptId: 'goodsReceiptId',
+  purchaseOrderId: 'purchaseOrderId',
+  supplierInvoiceId: 'supplierInvoiceId',
+  allocationBasis: 'allocationBasis',
+  currencyCode: 'currencyCode',
+  exchangeRate: 'exchangeRate',
+  totalCharges: 'totalCharges',
+  notes: 'notes',
+  isPosted: 'isPosted',
+  postedAt: 'postedAt',
+  postedByProfileId: 'postedByProfileId',
+  correlationId: 'correlationId',
+  isActive: 'isActive',
+  versionNumber: 'versionNumber',
+  createdBy: 'createdBy',
+  updatedBy: 'updatedBy',
+  deletedBy: 'deletedBy',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt',
+  deletedAt: 'deletedAt'
+} as const
+
+export type PodLandedCostVoucherScalarFieldEnum = (typeof PodLandedCostVoucherScalarFieldEnum)[keyof typeof PodLandedCostVoucherScalarFieldEnum]
+
+
+export const PodLandedCostChargeScalarFieldEnum = {
+  id: 'id',
+  tenantId: 'tenantId',
+  voucherId: 'voucherId',
+  lineNo: 'lineNo',
+  costTypeId: 'costTypeId',
+  description: 'description',
+  amount: 'amount',
+  supplierId: 'supplierId',
+  taxAmount: 'taxAmount',
+  createdAt: 'createdAt'
+} as const
+
+export type PodLandedCostChargeScalarFieldEnum = (typeof PodLandedCostChargeScalarFieldEnum)[keyof typeof PodLandedCostChargeScalarFieldEnum]
+
+
+export const PodLandedCostAllocationScalarFieldEnum = {
+  id: 'id',
+  tenantId: 'tenantId',
+  voucherId: 'voucherId',
+  goodsReceiptLineId: 'goodsReceiptLineId',
+  purchaseOrderLineId: 'purchaseOrderLineId',
+  productId: 'productId',
+  basisValue: 'basisValue',
+  allocatedAmount: 'allocatedAmount',
+  createdAt: 'createdAt'
+} as const
+
+export type PodLandedCostAllocationScalarFieldEnum = (typeof PodLandedCostAllocationScalarFieldEnum)[keyof typeof PodLandedCostAllocationScalarFieldEnum]
+
+
+export const PodSupplierPaymentScalarFieldEnum = {
+  id: 'id',
+  tenantId: 'tenantId',
+  companyId: 'companyId',
+  branchId: 'branchId',
+  documentNumber: 'documentNumber',
+  supplierId: 'supplierId',
+  statusCode: 'statusCode',
+  paymentMethodId: 'paymentMethodId',
+  paymentDate: 'paymentDate',
+  currencyCode: 'currencyCode',
+  exchangeRate: 'exchangeRate',
+  amount: 'amount',
+  allocatedAmount: 'allocatedAmount',
+  unallocatedAmount: 'unallocatedAmount',
+  referenceNumber: 'referenceNumber',
+  bankAccountId: 'bankAccountId',
+  isAdvance: 'isAdvance',
+  notes: 'notes',
+  isPosted: 'isPosted',
+  postedAt: 'postedAt',
+  postedByProfileId: 'postedByProfileId',
+  correlationId: 'correlationId',
+  isActive: 'isActive',
+  versionNumber: 'versionNumber',
+  createdBy: 'createdBy',
+  updatedBy: 'updatedBy',
+  deletedBy: 'deletedBy',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt',
+  deletedAt: 'deletedAt'
+} as const
+
+export type PodSupplierPaymentScalarFieldEnum = (typeof PodSupplierPaymentScalarFieldEnum)[keyof typeof PodSupplierPaymentScalarFieldEnum]
+
+
+export const PodSupplierPaymentAllocationScalarFieldEnum = {
+  id: 'id',
+  tenantId: 'tenantId',
+  paymentId: 'paymentId',
+  supplierInvoiceId: 'supplierInvoiceId',
+  financialNoteId: 'financialNoteId',
+  allocatedAmount: 'allocatedAmount',
+  createdAt: 'createdAt'
+} as const
+
+export type PodSupplierPaymentAllocationScalarFieldEnum = (typeof PodSupplierPaymentAllocationScalarFieldEnum)[keyof typeof PodSupplierPaymentAllocationScalarFieldEnum]
+
+
+export const PodAttachmentScalarFieldEnum = {
+  id: 'id',
+  tenantId: 'tenantId',
+  entityType: 'entityType',
+  entityId: 'entityId',
+  fileName: 'fileName',
+  fileUrl: 'fileUrl',
+  mimeType: 'mimeType',
+  fileSize: 'fileSize',
+  category: 'category',
+  uploadedByProfileId: 'uploadedByProfileId',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt',
+  deletedAt: 'deletedAt'
+} as const
+
+export type PodAttachmentScalarFieldEnum = (typeof PodAttachmentScalarFieldEnum)[keyof typeof PodAttachmentScalarFieldEnum]
+
+
+export const PodCustomFieldDefinitionScalarFieldEnum = {
+  id: 'id',
+  tenantId: 'tenantId',
+  entityType: 'entityType',
+  fieldKey: 'fieldKey',
+  label: 'label',
+  fieldType: 'fieldType',
+  optionsJson: 'optionsJson',
+  isRequired: 'isRequired',
+  displayOrder: 'displayOrder',
+  isActive: 'isActive',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt',
+  deletedAt: 'deletedAt'
+} as const
+
+export type PodCustomFieldDefinitionScalarFieldEnum = (typeof PodCustomFieldDefinitionScalarFieldEnum)[keyof typeof PodCustomFieldDefinitionScalarFieldEnum]
+
+
+export const PodCustomFieldValueScalarFieldEnum = {
+  id: 'id',
+  tenantId: 'tenantId',
+  definitionId: 'definitionId',
+  entityType: 'entityType',
+  entityId: 'entityId',
+  valueJson: 'valueJson',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type PodCustomFieldValueScalarFieldEnum = (typeof PodCustomFieldValueScalarFieldEnum)[keyof typeof PodCustomFieldValueScalarFieldEnum]
 
 
 export const SortOrder = {

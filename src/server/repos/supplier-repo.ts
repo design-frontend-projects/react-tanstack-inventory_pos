@@ -12,46 +12,121 @@ export interface SupplierWriteInput {
   paymentTerms?: string | null
   currencyCode?: string
   creditLimit?: Prisma.Decimal | string | number | null
+  // Spec 005 procurement fields
+  categoryId?: string | null
+  statusCode?: string
+  rating?: Prisma.Decimal | string | number | null
+  leadTimeDays?: number | null
+  isPreferred?: boolean
+  tags?: Prisma.InputJsonValue | null
   isActive?: boolean
+}
+
+export interface SupplierActor {
+  createdBy?: string | null
+  updatedBy?: string | null
 }
 
 export function findSupplierById(
   tenantId: string,
   id: string,
-  client: PrismaClientLike = prisma
+  client: PrismaClientLike = prisma,
 ) {
   return client.supplier.findFirst({
     where: { id, tenantId, deletedAt: null },
   })
 }
 
+// Full profile with CRM satellites (contacts, addresses, bank accounts). Satellites
+// are separate pod_ aggregates referenced by scalar supplierId, so they are fetched
+// explicitly rather than via a Prisma relation include.
+export async function findSupplierDetail(
+  tenantId: string,
+  id: string,
+  client: PrismaClientLike = prisma,
+) {
+  const supplier = await client.supplier.findFirst({
+    where: { id, tenantId, deletedAt: null },
+  })
+
+  if (!supplier) {
+    return null
+  }
+
+  const [contacts, addresses, bankAccounts] = await Promise.all([
+    client.podSupplierContact.findMany({
+      where: { tenantId, supplierId: id, deletedAt: null },
+      orderBy: [{ isPrimary: 'desc' }, { name: 'asc' }],
+    }),
+    client.podSupplierAddress.findMany({
+      where: { tenantId, supplierId: id, deletedAt: null },
+      orderBy: [{ isPrimary: 'desc' }, { addressType: 'asc' }],
+    }),
+    client.podSupplierBankAccount.findMany({
+      where: { tenantId, supplierId: id, deletedAt: null },
+      orderBy: [{ isPrimary: 'desc' }, { bankName: 'asc' }],
+    }),
+  ])
+
+  return { ...supplier, contacts, addresses, bankAccounts }
+}
+
+export interface ListSupplierOptions {
+  search?: string
+  categoryId?: string
+  statusCode?: string
+  includeInactive?: boolean
+  skip?: number
+  take?: number
+}
+
+function buildSupplierWhere(
+  tenantId: string,
+  options: ListSupplierOptions,
+): Prisma.SupplierWhereInput {
+  return {
+    tenantId,
+    deletedAt: null,
+    ...(options.includeInactive ? {} : { isActive: true }),
+    ...(options.categoryId ? { categoryId: options.categoryId } : {}),
+    ...(options.statusCode ? { statusCode: options.statusCode } : {}),
+    ...(options.search
+      ? {
+          OR: [
+            { name: { contains: options.search, mode: 'insensitive' } },
+            { code: { contains: options.search, mode: 'insensitive' } },
+            { email: { contains: options.search, mode: 'insensitive' } },
+          ],
+        }
+      : {}),
+  }
+}
+
 export function listSuppliers(
   tenantId: string,
-  options: { search?: string; includeInactive?: boolean } = {},
-  client: PrismaClientLike = prisma
+  options: ListSupplierOptions = {},
+  client: PrismaClientLike = prisma,
 ) {
   return client.supplier.findMany({
-    where: {
-      tenantId,
-      deletedAt: null,
-      ...(options.includeInactive ? {} : { isActive: true }),
-      ...(options.search
-        ? {
-            OR: [
-              { name: { contains: options.search, mode: 'insensitive' } },
-              { code: { contains: options.search, mode: 'insensitive' } },
-            ],
-          }
-        : {}),
-    },
-    orderBy: { name: 'asc' },
+    where: buildSupplierWhere(tenantId, options),
+    orderBy: [{ isPreferred: 'desc' }, { name: 'asc' }],
+    ...(options.skip !== undefined ? { skip: options.skip } : {}),
+    ...(options.take !== undefined ? { take: options.take } : {}),
   })
+}
+
+export function countSuppliers(
+  tenantId: string,
+  options: ListSupplierOptions = {},
+  client: PrismaClientLike = prisma,
+) {
+  return client.supplier.count({ where: buildSupplierWhere(tenantId, options) })
 }
 
 export function createSupplier(
   tenantId: string,
-  input: SupplierWriteInput,
-  client: PrismaClientLike = prisma
+  input: SupplierWriteInput & SupplierActor,
+  client: PrismaClientLike = prisma,
 ) {
   return client.supplier.create({
     data: {
@@ -65,7 +140,15 @@ export function createSupplier(
       paymentTerms: input.paymentTerms ?? null,
       currencyCode: input.currencyCode ?? 'USD',
       creditLimit: input.creditLimit ?? null,
+      categoryId: input.categoryId ?? null,
+      statusCode: input.statusCode ?? 'active',
+      rating: input.rating ?? null,
+      leadTimeDays: input.leadTimeDays ?? null,
+      isPreferred: input.isPreferred ?? false,
+      tags: input.tags ?? undefined,
       isActive: input.isActive ?? true,
+      createdBy: input.createdBy ?? null,
+      updatedBy: input.createdBy ?? null,
     },
   })
 }
@@ -73,8 +156,8 @@ export function createSupplier(
 export async function updateSupplier(
   tenantId: string,
   id: string,
-  data: Partial<SupplierWriteInput>,
-  client: PrismaClientLike = prisma
+  data: Partial<SupplierWriteInput> & SupplierActor,
+  client: PrismaClientLike = prisma,
 ) {
   const result = await client.supplier.updateMany({
     where: { id, tenantId, deletedAt: null },
@@ -87,10 +170,31 @@ export async function updateSupplier(
       ...(data.addressJson !== undefined
         ? { addressJson: data.addressJson ?? Prisma.DbNull }
         : {}),
-      ...(data.paymentTerms !== undefined ? { paymentTerms: data.paymentTerms ?? null } : {}),
-      ...(data.currencyCode !== undefined ? { currencyCode: data.currencyCode } : {}),
-      ...(data.creditLimit !== undefined ? { creditLimit: data.creditLimit ?? null } : {}),
+      ...(data.paymentTerms !== undefined
+        ? { paymentTerms: data.paymentTerms ?? null }
+        : {}),
+      ...(data.currencyCode !== undefined
+        ? { currencyCode: data.currencyCode }
+        : {}),
+      ...(data.creditLimit !== undefined
+        ? { creditLimit: data.creditLimit ?? null }
+        : {}),
+      ...(data.categoryId !== undefined
+        ? { categoryId: data.categoryId ?? null }
+        : {}),
+      ...(data.statusCode !== undefined ? { statusCode: data.statusCode } : {}),
+      ...(data.rating !== undefined ? { rating: data.rating ?? null } : {}),
+      ...(data.leadTimeDays !== undefined
+        ? { leadTimeDays: data.leadTimeDays ?? null }
+        : {}),
+      ...(data.isPreferred !== undefined
+        ? { isPreferred: data.isPreferred }
+        : {}),
+      ...(data.tags !== undefined ? { tags: data.tags ?? Prisma.DbNull } : {}),
       ...(data.isActive !== undefined ? { isActive: data.isActive } : {}),
+      ...(data.updatedBy !== undefined
+        ? { updatedBy: data.updatedBy ?? null }
+        : {}),
     },
   })
 
@@ -104,12 +208,22 @@ export async function updateSupplier(
 export async function softDeleteSupplier(
   tenantId: string,
   id: string,
-  client: PrismaClientLike = prisma
+  actor: { deletedBy?: string | null } = {},
+  client: PrismaClientLike = prisma,
 ) {
   const result = await client.supplier.updateMany({
     where: { id, tenantId, deletedAt: null },
-    data: { deletedAt: new Date(), isActive: false },
+    data: {
+      deletedAt: new Date(),
+      isActive: false,
+      deletedBy: actor.deletedBy ?? null,
+    },
   })
 
   return result.count > 0
 }
+
+// Detail payload type shared with the DTO/service layer.
+export type SupplierDetail = NonNullable<
+  Awaited<ReturnType<typeof findSupplierDetail>>
+>

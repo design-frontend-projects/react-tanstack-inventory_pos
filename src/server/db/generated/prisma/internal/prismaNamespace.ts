@@ -80,12 +80,12 @@ export type PrismaVersion = {
 }
 
 /**
- * Prisma Client JS version: 7.8.0
- * Query Engine version: 3c6e192761c0362d496ed980de936e2f3cebcd3a
+ * Prisma Client JS version: 7.7.0
+ * Query Engine version: 75cbdc1eb7150937890ad5465d861175c6624711
  */
 export const prismaVersion: PrismaVersion = {
-  client: "7.8.0",
-  engine: "3c6e192761c0362d496ed980de936e2f3cebcd3a"
+  client: "7.7.0",
+  engine: "75cbdc1eb7150937890ad5465d861175c6624711"
 }
 
 /**
@@ -540,7 +540,39 @@ export const ModelName = {
   ResOrderTransfer: 'ResOrderTransfer',
   ResOrderEvent: 'ResOrderEvent',
   ResVoidReason: 'ResVoidReason',
-  ResCancelReason: 'ResCancelReason'
+  ResCancelReason: 'ResCancelReason',
+  PodDocumentStatus: 'PodDocumentStatus',
+  PodStatusTransition: 'PodStatusTransition',
+  PodSupplierCategory: 'PodSupplierCategory',
+  PodReturnReason: 'PodReturnReason',
+  PodPaymentMethod: 'PodPaymentMethod',
+  PodLandedCostType: 'PodLandedCostType',
+  PodIncoterm: 'PodIncoterm',
+  PodDebitNoteReason: 'PodDebitNoteReason',
+  PodSupplierContact: 'PodSupplierContact',
+  PodSupplierAddress: 'PodSupplierAddress',
+  PodSupplierBankAccount: 'PodSupplierBankAccount',
+  PodRfq: 'PodRfq',
+  PodRfqItem: 'PodRfqItem',
+  PodRfqSupplier: 'PodRfqSupplier',
+  PodSupplierQuotation: 'PodSupplierQuotation',
+  PodSupplierQuotationItem: 'PodSupplierQuotationItem',
+  PodApprovalWorkflow: 'PodApprovalWorkflow',
+  PodApprovalWorkflowStep: 'PodApprovalWorkflowStep',
+  PodApprovalRequest: 'PodApprovalRequest',
+  PodApprovalAction: 'PodApprovalAction',
+  PodSupplierInvoice: 'PodSupplierInvoice',
+  PodSupplierInvoiceItem: 'PodSupplierInvoiceItem',
+  PodSupplierInvoiceMatch: 'PodSupplierInvoiceMatch',
+  PodDebitNoteLine: 'PodDebitNoteLine',
+  PodLandedCostVoucher: 'PodLandedCostVoucher',
+  PodLandedCostCharge: 'PodLandedCostCharge',
+  PodLandedCostAllocation: 'PodLandedCostAllocation',
+  PodSupplierPayment: 'PodSupplierPayment',
+  PodSupplierPaymentAllocation: 'PodSupplierPaymentAllocation',
+  PodAttachment: 'PodAttachment',
+  PodCustomFieldDefinition: 'PodCustomFieldDefinition',
+  PodCustomFieldValue: 'PodCustomFieldValue'
 } as const
 
 export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -556,7 +588,7 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
     omit: GlobalOmitOptions
   }
   meta: {
-    modelProps: "profile" | "tenantAccount" | "tenantUser" | "role" | "permission" | "rolePermission" | "tenantUserRole" | "tenantUserPermission" | "user_invitations" | "auditLog" | "preferenceProfile" | "tenantRegistrationRequest" | "module" | "tenantModule" | "tenantScreen" | "screen" | "screenAction" | "documentSequence" | "brand" | "productCategory" | "unitOfMeasure" | "uomConversion" | "product" | "productVariant" | "productBarcode" | "productImage" | "productSupplier" | "priceList" | "productPrice" | "bundleComponent" | "attribute" | "attributeOption" | "productAttributeValue" | "productTag" | "productTagLink" | "supplier" | "customer" | "taxRate" | "warehouse" | "warehouseLocation" | "stockBalance" | "inventoryMovement" | "costLayer" | "stockAdjustment" | "stockAdjustmentLine" | "ownerActivityOption" | "ownerSubscriptionPlan" | "ownerSubscriptionPlanFeature" | "ownerTenantSubscription" | "stockTransfer" | "stockTransferLine" | "purchaseRequisition" | "purchaseRequisitionLine" | "purchaseOrder" | "purchaseOrderLine" | "goodsReceipt" | "goodsReceiptLine" | "purchaseReturn" | "purchaseReturnLine" | "salesOrder" | "salesOrderLine" | "salesInvoice" | "salesInvoiceLine" | "posSession" | "posSale" | "posSaleLine" | "posPayment" | "salesReturn" | "salesReturnLine" | "financialNote" | "stockReservation" | "lot" | "serialNumber" | "billOfMaterials" | "bomComponent" | "productionOrder" | "productionMaterial" | "productionOutput" | "reorderRule" | "stockSnapshot" | "domainEvent" | "crmProjectionCursor" | "crmCustomerProfile" | "crmCustomerContact" | "crmCustomerAddress" | "crmCustomerRelationship" | "crmCommunicationConsent" | "crmCustomerPreference" | "crmTag" | "crmCustomerTag" | "crmCustomerGroup" | "crmCustomerGroupMember" | "crmCustomFieldDefinition" | "crmCustomFieldValue" | "crmTimelineEntry" | "crmLoyaltySettings" | "crmLoyaltyTier" | "crmLoyaltyAccount" | "crmLoyaltyLedgerEntry" | "crmLoyaltyEarnRule" | "crmCustomerMetrics" | "crmCustomerMetricsMonthly" | "crmSegment" | "crmSegmentMember" | "crmCustomerScore" | "resRestaurant" | "resBranch" | "resBranchMember" | "resBusinessHours" | "resHoliday" | "resDiningArea" | "resTableSection" | "resTable" | "resTableQrCode" | "resServiceType" | "resShift" | "resKitchenStation" | "resKitchenPrinter" | "resReceiptTemplate" | "resTaxConfig" | "resServiceChargeRule" | "resDeliverySettings" | "resTakeawaySettings" | "resNumberSequence" | "resRestaurantSettings" | "resBranchSettings" | "resMenu" | "resMenuCategory" | "resMenuItem" | "resMenuItemVariant" | "resMenuItemPrice" | "resModifierGroup" | "resModifier" | "resMenuItemModifierGroup" | "resCombo" | "resComboComponent" | "resMenuItemAllergen" | "resMenuItemTag" | "resMenuAvailability" | "resCrossSell" | "resRecipe" | "resRecipeVersion" | "resRecipeLine" | "resRecipeSubRecipe" | "resRecipeStep" | "resRecipeApproval" | "resOrder" | "resOrderItem" | "resOrderItemModifier" | "resOrderPayment" | "resOrderDiscount" | "resOrderCharge" | "resOrderSplit" | "resOrderTransfer" | "resOrderEvent" | "resVoidReason" | "resCancelReason"
+    modelProps: "profile" | "tenantAccount" | "tenantUser" | "role" | "permission" | "rolePermission" | "tenantUserRole" | "tenantUserPermission" | "user_invitations" | "auditLog" | "preferenceProfile" | "tenantRegistrationRequest" | "module" | "tenantModule" | "tenantScreen" | "screen" | "screenAction" | "documentSequence" | "brand" | "productCategory" | "unitOfMeasure" | "uomConversion" | "product" | "productVariant" | "productBarcode" | "productImage" | "productSupplier" | "priceList" | "productPrice" | "bundleComponent" | "attribute" | "attributeOption" | "productAttributeValue" | "productTag" | "productTagLink" | "supplier" | "customer" | "taxRate" | "warehouse" | "warehouseLocation" | "stockBalance" | "inventoryMovement" | "costLayer" | "stockAdjustment" | "stockAdjustmentLine" | "ownerActivityOption" | "ownerSubscriptionPlan" | "ownerSubscriptionPlanFeature" | "ownerTenantSubscription" | "stockTransfer" | "stockTransferLine" | "purchaseRequisition" | "purchaseRequisitionLine" | "purchaseOrder" | "purchaseOrderLine" | "goodsReceipt" | "goodsReceiptLine" | "purchaseReturn" | "purchaseReturnLine" | "salesOrder" | "salesOrderLine" | "salesInvoice" | "salesInvoiceLine" | "posSession" | "posSale" | "posSaleLine" | "posPayment" | "salesReturn" | "salesReturnLine" | "financialNote" | "stockReservation" | "lot" | "serialNumber" | "billOfMaterials" | "bomComponent" | "productionOrder" | "productionMaterial" | "productionOutput" | "reorderRule" | "stockSnapshot" | "domainEvent" | "crmProjectionCursor" | "crmCustomerProfile" | "crmCustomerContact" | "crmCustomerAddress" | "crmCustomerRelationship" | "crmCommunicationConsent" | "crmCustomerPreference" | "crmTag" | "crmCustomerTag" | "crmCustomerGroup" | "crmCustomerGroupMember" | "crmCustomFieldDefinition" | "crmCustomFieldValue" | "crmTimelineEntry" | "crmLoyaltySettings" | "crmLoyaltyTier" | "crmLoyaltyAccount" | "crmLoyaltyLedgerEntry" | "crmLoyaltyEarnRule" | "crmCustomerMetrics" | "crmCustomerMetricsMonthly" | "crmSegment" | "crmSegmentMember" | "crmCustomerScore" | "resRestaurant" | "resBranch" | "resBranchMember" | "resBusinessHours" | "resHoliday" | "resDiningArea" | "resTableSection" | "resTable" | "resTableQrCode" | "resServiceType" | "resShift" | "resKitchenStation" | "resKitchenPrinter" | "resReceiptTemplate" | "resTaxConfig" | "resServiceChargeRule" | "resDeliverySettings" | "resTakeawaySettings" | "resNumberSequence" | "resRestaurantSettings" | "resBranchSettings" | "resMenu" | "resMenuCategory" | "resMenuItem" | "resMenuItemVariant" | "resMenuItemPrice" | "resModifierGroup" | "resModifier" | "resMenuItemModifierGroup" | "resCombo" | "resComboComponent" | "resMenuItemAllergen" | "resMenuItemTag" | "resMenuAvailability" | "resCrossSell" | "resRecipe" | "resRecipeVersion" | "resRecipeLine" | "resRecipeSubRecipe" | "resRecipeStep" | "resRecipeApproval" | "resOrder" | "resOrderItem" | "resOrderItemModifier" | "resOrderPayment" | "resOrderDiscount" | "resOrderCharge" | "resOrderSplit" | "resOrderTransfer" | "resOrderEvent" | "resVoidReason" | "resCancelReason" | "podDocumentStatus" | "podStatusTransition" | "podSupplierCategory" | "podReturnReason" | "podPaymentMethod" | "podLandedCostType" | "podIncoterm" | "podDebitNoteReason" | "podSupplierContact" | "podSupplierAddress" | "podSupplierBankAccount" | "podRfq" | "podRfqItem" | "podRfqSupplier" | "podSupplierQuotation" | "podSupplierQuotationItem" | "podApprovalWorkflow" | "podApprovalWorkflowStep" | "podApprovalRequest" | "podApprovalAction" | "podSupplierInvoice" | "podSupplierInvoiceItem" | "podSupplierInvoiceMatch" | "podDebitNoteLine" | "podLandedCostVoucher" | "podLandedCostCharge" | "podLandedCostAllocation" | "podSupplierPayment" | "podSupplierPaymentAllocation" | "podAttachment" | "podCustomFieldDefinition" | "podCustomFieldValue"
     txIsolationLevel: TransactionIsolationLevel
   }
   model: {
@@ -12178,6 +12210,2374 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
         }
       }
     }
+    PodDocumentStatus: {
+      payload: Prisma.$PodDocumentStatusPayload<ExtArgs>
+      fields: Prisma.PodDocumentStatusFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.PodDocumentStatusFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PodDocumentStatusPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.PodDocumentStatusFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PodDocumentStatusPayload>
+        }
+        findFirst: {
+          args: Prisma.PodDocumentStatusFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PodDocumentStatusPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.PodDocumentStatusFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PodDocumentStatusPayload>
+        }
+        findMany: {
+          args: Prisma.PodDocumentStatusFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PodDocumentStatusPayload>[]
+        }
+        create: {
+          args: Prisma.PodDocumentStatusCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PodDocumentStatusPayload>
+        }
+        createMany: {
+          args: Prisma.PodDocumentStatusCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.PodDocumentStatusCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PodDocumentStatusPayload>[]
+        }
+        delete: {
+          args: Prisma.PodDocumentStatusDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PodDocumentStatusPayload>
+        }
+        update: {
+          args: Prisma.PodDocumentStatusUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PodDocumentStatusPayload>
+        }
+        deleteMany: {
+          args: Prisma.PodDocumentStatusDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.PodDocumentStatusUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.PodDocumentStatusUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PodDocumentStatusPayload>[]
+        }
+        upsert: {
+          args: Prisma.PodDocumentStatusUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PodDocumentStatusPayload>
+        }
+        aggregate: {
+          args: Prisma.PodDocumentStatusAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregatePodDocumentStatus>
+        }
+        groupBy: {
+          args: Prisma.PodDocumentStatusGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.PodDocumentStatusGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.PodDocumentStatusCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.PodDocumentStatusCountAggregateOutputType> | number
+        }
+      }
+    }
+    PodStatusTransition: {
+      payload: Prisma.$PodStatusTransitionPayload<ExtArgs>
+      fields: Prisma.PodStatusTransitionFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.PodStatusTransitionFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PodStatusTransitionPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.PodStatusTransitionFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PodStatusTransitionPayload>
+        }
+        findFirst: {
+          args: Prisma.PodStatusTransitionFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PodStatusTransitionPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.PodStatusTransitionFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PodStatusTransitionPayload>
+        }
+        findMany: {
+          args: Prisma.PodStatusTransitionFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PodStatusTransitionPayload>[]
+        }
+        create: {
+          args: Prisma.PodStatusTransitionCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PodStatusTransitionPayload>
+        }
+        createMany: {
+          args: Prisma.PodStatusTransitionCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.PodStatusTransitionCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PodStatusTransitionPayload>[]
+        }
+        delete: {
+          args: Prisma.PodStatusTransitionDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PodStatusTransitionPayload>
+        }
+        update: {
+          args: Prisma.PodStatusTransitionUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PodStatusTransitionPayload>
+        }
+        deleteMany: {
+          args: Prisma.PodStatusTransitionDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.PodStatusTransitionUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.PodStatusTransitionUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PodStatusTransitionPayload>[]
+        }
+        upsert: {
+          args: Prisma.PodStatusTransitionUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PodStatusTransitionPayload>
+        }
+        aggregate: {
+          args: Prisma.PodStatusTransitionAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregatePodStatusTransition>
+        }
+        groupBy: {
+          args: Prisma.PodStatusTransitionGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.PodStatusTransitionGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.PodStatusTransitionCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.PodStatusTransitionCountAggregateOutputType> | number
+        }
+      }
+    }
+    PodSupplierCategory: {
+      payload: Prisma.$PodSupplierCategoryPayload<ExtArgs>
+      fields: Prisma.PodSupplierCategoryFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.PodSupplierCategoryFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PodSupplierCategoryPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.PodSupplierCategoryFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PodSupplierCategoryPayload>
+        }
+        findFirst: {
+          args: Prisma.PodSupplierCategoryFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PodSupplierCategoryPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.PodSupplierCategoryFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PodSupplierCategoryPayload>
+        }
+        findMany: {
+          args: Prisma.PodSupplierCategoryFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PodSupplierCategoryPayload>[]
+        }
+        create: {
+          args: Prisma.PodSupplierCategoryCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PodSupplierCategoryPayload>
+        }
+        createMany: {
+          args: Prisma.PodSupplierCategoryCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.PodSupplierCategoryCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PodSupplierCategoryPayload>[]
+        }
+        delete: {
+          args: Prisma.PodSupplierCategoryDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PodSupplierCategoryPayload>
+        }
+        update: {
+          args: Prisma.PodSupplierCategoryUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PodSupplierCategoryPayload>
+        }
+        deleteMany: {
+          args: Prisma.PodSupplierCategoryDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.PodSupplierCategoryUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.PodSupplierCategoryUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PodSupplierCategoryPayload>[]
+        }
+        upsert: {
+          args: Prisma.PodSupplierCategoryUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PodSupplierCategoryPayload>
+        }
+        aggregate: {
+          args: Prisma.PodSupplierCategoryAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregatePodSupplierCategory>
+        }
+        groupBy: {
+          args: Prisma.PodSupplierCategoryGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.PodSupplierCategoryGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.PodSupplierCategoryCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.PodSupplierCategoryCountAggregateOutputType> | number
+        }
+      }
+    }
+    PodReturnReason: {
+      payload: Prisma.$PodReturnReasonPayload<ExtArgs>
+      fields: Prisma.PodReturnReasonFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.PodReturnReasonFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PodReturnReasonPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.PodReturnReasonFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PodReturnReasonPayload>
+        }
+        findFirst: {
+          args: Prisma.PodReturnReasonFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PodReturnReasonPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.PodReturnReasonFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PodReturnReasonPayload>
+        }
+        findMany: {
+          args: Prisma.PodReturnReasonFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PodReturnReasonPayload>[]
+        }
+        create: {
+          args: Prisma.PodReturnReasonCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PodReturnReasonPayload>
+        }
+        createMany: {
+          args: Prisma.PodReturnReasonCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.PodReturnReasonCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PodReturnReasonPayload>[]
+        }
+        delete: {
+          args: Prisma.PodReturnReasonDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PodReturnReasonPayload>
+        }
+        update: {
+          args: Prisma.PodReturnReasonUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PodReturnReasonPayload>
+        }
+        deleteMany: {
+          args: Prisma.PodReturnReasonDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.PodReturnReasonUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.PodReturnReasonUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PodReturnReasonPayload>[]
+        }
+        upsert: {
+          args: Prisma.PodReturnReasonUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PodReturnReasonPayload>
+        }
+        aggregate: {
+          args: Prisma.PodReturnReasonAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregatePodReturnReason>
+        }
+        groupBy: {
+          args: Prisma.PodReturnReasonGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.PodReturnReasonGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.PodReturnReasonCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.PodReturnReasonCountAggregateOutputType> | number
+        }
+      }
+    }
+    PodPaymentMethod: {
+      payload: Prisma.$PodPaymentMethodPayload<ExtArgs>
+      fields: Prisma.PodPaymentMethodFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.PodPaymentMethodFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PodPaymentMethodPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.PodPaymentMethodFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PodPaymentMethodPayload>
+        }
+        findFirst: {
+          args: Prisma.PodPaymentMethodFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PodPaymentMethodPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.PodPaymentMethodFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PodPaymentMethodPayload>
+        }
+        findMany: {
+          args: Prisma.PodPaymentMethodFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PodPaymentMethodPayload>[]
+        }
+        create: {
+          args: Prisma.PodPaymentMethodCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PodPaymentMethodPayload>
+        }
+        createMany: {
+          args: Prisma.PodPaymentMethodCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.PodPaymentMethodCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PodPaymentMethodPayload>[]
+        }
+        delete: {
+          args: Prisma.PodPaymentMethodDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PodPaymentMethodPayload>
+        }
+        update: {
+          args: Prisma.PodPaymentMethodUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PodPaymentMethodPayload>
+        }
+        deleteMany: {
+          args: Prisma.PodPaymentMethodDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.PodPaymentMethodUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.PodPaymentMethodUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PodPaymentMethodPayload>[]
+        }
+        upsert: {
+          args: Prisma.PodPaymentMethodUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PodPaymentMethodPayload>
+        }
+        aggregate: {
+          args: Prisma.PodPaymentMethodAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregatePodPaymentMethod>
+        }
+        groupBy: {
+          args: Prisma.PodPaymentMethodGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.PodPaymentMethodGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.PodPaymentMethodCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.PodPaymentMethodCountAggregateOutputType> | number
+        }
+      }
+    }
+    PodLandedCostType: {
+      payload: Prisma.$PodLandedCostTypePayload<ExtArgs>
+      fields: Prisma.PodLandedCostTypeFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.PodLandedCostTypeFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PodLandedCostTypePayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.PodLandedCostTypeFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PodLandedCostTypePayload>
+        }
+        findFirst: {
+          args: Prisma.PodLandedCostTypeFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PodLandedCostTypePayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.PodLandedCostTypeFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PodLandedCostTypePayload>
+        }
+        findMany: {
+          args: Prisma.PodLandedCostTypeFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PodLandedCostTypePayload>[]
+        }
+        create: {
+          args: Prisma.PodLandedCostTypeCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PodLandedCostTypePayload>
+        }
+        createMany: {
+          args: Prisma.PodLandedCostTypeCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.PodLandedCostTypeCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PodLandedCostTypePayload>[]
+        }
+        delete: {
+          args: Prisma.PodLandedCostTypeDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PodLandedCostTypePayload>
+        }
+        update: {
+          args: Prisma.PodLandedCostTypeUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PodLandedCostTypePayload>
+        }
+        deleteMany: {
+          args: Prisma.PodLandedCostTypeDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.PodLandedCostTypeUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.PodLandedCostTypeUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PodLandedCostTypePayload>[]
+        }
+        upsert: {
+          args: Prisma.PodLandedCostTypeUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PodLandedCostTypePayload>
+        }
+        aggregate: {
+          args: Prisma.PodLandedCostTypeAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregatePodLandedCostType>
+        }
+        groupBy: {
+          args: Prisma.PodLandedCostTypeGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.PodLandedCostTypeGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.PodLandedCostTypeCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.PodLandedCostTypeCountAggregateOutputType> | number
+        }
+      }
+    }
+    PodIncoterm: {
+      payload: Prisma.$PodIncotermPayload<ExtArgs>
+      fields: Prisma.PodIncotermFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.PodIncotermFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PodIncotermPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.PodIncotermFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PodIncotermPayload>
+        }
+        findFirst: {
+          args: Prisma.PodIncotermFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PodIncotermPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.PodIncotermFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PodIncotermPayload>
+        }
+        findMany: {
+          args: Prisma.PodIncotermFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PodIncotermPayload>[]
+        }
+        create: {
+          args: Prisma.PodIncotermCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PodIncotermPayload>
+        }
+        createMany: {
+          args: Prisma.PodIncotermCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.PodIncotermCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PodIncotermPayload>[]
+        }
+        delete: {
+          args: Prisma.PodIncotermDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PodIncotermPayload>
+        }
+        update: {
+          args: Prisma.PodIncotermUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PodIncotermPayload>
+        }
+        deleteMany: {
+          args: Prisma.PodIncotermDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.PodIncotermUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.PodIncotermUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PodIncotermPayload>[]
+        }
+        upsert: {
+          args: Prisma.PodIncotermUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PodIncotermPayload>
+        }
+        aggregate: {
+          args: Prisma.PodIncotermAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregatePodIncoterm>
+        }
+        groupBy: {
+          args: Prisma.PodIncotermGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.PodIncotermGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.PodIncotermCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.PodIncotermCountAggregateOutputType> | number
+        }
+      }
+    }
+    PodDebitNoteReason: {
+      payload: Prisma.$PodDebitNoteReasonPayload<ExtArgs>
+      fields: Prisma.PodDebitNoteReasonFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.PodDebitNoteReasonFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PodDebitNoteReasonPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.PodDebitNoteReasonFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PodDebitNoteReasonPayload>
+        }
+        findFirst: {
+          args: Prisma.PodDebitNoteReasonFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PodDebitNoteReasonPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.PodDebitNoteReasonFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PodDebitNoteReasonPayload>
+        }
+        findMany: {
+          args: Prisma.PodDebitNoteReasonFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PodDebitNoteReasonPayload>[]
+        }
+        create: {
+          args: Prisma.PodDebitNoteReasonCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PodDebitNoteReasonPayload>
+        }
+        createMany: {
+          args: Prisma.PodDebitNoteReasonCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.PodDebitNoteReasonCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PodDebitNoteReasonPayload>[]
+        }
+        delete: {
+          args: Prisma.PodDebitNoteReasonDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PodDebitNoteReasonPayload>
+        }
+        update: {
+          args: Prisma.PodDebitNoteReasonUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PodDebitNoteReasonPayload>
+        }
+        deleteMany: {
+          args: Prisma.PodDebitNoteReasonDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.PodDebitNoteReasonUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.PodDebitNoteReasonUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PodDebitNoteReasonPayload>[]
+        }
+        upsert: {
+          args: Prisma.PodDebitNoteReasonUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PodDebitNoteReasonPayload>
+        }
+        aggregate: {
+          args: Prisma.PodDebitNoteReasonAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregatePodDebitNoteReason>
+        }
+        groupBy: {
+          args: Prisma.PodDebitNoteReasonGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.PodDebitNoteReasonGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.PodDebitNoteReasonCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.PodDebitNoteReasonCountAggregateOutputType> | number
+        }
+      }
+    }
+    PodSupplierContact: {
+      payload: Prisma.$PodSupplierContactPayload<ExtArgs>
+      fields: Prisma.PodSupplierContactFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.PodSupplierContactFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PodSupplierContactPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.PodSupplierContactFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PodSupplierContactPayload>
+        }
+        findFirst: {
+          args: Prisma.PodSupplierContactFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PodSupplierContactPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.PodSupplierContactFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PodSupplierContactPayload>
+        }
+        findMany: {
+          args: Prisma.PodSupplierContactFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PodSupplierContactPayload>[]
+        }
+        create: {
+          args: Prisma.PodSupplierContactCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PodSupplierContactPayload>
+        }
+        createMany: {
+          args: Prisma.PodSupplierContactCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.PodSupplierContactCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PodSupplierContactPayload>[]
+        }
+        delete: {
+          args: Prisma.PodSupplierContactDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PodSupplierContactPayload>
+        }
+        update: {
+          args: Prisma.PodSupplierContactUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PodSupplierContactPayload>
+        }
+        deleteMany: {
+          args: Prisma.PodSupplierContactDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.PodSupplierContactUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.PodSupplierContactUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PodSupplierContactPayload>[]
+        }
+        upsert: {
+          args: Prisma.PodSupplierContactUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PodSupplierContactPayload>
+        }
+        aggregate: {
+          args: Prisma.PodSupplierContactAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregatePodSupplierContact>
+        }
+        groupBy: {
+          args: Prisma.PodSupplierContactGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.PodSupplierContactGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.PodSupplierContactCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.PodSupplierContactCountAggregateOutputType> | number
+        }
+      }
+    }
+    PodSupplierAddress: {
+      payload: Prisma.$PodSupplierAddressPayload<ExtArgs>
+      fields: Prisma.PodSupplierAddressFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.PodSupplierAddressFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PodSupplierAddressPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.PodSupplierAddressFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PodSupplierAddressPayload>
+        }
+        findFirst: {
+          args: Prisma.PodSupplierAddressFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PodSupplierAddressPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.PodSupplierAddressFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PodSupplierAddressPayload>
+        }
+        findMany: {
+          args: Prisma.PodSupplierAddressFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PodSupplierAddressPayload>[]
+        }
+        create: {
+          args: Prisma.PodSupplierAddressCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PodSupplierAddressPayload>
+        }
+        createMany: {
+          args: Prisma.PodSupplierAddressCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.PodSupplierAddressCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PodSupplierAddressPayload>[]
+        }
+        delete: {
+          args: Prisma.PodSupplierAddressDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PodSupplierAddressPayload>
+        }
+        update: {
+          args: Prisma.PodSupplierAddressUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PodSupplierAddressPayload>
+        }
+        deleteMany: {
+          args: Prisma.PodSupplierAddressDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.PodSupplierAddressUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.PodSupplierAddressUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PodSupplierAddressPayload>[]
+        }
+        upsert: {
+          args: Prisma.PodSupplierAddressUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PodSupplierAddressPayload>
+        }
+        aggregate: {
+          args: Prisma.PodSupplierAddressAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregatePodSupplierAddress>
+        }
+        groupBy: {
+          args: Prisma.PodSupplierAddressGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.PodSupplierAddressGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.PodSupplierAddressCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.PodSupplierAddressCountAggregateOutputType> | number
+        }
+      }
+    }
+    PodSupplierBankAccount: {
+      payload: Prisma.$PodSupplierBankAccountPayload<ExtArgs>
+      fields: Prisma.PodSupplierBankAccountFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.PodSupplierBankAccountFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PodSupplierBankAccountPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.PodSupplierBankAccountFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PodSupplierBankAccountPayload>
+        }
+        findFirst: {
+          args: Prisma.PodSupplierBankAccountFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PodSupplierBankAccountPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.PodSupplierBankAccountFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PodSupplierBankAccountPayload>
+        }
+        findMany: {
+          args: Prisma.PodSupplierBankAccountFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PodSupplierBankAccountPayload>[]
+        }
+        create: {
+          args: Prisma.PodSupplierBankAccountCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PodSupplierBankAccountPayload>
+        }
+        createMany: {
+          args: Prisma.PodSupplierBankAccountCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.PodSupplierBankAccountCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PodSupplierBankAccountPayload>[]
+        }
+        delete: {
+          args: Prisma.PodSupplierBankAccountDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PodSupplierBankAccountPayload>
+        }
+        update: {
+          args: Prisma.PodSupplierBankAccountUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PodSupplierBankAccountPayload>
+        }
+        deleteMany: {
+          args: Prisma.PodSupplierBankAccountDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.PodSupplierBankAccountUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.PodSupplierBankAccountUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PodSupplierBankAccountPayload>[]
+        }
+        upsert: {
+          args: Prisma.PodSupplierBankAccountUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PodSupplierBankAccountPayload>
+        }
+        aggregate: {
+          args: Prisma.PodSupplierBankAccountAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregatePodSupplierBankAccount>
+        }
+        groupBy: {
+          args: Prisma.PodSupplierBankAccountGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.PodSupplierBankAccountGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.PodSupplierBankAccountCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.PodSupplierBankAccountCountAggregateOutputType> | number
+        }
+      }
+    }
+    PodRfq: {
+      payload: Prisma.$PodRfqPayload<ExtArgs>
+      fields: Prisma.PodRfqFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.PodRfqFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PodRfqPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.PodRfqFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PodRfqPayload>
+        }
+        findFirst: {
+          args: Prisma.PodRfqFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PodRfqPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.PodRfqFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PodRfqPayload>
+        }
+        findMany: {
+          args: Prisma.PodRfqFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PodRfqPayload>[]
+        }
+        create: {
+          args: Prisma.PodRfqCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PodRfqPayload>
+        }
+        createMany: {
+          args: Prisma.PodRfqCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.PodRfqCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PodRfqPayload>[]
+        }
+        delete: {
+          args: Prisma.PodRfqDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PodRfqPayload>
+        }
+        update: {
+          args: Prisma.PodRfqUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PodRfqPayload>
+        }
+        deleteMany: {
+          args: Prisma.PodRfqDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.PodRfqUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.PodRfqUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PodRfqPayload>[]
+        }
+        upsert: {
+          args: Prisma.PodRfqUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PodRfqPayload>
+        }
+        aggregate: {
+          args: Prisma.PodRfqAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregatePodRfq>
+        }
+        groupBy: {
+          args: Prisma.PodRfqGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.PodRfqGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.PodRfqCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.PodRfqCountAggregateOutputType> | number
+        }
+      }
+    }
+    PodRfqItem: {
+      payload: Prisma.$PodRfqItemPayload<ExtArgs>
+      fields: Prisma.PodRfqItemFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.PodRfqItemFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PodRfqItemPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.PodRfqItemFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PodRfqItemPayload>
+        }
+        findFirst: {
+          args: Prisma.PodRfqItemFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PodRfqItemPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.PodRfqItemFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PodRfqItemPayload>
+        }
+        findMany: {
+          args: Prisma.PodRfqItemFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PodRfqItemPayload>[]
+        }
+        create: {
+          args: Prisma.PodRfqItemCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PodRfqItemPayload>
+        }
+        createMany: {
+          args: Prisma.PodRfqItemCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.PodRfqItemCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PodRfqItemPayload>[]
+        }
+        delete: {
+          args: Prisma.PodRfqItemDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PodRfqItemPayload>
+        }
+        update: {
+          args: Prisma.PodRfqItemUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PodRfqItemPayload>
+        }
+        deleteMany: {
+          args: Prisma.PodRfqItemDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.PodRfqItemUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.PodRfqItemUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PodRfqItemPayload>[]
+        }
+        upsert: {
+          args: Prisma.PodRfqItemUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PodRfqItemPayload>
+        }
+        aggregate: {
+          args: Prisma.PodRfqItemAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregatePodRfqItem>
+        }
+        groupBy: {
+          args: Prisma.PodRfqItemGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.PodRfqItemGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.PodRfqItemCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.PodRfqItemCountAggregateOutputType> | number
+        }
+      }
+    }
+    PodRfqSupplier: {
+      payload: Prisma.$PodRfqSupplierPayload<ExtArgs>
+      fields: Prisma.PodRfqSupplierFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.PodRfqSupplierFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PodRfqSupplierPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.PodRfqSupplierFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PodRfqSupplierPayload>
+        }
+        findFirst: {
+          args: Prisma.PodRfqSupplierFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PodRfqSupplierPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.PodRfqSupplierFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PodRfqSupplierPayload>
+        }
+        findMany: {
+          args: Prisma.PodRfqSupplierFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PodRfqSupplierPayload>[]
+        }
+        create: {
+          args: Prisma.PodRfqSupplierCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PodRfqSupplierPayload>
+        }
+        createMany: {
+          args: Prisma.PodRfqSupplierCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.PodRfqSupplierCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PodRfqSupplierPayload>[]
+        }
+        delete: {
+          args: Prisma.PodRfqSupplierDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PodRfqSupplierPayload>
+        }
+        update: {
+          args: Prisma.PodRfqSupplierUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PodRfqSupplierPayload>
+        }
+        deleteMany: {
+          args: Prisma.PodRfqSupplierDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.PodRfqSupplierUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.PodRfqSupplierUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PodRfqSupplierPayload>[]
+        }
+        upsert: {
+          args: Prisma.PodRfqSupplierUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PodRfqSupplierPayload>
+        }
+        aggregate: {
+          args: Prisma.PodRfqSupplierAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregatePodRfqSupplier>
+        }
+        groupBy: {
+          args: Prisma.PodRfqSupplierGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.PodRfqSupplierGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.PodRfqSupplierCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.PodRfqSupplierCountAggregateOutputType> | number
+        }
+      }
+    }
+    PodSupplierQuotation: {
+      payload: Prisma.$PodSupplierQuotationPayload<ExtArgs>
+      fields: Prisma.PodSupplierQuotationFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.PodSupplierQuotationFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PodSupplierQuotationPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.PodSupplierQuotationFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PodSupplierQuotationPayload>
+        }
+        findFirst: {
+          args: Prisma.PodSupplierQuotationFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PodSupplierQuotationPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.PodSupplierQuotationFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PodSupplierQuotationPayload>
+        }
+        findMany: {
+          args: Prisma.PodSupplierQuotationFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PodSupplierQuotationPayload>[]
+        }
+        create: {
+          args: Prisma.PodSupplierQuotationCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PodSupplierQuotationPayload>
+        }
+        createMany: {
+          args: Prisma.PodSupplierQuotationCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.PodSupplierQuotationCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PodSupplierQuotationPayload>[]
+        }
+        delete: {
+          args: Prisma.PodSupplierQuotationDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PodSupplierQuotationPayload>
+        }
+        update: {
+          args: Prisma.PodSupplierQuotationUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PodSupplierQuotationPayload>
+        }
+        deleteMany: {
+          args: Prisma.PodSupplierQuotationDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.PodSupplierQuotationUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.PodSupplierQuotationUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PodSupplierQuotationPayload>[]
+        }
+        upsert: {
+          args: Prisma.PodSupplierQuotationUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PodSupplierQuotationPayload>
+        }
+        aggregate: {
+          args: Prisma.PodSupplierQuotationAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregatePodSupplierQuotation>
+        }
+        groupBy: {
+          args: Prisma.PodSupplierQuotationGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.PodSupplierQuotationGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.PodSupplierQuotationCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.PodSupplierQuotationCountAggregateOutputType> | number
+        }
+      }
+    }
+    PodSupplierQuotationItem: {
+      payload: Prisma.$PodSupplierQuotationItemPayload<ExtArgs>
+      fields: Prisma.PodSupplierQuotationItemFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.PodSupplierQuotationItemFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PodSupplierQuotationItemPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.PodSupplierQuotationItemFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PodSupplierQuotationItemPayload>
+        }
+        findFirst: {
+          args: Prisma.PodSupplierQuotationItemFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PodSupplierQuotationItemPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.PodSupplierQuotationItemFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PodSupplierQuotationItemPayload>
+        }
+        findMany: {
+          args: Prisma.PodSupplierQuotationItemFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PodSupplierQuotationItemPayload>[]
+        }
+        create: {
+          args: Prisma.PodSupplierQuotationItemCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PodSupplierQuotationItemPayload>
+        }
+        createMany: {
+          args: Prisma.PodSupplierQuotationItemCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.PodSupplierQuotationItemCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PodSupplierQuotationItemPayload>[]
+        }
+        delete: {
+          args: Prisma.PodSupplierQuotationItemDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PodSupplierQuotationItemPayload>
+        }
+        update: {
+          args: Prisma.PodSupplierQuotationItemUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PodSupplierQuotationItemPayload>
+        }
+        deleteMany: {
+          args: Prisma.PodSupplierQuotationItemDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.PodSupplierQuotationItemUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.PodSupplierQuotationItemUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PodSupplierQuotationItemPayload>[]
+        }
+        upsert: {
+          args: Prisma.PodSupplierQuotationItemUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PodSupplierQuotationItemPayload>
+        }
+        aggregate: {
+          args: Prisma.PodSupplierQuotationItemAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregatePodSupplierQuotationItem>
+        }
+        groupBy: {
+          args: Prisma.PodSupplierQuotationItemGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.PodSupplierQuotationItemGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.PodSupplierQuotationItemCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.PodSupplierQuotationItemCountAggregateOutputType> | number
+        }
+      }
+    }
+    PodApprovalWorkflow: {
+      payload: Prisma.$PodApprovalWorkflowPayload<ExtArgs>
+      fields: Prisma.PodApprovalWorkflowFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.PodApprovalWorkflowFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PodApprovalWorkflowPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.PodApprovalWorkflowFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PodApprovalWorkflowPayload>
+        }
+        findFirst: {
+          args: Prisma.PodApprovalWorkflowFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PodApprovalWorkflowPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.PodApprovalWorkflowFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PodApprovalWorkflowPayload>
+        }
+        findMany: {
+          args: Prisma.PodApprovalWorkflowFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PodApprovalWorkflowPayload>[]
+        }
+        create: {
+          args: Prisma.PodApprovalWorkflowCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PodApprovalWorkflowPayload>
+        }
+        createMany: {
+          args: Prisma.PodApprovalWorkflowCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.PodApprovalWorkflowCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PodApprovalWorkflowPayload>[]
+        }
+        delete: {
+          args: Prisma.PodApprovalWorkflowDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PodApprovalWorkflowPayload>
+        }
+        update: {
+          args: Prisma.PodApprovalWorkflowUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PodApprovalWorkflowPayload>
+        }
+        deleteMany: {
+          args: Prisma.PodApprovalWorkflowDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.PodApprovalWorkflowUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.PodApprovalWorkflowUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PodApprovalWorkflowPayload>[]
+        }
+        upsert: {
+          args: Prisma.PodApprovalWorkflowUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PodApprovalWorkflowPayload>
+        }
+        aggregate: {
+          args: Prisma.PodApprovalWorkflowAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregatePodApprovalWorkflow>
+        }
+        groupBy: {
+          args: Prisma.PodApprovalWorkflowGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.PodApprovalWorkflowGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.PodApprovalWorkflowCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.PodApprovalWorkflowCountAggregateOutputType> | number
+        }
+      }
+    }
+    PodApprovalWorkflowStep: {
+      payload: Prisma.$PodApprovalWorkflowStepPayload<ExtArgs>
+      fields: Prisma.PodApprovalWorkflowStepFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.PodApprovalWorkflowStepFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PodApprovalWorkflowStepPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.PodApprovalWorkflowStepFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PodApprovalWorkflowStepPayload>
+        }
+        findFirst: {
+          args: Prisma.PodApprovalWorkflowStepFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PodApprovalWorkflowStepPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.PodApprovalWorkflowStepFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PodApprovalWorkflowStepPayload>
+        }
+        findMany: {
+          args: Prisma.PodApprovalWorkflowStepFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PodApprovalWorkflowStepPayload>[]
+        }
+        create: {
+          args: Prisma.PodApprovalWorkflowStepCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PodApprovalWorkflowStepPayload>
+        }
+        createMany: {
+          args: Prisma.PodApprovalWorkflowStepCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.PodApprovalWorkflowStepCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PodApprovalWorkflowStepPayload>[]
+        }
+        delete: {
+          args: Prisma.PodApprovalWorkflowStepDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PodApprovalWorkflowStepPayload>
+        }
+        update: {
+          args: Prisma.PodApprovalWorkflowStepUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PodApprovalWorkflowStepPayload>
+        }
+        deleteMany: {
+          args: Prisma.PodApprovalWorkflowStepDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.PodApprovalWorkflowStepUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.PodApprovalWorkflowStepUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PodApprovalWorkflowStepPayload>[]
+        }
+        upsert: {
+          args: Prisma.PodApprovalWorkflowStepUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PodApprovalWorkflowStepPayload>
+        }
+        aggregate: {
+          args: Prisma.PodApprovalWorkflowStepAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregatePodApprovalWorkflowStep>
+        }
+        groupBy: {
+          args: Prisma.PodApprovalWorkflowStepGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.PodApprovalWorkflowStepGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.PodApprovalWorkflowStepCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.PodApprovalWorkflowStepCountAggregateOutputType> | number
+        }
+      }
+    }
+    PodApprovalRequest: {
+      payload: Prisma.$PodApprovalRequestPayload<ExtArgs>
+      fields: Prisma.PodApprovalRequestFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.PodApprovalRequestFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PodApprovalRequestPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.PodApprovalRequestFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PodApprovalRequestPayload>
+        }
+        findFirst: {
+          args: Prisma.PodApprovalRequestFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PodApprovalRequestPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.PodApprovalRequestFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PodApprovalRequestPayload>
+        }
+        findMany: {
+          args: Prisma.PodApprovalRequestFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PodApprovalRequestPayload>[]
+        }
+        create: {
+          args: Prisma.PodApprovalRequestCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PodApprovalRequestPayload>
+        }
+        createMany: {
+          args: Prisma.PodApprovalRequestCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.PodApprovalRequestCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PodApprovalRequestPayload>[]
+        }
+        delete: {
+          args: Prisma.PodApprovalRequestDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PodApprovalRequestPayload>
+        }
+        update: {
+          args: Prisma.PodApprovalRequestUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PodApprovalRequestPayload>
+        }
+        deleteMany: {
+          args: Prisma.PodApprovalRequestDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.PodApprovalRequestUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.PodApprovalRequestUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PodApprovalRequestPayload>[]
+        }
+        upsert: {
+          args: Prisma.PodApprovalRequestUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PodApprovalRequestPayload>
+        }
+        aggregate: {
+          args: Prisma.PodApprovalRequestAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregatePodApprovalRequest>
+        }
+        groupBy: {
+          args: Prisma.PodApprovalRequestGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.PodApprovalRequestGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.PodApprovalRequestCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.PodApprovalRequestCountAggregateOutputType> | number
+        }
+      }
+    }
+    PodApprovalAction: {
+      payload: Prisma.$PodApprovalActionPayload<ExtArgs>
+      fields: Prisma.PodApprovalActionFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.PodApprovalActionFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PodApprovalActionPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.PodApprovalActionFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PodApprovalActionPayload>
+        }
+        findFirst: {
+          args: Prisma.PodApprovalActionFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PodApprovalActionPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.PodApprovalActionFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PodApprovalActionPayload>
+        }
+        findMany: {
+          args: Prisma.PodApprovalActionFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PodApprovalActionPayload>[]
+        }
+        create: {
+          args: Prisma.PodApprovalActionCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PodApprovalActionPayload>
+        }
+        createMany: {
+          args: Prisma.PodApprovalActionCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.PodApprovalActionCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PodApprovalActionPayload>[]
+        }
+        delete: {
+          args: Prisma.PodApprovalActionDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PodApprovalActionPayload>
+        }
+        update: {
+          args: Prisma.PodApprovalActionUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PodApprovalActionPayload>
+        }
+        deleteMany: {
+          args: Prisma.PodApprovalActionDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.PodApprovalActionUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.PodApprovalActionUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PodApprovalActionPayload>[]
+        }
+        upsert: {
+          args: Prisma.PodApprovalActionUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PodApprovalActionPayload>
+        }
+        aggregate: {
+          args: Prisma.PodApprovalActionAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregatePodApprovalAction>
+        }
+        groupBy: {
+          args: Prisma.PodApprovalActionGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.PodApprovalActionGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.PodApprovalActionCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.PodApprovalActionCountAggregateOutputType> | number
+        }
+      }
+    }
+    PodSupplierInvoice: {
+      payload: Prisma.$PodSupplierInvoicePayload<ExtArgs>
+      fields: Prisma.PodSupplierInvoiceFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.PodSupplierInvoiceFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PodSupplierInvoicePayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.PodSupplierInvoiceFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PodSupplierInvoicePayload>
+        }
+        findFirst: {
+          args: Prisma.PodSupplierInvoiceFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PodSupplierInvoicePayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.PodSupplierInvoiceFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PodSupplierInvoicePayload>
+        }
+        findMany: {
+          args: Prisma.PodSupplierInvoiceFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PodSupplierInvoicePayload>[]
+        }
+        create: {
+          args: Prisma.PodSupplierInvoiceCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PodSupplierInvoicePayload>
+        }
+        createMany: {
+          args: Prisma.PodSupplierInvoiceCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.PodSupplierInvoiceCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PodSupplierInvoicePayload>[]
+        }
+        delete: {
+          args: Prisma.PodSupplierInvoiceDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PodSupplierInvoicePayload>
+        }
+        update: {
+          args: Prisma.PodSupplierInvoiceUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PodSupplierInvoicePayload>
+        }
+        deleteMany: {
+          args: Prisma.PodSupplierInvoiceDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.PodSupplierInvoiceUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.PodSupplierInvoiceUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PodSupplierInvoicePayload>[]
+        }
+        upsert: {
+          args: Prisma.PodSupplierInvoiceUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PodSupplierInvoicePayload>
+        }
+        aggregate: {
+          args: Prisma.PodSupplierInvoiceAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregatePodSupplierInvoice>
+        }
+        groupBy: {
+          args: Prisma.PodSupplierInvoiceGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.PodSupplierInvoiceGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.PodSupplierInvoiceCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.PodSupplierInvoiceCountAggregateOutputType> | number
+        }
+      }
+    }
+    PodSupplierInvoiceItem: {
+      payload: Prisma.$PodSupplierInvoiceItemPayload<ExtArgs>
+      fields: Prisma.PodSupplierInvoiceItemFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.PodSupplierInvoiceItemFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PodSupplierInvoiceItemPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.PodSupplierInvoiceItemFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PodSupplierInvoiceItemPayload>
+        }
+        findFirst: {
+          args: Prisma.PodSupplierInvoiceItemFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PodSupplierInvoiceItemPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.PodSupplierInvoiceItemFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PodSupplierInvoiceItemPayload>
+        }
+        findMany: {
+          args: Prisma.PodSupplierInvoiceItemFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PodSupplierInvoiceItemPayload>[]
+        }
+        create: {
+          args: Prisma.PodSupplierInvoiceItemCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PodSupplierInvoiceItemPayload>
+        }
+        createMany: {
+          args: Prisma.PodSupplierInvoiceItemCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.PodSupplierInvoiceItemCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PodSupplierInvoiceItemPayload>[]
+        }
+        delete: {
+          args: Prisma.PodSupplierInvoiceItemDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PodSupplierInvoiceItemPayload>
+        }
+        update: {
+          args: Prisma.PodSupplierInvoiceItemUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PodSupplierInvoiceItemPayload>
+        }
+        deleteMany: {
+          args: Prisma.PodSupplierInvoiceItemDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.PodSupplierInvoiceItemUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.PodSupplierInvoiceItemUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PodSupplierInvoiceItemPayload>[]
+        }
+        upsert: {
+          args: Prisma.PodSupplierInvoiceItemUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PodSupplierInvoiceItemPayload>
+        }
+        aggregate: {
+          args: Prisma.PodSupplierInvoiceItemAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregatePodSupplierInvoiceItem>
+        }
+        groupBy: {
+          args: Prisma.PodSupplierInvoiceItemGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.PodSupplierInvoiceItemGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.PodSupplierInvoiceItemCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.PodSupplierInvoiceItemCountAggregateOutputType> | number
+        }
+      }
+    }
+    PodSupplierInvoiceMatch: {
+      payload: Prisma.$PodSupplierInvoiceMatchPayload<ExtArgs>
+      fields: Prisma.PodSupplierInvoiceMatchFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.PodSupplierInvoiceMatchFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PodSupplierInvoiceMatchPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.PodSupplierInvoiceMatchFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PodSupplierInvoiceMatchPayload>
+        }
+        findFirst: {
+          args: Prisma.PodSupplierInvoiceMatchFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PodSupplierInvoiceMatchPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.PodSupplierInvoiceMatchFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PodSupplierInvoiceMatchPayload>
+        }
+        findMany: {
+          args: Prisma.PodSupplierInvoiceMatchFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PodSupplierInvoiceMatchPayload>[]
+        }
+        create: {
+          args: Prisma.PodSupplierInvoiceMatchCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PodSupplierInvoiceMatchPayload>
+        }
+        createMany: {
+          args: Prisma.PodSupplierInvoiceMatchCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.PodSupplierInvoiceMatchCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PodSupplierInvoiceMatchPayload>[]
+        }
+        delete: {
+          args: Prisma.PodSupplierInvoiceMatchDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PodSupplierInvoiceMatchPayload>
+        }
+        update: {
+          args: Prisma.PodSupplierInvoiceMatchUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PodSupplierInvoiceMatchPayload>
+        }
+        deleteMany: {
+          args: Prisma.PodSupplierInvoiceMatchDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.PodSupplierInvoiceMatchUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.PodSupplierInvoiceMatchUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PodSupplierInvoiceMatchPayload>[]
+        }
+        upsert: {
+          args: Prisma.PodSupplierInvoiceMatchUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PodSupplierInvoiceMatchPayload>
+        }
+        aggregate: {
+          args: Prisma.PodSupplierInvoiceMatchAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregatePodSupplierInvoiceMatch>
+        }
+        groupBy: {
+          args: Prisma.PodSupplierInvoiceMatchGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.PodSupplierInvoiceMatchGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.PodSupplierInvoiceMatchCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.PodSupplierInvoiceMatchCountAggregateOutputType> | number
+        }
+      }
+    }
+    PodDebitNoteLine: {
+      payload: Prisma.$PodDebitNoteLinePayload<ExtArgs>
+      fields: Prisma.PodDebitNoteLineFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.PodDebitNoteLineFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PodDebitNoteLinePayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.PodDebitNoteLineFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PodDebitNoteLinePayload>
+        }
+        findFirst: {
+          args: Prisma.PodDebitNoteLineFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PodDebitNoteLinePayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.PodDebitNoteLineFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PodDebitNoteLinePayload>
+        }
+        findMany: {
+          args: Prisma.PodDebitNoteLineFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PodDebitNoteLinePayload>[]
+        }
+        create: {
+          args: Prisma.PodDebitNoteLineCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PodDebitNoteLinePayload>
+        }
+        createMany: {
+          args: Prisma.PodDebitNoteLineCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.PodDebitNoteLineCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PodDebitNoteLinePayload>[]
+        }
+        delete: {
+          args: Prisma.PodDebitNoteLineDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PodDebitNoteLinePayload>
+        }
+        update: {
+          args: Prisma.PodDebitNoteLineUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PodDebitNoteLinePayload>
+        }
+        deleteMany: {
+          args: Prisma.PodDebitNoteLineDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.PodDebitNoteLineUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.PodDebitNoteLineUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PodDebitNoteLinePayload>[]
+        }
+        upsert: {
+          args: Prisma.PodDebitNoteLineUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PodDebitNoteLinePayload>
+        }
+        aggregate: {
+          args: Prisma.PodDebitNoteLineAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregatePodDebitNoteLine>
+        }
+        groupBy: {
+          args: Prisma.PodDebitNoteLineGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.PodDebitNoteLineGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.PodDebitNoteLineCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.PodDebitNoteLineCountAggregateOutputType> | number
+        }
+      }
+    }
+    PodLandedCostVoucher: {
+      payload: Prisma.$PodLandedCostVoucherPayload<ExtArgs>
+      fields: Prisma.PodLandedCostVoucherFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.PodLandedCostVoucherFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PodLandedCostVoucherPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.PodLandedCostVoucherFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PodLandedCostVoucherPayload>
+        }
+        findFirst: {
+          args: Prisma.PodLandedCostVoucherFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PodLandedCostVoucherPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.PodLandedCostVoucherFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PodLandedCostVoucherPayload>
+        }
+        findMany: {
+          args: Prisma.PodLandedCostVoucherFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PodLandedCostVoucherPayload>[]
+        }
+        create: {
+          args: Prisma.PodLandedCostVoucherCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PodLandedCostVoucherPayload>
+        }
+        createMany: {
+          args: Prisma.PodLandedCostVoucherCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.PodLandedCostVoucherCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PodLandedCostVoucherPayload>[]
+        }
+        delete: {
+          args: Prisma.PodLandedCostVoucherDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PodLandedCostVoucherPayload>
+        }
+        update: {
+          args: Prisma.PodLandedCostVoucherUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PodLandedCostVoucherPayload>
+        }
+        deleteMany: {
+          args: Prisma.PodLandedCostVoucherDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.PodLandedCostVoucherUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.PodLandedCostVoucherUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PodLandedCostVoucherPayload>[]
+        }
+        upsert: {
+          args: Prisma.PodLandedCostVoucherUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PodLandedCostVoucherPayload>
+        }
+        aggregate: {
+          args: Prisma.PodLandedCostVoucherAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregatePodLandedCostVoucher>
+        }
+        groupBy: {
+          args: Prisma.PodLandedCostVoucherGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.PodLandedCostVoucherGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.PodLandedCostVoucherCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.PodLandedCostVoucherCountAggregateOutputType> | number
+        }
+      }
+    }
+    PodLandedCostCharge: {
+      payload: Prisma.$PodLandedCostChargePayload<ExtArgs>
+      fields: Prisma.PodLandedCostChargeFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.PodLandedCostChargeFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PodLandedCostChargePayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.PodLandedCostChargeFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PodLandedCostChargePayload>
+        }
+        findFirst: {
+          args: Prisma.PodLandedCostChargeFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PodLandedCostChargePayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.PodLandedCostChargeFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PodLandedCostChargePayload>
+        }
+        findMany: {
+          args: Prisma.PodLandedCostChargeFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PodLandedCostChargePayload>[]
+        }
+        create: {
+          args: Prisma.PodLandedCostChargeCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PodLandedCostChargePayload>
+        }
+        createMany: {
+          args: Prisma.PodLandedCostChargeCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.PodLandedCostChargeCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PodLandedCostChargePayload>[]
+        }
+        delete: {
+          args: Prisma.PodLandedCostChargeDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PodLandedCostChargePayload>
+        }
+        update: {
+          args: Prisma.PodLandedCostChargeUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PodLandedCostChargePayload>
+        }
+        deleteMany: {
+          args: Prisma.PodLandedCostChargeDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.PodLandedCostChargeUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.PodLandedCostChargeUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PodLandedCostChargePayload>[]
+        }
+        upsert: {
+          args: Prisma.PodLandedCostChargeUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PodLandedCostChargePayload>
+        }
+        aggregate: {
+          args: Prisma.PodLandedCostChargeAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregatePodLandedCostCharge>
+        }
+        groupBy: {
+          args: Prisma.PodLandedCostChargeGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.PodLandedCostChargeGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.PodLandedCostChargeCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.PodLandedCostChargeCountAggregateOutputType> | number
+        }
+      }
+    }
+    PodLandedCostAllocation: {
+      payload: Prisma.$PodLandedCostAllocationPayload<ExtArgs>
+      fields: Prisma.PodLandedCostAllocationFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.PodLandedCostAllocationFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PodLandedCostAllocationPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.PodLandedCostAllocationFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PodLandedCostAllocationPayload>
+        }
+        findFirst: {
+          args: Prisma.PodLandedCostAllocationFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PodLandedCostAllocationPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.PodLandedCostAllocationFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PodLandedCostAllocationPayload>
+        }
+        findMany: {
+          args: Prisma.PodLandedCostAllocationFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PodLandedCostAllocationPayload>[]
+        }
+        create: {
+          args: Prisma.PodLandedCostAllocationCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PodLandedCostAllocationPayload>
+        }
+        createMany: {
+          args: Prisma.PodLandedCostAllocationCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.PodLandedCostAllocationCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PodLandedCostAllocationPayload>[]
+        }
+        delete: {
+          args: Prisma.PodLandedCostAllocationDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PodLandedCostAllocationPayload>
+        }
+        update: {
+          args: Prisma.PodLandedCostAllocationUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PodLandedCostAllocationPayload>
+        }
+        deleteMany: {
+          args: Prisma.PodLandedCostAllocationDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.PodLandedCostAllocationUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.PodLandedCostAllocationUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PodLandedCostAllocationPayload>[]
+        }
+        upsert: {
+          args: Prisma.PodLandedCostAllocationUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PodLandedCostAllocationPayload>
+        }
+        aggregate: {
+          args: Prisma.PodLandedCostAllocationAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregatePodLandedCostAllocation>
+        }
+        groupBy: {
+          args: Prisma.PodLandedCostAllocationGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.PodLandedCostAllocationGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.PodLandedCostAllocationCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.PodLandedCostAllocationCountAggregateOutputType> | number
+        }
+      }
+    }
+    PodSupplierPayment: {
+      payload: Prisma.$PodSupplierPaymentPayload<ExtArgs>
+      fields: Prisma.PodSupplierPaymentFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.PodSupplierPaymentFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PodSupplierPaymentPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.PodSupplierPaymentFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PodSupplierPaymentPayload>
+        }
+        findFirst: {
+          args: Prisma.PodSupplierPaymentFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PodSupplierPaymentPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.PodSupplierPaymentFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PodSupplierPaymentPayload>
+        }
+        findMany: {
+          args: Prisma.PodSupplierPaymentFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PodSupplierPaymentPayload>[]
+        }
+        create: {
+          args: Prisma.PodSupplierPaymentCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PodSupplierPaymentPayload>
+        }
+        createMany: {
+          args: Prisma.PodSupplierPaymentCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.PodSupplierPaymentCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PodSupplierPaymentPayload>[]
+        }
+        delete: {
+          args: Prisma.PodSupplierPaymentDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PodSupplierPaymentPayload>
+        }
+        update: {
+          args: Prisma.PodSupplierPaymentUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PodSupplierPaymentPayload>
+        }
+        deleteMany: {
+          args: Prisma.PodSupplierPaymentDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.PodSupplierPaymentUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.PodSupplierPaymentUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PodSupplierPaymentPayload>[]
+        }
+        upsert: {
+          args: Prisma.PodSupplierPaymentUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PodSupplierPaymentPayload>
+        }
+        aggregate: {
+          args: Prisma.PodSupplierPaymentAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregatePodSupplierPayment>
+        }
+        groupBy: {
+          args: Prisma.PodSupplierPaymentGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.PodSupplierPaymentGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.PodSupplierPaymentCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.PodSupplierPaymentCountAggregateOutputType> | number
+        }
+      }
+    }
+    PodSupplierPaymentAllocation: {
+      payload: Prisma.$PodSupplierPaymentAllocationPayload<ExtArgs>
+      fields: Prisma.PodSupplierPaymentAllocationFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.PodSupplierPaymentAllocationFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PodSupplierPaymentAllocationPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.PodSupplierPaymentAllocationFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PodSupplierPaymentAllocationPayload>
+        }
+        findFirst: {
+          args: Prisma.PodSupplierPaymentAllocationFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PodSupplierPaymentAllocationPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.PodSupplierPaymentAllocationFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PodSupplierPaymentAllocationPayload>
+        }
+        findMany: {
+          args: Prisma.PodSupplierPaymentAllocationFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PodSupplierPaymentAllocationPayload>[]
+        }
+        create: {
+          args: Prisma.PodSupplierPaymentAllocationCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PodSupplierPaymentAllocationPayload>
+        }
+        createMany: {
+          args: Prisma.PodSupplierPaymentAllocationCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.PodSupplierPaymentAllocationCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PodSupplierPaymentAllocationPayload>[]
+        }
+        delete: {
+          args: Prisma.PodSupplierPaymentAllocationDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PodSupplierPaymentAllocationPayload>
+        }
+        update: {
+          args: Prisma.PodSupplierPaymentAllocationUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PodSupplierPaymentAllocationPayload>
+        }
+        deleteMany: {
+          args: Prisma.PodSupplierPaymentAllocationDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.PodSupplierPaymentAllocationUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.PodSupplierPaymentAllocationUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PodSupplierPaymentAllocationPayload>[]
+        }
+        upsert: {
+          args: Prisma.PodSupplierPaymentAllocationUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PodSupplierPaymentAllocationPayload>
+        }
+        aggregate: {
+          args: Prisma.PodSupplierPaymentAllocationAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregatePodSupplierPaymentAllocation>
+        }
+        groupBy: {
+          args: Prisma.PodSupplierPaymentAllocationGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.PodSupplierPaymentAllocationGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.PodSupplierPaymentAllocationCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.PodSupplierPaymentAllocationCountAggregateOutputType> | number
+        }
+      }
+    }
+    PodAttachment: {
+      payload: Prisma.$PodAttachmentPayload<ExtArgs>
+      fields: Prisma.PodAttachmentFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.PodAttachmentFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PodAttachmentPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.PodAttachmentFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PodAttachmentPayload>
+        }
+        findFirst: {
+          args: Prisma.PodAttachmentFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PodAttachmentPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.PodAttachmentFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PodAttachmentPayload>
+        }
+        findMany: {
+          args: Prisma.PodAttachmentFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PodAttachmentPayload>[]
+        }
+        create: {
+          args: Prisma.PodAttachmentCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PodAttachmentPayload>
+        }
+        createMany: {
+          args: Prisma.PodAttachmentCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.PodAttachmentCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PodAttachmentPayload>[]
+        }
+        delete: {
+          args: Prisma.PodAttachmentDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PodAttachmentPayload>
+        }
+        update: {
+          args: Prisma.PodAttachmentUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PodAttachmentPayload>
+        }
+        deleteMany: {
+          args: Prisma.PodAttachmentDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.PodAttachmentUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.PodAttachmentUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PodAttachmentPayload>[]
+        }
+        upsert: {
+          args: Prisma.PodAttachmentUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PodAttachmentPayload>
+        }
+        aggregate: {
+          args: Prisma.PodAttachmentAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregatePodAttachment>
+        }
+        groupBy: {
+          args: Prisma.PodAttachmentGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.PodAttachmentGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.PodAttachmentCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.PodAttachmentCountAggregateOutputType> | number
+        }
+      }
+    }
+    PodCustomFieldDefinition: {
+      payload: Prisma.$PodCustomFieldDefinitionPayload<ExtArgs>
+      fields: Prisma.PodCustomFieldDefinitionFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.PodCustomFieldDefinitionFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PodCustomFieldDefinitionPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.PodCustomFieldDefinitionFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PodCustomFieldDefinitionPayload>
+        }
+        findFirst: {
+          args: Prisma.PodCustomFieldDefinitionFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PodCustomFieldDefinitionPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.PodCustomFieldDefinitionFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PodCustomFieldDefinitionPayload>
+        }
+        findMany: {
+          args: Prisma.PodCustomFieldDefinitionFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PodCustomFieldDefinitionPayload>[]
+        }
+        create: {
+          args: Prisma.PodCustomFieldDefinitionCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PodCustomFieldDefinitionPayload>
+        }
+        createMany: {
+          args: Prisma.PodCustomFieldDefinitionCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.PodCustomFieldDefinitionCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PodCustomFieldDefinitionPayload>[]
+        }
+        delete: {
+          args: Prisma.PodCustomFieldDefinitionDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PodCustomFieldDefinitionPayload>
+        }
+        update: {
+          args: Prisma.PodCustomFieldDefinitionUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PodCustomFieldDefinitionPayload>
+        }
+        deleteMany: {
+          args: Prisma.PodCustomFieldDefinitionDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.PodCustomFieldDefinitionUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.PodCustomFieldDefinitionUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PodCustomFieldDefinitionPayload>[]
+        }
+        upsert: {
+          args: Prisma.PodCustomFieldDefinitionUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PodCustomFieldDefinitionPayload>
+        }
+        aggregate: {
+          args: Prisma.PodCustomFieldDefinitionAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregatePodCustomFieldDefinition>
+        }
+        groupBy: {
+          args: Prisma.PodCustomFieldDefinitionGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.PodCustomFieldDefinitionGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.PodCustomFieldDefinitionCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.PodCustomFieldDefinitionCountAggregateOutputType> | number
+        }
+      }
+    }
+    PodCustomFieldValue: {
+      payload: Prisma.$PodCustomFieldValuePayload<ExtArgs>
+      fields: Prisma.PodCustomFieldValueFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.PodCustomFieldValueFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PodCustomFieldValuePayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.PodCustomFieldValueFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PodCustomFieldValuePayload>
+        }
+        findFirst: {
+          args: Prisma.PodCustomFieldValueFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PodCustomFieldValuePayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.PodCustomFieldValueFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PodCustomFieldValuePayload>
+        }
+        findMany: {
+          args: Prisma.PodCustomFieldValueFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PodCustomFieldValuePayload>[]
+        }
+        create: {
+          args: Prisma.PodCustomFieldValueCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PodCustomFieldValuePayload>
+        }
+        createMany: {
+          args: Prisma.PodCustomFieldValueCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.PodCustomFieldValueCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PodCustomFieldValuePayload>[]
+        }
+        delete: {
+          args: Prisma.PodCustomFieldValueDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PodCustomFieldValuePayload>
+        }
+        update: {
+          args: Prisma.PodCustomFieldValueUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PodCustomFieldValuePayload>
+        }
+        deleteMany: {
+          args: Prisma.PodCustomFieldValueDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.PodCustomFieldValueUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.PodCustomFieldValueUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PodCustomFieldValuePayload>[]
+        }
+        upsert: {
+          args: Prisma.PodCustomFieldValueUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PodCustomFieldValuePayload>
+        }
+        aggregate: {
+          args: Prisma.PodCustomFieldValueAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregatePodCustomFieldValue>
+        }
+        groupBy: {
+          args: Prisma.PodCustomFieldValueGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.PodCustomFieldValueGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.PodCustomFieldValueCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.PodCustomFieldValueCountAggregateOutputType> | number
+        }
+      }
+    }
   }
 } & {
   other: {
@@ -12854,6 +15254,19 @@ export const SupplierScalarFieldEnum = {
   paymentTerms: 'paymentTerms',
   currencyCode: 'currencyCode',
   creditLimit: 'creditLimit',
+  categoryId: 'categoryId',
+  statusCode: 'statusCode',
+  rating: 'rating',
+  leadTimeDays: 'leadTimeDays',
+  isPreferred: 'isPreferred',
+  currentBalance: 'currentBalance',
+  tags: 'tags',
+  companyId: 'companyId',
+  branchId: 'branchId',
+  versionNumber: 'versionNumber',
+  createdBy: 'createdBy',
+  updatedBy: 'updatedBy',
+  deletedBy: 'deletedBy',
   isActive: 'isActive',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt',
@@ -13193,6 +15606,13 @@ export const PurchaseRequisitionScalarFieldEnum = {
   requestedByProfileId: 'requestedByProfileId',
   approvedByProfileId: 'approvedByProfileId',
   convertedToPoId: 'convertedToPoId',
+  priority: 'priority',
+  requiredDate: 'requiredDate',
+  department: 'department',
+  sourceType: 'sourceType',
+  branchId: 'branchId',
+  companyId: 'companyId',
+  approvalRequestId: 'approvalRequestId',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
 } as const
@@ -13235,6 +15655,17 @@ export const PurchaseOrderScalarFieldEnum = {
   requisitionId: 'requisitionId',
   createdByProfileId: 'createdByProfileId',
   correlationId: 'correlationId',
+  branchId: 'branchId',
+  companyId: 'companyId',
+  exchangeRate: 'exchangeRate',
+  incoterms: 'incoterms',
+  deliveryAddressJson: 'deliveryAddressJson',
+  billingAddressJson: 'billingAddressJson',
+  buyerProfileId: 'buyerProfileId',
+  discountTotal: 'discountTotal',
+  approvalRequestId: 'approvalRequestId',
+  quotationId: 'quotationId',
+  versionNumber: 'versionNumber',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
 } as const
@@ -13257,6 +15688,14 @@ export const PurchaseOrderLineScalarFieldEnum = {
   taxAmount: 'taxAmount',
   lineTotal: 'lineTotal',
   expectedDate: 'expectedDate',
+  rejectedQty: 'rejectedQty',
+  returnedQty: 'returnedQty',
+  cancelledQty: 'cancelledQty',
+  discountPct: 'discountPct',
+  discountAmount: 'discountAmount',
+  netAmount: 'netAmount',
+  grossAmount: 'grossAmount',
+  remainingQty: 'remainingQty',
   createdAt: 'createdAt'
 } as const
 
@@ -13273,6 +15712,8 @@ export const GoodsReceiptScalarFieldEnum = {
   status: 'status',
   receiptDate: 'receiptDate',
   supplierDeliveryNote: 'supplierDeliveryNote',
+  inspectionStatusCode: 'inspectionStatusCode',
+  branchId: 'branchId',
   isPosted: 'isPosted',
   postedAt: 'postedAt',
   postedByProfileId: 'postedByProfileId',
@@ -15160,6 +17601,653 @@ export const ResCancelReasonScalarFieldEnum = {
 export type ResCancelReasonScalarFieldEnum = (typeof ResCancelReasonScalarFieldEnum)[keyof typeof ResCancelReasonScalarFieldEnum]
 
 
+export const PodDocumentStatusScalarFieldEnum = {
+  id: 'id',
+  tenantId: 'tenantId',
+  entityType: 'entityType',
+  code: 'code',
+  name: 'name',
+  sortOrder: 'sortOrder',
+  isInitial: 'isInitial',
+  isTerminal: 'isTerminal',
+  color: 'color',
+  isActive: 'isActive',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type PodDocumentStatusScalarFieldEnum = (typeof PodDocumentStatusScalarFieldEnum)[keyof typeof PodDocumentStatusScalarFieldEnum]
+
+
+export const PodStatusTransitionScalarFieldEnum = {
+  id: 'id',
+  tenantId: 'tenantId',
+  entityType: 'entityType',
+  fromCode: 'fromCode',
+  toCode: 'toCode',
+  requiresPermission: 'requiresPermission',
+  createdAt: 'createdAt'
+} as const
+
+export type PodStatusTransitionScalarFieldEnum = (typeof PodStatusTransitionScalarFieldEnum)[keyof typeof PodStatusTransitionScalarFieldEnum]
+
+
+export const PodSupplierCategoryScalarFieldEnum = {
+  id: 'id',
+  tenantId: 'tenantId',
+  parentId: 'parentId',
+  code: 'code',
+  name: 'name',
+  description: 'description',
+  isActive: 'isActive',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt',
+  deletedAt: 'deletedAt'
+} as const
+
+export type PodSupplierCategoryScalarFieldEnum = (typeof PodSupplierCategoryScalarFieldEnum)[keyof typeof PodSupplierCategoryScalarFieldEnum]
+
+
+export const PodReturnReasonScalarFieldEnum = {
+  id: 'id',
+  tenantId: 'tenantId',
+  code: 'code',
+  label: 'label',
+  requiresInspection: 'requiresInspection',
+  isActive: 'isActive',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type PodReturnReasonScalarFieldEnum = (typeof PodReturnReasonScalarFieldEnum)[keyof typeof PodReturnReasonScalarFieldEnum]
+
+
+export const PodPaymentMethodScalarFieldEnum = {
+  id: 'id',
+  tenantId: 'tenantId',
+  code: 'code',
+  label: 'label',
+  isActive: 'isActive',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type PodPaymentMethodScalarFieldEnum = (typeof PodPaymentMethodScalarFieldEnum)[keyof typeof PodPaymentMethodScalarFieldEnum]
+
+
+export const PodLandedCostTypeScalarFieldEnum = {
+  id: 'id',
+  tenantId: 'tenantId',
+  code: 'code',
+  label: 'label',
+  defaultAllocationBasis: 'defaultAllocationBasis',
+  isActive: 'isActive',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type PodLandedCostTypeScalarFieldEnum = (typeof PodLandedCostTypeScalarFieldEnum)[keyof typeof PodLandedCostTypeScalarFieldEnum]
+
+
+export const PodIncotermScalarFieldEnum = {
+  id: 'id',
+  tenantId: 'tenantId',
+  code: 'code',
+  label: 'label',
+  isActive: 'isActive',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type PodIncotermScalarFieldEnum = (typeof PodIncotermScalarFieldEnum)[keyof typeof PodIncotermScalarFieldEnum]
+
+
+export const PodDebitNoteReasonScalarFieldEnum = {
+  id: 'id',
+  tenantId: 'tenantId',
+  code: 'code',
+  label: 'label',
+  isActive: 'isActive',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type PodDebitNoteReasonScalarFieldEnum = (typeof PodDebitNoteReasonScalarFieldEnum)[keyof typeof PodDebitNoteReasonScalarFieldEnum]
+
+
+export const PodSupplierContactScalarFieldEnum = {
+  id: 'id',
+  tenantId: 'tenantId',
+  supplierId: 'supplierId',
+  name: 'name',
+  title: 'title',
+  email: 'email',
+  phone: 'phone',
+  mobile: 'mobile',
+  isPrimary: 'isPrimary',
+  notes: 'notes',
+  isActive: 'isActive',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt',
+  deletedAt: 'deletedAt'
+} as const
+
+export type PodSupplierContactScalarFieldEnum = (typeof PodSupplierContactScalarFieldEnum)[keyof typeof PodSupplierContactScalarFieldEnum]
+
+
+export const PodSupplierAddressScalarFieldEnum = {
+  id: 'id',
+  tenantId: 'tenantId',
+  supplierId: 'supplierId',
+  addressType: 'addressType',
+  line1: 'line1',
+  line2: 'line2',
+  city: 'city',
+  state: 'state',
+  postalCode: 'postalCode',
+  countryCode: 'countryCode',
+  isPrimary: 'isPrimary',
+  isActive: 'isActive',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt',
+  deletedAt: 'deletedAt'
+} as const
+
+export type PodSupplierAddressScalarFieldEnum = (typeof PodSupplierAddressScalarFieldEnum)[keyof typeof PodSupplierAddressScalarFieldEnum]
+
+
+export const PodSupplierBankAccountScalarFieldEnum = {
+  id: 'id',
+  tenantId: 'tenantId',
+  supplierId: 'supplierId',
+  bankName: 'bankName',
+  accountName: 'accountName',
+  accountNumber: 'accountNumber',
+  iban: 'iban',
+  swift: 'swift',
+  currencyCode: 'currencyCode',
+  isPrimary: 'isPrimary',
+  isActive: 'isActive',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt',
+  deletedAt: 'deletedAt'
+} as const
+
+export type PodSupplierBankAccountScalarFieldEnum = (typeof PodSupplierBankAccountScalarFieldEnum)[keyof typeof PodSupplierBankAccountScalarFieldEnum]
+
+
+export const PodRfqScalarFieldEnum = {
+  id: 'id',
+  tenantId: 'tenantId',
+  companyId: 'companyId',
+  branchId: 'branchId',
+  documentNumber: 'documentNumber',
+  statusCode: 'statusCode',
+  title: 'title',
+  requisitionId: 'requisitionId',
+  warehouseId: 'warehouseId',
+  currencyCode: 'currencyCode',
+  issueDate: 'issueDate',
+  expiryDate: 'expiryDate',
+  revision: 'revision',
+  awardedSupplierId: 'awardedSupplierId',
+  awardedQuotationId: 'awardedQuotationId',
+  buyerProfileId: 'buyerProfileId',
+  notes: 'notes',
+  correlationId: 'correlationId',
+  isActive: 'isActive',
+  versionNumber: 'versionNumber',
+  createdBy: 'createdBy',
+  updatedBy: 'updatedBy',
+  deletedBy: 'deletedBy',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt',
+  deletedAt: 'deletedAt'
+} as const
+
+export type PodRfqScalarFieldEnum = (typeof PodRfqScalarFieldEnum)[keyof typeof PodRfqScalarFieldEnum]
+
+
+export const PodRfqItemScalarFieldEnum = {
+  id: 'id',
+  tenantId: 'tenantId',
+  rfqId: 'rfqId',
+  lineNo: 'lineNo',
+  productId: 'productId',
+  variantId: 'variantId',
+  uomId: 'uomId',
+  quantity: 'quantity',
+  requiredDate: 'requiredDate',
+  specification: 'specification',
+  notes: 'notes',
+  createdAt: 'createdAt'
+} as const
+
+export type PodRfqItemScalarFieldEnum = (typeof PodRfqItemScalarFieldEnum)[keyof typeof PodRfqItemScalarFieldEnum]
+
+
+export const PodRfqSupplierScalarFieldEnum = {
+  id: 'id',
+  tenantId: 'tenantId',
+  rfqId: 'rfqId',
+  supplierId: 'supplierId',
+  statusCode: 'statusCode',
+  invitedAt: 'invitedAt',
+  respondedAt: 'respondedAt',
+  createdAt: 'createdAt'
+} as const
+
+export type PodRfqSupplierScalarFieldEnum = (typeof PodRfqSupplierScalarFieldEnum)[keyof typeof PodRfqSupplierScalarFieldEnum]
+
+
+export const PodSupplierQuotationScalarFieldEnum = {
+  id: 'id',
+  tenantId: 'tenantId',
+  companyId: 'companyId',
+  branchId: 'branchId',
+  documentNumber: 'documentNumber',
+  rfqId: 'rfqId',
+  supplierId: 'supplierId',
+  statusCode: 'statusCode',
+  quotationDate: 'quotationDate',
+  validUntil: 'validUntil',
+  currencyCode: 'currencyCode',
+  exchangeRate: 'exchangeRate',
+  leadTimeDays: 'leadTimeDays',
+  paymentTerms: 'paymentTerms',
+  freightAmount: 'freightAmount',
+  insuranceAmount: 'insuranceAmount',
+  discountTotal: 'discountTotal',
+  subtotal: 'subtotal',
+  taxTotal: 'taxTotal',
+  grandTotal: 'grandTotal',
+  remarks: 'remarks',
+  revision: 'revision',
+  approvedByProfileId: 'approvedByProfileId',
+  correlationId: 'correlationId',
+  isActive: 'isActive',
+  versionNumber: 'versionNumber',
+  createdBy: 'createdBy',
+  updatedBy: 'updatedBy',
+  deletedBy: 'deletedBy',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt',
+  deletedAt: 'deletedAt'
+} as const
+
+export type PodSupplierQuotationScalarFieldEnum = (typeof PodSupplierQuotationScalarFieldEnum)[keyof typeof PodSupplierQuotationScalarFieldEnum]
+
+
+export const PodSupplierQuotationItemScalarFieldEnum = {
+  id: 'id',
+  tenantId: 'tenantId',
+  quotationId: 'quotationId',
+  lineNo: 'lineNo',
+  productId: 'productId',
+  variantId: 'variantId',
+  uomId: 'uomId',
+  quantity: 'quantity',
+  unitPrice: 'unitPrice',
+  discountPct: 'discountPct',
+  discountAmount: 'discountAmount',
+  taxRateId: 'taxRateId',
+  taxAmount: 'taxAmount',
+  netAmount: 'netAmount',
+  leadTimeDays: 'leadTimeDays',
+  notes: 'notes',
+  createdAt: 'createdAt'
+} as const
+
+export type PodSupplierQuotationItemScalarFieldEnum = (typeof PodSupplierQuotationItemScalarFieldEnum)[keyof typeof PodSupplierQuotationItemScalarFieldEnum]
+
+
+export const PodApprovalWorkflowScalarFieldEnum = {
+  id: 'id',
+  tenantId: 'tenantId',
+  code: 'code',
+  name: 'name',
+  entityType: 'entityType',
+  minAmount: 'minAmount',
+  maxAmount: 'maxAmount',
+  currencyCode: 'currencyCode',
+  autoApprove: 'autoApprove',
+  notes: 'notes',
+  isActive: 'isActive',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt',
+  deletedAt: 'deletedAt'
+} as const
+
+export type PodApprovalWorkflowScalarFieldEnum = (typeof PodApprovalWorkflowScalarFieldEnum)[keyof typeof PodApprovalWorkflowScalarFieldEnum]
+
+
+export const PodApprovalWorkflowStepScalarFieldEnum = {
+  id: 'id',
+  tenantId: 'tenantId',
+  workflowId: 'workflowId',
+  stepOrder: 'stepOrder',
+  name: 'name',
+  approverRoleCode: 'approverRoleCode',
+  approverProfileId: 'approverProfileId',
+  minAmount: 'minAmount',
+  condition: 'condition',
+  isFinal: 'isFinal',
+  allowDelegate: 'allowDelegate',
+  escalateAfterHours: 'escalateAfterHours',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type PodApprovalWorkflowStepScalarFieldEnum = (typeof PodApprovalWorkflowStepScalarFieldEnum)[keyof typeof PodApprovalWorkflowStepScalarFieldEnum]
+
+
+export const PodApprovalRequestScalarFieldEnum = {
+  id: 'id',
+  tenantId: 'tenantId',
+  companyId: 'companyId',
+  branchId: 'branchId',
+  workflowId: 'workflowId',
+  entityType: 'entityType',
+  entityId: 'entityId',
+  statusCode: 'statusCode',
+  currentStepOrder: 'currentStepOrder',
+  amount: 'amount',
+  currencyCode: 'currencyCode',
+  requestedByProfileId: 'requestedByProfileId',
+  requestedAt: 'requestedAt',
+  completedAt: 'completedAt',
+  correlationId: 'correlationId',
+  versionNumber: 'versionNumber',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type PodApprovalRequestScalarFieldEnum = (typeof PodApprovalRequestScalarFieldEnum)[keyof typeof PodApprovalRequestScalarFieldEnum]
+
+
+export const PodApprovalActionScalarFieldEnum = {
+  id: 'id',
+  tenantId: 'tenantId',
+  requestId: 'requestId',
+  stepOrder: 'stepOrder',
+  actionCode: 'actionCode',
+  actorProfileId: 'actorProfileId',
+  delegatedToProfileId: 'delegatedToProfileId',
+  comment: 'comment',
+  actedAt: 'actedAt',
+  createdAt: 'createdAt'
+} as const
+
+export type PodApprovalActionScalarFieldEnum = (typeof PodApprovalActionScalarFieldEnum)[keyof typeof PodApprovalActionScalarFieldEnum]
+
+
+export const PodSupplierInvoiceScalarFieldEnum = {
+  id: 'id',
+  tenantId: 'tenantId',
+  companyId: 'companyId',
+  branchId: 'branchId',
+  documentNumber: 'documentNumber',
+  supplierInvoiceNumber: 'supplierInvoiceNumber',
+  supplierId: 'supplierId',
+  purchaseOrderId: 'purchaseOrderId',
+  statusCode: 'statusCode',
+  matchStatusCode: 'matchStatusCode',
+  paymentStatusCode: 'paymentStatusCode',
+  invoiceDate: 'invoiceDate',
+  dueDate: 'dueDate',
+  currencyCode: 'currencyCode',
+  exchangeRate: 'exchangeRate',
+  subtotal: 'subtotal',
+  discountTotal: 'discountTotal',
+  taxTotal: 'taxTotal',
+  retentionAmount: 'retentionAmount',
+  withholdingTaxAmount: 'withholdingTaxAmount',
+  freightAmount: 'freightAmount',
+  grandTotal: 'grandTotal',
+  paidAmount: 'paidAmount',
+  outstandingAmount: 'outstandingAmount',
+  notes: 'notes',
+  approvalRequestId: 'approvalRequestId',
+  isPosted: 'isPosted',
+  postedAt: 'postedAt',
+  postedByProfileId: 'postedByProfileId',
+  correlationId: 'correlationId',
+  isActive: 'isActive',
+  versionNumber: 'versionNumber',
+  createdBy: 'createdBy',
+  updatedBy: 'updatedBy',
+  deletedBy: 'deletedBy',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt',
+  deletedAt: 'deletedAt'
+} as const
+
+export type PodSupplierInvoiceScalarFieldEnum = (typeof PodSupplierInvoiceScalarFieldEnum)[keyof typeof PodSupplierInvoiceScalarFieldEnum]
+
+
+export const PodSupplierInvoiceItemScalarFieldEnum = {
+  id: 'id',
+  tenantId: 'tenantId',
+  invoiceId: 'invoiceId',
+  lineNo: 'lineNo',
+  productId: 'productId',
+  variantId: 'variantId',
+  description: 'description',
+  purchaseOrderLineId: 'purchaseOrderLineId',
+  goodsReceiptLineId: 'goodsReceiptLineId',
+  uomId: 'uomId',
+  quantity: 'quantity',
+  unitPrice: 'unitPrice',
+  discountAmount: 'discountAmount',
+  taxRateId: 'taxRateId',
+  taxAmount: 'taxAmount',
+  netAmount: 'netAmount',
+  createdAt: 'createdAt'
+} as const
+
+export type PodSupplierInvoiceItemScalarFieldEnum = (typeof PodSupplierInvoiceItemScalarFieldEnum)[keyof typeof PodSupplierInvoiceItemScalarFieldEnum]
+
+
+export const PodSupplierInvoiceMatchScalarFieldEnum = {
+  id: 'id',
+  tenantId: 'tenantId',
+  invoiceId: 'invoiceId',
+  invoiceItemId: 'invoiceItemId',
+  purchaseOrderLineId: 'purchaseOrderLineId',
+  goodsReceiptLineId: 'goodsReceiptLineId',
+  matchedQty: 'matchedQty',
+  matchedAmount: 'matchedAmount',
+  priceVariance: 'priceVariance',
+  qtyVariance: 'qtyVariance',
+  createdAt: 'createdAt'
+} as const
+
+export type PodSupplierInvoiceMatchScalarFieldEnum = (typeof PodSupplierInvoiceMatchScalarFieldEnum)[keyof typeof PodSupplierInvoiceMatchScalarFieldEnum]
+
+
+export const PodDebitNoteLineScalarFieldEnum = {
+  id: 'id',
+  tenantId: 'tenantId',
+  financialNoteId: 'financialNoteId',
+  lineNo: 'lineNo',
+  reasonId: 'reasonId',
+  productId: 'productId',
+  description: 'description',
+  quantity: 'quantity',
+  unitCost: 'unitCost',
+  amount: 'amount',
+  taxAmount: 'taxAmount',
+  purchaseReturnId: 'purchaseReturnId',
+  createdAt: 'createdAt'
+} as const
+
+export type PodDebitNoteLineScalarFieldEnum = (typeof PodDebitNoteLineScalarFieldEnum)[keyof typeof PodDebitNoteLineScalarFieldEnum]
+
+
+export const PodLandedCostVoucherScalarFieldEnum = {
+  id: 'id',
+  tenantId: 'tenantId',
+  companyId: 'companyId',
+  branchId: 'branchId',
+  documentNumber: 'documentNumber',
+  statusCode: 'statusCode',
+  goodsReceiptId: 'goodsReceiptId',
+  purchaseOrderId: 'purchaseOrderId',
+  supplierInvoiceId: 'supplierInvoiceId',
+  allocationBasis: 'allocationBasis',
+  currencyCode: 'currencyCode',
+  exchangeRate: 'exchangeRate',
+  totalCharges: 'totalCharges',
+  notes: 'notes',
+  isPosted: 'isPosted',
+  postedAt: 'postedAt',
+  postedByProfileId: 'postedByProfileId',
+  correlationId: 'correlationId',
+  isActive: 'isActive',
+  versionNumber: 'versionNumber',
+  createdBy: 'createdBy',
+  updatedBy: 'updatedBy',
+  deletedBy: 'deletedBy',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt',
+  deletedAt: 'deletedAt'
+} as const
+
+export type PodLandedCostVoucherScalarFieldEnum = (typeof PodLandedCostVoucherScalarFieldEnum)[keyof typeof PodLandedCostVoucherScalarFieldEnum]
+
+
+export const PodLandedCostChargeScalarFieldEnum = {
+  id: 'id',
+  tenantId: 'tenantId',
+  voucherId: 'voucherId',
+  lineNo: 'lineNo',
+  costTypeId: 'costTypeId',
+  description: 'description',
+  amount: 'amount',
+  supplierId: 'supplierId',
+  taxAmount: 'taxAmount',
+  createdAt: 'createdAt'
+} as const
+
+export type PodLandedCostChargeScalarFieldEnum = (typeof PodLandedCostChargeScalarFieldEnum)[keyof typeof PodLandedCostChargeScalarFieldEnum]
+
+
+export const PodLandedCostAllocationScalarFieldEnum = {
+  id: 'id',
+  tenantId: 'tenantId',
+  voucherId: 'voucherId',
+  goodsReceiptLineId: 'goodsReceiptLineId',
+  purchaseOrderLineId: 'purchaseOrderLineId',
+  productId: 'productId',
+  basisValue: 'basisValue',
+  allocatedAmount: 'allocatedAmount',
+  createdAt: 'createdAt'
+} as const
+
+export type PodLandedCostAllocationScalarFieldEnum = (typeof PodLandedCostAllocationScalarFieldEnum)[keyof typeof PodLandedCostAllocationScalarFieldEnum]
+
+
+export const PodSupplierPaymentScalarFieldEnum = {
+  id: 'id',
+  tenantId: 'tenantId',
+  companyId: 'companyId',
+  branchId: 'branchId',
+  documentNumber: 'documentNumber',
+  supplierId: 'supplierId',
+  statusCode: 'statusCode',
+  paymentMethodId: 'paymentMethodId',
+  paymentDate: 'paymentDate',
+  currencyCode: 'currencyCode',
+  exchangeRate: 'exchangeRate',
+  amount: 'amount',
+  allocatedAmount: 'allocatedAmount',
+  unallocatedAmount: 'unallocatedAmount',
+  referenceNumber: 'referenceNumber',
+  bankAccountId: 'bankAccountId',
+  isAdvance: 'isAdvance',
+  notes: 'notes',
+  isPosted: 'isPosted',
+  postedAt: 'postedAt',
+  postedByProfileId: 'postedByProfileId',
+  correlationId: 'correlationId',
+  isActive: 'isActive',
+  versionNumber: 'versionNumber',
+  createdBy: 'createdBy',
+  updatedBy: 'updatedBy',
+  deletedBy: 'deletedBy',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt',
+  deletedAt: 'deletedAt'
+} as const
+
+export type PodSupplierPaymentScalarFieldEnum = (typeof PodSupplierPaymentScalarFieldEnum)[keyof typeof PodSupplierPaymentScalarFieldEnum]
+
+
+export const PodSupplierPaymentAllocationScalarFieldEnum = {
+  id: 'id',
+  tenantId: 'tenantId',
+  paymentId: 'paymentId',
+  supplierInvoiceId: 'supplierInvoiceId',
+  financialNoteId: 'financialNoteId',
+  allocatedAmount: 'allocatedAmount',
+  createdAt: 'createdAt'
+} as const
+
+export type PodSupplierPaymentAllocationScalarFieldEnum = (typeof PodSupplierPaymentAllocationScalarFieldEnum)[keyof typeof PodSupplierPaymentAllocationScalarFieldEnum]
+
+
+export const PodAttachmentScalarFieldEnum = {
+  id: 'id',
+  tenantId: 'tenantId',
+  entityType: 'entityType',
+  entityId: 'entityId',
+  fileName: 'fileName',
+  fileUrl: 'fileUrl',
+  mimeType: 'mimeType',
+  fileSize: 'fileSize',
+  category: 'category',
+  uploadedByProfileId: 'uploadedByProfileId',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt',
+  deletedAt: 'deletedAt'
+} as const
+
+export type PodAttachmentScalarFieldEnum = (typeof PodAttachmentScalarFieldEnum)[keyof typeof PodAttachmentScalarFieldEnum]
+
+
+export const PodCustomFieldDefinitionScalarFieldEnum = {
+  id: 'id',
+  tenantId: 'tenantId',
+  entityType: 'entityType',
+  fieldKey: 'fieldKey',
+  label: 'label',
+  fieldType: 'fieldType',
+  optionsJson: 'optionsJson',
+  isRequired: 'isRequired',
+  displayOrder: 'displayOrder',
+  isActive: 'isActive',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt',
+  deletedAt: 'deletedAt'
+} as const
+
+export type PodCustomFieldDefinitionScalarFieldEnum = (typeof PodCustomFieldDefinitionScalarFieldEnum)[keyof typeof PodCustomFieldDefinitionScalarFieldEnum]
+
+
+export const PodCustomFieldValueScalarFieldEnum = {
+  id: 'id',
+  tenantId: 'tenantId',
+  definitionId: 'definitionId',
+  entityType: 'entityType',
+  entityId: 'entityId',
+  valueJson: 'valueJson',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type PodCustomFieldValueScalarFieldEnum = (typeof PodCustomFieldValueScalarFieldEnum)[keyof typeof PodCustomFieldValueScalarFieldEnum]
+
+
 export const SortOrder = {
   asc: 'asc',
   desc: 'desc'
@@ -16587,21 +19675,6 @@ export type PrismaClientOptions = ({
    * ```
    */
   comments?: runtime.SqlCommenterPlugin[]
-  /**
-   * Optional maximum size for the query plan cache. If not provided, a default size will be used.
-   * A value of `0` can be used to disable the cache entirely. A higher cache size can improve
-   * performance for applications that execute a large number of unique queries, while a smaller
-   * cache size can reduce memory usage.
-   * 
-   * @example
-   * ```
-   * const prisma = new PrismaClient({
-   *   adapter,
-   *   queryPlanCacheMaxSize: 100,
-   * })
-   * ```
-   */
-  queryPlanCacheMaxSize?: number
 }
 export type GlobalOmitConfig = {
   profile?: Prisma.ProfileOmit
@@ -16761,6 +19834,38 @@ export type GlobalOmitConfig = {
   resOrderEvent?: Prisma.ResOrderEventOmit
   resVoidReason?: Prisma.ResVoidReasonOmit
   resCancelReason?: Prisma.ResCancelReasonOmit
+  podDocumentStatus?: Prisma.PodDocumentStatusOmit
+  podStatusTransition?: Prisma.PodStatusTransitionOmit
+  podSupplierCategory?: Prisma.PodSupplierCategoryOmit
+  podReturnReason?: Prisma.PodReturnReasonOmit
+  podPaymentMethod?: Prisma.PodPaymentMethodOmit
+  podLandedCostType?: Prisma.PodLandedCostTypeOmit
+  podIncoterm?: Prisma.PodIncotermOmit
+  podDebitNoteReason?: Prisma.PodDebitNoteReasonOmit
+  podSupplierContact?: Prisma.PodSupplierContactOmit
+  podSupplierAddress?: Prisma.PodSupplierAddressOmit
+  podSupplierBankAccount?: Prisma.PodSupplierBankAccountOmit
+  podRfq?: Prisma.PodRfqOmit
+  podRfqItem?: Prisma.PodRfqItemOmit
+  podRfqSupplier?: Prisma.PodRfqSupplierOmit
+  podSupplierQuotation?: Prisma.PodSupplierQuotationOmit
+  podSupplierQuotationItem?: Prisma.PodSupplierQuotationItemOmit
+  podApprovalWorkflow?: Prisma.PodApprovalWorkflowOmit
+  podApprovalWorkflowStep?: Prisma.PodApprovalWorkflowStepOmit
+  podApprovalRequest?: Prisma.PodApprovalRequestOmit
+  podApprovalAction?: Prisma.PodApprovalActionOmit
+  podSupplierInvoice?: Prisma.PodSupplierInvoiceOmit
+  podSupplierInvoiceItem?: Prisma.PodSupplierInvoiceItemOmit
+  podSupplierInvoiceMatch?: Prisma.PodSupplierInvoiceMatchOmit
+  podDebitNoteLine?: Prisma.PodDebitNoteLineOmit
+  podLandedCostVoucher?: Prisma.PodLandedCostVoucherOmit
+  podLandedCostCharge?: Prisma.PodLandedCostChargeOmit
+  podLandedCostAllocation?: Prisma.PodLandedCostAllocationOmit
+  podSupplierPayment?: Prisma.PodSupplierPaymentOmit
+  podSupplierPaymentAllocation?: Prisma.PodSupplierPaymentAllocationOmit
+  podAttachment?: Prisma.PodAttachmentOmit
+  podCustomFieldDefinition?: Prisma.PodCustomFieldDefinitionOmit
+  podCustomFieldValue?: Prisma.PodCustomFieldValueOmit
 }
 
 /* Types for Logging */

@@ -30,12 +30,18 @@ export type PurchaseOrderAvgAggregateOutputType = {
   subtotal: runtime.Decimal | null
   taxTotal: runtime.Decimal | null
   grandTotal: runtime.Decimal | null
+  exchangeRate: runtime.Decimal | null
+  discountTotal: runtime.Decimal | null
+  versionNumber: number | null
 }
 
 export type PurchaseOrderSumAggregateOutputType = {
   subtotal: runtime.Decimal | null
   taxTotal: runtime.Decimal | null
   grandTotal: runtime.Decimal | null
+  exchangeRate: runtime.Decimal | null
+  discountTotal: runtime.Decimal | null
+  versionNumber: number | null
 }
 
 export type PurchaseOrderMinAggregateOutputType = {
@@ -57,6 +63,15 @@ export type PurchaseOrderMinAggregateOutputType = {
   requisitionId: string | null
   createdByProfileId: string | null
   correlationId: string | null
+  branchId: string | null
+  companyId: string | null
+  exchangeRate: runtime.Decimal | null
+  incoterms: string | null
+  buyerProfileId: string | null
+  discountTotal: runtime.Decimal | null
+  approvalRequestId: string | null
+  quotationId: string | null
+  versionNumber: number | null
   createdAt: Date | null
   updatedAt: Date | null
 }
@@ -80,6 +95,15 @@ export type PurchaseOrderMaxAggregateOutputType = {
   requisitionId: string | null
   createdByProfileId: string | null
   correlationId: string | null
+  branchId: string | null
+  companyId: string | null
+  exchangeRate: runtime.Decimal | null
+  incoterms: string | null
+  buyerProfileId: string | null
+  discountTotal: runtime.Decimal | null
+  approvalRequestId: string | null
+  quotationId: string | null
+  versionNumber: number | null
   createdAt: Date | null
   updatedAt: Date | null
 }
@@ -103,6 +127,17 @@ export type PurchaseOrderCountAggregateOutputType = {
   requisitionId: number
   createdByProfileId: number
   correlationId: number
+  branchId: number
+  companyId: number
+  exchangeRate: number
+  incoterms: number
+  deliveryAddressJson: number
+  billingAddressJson: number
+  buyerProfileId: number
+  discountTotal: number
+  approvalRequestId: number
+  quotationId: number
+  versionNumber: number
   createdAt: number
   updatedAt: number
   _all: number
@@ -113,12 +148,18 @@ export type PurchaseOrderAvgAggregateInputType = {
   subtotal?: true
   taxTotal?: true
   grandTotal?: true
+  exchangeRate?: true
+  discountTotal?: true
+  versionNumber?: true
 }
 
 export type PurchaseOrderSumAggregateInputType = {
   subtotal?: true
   taxTotal?: true
   grandTotal?: true
+  exchangeRate?: true
+  discountTotal?: true
+  versionNumber?: true
 }
 
 export type PurchaseOrderMinAggregateInputType = {
@@ -140,6 +181,15 @@ export type PurchaseOrderMinAggregateInputType = {
   requisitionId?: true
   createdByProfileId?: true
   correlationId?: true
+  branchId?: true
+  companyId?: true
+  exchangeRate?: true
+  incoterms?: true
+  buyerProfileId?: true
+  discountTotal?: true
+  approvalRequestId?: true
+  quotationId?: true
+  versionNumber?: true
   createdAt?: true
   updatedAt?: true
 }
@@ -163,6 +213,15 @@ export type PurchaseOrderMaxAggregateInputType = {
   requisitionId?: true
   createdByProfileId?: true
   correlationId?: true
+  branchId?: true
+  companyId?: true
+  exchangeRate?: true
+  incoterms?: true
+  buyerProfileId?: true
+  discountTotal?: true
+  approvalRequestId?: true
+  quotationId?: true
+  versionNumber?: true
   createdAt?: true
   updatedAt?: true
 }
@@ -186,6 +245,17 @@ export type PurchaseOrderCountAggregateInputType = {
   requisitionId?: true
   createdByProfileId?: true
   correlationId?: true
+  branchId?: true
+  companyId?: true
+  exchangeRate?: true
+  incoterms?: true
+  deliveryAddressJson?: true
+  billingAddressJson?: true
+  buyerProfileId?: true
+  discountTotal?: true
+  approvalRequestId?: true
+  quotationId?: true
+  versionNumber?: true
   createdAt?: true
   updatedAt?: true
   _all?: true
@@ -296,6 +366,17 @@ export type PurchaseOrderGroupByOutputType = {
   requisitionId: string | null
   createdByProfileId: string | null
   correlationId: string | null
+  branchId: string | null
+  companyId: string | null
+  exchangeRate: runtime.Decimal
+  incoterms: string | null
+  deliveryAddressJson: runtime.JsonValue | null
+  billingAddressJson: runtime.JsonValue | null
+  buyerProfileId: string | null
+  discountTotal: runtime.Decimal
+  approvalRequestId: string | null
+  quotationId: string | null
+  versionNumber: number
   createdAt: Date
   updatedAt: Date
   _count: PurchaseOrderCountAggregateOutputType | null
@@ -342,6 +423,17 @@ export type PurchaseOrderWhereInput = {
   requisitionId?: Prisma.UuidNullableFilter<"PurchaseOrder"> | string | null
   createdByProfileId?: Prisma.UuidNullableFilter<"PurchaseOrder"> | string | null
   correlationId?: Prisma.UuidNullableFilter<"PurchaseOrder"> | string | null
+  branchId?: Prisma.UuidNullableFilter<"PurchaseOrder"> | string | null
+  companyId?: Prisma.UuidNullableFilter<"PurchaseOrder"> | string | null
+  exchangeRate?: Prisma.DecimalFilter<"PurchaseOrder"> | runtime.Decimal | runtime.DecimalJsLike | number | string
+  incoterms?: Prisma.StringNullableFilter<"PurchaseOrder"> | string | null
+  deliveryAddressJson?: Prisma.JsonNullableFilter<"PurchaseOrder">
+  billingAddressJson?: Prisma.JsonNullableFilter<"PurchaseOrder">
+  buyerProfileId?: Prisma.UuidNullableFilter<"PurchaseOrder"> | string | null
+  discountTotal?: Prisma.DecimalFilter<"PurchaseOrder"> | runtime.Decimal | runtime.DecimalJsLike | number | string
+  approvalRequestId?: Prisma.UuidNullableFilter<"PurchaseOrder"> | string | null
+  quotationId?: Prisma.UuidNullableFilter<"PurchaseOrder"> | string | null
+  versionNumber?: Prisma.IntFilter<"PurchaseOrder"> | number
   createdAt?: Prisma.DateTimeFilter<"PurchaseOrder"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"PurchaseOrder"> | Date | string
   tenant?: Prisma.XOR<Prisma.TenantAccountScalarRelationFilter, Prisma.TenantAccountWhereInput>
@@ -368,6 +460,17 @@ export type PurchaseOrderOrderByWithRelationInput = {
   requisitionId?: Prisma.SortOrderInput | Prisma.SortOrder
   createdByProfileId?: Prisma.SortOrderInput | Prisma.SortOrder
   correlationId?: Prisma.SortOrderInput | Prisma.SortOrder
+  branchId?: Prisma.SortOrderInput | Prisma.SortOrder
+  companyId?: Prisma.SortOrderInput | Prisma.SortOrder
+  exchangeRate?: Prisma.SortOrder
+  incoterms?: Prisma.SortOrderInput | Prisma.SortOrder
+  deliveryAddressJson?: Prisma.SortOrderInput | Prisma.SortOrder
+  billingAddressJson?: Prisma.SortOrderInput | Prisma.SortOrder
+  buyerProfileId?: Prisma.SortOrderInput | Prisma.SortOrder
+  discountTotal?: Prisma.SortOrder
+  approvalRequestId?: Prisma.SortOrderInput | Prisma.SortOrder
+  quotationId?: Prisma.SortOrderInput | Prisma.SortOrder
+  versionNumber?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   tenant?: Prisma.TenantAccountOrderByWithRelationInput
@@ -398,6 +501,17 @@ export type PurchaseOrderWhereUniqueInput = Prisma.AtLeast<{
   requisitionId?: Prisma.UuidNullableFilter<"PurchaseOrder"> | string | null
   createdByProfileId?: Prisma.UuidNullableFilter<"PurchaseOrder"> | string | null
   correlationId?: Prisma.UuidNullableFilter<"PurchaseOrder"> | string | null
+  branchId?: Prisma.UuidNullableFilter<"PurchaseOrder"> | string | null
+  companyId?: Prisma.UuidNullableFilter<"PurchaseOrder"> | string | null
+  exchangeRate?: Prisma.DecimalFilter<"PurchaseOrder"> | runtime.Decimal | runtime.DecimalJsLike | number | string
+  incoterms?: Prisma.StringNullableFilter<"PurchaseOrder"> | string | null
+  deliveryAddressJson?: Prisma.JsonNullableFilter<"PurchaseOrder">
+  billingAddressJson?: Prisma.JsonNullableFilter<"PurchaseOrder">
+  buyerProfileId?: Prisma.UuidNullableFilter<"PurchaseOrder"> | string | null
+  discountTotal?: Prisma.DecimalFilter<"PurchaseOrder"> | runtime.Decimal | runtime.DecimalJsLike | number | string
+  approvalRequestId?: Prisma.UuidNullableFilter<"PurchaseOrder"> | string | null
+  quotationId?: Prisma.UuidNullableFilter<"PurchaseOrder"> | string | null
+  versionNumber?: Prisma.IntFilter<"PurchaseOrder"> | number
   createdAt?: Prisma.DateTimeFilter<"PurchaseOrder"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"PurchaseOrder"> | Date | string
   tenant?: Prisma.XOR<Prisma.TenantAccountScalarRelationFilter, Prisma.TenantAccountWhereInput>
@@ -424,6 +538,17 @@ export type PurchaseOrderOrderByWithAggregationInput = {
   requisitionId?: Prisma.SortOrderInput | Prisma.SortOrder
   createdByProfileId?: Prisma.SortOrderInput | Prisma.SortOrder
   correlationId?: Prisma.SortOrderInput | Prisma.SortOrder
+  branchId?: Prisma.SortOrderInput | Prisma.SortOrder
+  companyId?: Prisma.SortOrderInput | Prisma.SortOrder
+  exchangeRate?: Prisma.SortOrder
+  incoterms?: Prisma.SortOrderInput | Prisma.SortOrder
+  deliveryAddressJson?: Prisma.SortOrderInput | Prisma.SortOrder
+  billingAddressJson?: Prisma.SortOrderInput | Prisma.SortOrder
+  buyerProfileId?: Prisma.SortOrderInput | Prisma.SortOrder
+  discountTotal?: Prisma.SortOrder
+  approvalRequestId?: Prisma.SortOrderInput | Prisma.SortOrder
+  quotationId?: Prisma.SortOrderInput | Prisma.SortOrder
+  versionNumber?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   _count?: Prisma.PurchaseOrderCountOrderByAggregateInput
@@ -455,6 +580,17 @@ export type PurchaseOrderScalarWhereWithAggregatesInput = {
   requisitionId?: Prisma.UuidNullableWithAggregatesFilter<"PurchaseOrder"> | string | null
   createdByProfileId?: Prisma.UuidNullableWithAggregatesFilter<"PurchaseOrder"> | string | null
   correlationId?: Prisma.UuidNullableWithAggregatesFilter<"PurchaseOrder"> | string | null
+  branchId?: Prisma.UuidNullableWithAggregatesFilter<"PurchaseOrder"> | string | null
+  companyId?: Prisma.UuidNullableWithAggregatesFilter<"PurchaseOrder"> | string | null
+  exchangeRate?: Prisma.DecimalWithAggregatesFilter<"PurchaseOrder"> | runtime.Decimal | runtime.DecimalJsLike | number | string
+  incoterms?: Prisma.StringNullableWithAggregatesFilter<"PurchaseOrder"> | string | null
+  deliveryAddressJson?: Prisma.JsonNullableWithAggregatesFilter<"PurchaseOrder">
+  billingAddressJson?: Prisma.JsonNullableWithAggregatesFilter<"PurchaseOrder">
+  buyerProfileId?: Prisma.UuidNullableWithAggregatesFilter<"PurchaseOrder"> | string | null
+  discountTotal?: Prisma.DecimalWithAggregatesFilter<"PurchaseOrder"> | runtime.Decimal | runtime.DecimalJsLike | number | string
+  approvalRequestId?: Prisma.UuidNullableWithAggregatesFilter<"PurchaseOrder"> | string | null
+  quotationId?: Prisma.UuidNullableWithAggregatesFilter<"PurchaseOrder"> | string | null
+  versionNumber?: Prisma.IntWithAggregatesFilter<"PurchaseOrder"> | number
   createdAt?: Prisma.DateTimeWithAggregatesFilter<"PurchaseOrder"> | Date | string
   updatedAt?: Prisma.DateTimeWithAggregatesFilter<"PurchaseOrder"> | Date | string
 }
@@ -477,6 +613,17 @@ export type PurchaseOrderCreateInput = {
   requisitionId?: string | null
   createdByProfileId?: string | null
   correlationId?: string | null
+  branchId?: string | null
+  companyId?: string | null
+  exchangeRate?: runtime.Decimal | runtime.DecimalJsLike | number | string
+  incoterms?: string | null
+  deliveryAddressJson?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  billingAddressJson?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  buyerProfileId?: string | null
+  discountTotal?: runtime.Decimal | runtime.DecimalJsLike | number | string
+  approvalRequestId?: string | null
+  quotationId?: string | null
+  versionNumber?: number
   createdAt?: Date | string
   updatedAt?: Date | string
   tenant: Prisma.TenantAccountCreateNestedOneWithoutPurchaseOrdersInput
@@ -503,6 +650,17 @@ export type PurchaseOrderUncheckedCreateInput = {
   requisitionId?: string | null
   createdByProfileId?: string | null
   correlationId?: string | null
+  branchId?: string | null
+  companyId?: string | null
+  exchangeRate?: runtime.Decimal | runtime.DecimalJsLike | number | string
+  incoterms?: string | null
+  deliveryAddressJson?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  billingAddressJson?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  buyerProfileId?: string | null
+  discountTotal?: runtime.Decimal | runtime.DecimalJsLike | number | string
+  approvalRequestId?: string | null
+  quotationId?: string | null
+  versionNumber?: number
   createdAt?: Date | string
   updatedAt?: Date | string
   lines?: Prisma.PurchaseOrderLineUncheckedCreateNestedManyWithoutPurchaseOrderInput
@@ -527,6 +685,17 @@ export type PurchaseOrderUpdateInput = {
   requisitionId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdByProfileId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   correlationId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  branchId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  companyId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  exchangeRate?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  incoterms?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  deliveryAddressJson?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  billingAddressJson?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  buyerProfileId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  discountTotal?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  approvalRequestId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  quotationId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  versionNumber?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   tenant?: Prisma.TenantAccountUpdateOneRequiredWithoutPurchaseOrdersNestedInput
@@ -553,6 +722,17 @@ export type PurchaseOrderUncheckedUpdateInput = {
   requisitionId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdByProfileId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   correlationId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  branchId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  companyId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  exchangeRate?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  incoterms?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  deliveryAddressJson?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  billingAddressJson?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  buyerProfileId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  discountTotal?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  approvalRequestId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  quotationId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  versionNumber?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   lines?: Prisma.PurchaseOrderLineUncheckedUpdateManyWithoutPurchaseOrderNestedInput
@@ -578,6 +758,17 @@ export type PurchaseOrderCreateManyInput = {
   requisitionId?: string | null
   createdByProfileId?: string | null
   correlationId?: string | null
+  branchId?: string | null
+  companyId?: string | null
+  exchangeRate?: runtime.Decimal | runtime.DecimalJsLike | number | string
+  incoterms?: string | null
+  deliveryAddressJson?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  billingAddressJson?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  buyerProfileId?: string | null
+  discountTotal?: runtime.Decimal | runtime.DecimalJsLike | number | string
+  approvalRequestId?: string | null
+  quotationId?: string | null
+  versionNumber?: number
   createdAt?: Date | string
   updatedAt?: Date | string
 }
@@ -600,6 +791,17 @@ export type PurchaseOrderUpdateManyMutationInput = {
   requisitionId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdByProfileId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   correlationId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  branchId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  companyId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  exchangeRate?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  incoterms?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  deliveryAddressJson?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  billingAddressJson?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  buyerProfileId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  discountTotal?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  approvalRequestId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  quotationId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  versionNumber?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -623,6 +825,17 @@ export type PurchaseOrderUncheckedUpdateManyInput = {
   requisitionId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdByProfileId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   correlationId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  branchId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  companyId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  exchangeRate?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  incoterms?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  deliveryAddressJson?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  billingAddressJson?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  buyerProfileId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  discountTotal?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  approvalRequestId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  quotationId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  versionNumber?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -661,6 +874,17 @@ export type PurchaseOrderCountOrderByAggregateInput = {
   requisitionId?: Prisma.SortOrder
   createdByProfileId?: Prisma.SortOrder
   correlationId?: Prisma.SortOrder
+  branchId?: Prisma.SortOrder
+  companyId?: Prisma.SortOrder
+  exchangeRate?: Prisma.SortOrder
+  incoterms?: Prisma.SortOrder
+  deliveryAddressJson?: Prisma.SortOrder
+  billingAddressJson?: Prisma.SortOrder
+  buyerProfileId?: Prisma.SortOrder
+  discountTotal?: Prisma.SortOrder
+  approvalRequestId?: Prisma.SortOrder
+  quotationId?: Prisma.SortOrder
+  versionNumber?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
 }
@@ -669,6 +893,9 @@ export type PurchaseOrderAvgOrderByAggregateInput = {
   subtotal?: Prisma.SortOrder
   taxTotal?: Prisma.SortOrder
   grandTotal?: Prisma.SortOrder
+  exchangeRate?: Prisma.SortOrder
+  discountTotal?: Prisma.SortOrder
+  versionNumber?: Prisma.SortOrder
 }
 
 export type PurchaseOrderMaxOrderByAggregateInput = {
@@ -690,6 +917,15 @@ export type PurchaseOrderMaxOrderByAggregateInput = {
   requisitionId?: Prisma.SortOrder
   createdByProfileId?: Prisma.SortOrder
   correlationId?: Prisma.SortOrder
+  branchId?: Prisma.SortOrder
+  companyId?: Prisma.SortOrder
+  exchangeRate?: Prisma.SortOrder
+  incoterms?: Prisma.SortOrder
+  buyerProfileId?: Prisma.SortOrder
+  discountTotal?: Prisma.SortOrder
+  approvalRequestId?: Prisma.SortOrder
+  quotationId?: Prisma.SortOrder
+  versionNumber?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
 }
@@ -713,6 +949,15 @@ export type PurchaseOrderMinOrderByAggregateInput = {
   requisitionId?: Prisma.SortOrder
   createdByProfileId?: Prisma.SortOrder
   correlationId?: Prisma.SortOrder
+  branchId?: Prisma.SortOrder
+  companyId?: Prisma.SortOrder
+  exchangeRate?: Prisma.SortOrder
+  incoterms?: Prisma.SortOrder
+  buyerProfileId?: Prisma.SortOrder
+  discountTotal?: Prisma.SortOrder
+  approvalRequestId?: Prisma.SortOrder
+  quotationId?: Prisma.SortOrder
+  versionNumber?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
 }
@@ -721,6 +966,9 @@ export type PurchaseOrderSumOrderByAggregateInput = {
   subtotal?: Prisma.SortOrder
   taxTotal?: Prisma.SortOrder
   grandTotal?: Prisma.SortOrder
+  exchangeRate?: Prisma.SortOrder
+  discountTotal?: Prisma.SortOrder
+  versionNumber?: Prisma.SortOrder
 }
 
 export type PurchaseOrderScalarRelationFilter = {
@@ -827,6 +1075,17 @@ export type PurchaseOrderCreateWithoutTenantInput = {
   requisitionId?: string | null
   createdByProfileId?: string | null
   correlationId?: string | null
+  branchId?: string | null
+  companyId?: string | null
+  exchangeRate?: runtime.Decimal | runtime.DecimalJsLike | number | string
+  incoterms?: string | null
+  deliveryAddressJson?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  billingAddressJson?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  buyerProfileId?: string | null
+  discountTotal?: runtime.Decimal | runtime.DecimalJsLike | number | string
+  approvalRequestId?: string | null
+  quotationId?: string | null
+  versionNumber?: number
   createdAt?: Date | string
   updatedAt?: Date | string
   lines?: Prisma.PurchaseOrderLineCreateNestedManyWithoutPurchaseOrderInput
@@ -851,6 +1110,17 @@ export type PurchaseOrderUncheckedCreateWithoutTenantInput = {
   requisitionId?: string | null
   createdByProfileId?: string | null
   correlationId?: string | null
+  branchId?: string | null
+  companyId?: string | null
+  exchangeRate?: runtime.Decimal | runtime.DecimalJsLike | number | string
+  incoterms?: string | null
+  deliveryAddressJson?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  billingAddressJson?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  buyerProfileId?: string | null
+  discountTotal?: runtime.Decimal | runtime.DecimalJsLike | number | string
+  approvalRequestId?: string | null
+  quotationId?: string | null
+  versionNumber?: number
   createdAt?: Date | string
   updatedAt?: Date | string
   lines?: Prisma.PurchaseOrderLineUncheckedCreateNestedManyWithoutPurchaseOrderInput
@@ -905,6 +1175,17 @@ export type PurchaseOrderScalarWhereInput = {
   requisitionId?: Prisma.UuidNullableFilter<"PurchaseOrder"> | string | null
   createdByProfileId?: Prisma.UuidNullableFilter<"PurchaseOrder"> | string | null
   correlationId?: Prisma.UuidNullableFilter<"PurchaseOrder"> | string | null
+  branchId?: Prisma.UuidNullableFilter<"PurchaseOrder"> | string | null
+  companyId?: Prisma.UuidNullableFilter<"PurchaseOrder"> | string | null
+  exchangeRate?: Prisma.DecimalFilter<"PurchaseOrder"> | runtime.Decimal | runtime.DecimalJsLike | number | string
+  incoterms?: Prisma.StringNullableFilter<"PurchaseOrder"> | string | null
+  deliveryAddressJson?: Prisma.JsonNullableFilter<"PurchaseOrder">
+  billingAddressJson?: Prisma.JsonNullableFilter<"PurchaseOrder">
+  buyerProfileId?: Prisma.UuidNullableFilter<"PurchaseOrder"> | string | null
+  discountTotal?: Prisma.DecimalFilter<"PurchaseOrder"> | runtime.Decimal | runtime.DecimalJsLike | number | string
+  approvalRequestId?: Prisma.UuidNullableFilter<"PurchaseOrder"> | string | null
+  quotationId?: Prisma.UuidNullableFilter<"PurchaseOrder"> | string | null
+  versionNumber?: Prisma.IntFilter<"PurchaseOrder"> | number
   createdAt?: Prisma.DateTimeFilter<"PurchaseOrder"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"PurchaseOrder"> | Date | string
 }
@@ -927,6 +1208,17 @@ export type PurchaseOrderCreateWithoutLinesInput = {
   requisitionId?: string | null
   createdByProfileId?: string | null
   correlationId?: string | null
+  branchId?: string | null
+  companyId?: string | null
+  exchangeRate?: runtime.Decimal | runtime.DecimalJsLike | number | string
+  incoterms?: string | null
+  deliveryAddressJson?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  billingAddressJson?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  buyerProfileId?: string | null
+  discountTotal?: runtime.Decimal | runtime.DecimalJsLike | number | string
+  approvalRequestId?: string | null
+  quotationId?: string | null
+  versionNumber?: number
   createdAt?: Date | string
   updatedAt?: Date | string
   tenant: Prisma.TenantAccountCreateNestedOneWithoutPurchaseOrdersInput
@@ -952,6 +1244,17 @@ export type PurchaseOrderUncheckedCreateWithoutLinesInput = {
   requisitionId?: string | null
   createdByProfileId?: string | null
   correlationId?: string | null
+  branchId?: string | null
+  companyId?: string | null
+  exchangeRate?: runtime.Decimal | runtime.DecimalJsLike | number | string
+  incoterms?: string | null
+  deliveryAddressJson?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  billingAddressJson?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  buyerProfileId?: string | null
+  discountTotal?: runtime.Decimal | runtime.DecimalJsLike | number | string
+  approvalRequestId?: string | null
+  quotationId?: string | null
+  versionNumber?: number
   createdAt?: Date | string
   updatedAt?: Date | string
   goodsReceipts?: Prisma.GoodsReceiptUncheckedCreateNestedManyWithoutPurchaseOrderInput
@@ -991,6 +1294,17 @@ export type PurchaseOrderUpdateWithoutLinesInput = {
   requisitionId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdByProfileId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   correlationId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  branchId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  companyId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  exchangeRate?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  incoterms?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  deliveryAddressJson?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  billingAddressJson?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  buyerProfileId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  discountTotal?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  approvalRequestId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  quotationId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  versionNumber?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   tenant?: Prisma.TenantAccountUpdateOneRequiredWithoutPurchaseOrdersNestedInput
@@ -1016,6 +1330,17 @@ export type PurchaseOrderUncheckedUpdateWithoutLinesInput = {
   requisitionId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdByProfileId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   correlationId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  branchId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  companyId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  exchangeRate?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  incoterms?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  deliveryAddressJson?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  billingAddressJson?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  buyerProfileId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  discountTotal?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  approvalRequestId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  quotationId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  versionNumber?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   goodsReceipts?: Prisma.GoodsReceiptUncheckedUpdateManyWithoutPurchaseOrderNestedInput
@@ -1039,6 +1364,17 @@ export type PurchaseOrderCreateWithoutGoodsReceiptsInput = {
   requisitionId?: string | null
   createdByProfileId?: string | null
   correlationId?: string | null
+  branchId?: string | null
+  companyId?: string | null
+  exchangeRate?: runtime.Decimal | runtime.DecimalJsLike | number | string
+  incoterms?: string | null
+  deliveryAddressJson?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  billingAddressJson?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  buyerProfileId?: string | null
+  discountTotal?: runtime.Decimal | runtime.DecimalJsLike | number | string
+  approvalRequestId?: string | null
+  quotationId?: string | null
+  versionNumber?: number
   createdAt?: Date | string
   updatedAt?: Date | string
   tenant: Prisma.TenantAccountCreateNestedOneWithoutPurchaseOrdersInput
@@ -1064,6 +1400,17 @@ export type PurchaseOrderUncheckedCreateWithoutGoodsReceiptsInput = {
   requisitionId?: string | null
   createdByProfileId?: string | null
   correlationId?: string | null
+  branchId?: string | null
+  companyId?: string | null
+  exchangeRate?: runtime.Decimal | runtime.DecimalJsLike | number | string
+  incoterms?: string | null
+  deliveryAddressJson?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  billingAddressJson?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  buyerProfileId?: string | null
+  discountTotal?: runtime.Decimal | runtime.DecimalJsLike | number | string
+  approvalRequestId?: string | null
+  quotationId?: string | null
+  versionNumber?: number
   createdAt?: Date | string
   updatedAt?: Date | string
   lines?: Prisma.PurchaseOrderLineUncheckedCreateNestedManyWithoutPurchaseOrderInput
@@ -1103,6 +1450,17 @@ export type PurchaseOrderUpdateWithoutGoodsReceiptsInput = {
   requisitionId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdByProfileId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   correlationId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  branchId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  companyId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  exchangeRate?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  incoterms?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  deliveryAddressJson?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  billingAddressJson?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  buyerProfileId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  discountTotal?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  approvalRequestId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  quotationId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  versionNumber?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   tenant?: Prisma.TenantAccountUpdateOneRequiredWithoutPurchaseOrdersNestedInput
@@ -1128,6 +1486,17 @@ export type PurchaseOrderUncheckedUpdateWithoutGoodsReceiptsInput = {
   requisitionId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdByProfileId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   correlationId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  branchId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  companyId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  exchangeRate?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  incoterms?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  deliveryAddressJson?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  billingAddressJson?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  buyerProfileId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  discountTotal?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  approvalRequestId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  quotationId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  versionNumber?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   lines?: Prisma.PurchaseOrderLineUncheckedUpdateManyWithoutPurchaseOrderNestedInput
@@ -1151,6 +1520,17 @@ export type PurchaseOrderCreateManyTenantInput = {
   requisitionId?: string | null
   createdByProfileId?: string | null
   correlationId?: string | null
+  branchId?: string | null
+  companyId?: string | null
+  exchangeRate?: runtime.Decimal | runtime.DecimalJsLike | number | string
+  incoterms?: string | null
+  deliveryAddressJson?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  billingAddressJson?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  buyerProfileId?: string | null
+  discountTotal?: runtime.Decimal | runtime.DecimalJsLike | number | string
+  approvalRequestId?: string | null
+  quotationId?: string | null
+  versionNumber?: number
   createdAt?: Date | string
   updatedAt?: Date | string
 }
@@ -1173,6 +1553,17 @@ export type PurchaseOrderUpdateWithoutTenantInput = {
   requisitionId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdByProfileId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   correlationId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  branchId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  companyId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  exchangeRate?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  incoterms?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  deliveryAddressJson?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  billingAddressJson?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  buyerProfileId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  discountTotal?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  approvalRequestId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  quotationId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  versionNumber?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   lines?: Prisma.PurchaseOrderLineUpdateManyWithoutPurchaseOrderNestedInput
@@ -1197,6 +1588,17 @@ export type PurchaseOrderUncheckedUpdateWithoutTenantInput = {
   requisitionId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdByProfileId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   correlationId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  branchId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  companyId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  exchangeRate?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  incoterms?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  deliveryAddressJson?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  billingAddressJson?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  buyerProfileId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  discountTotal?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  approvalRequestId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  quotationId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  versionNumber?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   lines?: Prisma.PurchaseOrderLineUncheckedUpdateManyWithoutPurchaseOrderNestedInput
@@ -1221,6 +1623,17 @@ export type PurchaseOrderUncheckedUpdateManyWithoutTenantInput = {
   requisitionId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdByProfileId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   correlationId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  branchId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  companyId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  exchangeRate?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  incoterms?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  deliveryAddressJson?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  billingAddressJson?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  buyerProfileId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  discountTotal?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  approvalRequestId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  quotationId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  versionNumber?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -1284,6 +1697,17 @@ export type PurchaseOrderSelect<ExtArgs extends runtime.Types.Extensions.Interna
   requisitionId?: boolean
   createdByProfileId?: boolean
   correlationId?: boolean
+  branchId?: boolean
+  companyId?: boolean
+  exchangeRate?: boolean
+  incoterms?: boolean
+  deliveryAddressJson?: boolean
+  billingAddressJson?: boolean
+  buyerProfileId?: boolean
+  discountTotal?: boolean
+  approvalRequestId?: boolean
+  quotationId?: boolean
+  versionNumber?: boolean
   createdAt?: boolean
   updatedAt?: boolean
   tenant?: boolean | Prisma.TenantAccountDefaultArgs<ExtArgs>
@@ -1311,6 +1735,17 @@ export type PurchaseOrderSelectCreateManyAndReturn<ExtArgs extends runtime.Types
   requisitionId?: boolean
   createdByProfileId?: boolean
   correlationId?: boolean
+  branchId?: boolean
+  companyId?: boolean
+  exchangeRate?: boolean
+  incoterms?: boolean
+  deliveryAddressJson?: boolean
+  billingAddressJson?: boolean
+  buyerProfileId?: boolean
+  discountTotal?: boolean
+  approvalRequestId?: boolean
+  quotationId?: boolean
+  versionNumber?: boolean
   createdAt?: boolean
   updatedAt?: boolean
   tenant?: boolean | Prisma.TenantAccountDefaultArgs<ExtArgs>
@@ -1335,6 +1770,17 @@ export type PurchaseOrderSelectUpdateManyAndReturn<ExtArgs extends runtime.Types
   requisitionId?: boolean
   createdByProfileId?: boolean
   correlationId?: boolean
+  branchId?: boolean
+  companyId?: boolean
+  exchangeRate?: boolean
+  incoterms?: boolean
+  deliveryAddressJson?: boolean
+  billingAddressJson?: boolean
+  buyerProfileId?: boolean
+  discountTotal?: boolean
+  approvalRequestId?: boolean
+  quotationId?: boolean
+  versionNumber?: boolean
   createdAt?: boolean
   updatedAt?: boolean
   tenant?: boolean | Prisma.TenantAccountDefaultArgs<ExtArgs>
@@ -1359,11 +1805,22 @@ export type PurchaseOrderSelectScalar = {
   requisitionId?: boolean
   createdByProfileId?: boolean
   correlationId?: boolean
+  branchId?: boolean
+  companyId?: boolean
+  exchangeRate?: boolean
+  incoterms?: boolean
+  deliveryAddressJson?: boolean
+  billingAddressJson?: boolean
+  buyerProfileId?: boolean
+  discountTotal?: boolean
+  approvalRequestId?: boolean
+  quotationId?: boolean
+  versionNumber?: boolean
   createdAt?: boolean
   updatedAt?: boolean
 }
 
-export type PurchaseOrderOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "tenantId" | "documentNumber" | "supplierId" | "warehouseId" | "status" | "orderDate" | "expectedDate" | "currencyCode" | "subtotal" | "taxTotal" | "grandTotal" | "notes" | "paymentTerms" | "approvedByProfileId" | "requisitionId" | "createdByProfileId" | "correlationId" | "createdAt" | "updatedAt", ExtArgs["result"]["purchaseOrder"]>
+export type PurchaseOrderOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "tenantId" | "documentNumber" | "supplierId" | "warehouseId" | "status" | "orderDate" | "expectedDate" | "currencyCode" | "subtotal" | "taxTotal" | "grandTotal" | "notes" | "paymentTerms" | "approvedByProfileId" | "requisitionId" | "createdByProfileId" | "correlationId" | "branchId" | "companyId" | "exchangeRate" | "incoterms" | "deliveryAddressJson" | "billingAddressJson" | "buyerProfileId" | "discountTotal" | "approvalRequestId" | "quotationId" | "versionNumber" | "createdAt" | "updatedAt", ExtArgs["result"]["purchaseOrder"]>
 export type PurchaseOrderInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   tenant?: boolean | Prisma.TenantAccountDefaultArgs<ExtArgs>
   lines?: boolean | Prisma.PurchaseOrder$linesArgs<ExtArgs>
@@ -1403,6 +1860,17 @@ export type $PurchaseOrderPayload<ExtArgs extends runtime.Types.Extensions.Inter
     requisitionId: string | null
     createdByProfileId: string | null
     correlationId: string | null
+    branchId: string | null
+    companyId: string | null
+    exchangeRate: runtime.Decimal
+    incoterms: string | null
+    deliveryAddressJson: runtime.JsonValue | null
+    billingAddressJson: runtime.JsonValue | null
+    buyerProfileId: string | null
+    discountTotal: runtime.Decimal
+    approvalRequestId: string | null
+    quotationId: string | null
+    versionNumber: number
     createdAt: Date
     updatedAt: Date
   }, ExtArgs["result"]["purchaseOrder"]>
@@ -1849,6 +2317,17 @@ export interface PurchaseOrderFieldRefs {
   readonly requisitionId: Prisma.FieldRef<"PurchaseOrder", 'String'>
   readonly createdByProfileId: Prisma.FieldRef<"PurchaseOrder", 'String'>
   readonly correlationId: Prisma.FieldRef<"PurchaseOrder", 'String'>
+  readonly branchId: Prisma.FieldRef<"PurchaseOrder", 'String'>
+  readonly companyId: Prisma.FieldRef<"PurchaseOrder", 'String'>
+  readonly exchangeRate: Prisma.FieldRef<"PurchaseOrder", 'Decimal'>
+  readonly incoterms: Prisma.FieldRef<"PurchaseOrder", 'String'>
+  readonly deliveryAddressJson: Prisma.FieldRef<"PurchaseOrder", 'Json'>
+  readonly billingAddressJson: Prisma.FieldRef<"PurchaseOrder", 'Json'>
+  readonly buyerProfileId: Prisma.FieldRef<"PurchaseOrder", 'String'>
+  readonly discountTotal: Prisma.FieldRef<"PurchaseOrder", 'Decimal'>
+  readonly approvalRequestId: Prisma.FieldRef<"PurchaseOrder", 'String'>
+  readonly quotationId: Prisma.FieldRef<"PurchaseOrder", 'String'>
+  readonly versionNumber: Prisma.FieldRef<"PurchaseOrder", 'Int'>
   readonly createdAt: Prisma.FieldRef<"PurchaseOrder", 'DateTime'>
   readonly updatedAt: Prisma.FieldRef<"PurchaseOrder", 'DateTime'>
 }

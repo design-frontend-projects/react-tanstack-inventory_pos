@@ -168,6 +168,58 @@ export interface RestaurantPromotionAppliedPayload {
   discount: string
 }
 
+// --- Purchase Management (Spec 005) -----------------------------------------
+
+export interface RfqPayload {
+  documentNumber: string
+  supplierCount: number
+}
+
+export interface RfqAwardedPayload {
+  documentNumber: string
+  awardedSupplierId: string
+  awardedQuotationId?: string | null
+}
+
+export interface SupplierQuotationPayload {
+  documentNumber: string
+  supplierId: string
+  grandTotal: string
+}
+
+export interface SupplierInvoicePayload {
+  documentNumber: string
+  supplierId: string
+  grandTotal: string
+  outstandingAmount?: string
+}
+
+export interface SupplierInvoiceMatchedPayload {
+  documentNumber: string
+  matchStatusCode: string
+}
+
+export interface SupplierPaymentPayload {
+  documentNumber: string
+  supplierId: string
+  amount: string
+  allocatedAmount?: string
+}
+
+export interface LandedCostPayload {
+  documentNumber: string
+  totalCharges: string
+  allocationBasis: string
+}
+
+export interface ApprovalDecisionPayload {
+  requestId: string
+  entityType: string
+  entityId: string
+  statusCode: string
+  actorProfileId?: string | null
+}
+
 // Maps every event type to its payload shape. Deferred contexts (dining,
 // delivery, campaigns, tickets, feedback) reserve their event names in
 // specs/003-crm/data-model.md Appendix A and are added here when implemented.
@@ -199,6 +251,15 @@ export interface DomainEventPayloadMap {
   'restaurant_gift_card.issued': RestaurantGiftCardIssuedPayload
   'restaurant_gift_card.redeemed': RestaurantGiftCardRedeemedPayload
   'restaurant_promotion.applied': RestaurantPromotionAppliedPayload
+  'rfq.issued': RfqPayload
+  'rfq.awarded': RfqAwardedPayload
+  'supplier_quotation.submitted': SupplierQuotationPayload
+  'supplier_quotation.approved': SupplierQuotationPayload
+  'supplier_invoice.posted': SupplierInvoicePayload
+  'supplier_invoice.matched': SupplierInvoiceMatchedPayload
+  'supplier_payment.posted': SupplierPaymentPayload
+  'landed_cost.posted': LandedCostPayload
+  'purchase_approval.decided': ApprovalDecisionPayload
 }
 
 export type DomainEventType = keyof DomainEventPayloadMap
@@ -231,6 +292,15 @@ export const DOMAIN_EVENT_TYPES = [
   'restaurant_gift_card.issued',
   'restaurant_gift_card.redeemed',
   'restaurant_promotion.applied',
+  'rfq.issued',
+  'rfq.awarded',
+  'supplier_quotation.submitted',
+  'supplier_quotation.approved',
+  'supplier_invoice.posted',
+  'supplier_invoice.matched',
+  'supplier_payment.posted',
+  'landed_cost.posted',
+  'purchase_approval.decided',
 ] as const satisfies ReadonlyArray<DomainEventType>
 
 export function isDomainEventType(value: string): value is DomainEventType {

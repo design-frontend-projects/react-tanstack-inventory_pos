@@ -1,5 +1,8 @@
 import { describe, expect, it } from 'vitest'
-import { assertTransition, canTransition } from '#/server/inventory/state-machine'
+import {
+  assertTransition,
+  canTransition,
+} from '#/server/inventory/state-machine'
 import {
   isPermissionCode,
   ROLE_PERMISSION_MAP,
@@ -22,15 +25,21 @@ const PURCHASING_PERMISSIONS = [
 
 describe('phase 4/5 document lifecycles', () => {
   it('walks a purchase order through its full lifecycle', () => {
-    expect(() => assertTransition('purchaseOrder', 'draft', 'approved')).not.toThrow()
-    expect(() => assertTransition('purchaseOrder', 'approved', 'confirmed')).not.toThrow()
     expect(() =>
-      assertTransition('purchaseOrder', 'confirmed', 'partially_received')
+      assertTransition('purchaseOrder', 'draft', 'approved'),
     ).not.toThrow()
     expect(() =>
-      assertTransition('purchaseOrder', 'partially_received', 'received')
+      assertTransition('purchaseOrder', 'approved', 'confirmed'),
     ).not.toThrow()
-    expect(() => assertTransition('purchaseOrder', 'received', 'closed')).not.toThrow()
+    expect(() =>
+      assertTransition('purchaseOrder', 'confirmed', 'partially_received'),
+    ).not.toThrow()
+    expect(() =>
+      assertTransition('purchaseOrder', 'partially_received', 'received'),
+    ).not.toThrow()
+    expect(() =>
+      assertTransition('purchaseOrder', 'received', 'closed'),
+    ).not.toThrow()
   })
 
   it('allows single-step posting for receipts, transfers, and returns', () => {
@@ -56,7 +65,30 @@ describe('phase 4/5 RBAC catalog', () => {
     for (const code of PURCHASING_PERMISSIONS) {
       expect(isPermissionCode(code)).toBe(true)
       expect(PERMISSION_LINKS[code]).toBeDefined()
-      expect(PERMISSION_LINKS[code].moduleCode).toBe('inventory')
+      // transfers stay under inventory; purchase codes now belong to the
+      // dedicated `purchase` module (Spec 005).
+      const expectedModule = code.startsWith('purchase.')
+        ? 'purchase'
+        : 'inventory'
+      expect(PERMISSION_LINKS[code].moduleCode).toBe(expectedModule)
+    }
+  })
+
+  it('registers and links the Spec 005 procurement permissions', () => {
+    for (const code of [
+      'purchase.rfq_manage',
+      'purchase.quotation_award',
+      'purchase.invoice_manage',
+      'purchase.invoice_match',
+      'purchase.payment_manage',
+      'purchase.landed_cost_manage',
+      'purchase.debit_note_manage',
+      'purchase.approval_action',
+      'purchase.config_manage',
+    ] as const) {
+      expect(isPermissionCode(code)).toBe(true)
+      expect(PERMISSION_LINKS[code]).toBeDefined()
+      expect(PERMISSION_LINKS[code].moduleCode).toBe('purchase')
     }
   })
 
@@ -69,6 +101,11 @@ describe('phase 4/5 RBAC catalog', () => {
       'purchase.po_approve',
       'purchase.po_receive',
       'purchase.return_manage',
+      'purchase.rfq_manage',
+      'purchase.quotation_award',
+      'purchase.invoice_manage',
+      'purchase.payment_manage',
+      'purchase.landed_cost_manage',
     ] as const) {
       expect(grants).toContain(code)
     }

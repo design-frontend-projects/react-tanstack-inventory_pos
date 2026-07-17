@@ -802,3 +802,163 @@ export type ResVoidReason = Prisma.ResVoidReasonModel
  * 
  */
 export type ResCancelReason = Prisma.ResCancelReasonModel
+/**
+ * Model PodDocumentStatus
+ * 
+ */
+export type PodDocumentStatus = Prisma.PodDocumentStatusModel
+/**
+ * Model PodStatusTransition
+ * 
+ */
+export type PodStatusTransition = Prisma.PodStatusTransitionModel
+/**
+ * Model PodSupplierCategory
+ * 
+ */
+export type PodSupplierCategory = Prisma.PodSupplierCategoryModel
+/**
+ * Model PodReturnReason
+ * 
+ */
+export type PodReturnReason = Prisma.PodReturnReasonModel
+/**
+ * Model PodPaymentMethod
+ * 
+ */
+export type PodPaymentMethod = Prisma.PodPaymentMethodModel
+/**
+ * Model PodLandedCostType
+ * 
+ */
+export type PodLandedCostType = Prisma.PodLandedCostTypeModel
+/**
+ * Model PodIncoterm
+ * 
+ */
+export type PodIncoterm = Prisma.PodIncotermModel
+/**
+ * Model PodDebitNoteReason
+ * 
+ */
+export type PodDebitNoteReason = Prisma.PodDebitNoteReasonModel
+/**
+ * Model PodSupplierContact
+ * 
+ */
+export type PodSupplierContact = Prisma.PodSupplierContactModel
+/**
+ * Model PodSupplierAddress
+ * 
+ */
+export type PodSupplierAddress = Prisma.PodSupplierAddressModel
+/**
+ * Model PodSupplierBankAccount
+ * 
+ */
+export type PodSupplierBankAccount = Prisma.PodSupplierBankAccountModel
+/**
+ * Model PodRfq
+ * 
+ */
+export type PodRfq = Prisma.PodRfqModel
+/**
+ * Model PodRfqItem
+ * 
+ */
+export type PodRfqItem = Prisma.PodRfqItemModel
+/**
+ * Model PodRfqSupplier
+ * 
+ */
+export type PodRfqSupplier = Prisma.PodRfqSupplierModel
+/**
+ * Model PodSupplierQuotation
+ * 
+ */
+export type PodSupplierQuotation = Prisma.PodSupplierQuotationModel
+/**
+ * Model PodSupplierQuotationItem
+ * 
+ */
+export type PodSupplierQuotationItem = Prisma.PodSupplierQuotationItemModel
+/**
+ * Model PodApprovalWorkflow
+ * 
+ */
+export type PodApprovalWorkflow = Prisma.PodApprovalWorkflowModel
+/**
+ * Model PodApprovalWorkflowStep
+ * 
+ */
+export type PodApprovalWorkflowStep = Prisma.PodApprovalWorkflowStepModel
+/**
+ * Model PodApprovalRequest
+ * 
+ */
+export type PodApprovalRequest = Prisma.PodApprovalRequestModel
+/**
+ * Model PodApprovalAction
+ * 
+ */
+export type PodApprovalAction = Prisma.PodApprovalActionModel
+/**
+ * Model PodSupplierInvoice
+ * 
+ */
+export type PodSupplierInvoice = Prisma.PodSupplierInvoiceModel
+/**
+ * Model PodSupplierInvoiceItem
+ * 
+ */
+export type PodSupplierInvoiceItem = Prisma.PodSupplierInvoiceItemModel
+/**
+ * Model PodSupplierInvoiceMatch
+ * 
+ */
+export type PodSupplierInvoiceMatch = Prisma.PodSupplierInvoiceMatchModel
+/**
+ * Model PodDebitNoteLine
+ * 
+ */
+export type PodDebitNoteLine = Prisma.PodDebitNoteLineModel
+/**
+ * Model PodLandedCostVoucher
+ * 
+ */
+export type PodLandedCostVoucher = Prisma.PodLandedCostVoucherModel
+/**
+ * Model PodLandedCostCharge
+ * 
+ */
+export type PodLandedCostCharge = Prisma.PodLandedCostChargeModel
+/**
+ * Model PodLandedCostAllocation
+ * 
+ */
+export type PodLandedCostAllocation = Prisma.PodLandedCostAllocationModel
+/**
+ * Model PodSupplierPayment
+ * 
+ */
+export type PodSupplierPayment = Prisma.PodSupplierPaymentModel
+/**
+ * Model PodSupplierPaymentAllocation
+ * 
+ */
+export type PodSupplierPaymentAllocation = Prisma.PodSupplierPaymentAllocationModel
+/**
+ * Model PodAttachment
+ * 
+ */
+export type PodAttachment = Prisma.PodAttachmentModel
+/**
+ * Model PodCustomFieldDefinition
+ * 
+ */
+export type PodCustomFieldDefinition = Prisma.PodCustomFieldDefinitionModel
+/**
+ * Model PodCustomFieldValue
+ * 
+ */
+export type PodCustomFieldValue = Prisma.PodCustomFieldValueModel

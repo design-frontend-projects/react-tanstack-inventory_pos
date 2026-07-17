@@ -34,6 +34,8 @@ export type GoodsReceiptMinAggregateOutputType = {
   status: $Enums.ReceiptStatus | null
   receiptDate: Date | null
   supplierDeliveryNote: string | null
+  inspectionStatusCode: string | null
+  branchId: string | null
   isPosted: boolean | null
   postedAt: Date | null
   postedByProfileId: string | null
@@ -53,6 +55,8 @@ export type GoodsReceiptMaxAggregateOutputType = {
   status: $Enums.ReceiptStatus | null
   receiptDate: Date | null
   supplierDeliveryNote: string | null
+  inspectionStatusCode: string | null
+  branchId: string | null
   isPosted: boolean | null
   postedAt: Date | null
   postedByProfileId: string | null
@@ -72,6 +76,8 @@ export type GoodsReceiptCountAggregateOutputType = {
   status: number
   receiptDate: number
   supplierDeliveryNote: number
+  inspectionStatusCode: number
+  branchId: number
   isPosted: number
   postedAt: number
   postedByProfileId: number
@@ -93,6 +99,8 @@ export type GoodsReceiptMinAggregateInputType = {
   status?: true
   receiptDate?: true
   supplierDeliveryNote?: true
+  inspectionStatusCode?: true
+  branchId?: true
   isPosted?: true
   postedAt?: true
   postedByProfileId?: true
@@ -112,6 +120,8 @@ export type GoodsReceiptMaxAggregateInputType = {
   status?: true
   receiptDate?: true
   supplierDeliveryNote?: true
+  inspectionStatusCode?: true
+  branchId?: true
   isPosted?: true
   postedAt?: true
   postedByProfileId?: true
@@ -131,6 +141,8 @@ export type GoodsReceiptCountAggregateInputType = {
   status?: true
   receiptDate?: true
   supplierDeliveryNote?: true
+  inspectionStatusCode?: true
+  branchId?: true
   isPosted?: true
   postedAt?: true
   postedByProfileId?: true
@@ -223,6 +235,8 @@ export type GoodsReceiptGroupByOutputType = {
   status: $Enums.ReceiptStatus
   receiptDate: Date
   supplierDeliveryNote: string | null
+  inspectionStatusCode: string | null
+  branchId: string | null
   isPosted: boolean
   postedAt: Date | null
   postedByProfileId: string | null
@@ -263,6 +277,8 @@ export type GoodsReceiptWhereInput = {
   status?: Prisma.EnumReceiptStatusFilter<"GoodsReceipt"> | $Enums.ReceiptStatus
   receiptDate?: Prisma.DateTimeFilter<"GoodsReceipt"> | Date | string
   supplierDeliveryNote?: Prisma.StringNullableFilter<"GoodsReceipt"> | string | null
+  inspectionStatusCode?: Prisma.StringNullableFilter<"GoodsReceipt"> | string | null
+  branchId?: Prisma.UuidNullableFilter<"GoodsReceipt"> | string | null
   isPosted?: Prisma.BoolFilter<"GoodsReceipt"> | boolean
   postedAt?: Prisma.DateTimeNullableFilter<"GoodsReceipt"> | Date | string | null
   postedByProfileId?: Prisma.UuidNullableFilter<"GoodsReceipt"> | string | null
@@ -285,6 +301,8 @@ export type GoodsReceiptOrderByWithRelationInput = {
   status?: Prisma.SortOrder
   receiptDate?: Prisma.SortOrder
   supplierDeliveryNote?: Prisma.SortOrderInput | Prisma.SortOrder
+  inspectionStatusCode?: Prisma.SortOrderInput | Prisma.SortOrder
+  branchId?: Prisma.SortOrderInput | Prisma.SortOrder
   isPosted?: Prisma.SortOrder
   postedAt?: Prisma.SortOrderInput | Prisma.SortOrder
   postedByProfileId?: Prisma.SortOrderInput | Prisma.SortOrder
@@ -311,6 +329,8 @@ export type GoodsReceiptWhereUniqueInput = Prisma.AtLeast<{
   status?: Prisma.EnumReceiptStatusFilter<"GoodsReceipt"> | $Enums.ReceiptStatus
   receiptDate?: Prisma.DateTimeFilter<"GoodsReceipt"> | Date | string
   supplierDeliveryNote?: Prisma.StringNullableFilter<"GoodsReceipt"> | string | null
+  inspectionStatusCode?: Prisma.StringNullableFilter<"GoodsReceipt"> | string | null
+  branchId?: Prisma.UuidNullableFilter<"GoodsReceipt"> | string | null
   isPosted?: Prisma.BoolFilter<"GoodsReceipt"> | boolean
   postedAt?: Prisma.DateTimeNullableFilter<"GoodsReceipt"> | Date | string | null
   postedByProfileId?: Prisma.UuidNullableFilter<"GoodsReceipt"> | string | null
@@ -333,6 +353,8 @@ export type GoodsReceiptOrderByWithAggregationInput = {
   status?: Prisma.SortOrder
   receiptDate?: Prisma.SortOrder
   supplierDeliveryNote?: Prisma.SortOrderInput | Prisma.SortOrder
+  inspectionStatusCode?: Prisma.SortOrderInput | Prisma.SortOrder
+  branchId?: Prisma.SortOrderInput | Prisma.SortOrder
   isPosted?: Prisma.SortOrder
   postedAt?: Prisma.SortOrderInput | Prisma.SortOrder
   postedByProfileId?: Prisma.SortOrderInput | Prisma.SortOrder
@@ -358,6 +380,8 @@ export type GoodsReceiptScalarWhereWithAggregatesInput = {
   status?: Prisma.EnumReceiptStatusWithAggregatesFilter<"GoodsReceipt"> | $Enums.ReceiptStatus
   receiptDate?: Prisma.DateTimeWithAggregatesFilter<"GoodsReceipt"> | Date | string
   supplierDeliveryNote?: Prisma.StringNullableWithAggregatesFilter<"GoodsReceipt"> | string | null
+  inspectionStatusCode?: Prisma.StringNullableWithAggregatesFilter<"GoodsReceipt"> | string | null
+  branchId?: Prisma.UuidNullableWithAggregatesFilter<"GoodsReceipt"> | string | null
   isPosted?: Prisma.BoolWithAggregatesFilter<"GoodsReceipt"> | boolean
   postedAt?: Prisma.DateTimeNullableWithAggregatesFilter<"GoodsReceipt"> | Date | string | null
   postedByProfileId?: Prisma.UuidNullableWithAggregatesFilter<"GoodsReceipt"> | string | null
@@ -375,6 +399,8 @@ export type GoodsReceiptCreateInput = {
   status?: $Enums.ReceiptStatus
   receiptDate?: Date | string
   supplierDeliveryNote?: string | null
+  inspectionStatusCode?: string | null
+  branchId?: string | null
   isPosted?: boolean
   postedAt?: Date | string | null
   postedByProfileId?: string | null
@@ -397,6 +423,8 @@ export type GoodsReceiptUncheckedCreateInput = {
   status?: $Enums.ReceiptStatus
   receiptDate?: Date | string
   supplierDeliveryNote?: string | null
+  inspectionStatusCode?: string | null
+  branchId?: string | null
   isPosted?: boolean
   postedAt?: Date | string | null
   postedByProfileId?: string | null
@@ -415,6 +443,8 @@ export type GoodsReceiptUpdateInput = {
   status?: Prisma.EnumReceiptStatusFieldUpdateOperationsInput | $Enums.ReceiptStatus
   receiptDate?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   supplierDeliveryNote?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  inspectionStatusCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  branchId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   isPosted?: Prisma.BoolFieldUpdateOperationsInput | boolean
   postedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   postedByProfileId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -437,6 +467,8 @@ export type GoodsReceiptUncheckedUpdateInput = {
   status?: Prisma.EnumReceiptStatusFieldUpdateOperationsInput | $Enums.ReceiptStatus
   receiptDate?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   supplierDeliveryNote?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  inspectionStatusCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  branchId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   isPosted?: Prisma.BoolFieldUpdateOperationsInput | boolean
   postedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   postedByProfileId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -457,6 +489,8 @@ export type GoodsReceiptCreateManyInput = {
   status?: $Enums.ReceiptStatus
   receiptDate?: Date | string
   supplierDeliveryNote?: string | null
+  inspectionStatusCode?: string | null
+  branchId?: string | null
   isPosted?: boolean
   postedAt?: Date | string | null
   postedByProfileId?: string | null
@@ -474,6 +508,8 @@ export type GoodsReceiptUpdateManyMutationInput = {
   status?: Prisma.EnumReceiptStatusFieldUpdateOperationsInput | $Enums.ReceiptStatus
   receiptDate?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   supplierDeliveryNote?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  inspectionStatusCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  branchId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   isPosted?: Prisma.BoolFieldUpdateOperationsInput | boolean
   postedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   postedByProfileId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -493,6 +529,8 @@ export type GoodsReceiptUncheckedUpdateManyInput = {
   status?: Prisma.EnumReceiptStatusFieldUpdateOperationsInput | $Enums.ReceiptStatus
   receiptDate?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   supplierDeliveryNote?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  inspectionStatusCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  branchId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   isPosted?: Prisma.BoolFieldUpdateOperationsInput | boolean
   postedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   postedByProfileId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -527,6 +565,8 @@ export type GoodsReceiptCountOrderByAggregateInput = {
   status?: Prisma.SortOrder
   receiptDate?: Prisma.SortOrder
   supplierDeliveryNote?: Prisma.SortOrder
+  inspectionStatusCode?: Prisma.SortOrder
+  branchId?: Prisma.SortOrder
   isPosted?: Prisma.SortOrder
   postedAt?: Prisma.SortOrder
   postedByProfileId?: Prisma.SortOrder
@@ -546,6 +586,8 @@ export type GoodsReceiptMaxOrderByAggregateInput = {
   status?: Prisma.SortOrder
   receiptDate?: Prisma.SortOrder
   supplierDeliveryNote?: Prisma.SortOrder
+  inspectionStatusCode?: Prisma.SortOrder
+  branchId?: Prisma.SortOrder
   isPosted?: Prisma.SortOrder
   postedAt?: Prisma.SortOrder
   postedByProfileId?: Prisma.SortOrder
@@ -565,6 +607,8 @@ export type GoodsReceiptMinOrderByAggregateInput = {
   status?: Prisma.SortOrder
   receiptDate?: Prisma.SortOrder
   supplierDeliveryNote?: Prisma.SortOrder
+  inspectionStatusCode?: Prisma.SortOrder
+  branchId?: Prisma.SortOrder
   isPosted?: Prisma.SortOrder
   postedAt?: Prisma.SortOrder
   postedByProfileId?: Prisma.SortOrder
@@ -689,6 +733,8 @@ export type GoodsReceiptCreateWithoutTenantInput = {
   status?: $Enums.ReceiptStatus
   receiptDate?: Date | string
   supplierDeliveryNote?: string | null
+  inspectionStatusCode?: string | null
+  branchId?: string | null
   isPosted?: boolean
   postedAt?: Date | string | null
   postedByProfileId?: string | null
@@ -709,6 +755,8 @@ export type GoodsReceiptUncheckedCreateWithoutTenantInput = {
   status?: $Enums.ReceiptStatus
   receiptDate?: Date | string
   supplierDeliveryNote?: string | null
+  inspectionStatusCode?: string | null
+  branchId?: string | null
   isPosted?: boolean
   postedAt?: Date | string | null
   postedByProfileId?: string | null
@@ -758,6 +806,8 @@ export type GoodsReceiptScalarWhereInput = {
   status?: Prisma.EnumReceiptStatusFilter<"GoodsReceipt"> | $Enums.ReceiptStatus
   receiptDate?: Prisma.DateTimeFilter<"GoodsReceipt"> | Date | string
   supplierDeliveryNote?: Prisma.StringNullableFilter<"GoodsReceipt"> | string | null
+  inspectionStatusCode?: Prisma.StringNullableFilter<"GoodsReceipt"> | string | null
+  branchId?: Prisma.UuidNullableFilter<"GoodsReceipt"> | string | null
   isPosted?: Prisma.BoolFilter<"GoodsReceipt"> | boolean
   postedAt?: Prisma.DateTimeNullableFilter<"GoodsReceipt"> | Date | string | null
   postedByProfileId?: Prisma.UuidNullableFilter<"GoodsReceipt"> | string | null
@@ -775,6 +825,8 @@ export type GoodsReceiptCreateWithoutPurchaseOrderInput = {
   status?: $Enums.ReceiptStatus
   receiptDate?: Date | string
   supplierDeliveryNote?: string | null
+  inspectionStatusCode?: string | null
+  branchId?: string | null
   isPosted?: boolean
   postedAt?: Date | string | null
   postedByProfileId?: string | null
@@ -795,6 +847,8 @@ export type GoodsReceiptUncheckedCreateWithoutPurchaseOrderInput = {
   status?: $Enums.ReceiptStatus
   receiptDate?: Date | string
   supplierDeliveryNote?: string | null
+  inspectionStatusCode?: string | null
+  branchId?: string | null
   isPosted?: boolean
   postedAt?: Date | string | null
   postedByProfileId?: string | null
@@ -839,6 +893,8 @@ export type GoodsReceiptCreateWithoutLinesInput = {
   status?: $Enums.ReceiptStatus
   receiptDate?: Date | string
   supplierDeliveryNote?: string | null
+  inspectionStatusCode?: string | null
+  branchId?: string | null
   isPosted?: boolean
   postedAt?: Date | string | null
   postedByProfileId?: string | null
@@ -860,6 +916,8 @@ export type GoodsReceiptUncheckedCreateWithoutLinesInput = {
   status?: $Enums.ReceiptStatus
   receiptDate?: Date | string
   supplierDeliveryNote?: string | null
+  inspectionStatusCode?: string | null
+  branchId?: string | null
   isPosted?: boolean
   postedAt?: Date | string | null
   postedByProfileId?: string | null
@@ -893,6 +951,8 @@ export type GoodsReceiptUpdateWithoutLinesInput = {
   status?: Prisma.EnumReceiptStatusFieldUpdateOperationsInput | $Enums.ReceiptStatus
   receiptDate?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   supplierDeliveryNote?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  inspectionStatusCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  branchId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   isPosted?: Prisma.BoolFieldUpdateOperationsInput | boolean
   postedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   postedByProfileId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -914,6 +974,8 @@ export type GoodsReceiptUncheckedUpdateWithoutLinesInput = {
   status?: Prisma.EnumReceiptStatusFieldUpdateOperationsInput | $Enums.ReceiptStatus
   receiptDate?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   supplierDeliveryNote?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  inspectionStatusCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  branchId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   isPosted?: Prisma.BoolFieldUpdateOperationsInput | boolean
   postedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   postedByProfileId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -932,6 +994,8 @@ export type GoodsReceiptCreateManyTenantInput = {
   status?: $Enums.ReceiptStatus
   receiptDate?: Date | string
   supplierDeliveryNote?: string | null
+  inspectionStatusCode?: string | null
+  branchId?: string | null
   isPosted?: boolean
   postedAt?: Date | string | null
   postedByProfileId?: string | null
@@ -949,6 +1013,8 @@ export type GoodsReceiptUpdateWithoutTenantInput = {
   status?: Prisma.EnumReceiptStatusFieldUpdateOperationsInput | $Enums.ReceiptStatus
   receiptDate?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   supplierDeliveryNote?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  inspectionStatusCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  branchId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   isPosted?: Prisma.BoolFieldUpdateOperationsInput | boolean
   postedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   postedByProfileId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -969,6 +1035,8 @@ export type GoodsReceiptUncheckedUpdateWithoutTenantInput = {
   status?: Prisma.EnumReceiptStatusFieldUpdateOperationsInput | $Enums.ReceiptStatus
   receiptDate?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   supplierDeliveryNote?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  inspectionStatusCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  branchId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   isPosted?: Prisma.BoolFieldUpdateOperationsInput | boolean
   postedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   postedByProfileId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -988,6 +1056,8 @@ export type GoodsReceiptUncheckedUpdateManyWithoutTenantInput = {
   status?: Prisma.EnumReceiptStatusFieldUpdateOperationsInput | $Enums.ReceiptStatus
   receiptDate?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   supplierDeliveryNote?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  inspectionStatusCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  branchId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   isPosted?: Prisma.BoolFieldUpdateOperationsInput | boolean
   postedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   postedByProfileId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -1006,6 +1076,8 @@ export type GoodsReceiptCreateManyPurchaseOrderInput = {
   status?: $Enums.ReceiptStatus
   receiptDate?: Date | string
   supplierDeliveryNote?: string | null
+  inspectionStatusCode?: string | null
+  branchId?: string | null
   isPosted?: boolean
   postedAt?: Date | string | null
   postedByProfileId?: string | null
@@ -1023,6 +1095,8 @@ export type GoodsReceiptUpdateWithoutPurchaseOrderInput = {
   status?: Prisma.EnumReceiptStatusFieldUpdateOperationsInput | $Enums.ReceiptStatus
   receiptDate?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   supplierDeliveryNote?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  inspectionStatusCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  branchId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   isPosted?: Prisma.BoolFieldUpdateOperationsInput | boolean
   postedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   postedByProfileId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -1043,6 +1117,8 @@ export type GoodsReceiptUncheckedUpdateWithoutPurchaseOrderInput = {
   status?: Prisma.EnumReceiptStatusFieldUpdateOperationsInput | $Enums.ReceiptStatus
   receiptDate?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   supplierDeliveryNote?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  inspectionStatusCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  branchId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   isPosted?: Prisma.BoolFieldUpdateOperationsInput | boolean
   postedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   postedByProfileId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -1062,6 +1138,8 @@ export type GoodsReceiptUncheckedUpdateManyWithoutPurchaseOrderInput = {
   status?: Prisma.EnumReceiptStatusFieldUpdateOperationsInput | $Enums.ReceiptStatus
   receiptDate?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   supplierDeliveryNote?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  inspectionStatusCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  branchId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   isPosted?: Prisma.BoolFieldUpdateOperationsInput | boolean
   postedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   postedByProfileId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -1112,6 +1190,8 @@ export type GoodsReceiptSelect<ExtArgs extends runtime.Types.Extensions.Internal
   status?: boolean
   receiptDate?: boolean
   supplierDeliveryNote?: boolean
+  inspectionStatusCode?: boolean
+  branchId?: boolean
   isPosted?: boolean
   postedAt?: boolean
   postedByProfileId?: boolean
@@ -1135,6 +1215,8 @@ export type GoodsReceiptSelectCreateManyAndReturn<ExtArgs extends runtime.Types.
   status?: boolean
   receiptDate?: boolean
   supplierDeliveryNote?: boolean
+  inspectionStatusCode?: boolean
+  branchId?: boolean
   isPosted?: boolean
   postedAt?: boolean
   postedByProfileId?: boolean
@@ -1156,6 +1238,8 @@ export type GoodsReceiptSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.
   status?: boolean
   receiptDate?: boolean
   supplierDeliveryNote?: boolean
+  inspectionStatusCode?: boolean
+  branchId?: boolean
   isPosted?: boolean
   postedAt?: boolean
   postedByProfileId?: boolean
@@ -1177,6 +1261,8 @@ export type GoodsReceiptSelectScalar = {
   status?: boolean
   receiptDate?: boolean
   supplierDeliveryNote?: boolean
+  inspectionStatusCode?: boolean
+  branchId?: boolean
   isPosted?: boolean
   postedAt?: boolean
   postedByProfileId?: boolean
@@ -1186,7 +1272,7 @@ export type GoodsReceiptSelectScalar = {
   updatedAt?: boolean
 }
 
-export type GoodsReceiptOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "tenantId" | "documentNumber" | "purchaseOrderId" | "supplierId" | "warehouseId" | "status" | "receiptDate" | "supplierDeliveryNote" | "isPosted" | "postedAt" | "postedByProfileId" | "createdByProfileId" | "correlationId" | "createdAt" | "updatedAt", ExtArgs["result"]["goodsReceipt"]>
+export type GoodsReceiptOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "tenantId" | "documentNumber" | "purchaseOrderId" | "supplierId" | "warehouseId" | "status" | "receiptDate" | "supplierDeliveryNote" | "inspectionStatusCode" | "branchId" | "isPosted" | "postedAt" | "postedByProfileId" | "createdByProfileId" | "correlationId" | "createdAt" | "updatedAt", ExtArgs["result"]["goodsReceipt"]>
 export type GoodsReceiptInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   tenant?: boolean | Prisma.TenantAccountDefaultArgs<ExtArgs>
   purchaseOrder?: boolean | Prisma.GoodsReceipt$purchaseOrderArgs<ExtArgs>
@@ -1219,6 +1305,8 @@ export type $GoodsReceiptPayload<ExtArgs extends runtime.Types.Extensions.Intern
     status: $Enums.ReceiptStatus
     receiptDate: Date
     supplierDeliveryNote: string | null
+    inspectionStatusCode: string | null
+    branchId: string | null
     isPosted: boolean
     postedAt: Date | null
     postedByProfileId: string | null
@@ -1661,6 +1749,8 @@ export interface GoodsReceiptFieldRefs {
   readonly status: Prisma.FieldRef<"GoodsReceipt", 'ReceiptStatus'>
   readonly receiptDate: Prisma.FieldRef<"GoodsReceipt", 'DateTime'>
   readonly supplierDeliveryNote: Prisma.FieldRef<"GoodsReceipt", 'String'>
+  readonly inspectionStatusCode: Prisma.FieldRef<"GoodsReceipt", 'String'>
+  readonly branchId: Prisma.FieldRef<"GoodsReceipt", 'String'>
   readonly isPosted: Prisma.FieldRef<"GoodsReceipt", 'Boolean'>
   readonly postedAt: Prisma.FieldRef<"GoodsReceipt", 'DateTime'>
   readonly postedByProfileId: Prisma.FieldRef<"GoodsReceipt", 'String'>

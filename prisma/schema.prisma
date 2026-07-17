@@ -298,6 +298,38 @@ model TenantAccount {
   resOrderEvents           ResOrderEvent[]
   resVoidReasons           ResVoidReason[]
   resCancelReasons         ResCancelReason[]
+  podDocumentStatuses      PodDocumentStatus[]
+  podStatusTransitions     PodStatusTransition[]
+  podSupplierCategories    PodSupplierCategory[]
+  podReturnReasons         PodReturnReason[]
+  podPaymentMethods        PodPaymentMethod[]
+  podLandedCostTypes       PodLandedCostType[]
+  podIncoterms             PodIncoterm[]
+  podDebitNoteReasons      PodDebitNoteReason[]
+  podSupplierContacts      PodSupplierContact[]
+  podSupplierAddresses     PodSupplierAddress[]
+  podSupplierBankAccounts  PodSupplierBankAccount[]
+  podRfqs                  PodRfq[]
+  podRfqItems              PodRfqItem[]
+  podRfqSuppliers          PodRfqSupplier[]
+  podSupplierQuotations    PodSupplierQuotation[]
+  podSupplierQuotationItems PodSupplierQuotationItem[]
+  podApprovalWorkflows     PodApprovalWorkflow[]
+  podApprovalWorkflowSteps PodApprovalWorkflowStep[]
+  podApprovalRequests      PodApprovalRequest[]
+  podApprovalActions       PodApprovalAction[]
+  podSupplierInvoices      PodSupplierInvoice[]
+  podSupplierInvoiceItems  PodSupplierInvoiceItem[]
+  podSupplierInvoiceMatches PodSupplierInvoiceMatch[]
+  podDebitNoteLines        PodDebitNoteLine[]
+  podLandedCostVouchers    PodLandedCostVoucher[]
+  podLandedCostCharges     PodLandedCostCharge[]
+  podLandedCostAllocations PodLandedCostAllocation[]
+  podSupplierPayments      PodSupplierPayment[]
+  podSupplierPaymentAllocations PodSupplierPaymentAllocation[]
+  podAttachments           PodAttachment[]
+  podCustomFieldDefinitions PodCustomFieldDefinition[]
+  podCustomFieldValues     PodCustomFieldValue[]
 
   @@map("tenant_accounts")
 }
@@ -663,8 +695,13 @@ model ScreenAction {
 
 enum DocumentType {
   PURCHASE_REQUISITION @map("purchase_requisition")
+  RFQ                  @map("rfq")
+  SUPPLIER_QUOTATION   @map("supplier_quotation")
   PURCHASE_ORDER       @map("purchase_order")
   GOODS_RECEIPT        @map("goods_receipt")
+  SUPPLIER_INVOICE     @map("supplier_invoice")
+  SUPPLIER_PAYMENT     @map("supplier_payment")
+  LANDED_COST          @map("landed_cost")
   PURCHASE_RETURN      @map("purchase_return")
   DEBIT_NOTE           @map("debit_note")
   SALES_ORDER          @map("sales_order")
@@ -1177,6 +1214,20 @@ model Supplier {
   paymentTerms     String?           @map("payment_terms")
   currencyCode     String            @default("USD") @map("currency_code")
   creditLimit      Decimal?          @map("credit_limit") @db.Decimal(19, 4)
+  // Spec 005 procurement extensions (non-breaking, nullable/defaulted)
+  categoryId       String?           @map("category_id") @db.Uuid
+  statusCode       String            @default("active") @map("status_code")
+  rating           Decimal?          @db.Decimal(3, 2)
+  leadTimeDays     Int?              @map("lead_time_days")
+  isPreferred      Boolean           @default(false) @map("is_preferred")
+  currentBalance   Decimal           @default(0) @map("current_balance") @db.Decimal(19, 4)
+  tags             Json?
+  companyId        String?           @map("company_id") @db.Uuid
+  branchId         String?           @map("branch_id") @db.Uuid
+  versionNumber    Int               @default(1) @map("version_number")
+  createdBy        String?           @map("created_by") @db.Uuid
+  updatedBy        String?           @map("updated_by") @db.Uuid
+  deletedBy        String?           @map("deleted_by") @db.Uuid
   isActive         Boolean           @default(true) @map("is_active")
   createdAt        DateTime          @default(now()) @map("created_at")
   updatedAt        DateTime          @updatedAt @map("updated_at")
@@ -1186,6 +1237,7 @@ model Supplier {
 
   @@unique([tenantId, code], map: "suppliers_tenant_code_unique")
   @@index([tenantId, isActive], map: "suppliers_tenant_active_idx")
+  @@index([tenantId, categoryId], map: "suppliers_tenant_category_idx")
   @@map("suppliers")
 }
 
@@ -1750,6 +1802,14 @@ model PurchaseRequisition {
   requestedByProfileId String?                   @map("requested_by_profile_id") @db.Uuid
   approvedByProfileId  String?                   @map("approved_by_profile_id") @db.Uuid
   convertedToPoId      String?                   @map("converted_to_po_id") @db.Uuid
+  // Spec 005 procurement extensions
+  priority             String?
+  requiredDate         DateTime?                 @map("required_date")
+  department           String?
+  sourceType           String?                   @map("source_type")
+  branchId             String?                   @map("branch_id") @db.Uuid
+  companyId            String?                   @map("company_id") @db.Uuid
+  approvalRequestId    String?                   @map("approval_request_id") @db.Uuid
   createdAt            DateTime                  @default(now()) @map("created_at")
   updatedAt            DateTime                  @updatedAt @map("updated_at")
   tenant               TenantAccount             @relation(fields: [tenantId], references: [id], onDelete: Cascade, onUpdate: Cascade)
@@ -1797,6 +1857,18 @@ model PurchaseOrder {
   requisitionId       String?             @map("requisition_id") @db.Uuid
   createdByProfileId  String?             @map("created_by_profile_id") @db.Uuid
   correlationId       String?             @map("correlation_id") @db.Uuid
+  // Spec 005 procurement extensions
+  branchId            String?             @map("branch_id") @db.Uuid
+  companyId           String?             @map("company_id") @db.Uuid
+  exchangeRate        Decimal             @default(1) @map("exchange_rate") @db.Decimal(19, 8)
+  incoterms           String?
+  deliveryAddressJson Json?               @map("delivery_address_json")
+  billingAddressJson  Json?               @map("billing_address_json")
+  buyerProfileId      String?             @map("buyer_profile_id") @db.Uuid
+  discountTotal       Decimal             @default(0) @map("discount_total") @db.Decimal(19, 4)
+  approvalRequestId   String?             @map("approval_request_id") @db.Uuid
+  quotationId         String?             @map("quotation_id") @db.Uuid
+  versionNumber       Int                 @default(1) @map("version_number")
   createdAt           DateTime            @default(now()) @map("created_at")
   updatedAt           DateTime            @updatedAt @map("updated_at")
   tenant              TenantAccount       @relation(fields: [tenantId], references: [id], onDelete: Cascade, onUpdate: Cascade)
@@ -1824,6 +1896,16 @@ model PurchaseOrderLine {
   taxAmount       Decimal       @default(0) @map("tax_amount") @db.Decimal(19, 4)
   lineTotal       Decimal       @map("line_total") @db.Decimal(19, 4)
   expectedDate    DateTime?     @map("expected_date")
+  // Spec 005 procurement extensions
+  rejectedQty     Decimal       @default(0) @map("rejected_qty") @db.Decimal(18, 4)
+  returnedQty     Decimal       @default(0) @map("returned_qty") @db.Decimal(18, 4)
+  cancelledQty    Decimal       @default(0) @map("cancelled_qty") @db.Decimal(18, 4)
+  discountPct     Decimal?      @map("discount_pct") @db.Decimal(9, 6)
+  discountAmount  Decimal       @default(0) @map("discount_amount") @db.Decimal(19, 4)
+  netAmount       Decimal       @default(0) @map("net_amount") @db.Decimal(19, 4)
+  grossAmount     Decimal       @default(0) @map("gross_amount") @db.Decimal(19, 4)
+  // remaining_qty is a GENERATED STORED column (defined in migration); read-only
+  remainingQty    Decimal?      @map("remaining_qty") @db.Decimal(18, 4)
   createdAt       DateTime      @default(now()) @map("created_at")
   tenant          TenantAccount @relation(fields: [tenantId], references: [id], onDelete: Cascade, onUpdate: Cascade)
   purchaseOrder   PurchaseOrder @relation(fields: [purchaseOrderId], references: [id], onDelete: Cascade, onUpdate: Cascade)
@@ -1843,6 +1925,8 @@ model GoodsReceipt {
   status               ReceiptStatus      @default(DRAFT)
   receiptDate          DateTime           @default(now()) @map("receipt_date")
   supplierDeliveryNote String?            @map("supplier_delivery_note")
+  inspectionStatusCode String?            @map("inspection_status_code")
+  branchId             String?            @map("branch_id") @db.Uuid
   isPosted             Boolean            @default(false) @map("is_posted")
   postedAt             DateTime?          @map("posted_at")
   postedByProfileId    String?            @map("posted_by_profile_id") @db.Uuid
@@ -4588,4 +4672,768 @@ model ResCancelReason {
 
   @@unique([tenantId, branchId, code], map: "res_cancel_reasons_tenant_branch_code_unique")
   @@map("res_cancel_reasons")
+}
+
+// ============================================================================
+// Purchase Management — Spec 005 (enterprise procurement layer).
+//
+// This section EXTENDS the existing Spec-002 purchasing spine (suppliers,
+// purchase_requisitions, purchase_orders, goods_receipts, purchase_returns,
+// financial_notes) rather than replacing it. New capabilities land as pod_*
+// tables: supplier CRM satellites, RFQ, supplier quotations, a generic approval
+// engine, supplier invoices + 3-way match (AP subledger), landed cost, supplier
+// payments, attachments, custom fields, and admin-customizable status/lookup
+// tables.
+//
+// Conventions (match the rest of the schema): UUID PKs; tenant scoped via a real
+// TenantAccount relation with cascade; cross-aggregate/lookup references are bare
+// scalar @db.Uuid columns with app-enforced integrity (no @relation); header->line
+// links use real relations with cascade. Statuses are stored as `statusCode`
+// strings validated against pod_document_statuses / pod_status_transitions (the
+// lookup-table analogue of the enum state machine used by the Spec-002 docs, which
+// keep their native enums). Money: Decimal(19,4); unit cost/price: Decimal(19,6);
+// quantity: Decimal(18,4); tax rate: Decimal(9,6); exchange rate: Decimal(19,8).
+// company_id defaults to the tenant; branch_id is an optional operational unit
+// (warehouse today) — both nullable for future multi-company/branch.
+// ============================================================================
+
+// --- Status & classification lookup tables (admin-customizable) --------------
+
+model PodDocumentStatus {
+  id         String         @id @default(uuid()) @db.Uuid
+  tenantId   String?        @map("tenant_id") @db.Uuid
+  entityType String         @map("entity_type")
+  code       String
+  name       String
+  sortOrder  Int            @default(0) @map("sort_order")
+  isInitial  Boolean        @default(false) @map("is_initial")
+  isTerminal Boolean        @default(false) @map("is_terminal")
+  color      String?
+  isActive   Boolean        @default(true) @map("is_active")
+  createdAt  DateTime       @default(now()) @map("created_at")
+  updatedAt  DateTime       @updatedAt @map("updated_at")
+  tenant     TenantAccount? @relation(fields: [tenantId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+
+  @@unique([tenantId, entityType, code], map: "pod_document_statuses_scope_unique")
+  @@index([tenantId, entityType], map: "pod_document_statuses_tenant_entity_idx")
+  @@map("pod_document_statuses")
+}
+
+model PodStatusTransition {
+  id                 String         @id @default(uuid()) @db.Uuid
+  tenantId           String?        @map("tenant_id") @db.Uuid
+  entityType         String         @map("entity_type")
+  fromCode           String         @map("from_code")
+  toCode             String         @map("to_code")
+  requiresPermission String?        @map("requires_permission")
+  createdAt          DateTime       @default(now()) @map("created_at")
+  tenant             TenantAccount? @relation(fields: [tenantId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+
+  @@unique([tenantId, entityType, fromCode, toCode], map: "pod_status_transitions_scope_unique")
+  @@index([tenantId, entityType], map: "pod_status_transitions_tenant_entity_idx")
+  @@map("pod_status_transitions")
+}
+
+model PodSupplierCategory {
+  id          String         @id @default(uuid()) @db.Uuid
+  tenantId    String         @map("tenant_id") @db.Uuid
+  parentId    String?        @map("parent_id") @db.Uuid
+  code        String
+  name        String
+  description String?
+  isActive    Boolean        @default(true) @map("is_active")
+  createdAt   DateTime       @default(now()) @map("created_at")
+  updatedAt   DateTime       @updatedAt @map("updated_at")
+  deletedAt   DateTime?      @map("deleted_at")
+  tenant      TenantAccount  @relation(fields: [tenantId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+
+  @@unique([tenantId, code], map: "pod_supplier_categories_tenant_code_unique")
+  @@index([tenantId, isActive], map: "pod_supplier_categories_tenant_active_idx")
+  @@map("pod_supplier_categories")
+}
+
+model PodReturnReason {
+  id                 String         @id @default(uuid()) @db.Uuid
+  tenantId           String?        @map("tenant_id") @db.Uuid
+  code               String
+  label              String
+  requiresInspection Boolean        @default(false) @map("requires_inspection")
+  isActive           Boolean        @default(true) @map("is_active")
+  createdAt          DateTime       @default(now()) @map("created_at")
+  updatedAt          DateTime       @updatedAt @map("updated_at")
+  tenant             TenantAccount? @relation(fields: [tenantId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+
+  @@unique([tenantId, code], map: "pod_return_reasons_tenant_code_unique")
+  @@map("pod_return_reasons")
+}
+
+model PodPaymentMethod {
+  id        String         @id @default(uuid()) @db.Uuid
+  tenantId  String?        @map("tenant_id") @db.Uuid
+  code      String
+  label     String
+  isActive  Boolean        @default(true) @map("is_active")
+  createdAt DateTime       @default(now()) @map("created_at")
+  updatedAt DateTime       @updatedAt @map("updated_at")
+  tenant    TenantAccount? @relation(fields: [tenantId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+
+  @@unique([tenantId, code], map: "pod_payment_methods_tenant_code_unique")
+  @@map("pod_payment_methods")
+}
+
+model PodLandedCostType {
+  id                     String         @id @default(uuid()) @db.Uuid
+  tenantId               String?        @map("tenant_id") @db.Uuid
+  code                   String
+  label                  String
+  defaultAllocationBasis String         @default("value") @map("default_allocation_basis")
+  isActive               Boolean        @default(true) @map("is_active")
+  createdAt              DateTime       @default(now()) @map("created_at")
+  updatedAt              DateTime       @updatedAt @map("updated_at")
+  tenant                 TenantAccount? @relation(fields: [tenantId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+
+  @@unique([tenantId, code], map: "pod_landed_cost_types_tenant_code_unique")
+  @@map("pod_landed_cost_types")
+}
+
+model PodIncoterm {
+  id        String         @id @default(uuid()) @db.Uuid
+  tenantId  String?        @map("tenant_id") @db.Uuid
+  code      String
+  label     String
+  isActive  Boolean        @default(true) @map("is_active")
+  createdAt DateTime       @default(now()) @map("created_at")
+  updatedAt DateTime       @updatedAt @map("updated_at")
+  tenant    TenantAccount? @relation(fields: [tenantId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+
+  @@unique([tenantId, code], map: "pod_incoterms_tenant_code_unique")
+  @@map("pod_incoterms")
+}
+
+model PodDebitNoteReason {
+  id        String         @id @default(uuid()) @db.Uuid
+  tenantId  String?        @map("tenant_id") @db.Uuid
+  code      String
+  label     String
+  isActive  Boolean        @default(true) @map("is_active")
+  createdAt DateTime       @default(now()) @map("created_at")
+  updatedAt DateTime       @updatedAt @map("updated_at")
+  tenant    TenantAccount? @relation(fields: [tenantId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+
+  @@unique([tenantId, code], map: "pod_debit_note_reasons_tenant_code_unique")
+  @@map("pod_debit_note_reasons")
+}
+
+// --- Supplier CRM satellites -------------------------------------------------
+
+model PodSupplierContact {
+  id         String        @id @default(uuid()) @db.Uuid
+  tenantId   String        @map("tenant_id") @db.Uuid
+  supplierId String        @map("supplier_id") @db.Uuid
+  name       String
+  title      String?
+  email      String?
+  phone      String?
+  mobile     String?
+  isPrimary  Boolean       @default(false) @map("is_primary")
+  notes      String?
+  isActive   Boolean       @default(true) @map("is_active")
+  createdAt  DateTime      @default(now()) @map("created_at")
+  updatedAt  DateTime      @updatedAt @map("updated_at")
+  deletedAt  DateTime?     @map("deleted_at")
+  tenant     TenantAccount @relation(fields: [tenantId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+
+  @@index([tenantId, supplierId], map: "pod_supplier_contacts_tenant_supplier_idx")
+  @@map("pod_supplier_contacts")
+}
+
+model PodSupplierAddress {
+  id          String        @id @default(uuid()) @db.Uuid
+  tenantId    String        @map("tenant_id") @db.Uuid
+  supplierId  String        @map("supplier_id") @db.Uuid
+  addressType String        @default("billing") @map("address_type")
+  line1       String
+  line2       String?
+  city        String?
+  state       String?
+  postalCode  String?       @map("postal_code")
+  countryCode String?       @map("country_code")
+  isPrimary   Boolean       @default(false) @map("is_primary")
+  isActive    Boolean       @default(true) @map("is_active")
+  createdAt   DateTime      @default(now()) @map("created_at")
+  updatedAt   DateTime      @updatedAt @map("updated_at")
+  deletedAt   DateTime?     @map("deleted_at")
+  tenant      TenantAccount @relation(fields: [tenantId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+
+  @@index([tenantId, supplierId], map: "pod_supplier_addresses_tenant_supplier_idx")
+  @@map("pod_supplier_addresses")
+}
+
+model PodSupplierBankAccount {
+  id            String        @id @default(uuid()) @db.Uuid
+  tenantId      String        @map("tenant_id") @db.Uuid
+  supplierId    String        @map("supplier_id") @db.Uuid
+  bankName      String        @map("bank_name")
+  accountName   String?       @map("account_name")
+  accountNumber String?       @map("account_number")
+  iban          String?
+  swift         String?
+  currencyCode  String        @default("USD") @map("currency_code")
+  isPrimary     Boolean       @default(false) @map("is_primary")
+  isActive      Boolean       @default(true) @map("is_active")
+  createdAt     DateTime      @default(now()) @map("created_at")
+  updatedAt     DateTime      @updatedAt @map("updated_at")
+  deletedAt     DateTime?     @map("deleted_at")
+  tenant        TenantAccount @relation(fields: [tenantId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+
+  @@index([tenantId, supplierId], map: "pod_supplier_bank_accounts_tenant_supplier_idx")
+  @@map("pod_supplier_bank_accounts")
+}
+
+// --- Request For Quotation (RFQ) --------------------------------------------
+
+model PodRfq {
+  id                 String         @id @default(uuid()) @db.Uuid
+  tenantId           String         @map("tenant_id") @db.Uuid
+  companyId          String?        @map("company_id") @db.Uuid
+  branchId           String?        @map("branch_id") @db.Uuid
+  documentNumber     String         @map("document_number")
+  statusCode         String         @default("open") @map("status_code")
+  title              String?
+  requisitionId      String?        @map("requisition_id") @db.Uuid
+  warehouseId        String?        @map("warehouse_id") @db.Uuid
+  currencyCode       String         @default("USD") @map("currency_code")
+  issueDate          DateTime       @default(now()) @map("issue_date")
+  expiryDate         DateTime?      @map("expiry_date")
+  revision           Int            @default(1)
+  awardedSupplierId  String?        @map("awarded_supplier_id") @db.Uuid
+  awardedQuotationId String?        @map("awarded_quotation_id") @db.Uuid
+  buyerProfileId     String?        @map("buyer_profile_id") @db.Uuid
+  notes              String?
+  correlationId      String?        @map("correlation_id") @db.Uuid
+  isActive           Boolean        @default(true) @map("is_active")
+  versionNumber      Int            @default(1) @map("version_number")
+  createdBy          String?        @map("created_by") @db.Uuid
+  updatedBy          String?        @map("updated_by") @db.Uuid
+  deletedBy          String?        @map("deleted_by") @db.Uuid
+  createdAt          DateTime       @default(now()) @map("created_at")
+  updatedAt          DateTime       @updatedAt @map("updated_at")
+  deletedAt          DateTime?      @map("deleted_at")
+  tenant             TenantAccount  @relation(fields: [tenantId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  items              PodRfqItem[]
+  suppliers          PodRfqSupplier[]
+
+  @@unique([tenantId, documentNumber], map: "pod_rfqs_tenant_number_unique")
+  @@index([tenantId, statusCode], map: "pod_rfqs_tenant_status_idx")
+  @@map("pod_rfqs")
+}
+
+model PodRfqItem {
+  id            String        @id @default(uuid()) @db.Uuid
+  tenantId      String        @map("tenant_id") @db.Uuid
+  rfqId         String        @map("rfq_id") @db.Uuid
+  lineNo        Int           @map("line_no")
+  productId     String        @map("product_id") @db.Uuid
+  variantId     String?       @map("variant_id") @db.Uuid
+  uomId         String        @map("uom_id") @db.Uuid
+  quantity      Decimal       @db.Decimal(18, 4)
+  requiredDate  DateTime?     @map("required_date")
+  specification String?
+  notes         String?
+  createdAt     DateTime      @default(now()) @map("created_at")
+  tenant        TenantAccount @relation(fields: [tenantId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  rfq           PodRfq        @relation(fields: [rfqId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+
+  @@index([tenantId, rfqId], map: "pod_rfq_items_rfq_idx")
+  @@map("pod_rfq_items")
+}
+
+model PodRfqSupplier {
+  id          String        @id @default(uuid()) @db.Uuid
+  tenantId    String        @map("tenant_id") @db.Uuid
+  rfqId       String        @map("rfq_id") @db.Uuid
+  supplierId  String        @map("supplier_id") @db.Uuid
+  statusCode  String        @default("invited") @map("status_code")
+  invitedAt   DateTime?     @map("invited_at")
+  respondedAt DateTime?     @map("responded_at")
+  createdAt   DateTime      @default(now()) @map("created_at")
+  tenant      TenantAccount @relation(fields: [tenantId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  rfq         PodRfq        @relation(fields: [rfqId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+
+  @@unique([tenantId, rfqId, supplierId], map: "pod_rfq_suppliers_grain_unique")
+  @@index([tenantId, supplierId], map: "pod_rfq_suppliers_tenant_supplier_idx")
+  @@map("pod_rfq_suppliers")
+}
+
+// --- Supplier quotations -----------------------------------------------------
+
+model PodSupplierQuotation {
+  id                  String                     @id @default(uuid()) @db.Uuid
+  tenantId            String                     @map("tenant_id") @db.Uuid
+  companyId           String?                    @map("company_id") @db.Uuid
+  branchId            String?                    @map("branch_id") @db.Uuid
+  documentNumber      String                     @map("document_number")
+  rfqId               String?                    @map("rfq_id") @db.Uuid
+  supplierId          String                     @map("supplier_id") @db.Uuid
+  statusCode          String                     @default("draft") @map("status_code")
+  quotationDate       DateTime                   @default(now()) @map("quotation_date")
+  validUntil          DateTime?                  @map("valid_until")
+  currencyCode        String                     @default("USD") @map("currency_code")
+  exchangeRate        Decimal                    @default(1) @map("exchange_rate") @db.Decimal(19, 8)
+  leadTimeDays        Int?                       @map("lead_time_days")
+  paymentTerms        String?                    @map("payment_terms")
+  freightAmount       Decimal                    @default(0) @map("freight_amount") @db.Decimal(19, 4)
+  insuranceAmount     Decimal                    @default(0) @map("insurance_amount") @db.Decimal(19, 4)
+  discountTotal       Decimal                    @default(0) @map("discount_total") @db.Decimal(19, 4)
+  subtotal            Decimal                    @default(0) @db.Decimal(19, 4)
+  taxTotal            Decimal                    @default(0) @map("tax_total") @db.Decimal(19, 4)
+  grandTotal          Decimal                    @default(0) @map("grand_total") @db.Decimal(19, 4)
+  remarks             String?
+  revision            Int                        @default(1)
+  approvedByProfileId String?                    @map("approved_by_profile_id") @db.Uuid
+  correlationId       String?                    @map("correlation_id") @db.Uuid
+  isActive            Boolean                    @default(true) @map("is_active")
+  versionNumber       Int                        @default(1) @map("version_number")
+  createdBy           String?                    @map("created_by") @db.Uuid
+  updatedBy           String?                    @map("updated_by") @db.Uuid
+  deletedBy           String?                    @map("deleted_by") @db.Uuid
+  createdAt           DateTime                   @default(now()) @map("created_at")
+  updatedAt           DateTime                   @updatedAt @map("updated_at")
+  deletedAt           DateTime?                  @map("deleted_at")
+  tenant              TenantAccount              @relation(fields: [tenantId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  items               PodSupplierQuotationItem[]
+
+  @@unique([tenantId, documentNumber], map: "pod_supplier_quotations_tenant_number_unique")
+  @@index([tenantId, statusCode], map: "pod_supplier_quotations_tenant_status_idx")
+  @@index([tenantId, supplierId], map: "pod_supplier_quotations_tenant_supplier_idx")
+  @@index([tenantId, rfqId], map: "pod_supplier_quotations_tenant_rfq_idx")
+  @@map("pod_supplier_quotations")
+}
+
+model PodSupplierQuotationItem {
+  id             String               @id @default(uuid()) @db.Uuid
+  tenantId       String               @map("tenant_id") @db.Uuid
+  quotationId    String               @map("quotation_id") @db.Uuid
+  lineNo         Int                  @map("line_no")
+  productId      String               @map("product_id") @db.Uuid
+  variantId      String?              @map("variant_id") @db.Uuid
+  uomId          String               @map("uom_id") @db.Uuid
+  quantity       Decimal              @db.Decimal(18, 4)
+  unitPrice      Decimal              @map("unit_price") @db.Decimal(19, 6)
+  discountPct    Decimal?             @map("discount_pct") @db.Decimal(9, 6)
+  discountAmount Decimal              @default(0) @map("discount_amount") @db.Decimal(19, 4)
+  taxRateId      String?              @map("tax_rate_id") @db.Uuid
+  taxAmount      Decimal              @default(0) @map("tax_amount") @db.Decimal(19, 4)
+  netAmount      Decimal              @map("net_amount") @db.Decimal(19, 4)
+  leadTimeDays   Int?                 @map("lead_time_days")
+  notes          String?
+  createdAt      DateTime             @default(now()) @map("created_at")
+  tenant         TenantAccount        @relation(fields: [tenantId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  quotation      PodSupplierQuotation @relation(fields: [quotationId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+
+  @@index([tenantId, quotationId], map: "pod_supplier_quotation_items_quotation_idx")
+  @@map("pod_supplier_quotation_items")
+}
+
+// --- Generic approval engine (reusable across modules) -----------------------
+
+model PodApprovalWorkflow {
+  id           String                    @id @default(uuid()) @db.Uuid
+  tenantId     String                    @map("tenant_id") @db.Uuid
+  code         String
+  name         String
+  entityType   String                    @map("entity_type")
+  minAmount    Decimal?                  @map("min_amount") @db.Decimal(19, 4)
+  maxAmount    Decimal?                  @map("max_amount") @db.Decimal(19, 4)
+  currencyCode String?                   @map("currency_code")
+  autoApprove  Boolean                   @default(false) @map("auto_approve")
+  notes        String?
+  isActive     Boolean                   @default(true) @map("is_active")
+  createdAt    DateTime                  @default(now()) @map("created_at")
+  updatedAt    DateTime                  @updatedAt @map("updated_at")
+  deletedAt    DateTime?                 @map("deleted_at")
+  tenant       TenantAccount             @relation(fields: [tenantId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  steps        PodApprovalWorkflowStep[]
+
+  @@unique([tenantId, code], map: "pod_approval_workflows_tenant_code_unique")
+  @@index([tenantId, entityType, isActive], map: "pod_approval_workflows_tenant_entity_idx")
+  @@map("pod_approval_workflows")
+}
+
+model PodApprovalWorkflowStep {
+  id                String              @id @default(uuid()) @db.Uuid
+  tenantId          String              @map("tenant_id") @db.Uuid
+  workflowId        String              @map("workflow_id") @db.Uuid
+  stepOrder         Int                 @map("step_order")
+  name              String
+  approverRoleCode  String?             @map("approver_role_code")
+  approverProfileId String?             @map("approver_profile_id") @db.Uuid
+  minAmount         Decimal?            @map("min_amount") @db.Decimal(19, 4)
+  condition         Json?
+  isFinal           Boolean             @default(false) @map("is_final")
+  allowDelegate     Boolean             @default(true) @map("allow_delegate")
+  escalateAfterHours Int?               @map("escalate_after_hours")
+  createdAt         DateTime            @default(now()) @map("created_at")
+  updatedAt         DateTime            @updatedAt @map("updated_at")
+  tenant            TenantAccount       @relation(fields: [tenantId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  workflow          PodApprovalWorkflow @relation(fields: [workflowId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+
+  @@unique([tenantId, workflowId, stepOrder], map: "pod_approval_workflow_steps_grain_unique")
+  @@index([tenantId, workflowId], map: "pod_approval_workflow_steps_workflow_idx")
+  @@map("pod_approval_workflow_steps")
+}
+
+model PodApprovalRequest {
+  id                   String              @id @default(uuid()) @db.Uuid
+  tenantId             String              @map("tenant_id") @db.Uuid
+  companyId            String?             @map("company_id") @db.Uuid
+  branchId             String?             @map("branch_id") @db.Uuid
+  workflowId           String?             @map("workflow_id") @db.Uuid
+  entityType           String              @map("entity_type")
+  entityId             String              @map("entity_id") @db.Uuid
+  statusCode           String              @default("pending") @map("status_code")
+  currentStepOrder     Int                 @default(1) @map("current_step_order")
+  amount               Decimal?            @db.Decimal(19, 4)
+  currencyCode         String?             @map("currency_code")
+  requestedByProfileId String?             @map("requested_by_profile_id") @db.Uuid
+  requestedAt          DateTime            @default(now()) @map("requested_at")
+  completedAt          DateTime?           @map("completed_at")
+  correlationId        String?             @map("correlation_id") @db.Uuid
+  versionNumber        Int                 @default(1) @map("version_number")
+  createdAt            DateTime            @default(now()) @map("created_at")
+  updatedAt            DateTime            @updatedAt @map("updated_at")
+  tenant               TenantAccount       @relation(fields: [tenantId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  actions              PodApprovalAction[]
+
+  @@index([tenantId, entityType, entityId], map: "pod_approval_requests_entity_idx")
+  @@index([tenantId, statusCode], map: "pod_approval_requests_tenant_status_idx")
+  @@map("pod_approval_requests")
+}
+
+model PodApprovalAction {
+  id                  String             @id @default(uuid()) @db.Uuid
+  tenantId            String             @map("tenant_id") @db.Uuid
+  requestId           String             @map("request_id") @db.Uuid
+  stepOrder           Int                @map("step_order")
+  actionCode          String             @map("action_code")
+  actorProfileId      String?            @map("actor_profile_id") @db.Uuid
+  delegatedToProfileId String?           @map("delegated_to_profile_id") @db.Uuid
+  comment             String?
+  actedAt             DateTime           @default(now()) @map("acted_at")
+  createdAt           DateTime           @default(now()) @map("created_at")
+  tenant              TenantAccount      @relation(fields: [tenantId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  request             PodApprovalRequest @relation(fields: [requestId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+
+  @@index([tenantId, requestId], map: "pod_approval_actions_request_idx")
+  @@map("pod_approval_actions")
+}
+
+// --- Supplier invoices (AP subledger) + 3-way match --------------------------
+
+model PodSupplierInvoice {
+  id                     String                     @id @default(uuid()) @db.Uuid
+  tenantId               String                     @map("tenant_id") @db.Uuid
+  companyId              String?                    @map("company_id") @db.Uuid
+  branchId               String?                    @map("branch_id") @db.Uuid
+  documentNumber         String                     @map("document_number")
+  supplierInvoiceNumber  String?                    @map("supplier_invoice_number")
+  supplierId             String                     @map("supplier_id") @db.Uuid
+  purchaseOrderId        String?                    @map("purchase_order_id") @db.Uuid
+  statusCode             String                     @default("draft") @map("status_code")
+  matchStatusCode        String                     @default("unmatched") @map("match_status_code")
+  paymentStatusCode      String                     @default("unpaid") @map("payment_status_code")
+  invoiceDate            DateTime                   @default(now()) @map("invoice_date")
+  dueDate                DateTime?                  @map("due_date")
+  currencyCode           String                     @default("USD") @map("currency_code")
+  exchangeRate           Decimal                    @default(1) @map("exchange_rate") @db.Decimal(19, 8)
+  subtotal               Decimal                    @default(0) @db.Decimal(19, 4)
+  discountTotal          Decimal                    @default(0) @map("discount_total") @db.Decimal(19, 4)
+  taxTotal               Decimal                    @default(0) @map("tax_total") @db.Decimal(19, 4)
+  retentionAmount        Decimal                    @default(0) @map("retention_amount") @db.Decimal(19, 4)
+  withholdingTaxAmount   Decimal                    @default(0) @map("withholding_tax_amount") @db.Decimal(19, 4)
+  freightAmount          Decimal                    @default(0) @map("freight_amount") @db.Decimal(19, 4)
+  grandTotal             Decimal                    @default(0) @map("grand_total") @db.Decimal(19, 4)
+  paidAmount             Decimal                    @default(0) @map("paid_amount") @db.Decimal(19, 4)
+  outstandingAmount      Decimal                    @default(0) @map("outstanding_amount") @db.Decimal(19, 4)
+  notes                  String?
+  approvalRequestId      String?                    @map("approval_request_id") @db.Uuid
+  isPosted               Boolean                    @default(false) @map("is_posted")
+  postedAt               DateTime?                  @map("posted_at")
+  postedByProfileId      String?                    @map("posted_by_profile_id") @db.Uuid
+  correlationId          String?                    @map("correlation_id") @db.Uuid
+  isActive               Boolean                    @default(true) @map("is_active")
+  versionNumber          Int                        @default(1) @map("version_number")
+  createdBy              String?                    @map("created_by") @db.Uuid
+  updatedBy              String?                    @map("updated_by") @db.Uuid
+  deletedBy              String?                    @map("deleted_by") @db.Uuid
+  createdAt              DateTime                   @default(now()) @map("created_at")
+  updatedAt              DateTime                   @updatedAt @map("updated_at")
+  deletedAt              DateTime?                  @map("deleted_at")
+  tenant                 TenantAccount              @relation(fields: [tenantId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  items                  PodSupplierInvoiceItem[]
+  matches                PodSupplierInvoiceMatch[]
+
+  @@unique([tenantId, documentNumber], map: "pod_supplier_invoices_tenant_number_unique")
+  @@index([tenantId, supplierId], map: "pod_supplier_invoices_tenant_supplier_idx")
+  @@index([tenantId, statusCode], map: "pod_supplier_invoices_tenant_status_idx")
+  @@index([tenantId, paymentStatusCode, dueDate], map: "pod_supplier_invoices_payment_due_idx")
+  @@map("pod_supplier_invoices")
+}
+
+model PodSupplierInvoiceItem {
+  id                  String             @id @default(uuid()) @db.Uuid
+  tenantId            String             @map("tenant_id") @db.Uuid
+  invoiceId           String             @map("invoice_id") @db.Uuid
+  lineNo              Int                @map("line_no")
+  productId           String?            @map("product_id") @db.Uuid
+  variantId           String?            @map("variant_id") @db.Uuid
+  description         String?
+  purchaseOrderLineId String?            @map("purchase_order_line_id") @db.Uuid
+  goodsReceiptLineId  String?            @map("goods_receipt_line_id") @db.Uuid
+  uomId               String?            @map("uom_id") @db.Uuid
+  quantity            Decimal            @db.Decimal(18, 4)
+  unitPrice           Decimal            @map("unit_price") @db.Decimal(19, 6)
+  discountAmount      Decimal            @default(0) @map("discount_amount") @db.Decimal(19, 4)
+  taxRateId           String?            @map("tax_rate_id") @db.Uuid
+  taxAmount           Decimal            @default(0) @map("tax_amount") @db.Decimal(19, 4)
+  netAmount           Decimal            @map("net_amount") @db.Decimal(19, 4)
+  createdAt           DateTime           @default(now()) @map("created_at")
+  tenant              TenantAccount      @relation(fields: [tenantId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  invoice             PodSupplierInvoice @relation(fields: [invoiceId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+
+  @@index([tenantId, invoiceId], map: "pod_supplier_invoice_items_invoice_idx")
+  @@map("pod_supplier_invoice_items")
+}
+
+model PodSupplierInvoiceMatch {
+  id                  String             @id @default(uuid()) @db.Uuid
+  tenantId            String             @map("tenant_id") @db.Uuid
+  invoiceId           String             @map("invoice_id") @db.Uuid
+  invoiceItemId       String?            @map("invoice_item_id") @db.Uuid
+  purchaseOrderLineId String?            @map("purchase_order_line_id") @db.Uuid
+  goodsReceiptLineId  String?            @map("goods_receipt_line_id") @db.Uuid
+  matchedQty          Decimal            @default(0) @map("matched_qty") @db.Decimal(18, 4)
+  matchedAmount       Decimal            @default(0) @map("matched_amount") @db.Decimal(19, 4)
+  priceVariance       Decimal            @default(0) @map("price_variance") @db.Decimal(19, 4)
+  qtyVariance         Decimal            @default(0) @map("qty_variance") @db.Decimal(18, 4)
+  createdAt           DateTime           @default(now()) @map("created_at")
+  tenant              TenantAccount      @relation(fields: [tenantId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  invoice             PodSupplierInvoice @relation(fields: [invoiceId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+
+  @@index([tenantId, invoiceId], map: "pod_supplier_invoice_matches_invoice_idx")
+  @@map("pod_supplier_invoice_matches")
+}
+
+// --- Debit note line items (attach to existing financial_notes header) -------
+
+model PodDebitNoteLine {
+  id               String        @id @default(uuid()) @db.Uuid
+  tenantId         String        @map("tenant_id") @db.Uuid
+  financialNoteId  String        @map("financial_note_id") @db.Uuid
+  lineNo           Int           @map("line_no")
+  reasonId         String?       @map("reason_id") @db.Uuid
+  productId        String?       @map("product_id") @db.Uuid
+  description      String?
+  quantity         Decimal?      @db.Decimal(18, 4)
+  unitCost         Decimal?      @map("unit_cost") @db.Decimal(19, 6)
+  amount           Decimal       @db.Decimal(19, 4)
+  taxAmount        Decimal       @default(0) @map("tax_amount") @db.Decimal(19, 4)
+  purchaseReturnId String?       @map("purchase_return_id") @db.Uuid
+  createdAt        DateTime      @default(now()) @map("created_at")
+  tenant           TenantAccount @relation(fields: [tenantId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+
+  @@index([tenantId, financialNoteId], map: "pod_debit_note_lines_note_idx")
+  @@map("pod_debit_note_lines")
+}
+
+// --- Landed cost -------------------------------------------------------------
+
+model PodLandedCostVoucher {
+  id                String                     @id @default(uuid()) @db.Uuid
+  tenantId          String                     @map("tenant_id") @db.Uuid
+  companyId         String?                    @map("company_id") @db.Uuid
+  branchId          String?                    @map("branch_id") @db.Uuid
+  documentNumber    String                     @map("document_number")
+  statusCode        String                     @default("draft") @map("status_code")
+  goodsReceiptId    String?                    @map("goods_receipt_id") @db.Uuid
+  purchaseOrderId   String?                    @map("purchase_order_id") @db.Uuid
+  supplierInvoiceId String?                    @map("supplier_invoice_id") @db.Uuid
+  allocationBasis   String                     @default("value") @map("allocation_basis")
+  currencyCode      String                     @default("USD") @map("currency_code")
+  exchangeRate      Decimal                    @default(1) @map("exchange_rate") @db.Decimal(19, 8)
+  totalCharges      Decimal                    @default(0) @map("total_charges") @db.Decimal(19, 4)
+  notes             String?
+  isPosted          Boolean                    @default(false) @map("is_posted")
+  postedAt          DateTime?                  @map("posted_at")
+  postedByProfileId String?                    @map("posted_by_profile_id") @db.Uuid
+  correlationId     String?                    @map("correlation_id") @db.Uuid
+  isActive          Boolean                    @default(true) @map("is_active")
+  versionNumber     Int                        @default(1) @map("version_number")
+  createdBy         String?                    @map("created_by") @db.Uuid
+  updatedBy         String?                    @map("updated_by") @db.Uuid
+  deletedBy         String?                    @map("deleted_by") @db.Uuid
+  createdAt         DateTime                   @default(now()) @map("created_at")
+  updatedAt         DateTime                   @updatedAt @map("updated_at")
+  deletedAt         DateTime?                  @map("deleted_at")
+  tenant            TenantAccount              @relation(fields: [tenantId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  charges           PodLandedCostCharge[]
+  allocations       PodLandedCostAllocation[]
+
+  @@unique([tenantId, documentNumber], map: "pod_landed_cost_vouchers_tenant_number_unique")
+  @@index([tenantId, statusCode], map: "pod_landed_cost_vouchers_tenant_status_idx")
+  @@index([tenantId, goodsReceiptId], map: "pod_landed_cost_vouchers_grn_idx")
+  @@map("pod_landed_cost_vouchers")
+}
+
+model PodLandedCostCharge {
+  id          String               @id @default(uuid()) @db.Uuid
+  tenantId    String               @map("tenant_id") @db.Uuid
+  voucherId   String               @map("voucher_id") @db.Uuid
+  lineNo      Int                  @map("line_no")
+  costTypeId  String?              @map("cost_type_id") @db.Uuid
+  description String?
+  amount      Decimal              @db.Decimal(19, 4)
+  supplierId  String?              @map("supplier_id") @db.Uuid
+  taxAmount   Decimal              @default(0) @map("tax_amount") @db.Decimal(19, 4)
+  createdAt   DateTime             @default(now()) @map("created_at")
+  tenant      TenantAccount        @relation(fields: [tenantId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  voucher     PodLandedCostVoucher @relation(fields: [voucherId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+
+  @@index([tenantId, voucherId], map: "pod_landed_cost_charges_voucher_idx")
+  @@map("pod_landed_cost_charges")
+}
+
+model PodLandedCostAllocation {
+  id                 String               @id @default(uuid()) @db.Uuid
+  tenantId           String               @map("tenant_id") @db.Uuid
+  voucherId          String               @map("voucher_id") @db.Uuid
+  goodsReceiptLineId String?              @map("goods_receipt_line_id") @db.Uuid
+  purchaseOrderLineId String?             @map("purchase_order_line_id") @db.Uuid
+  productId          String?              @map("product_id") @db.Uuid
+  basisValue         Decimal              @default(0) @map("basis_value") @db.Decimal(19, 4)
+  allocatedAmount    Decimal              @default(0) @map("allocated_amount") @db.Decimal(19, 4)
+  createdAt          DateTime             @default(now()) @map("created_at")
+  tenant             TenantAccount        @relation(fields: [tenantId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  voucher            PodLandedCostVoucher @relation(fields: [voucherId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+
+  @@index([tenantId, voucherId], map: "pod_landed_cost_allocations_voucher_idx")
+  @@map("pod_landed_cost_allocations")
+}
+
+// --- Supplier payments (AP) --------------------------------------------------
+
+model PodSupplierPayment {
+  id                String                         @id @default(uuid()) @db.Uuid
+  tenantId          String                         @map("tenant_id") @db.Uuid
+  companyId         String?                        @map("company_id") @db.Uuid
+  branchId          String?                        @map("branch_id") @db.Uuid
+  documentNumber    String                         @map("document_number")
+  supplierId        String                         @map("supplier_id") @db.Uuid
+  statusCode        String                         @default("draft") @map("status_code")
+  paymentMethodId   String?                        @map("payment_method_id") @db.Uuid
+  paymentDate       DateTime                       @default(now()) @map("payment_date")
+  currencyCode      String                         @default("USD") @map("currency_code")
+  exchangeRate      Decimal                        @default(1) @map("exchange_rate") @db.Decimal(19, 8)
+  amount            Decimal                        @db.Decimal(19, 4)
+  allocatedAmount   Decimal                        @default(0) @map("allocated_amount") @db.Decimal(19, 4)
+  unallocatedAmount Decimal                        @default(0) @map("unallocated_amount") @db.Decimal(19, 4)
+  referenceNumber   String?                        @map("reference_number")
+  bankAccountId     String?                        @map("bank_account_id") @db.Uuid
+  isAdvance         Boolean                        @default(false) @map("is_advance")
+  notes             String?
+  isPosted          Boolean                        @default(false) @map("is_posted")
+  postedAt          DateTime?                      @map("posted_at")
+  postedByProfileId String?                        @map("posted_by_profile_id") @db.Uuid
+  correlationId     String?                        @map("correlation_id") @db.Uuid
+  isActive          Boolean                        @default(true) @map("is_active")
+  versionNumber     Int                            @default(1) @map("version_number")
+  createdBy         String?                        @map("created_by") @db.Uuid
+  updatedBy         String?                        @map("updated_by") @db.Uuid
+  deletedBy         String?                        @map("deleted_by") @db.Uuid
+  createdAt         DateTime                       @default(now()) @map("created_at")
+  updatedAt         DateTime                       @updatedAt @map("updated_at")
+  deletedAt         DateTime?                      @map("deleted_at")
+  tenant            TenantAccount                  @relation(fields: [tenantId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  allocations       PodSupplierPaymentAllocation[]
+
+  @@unique([tenantId, documentNumber], map: "pod_supplier_payments_tenant_number_unique")
+  @@index([tenantId, supplierId], map: "pod_supplier_payments_tenant_supplier_idx")
+  @@index([tenantId, statusCode], map: "pod_supplier_payments_tenant_status_idx")
+  @@map("pod_supplier_payments")
+}
+
+model PodSupplierPaymentAllocation {
+  id                String             @id @default(uuid()) @db.Uuid
+  tenantId          String             @map("tenant_id") @db.Uuid
+  paymentId         String             @map("payment_id") @db.Uuid
+  supplierInvoiceId String?            @map("supplier_invoice_id") @db.Uuid
+  financialNoteId   String?            @map("financial_note_id") @db.Uuid
+  allocatedAmount   Decimal            @default(0) @map("allocated_amount") @db.Decimal(19, 4)
+  createdAt         DateTime           @default(now()) @map("created_at")
+  tenant            TenantAccount      @relation(fields: [tenantId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  payment           PodSupplierPayment @relation(fields: [paymentId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+
+  @@index([tenantId, paymentId], map: "pod_supplier_payment_allocations_payment_idx")
+  @@index([tenantId, supplierInvoiceId], map: "pod_supplier_payment_allocations_invoice_idx")
+  @@map("pod_supplier_payment_allocations")
+}
+
+// --- Cross-cutting: attachments & custom fields (polymorphic) ----------------
+
+model PodAttachment {
+  id                 String        @id @default(uuid()) @db.Uuid
+  tenantId           String        @map("tenant_id") @db.Uuid
+  entityType         String        @map("entity_type")
+  entityId           String        @map("entity_id") @db.Uuid
+  fileName           String        @map("file_name")
+  fileUrl            String        @map("file_url")
+  mimeType           String?       @map("mime_type")
+  fileSize           Int?          @map("file_size")
+  category           String?
+  uploadedByProfileId String?      @map("uploaded_by_profile_id") @db.Uuid
+  createdAt          DateTime      @default(now()) @map("created_at")
+  updatedAt          DateTime      @updatedAt @map("updated_at")
+  deletedAt          DateTime?     @map("deleted_at")
+  tenant             TenantAccount @relation(fields: [tenantId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+
+  @@index([tenantId, entityType, entityId], map: "pod_attachments_entity_idx")
+  @@map("pod_attachments")
+}
+
+model PodCustomFieldDefinition {
+  id           String                @id @default(uuid()) @db.Uuid
+  tenantId     String                @map("tenant_id") @db.Uuid
+  entityType   String                @map("entity_type")
+  fieldKey     String                @map("field_key")
+  label        String
+  fieldType    String                @map("field_type")
+  optionsJson  Json?                 @map("options_json")
+  isRequired   Boolean               @default(false) @map("is_required")
+  displayOrder Int                   @default(0) @map("display_order")
+  isActive     Boolean               @default(true) @map("is_active")
+  createdAt    DateTime              @default(now()) @map("created_at")
+  updatedAt    DateTime              @updatedAt @map("updated_at")
+  deletedAt    DateTime?             @map("deleted_at")
+  tenant       TenantAccount         @relation(fields: [tenantId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  values       PodCustomFieldValue[]
+
+  @@unique([tenantId, entityType, fieldKey], map: "pod_custom_field_definitions_scope_unique")
+  @@map("pod_custom_field_definitions")
+}
+
+model PodCustomFieldValue {
+  id           String                   @id @default(uuid()) @db.Uuid
+  tenantId     String                   @map("tenant_id") @db.Uuid
+  definitionId String                   @map("definition_id") @db.Uuid
+  entityType   String                   @map("entity_type")
+  entityId     String                   @map("entity_id") @db.Uuid
+  valueJson    Json                     @map("value_json")
+  createdAt    DateTime                 @default(now()) @map("created_at")
+  updatedAt    DateTime                 @updatedAt @map("updated_at")
+  tenant       TenantAccount            @relation(fields: [tenantId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  definition   PodCustomFieldDefinition @relation(fields: [definitionId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+
+  @@unique([tenantId, definitionId, entityId], map: "pod_custom_field_values_grain_unique")
+  @@index([tenantId, entityType, entityId], map: "pod_custom_field_values_entity_idx")
+  @@map("pod_custom_field_values")
 }

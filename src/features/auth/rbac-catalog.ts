@@ -12,14 +12,16 @@ export const ROLE_DEFINITIONS = [
   {
     code: 'super_admin',
     name: 'Super Admin',
-    description: 'Tenant owner-grade access across all tenant and restaurant controls.',
+    description:
+      'Tenant owner-grade access across all tenant and restaurant controls.',
     isSystem: true,
     rank: 100,
   },
   {
     code: 'res:super_admin',
     name: 'Restaurant Super Admin',
-    description: 'Restaurant operational super admin with staff and settings control.',
+    description:
+      'Restaurant operational super admin with staff and settings control.',
     isSystem: true,
     rank: 90,
   },
@@ -33,7 +35,8 @@ export const ROLE_DEFINITIONS = [
   {
     code: 'res:admin',
     name: 'Restaurant Admin',
-    description: 'Restaurant administrator with order oversight and limited staff visibility.',
+    description:
+      'Restaurant administrator with order oversight and limited staff visibility.',
     isSystem: true,
     rank: 70,
   },
@@ -47,14 +50,16 @@ export const ROLE_DEFINITIONS = [
   {
     code: 'cashier',
     name: 'Cashier',
-    description: 'Generic cashier access for dashboard and self-service profile actions.',
+    description:
+      'Generic cashier access for dashboard and self-service profile actions.',
     isSystem: true,
     rank: 50,
   },
   {
     code: 'res:cashier',
     name: 'Restaurant Cashier',
-    description: 'Restaurant cashier with order entry and cashier interface access.',
+    description:
+      'Restaurant cashier with order entry and cashier interface access.',
     isSystem: true,
     rank: 45,
   },
@@ -75,7 +80,8 @@ export const ROLE_DEFINITIONS = [
   {
     code: 'inventory_manager',
     name: 'Inventory Manager',
-    description: 'Manages the product catalog, master data, and inventory operations.',
+    description:
+      'Manages the product catalog, master data, and inventory operations.',
     isSystem: true,
     rank: 65,
   },
@@ -89,7 +95,8 @@ export const ROLE_DEFINITIONS = [
   {
     code: 'purchasing_officer',
     name: 'Purchasing Officer',
-    description: 'Manages requisitions, purchase orders, goods receipts, and returns.',
+    description:
+      'Manages requisitions, purchase orders, goods receipts, and returns.',
     isSystem: true,
     rank: 58,
   },
@@ -103,21 +110,24 @@ export const ROLE_DEFINITIONS = [
   {
     code: 'pos_cashier',
     name: 'POS Cashier',
-    description: 'Operates the point of sale — sells, takes payment, manages the drawer.',
+    description:
+      'Operates the point of sale — sells, takes payment, manages the drawer.',
     isSystem: true,
     rank: 48,
   },
   {
     code: 'production_manager',
     name: 'Production Manager',
-    description: 'Manages bills of materials and production orders through to finished goods.',
+    description:
+      'Manages bills of materials and production orders through to finished goods.',
     isSystem: true,
     rank: 60,
   },
   {
     code: 'crm_manager',
     name: 'CRM Manager',
-    description: 'Manages customer intelligence: profiles, loyalty, segments, and CRM analytics.',
+    description:
+      'Manages customer intelligence: profiles, loyalty, segments, and CRM analytics.',
     isSystem: true,
     rank: 57,
   },
@@ -318,28 +328,32 @@ export const PERMISSION_DEFINITIONS = [
     name: 'View Restaurant Menu',
     moduleKey: 'restaurant_menu',
     actionKey: 'view',
-    description: 'View menus, categories, items, modifiers, combos, and pricing.',
+    description:
+      'View menus, categories, items, modifiers, combos, and pricing.',
   },
   {
     code: 'res.menu.manage',
     name: 'Manage Restaurant Menu',
     moduleKey: 'restaurant_menu',
     actionKey: 'manage',
-    description: 'Create and edit menus, items, price rules, modifiers, and combos.',
+    description:
+      'Create and edit menus, items, price rules, modifiers, and combos.',
   },
   {
     code: 'res.recipe.view',
     name: 'View Recipes',
     moduleKey: 'restaurant_recipe',
     actionKey: 'view',
-    description: 'View recipes, versions, ingredient lines, and computed costs.',
+    description:
+      'View recipes, versions, ingredient lines, and computed costs.',
   },
   {
     code: 'res.recipe.manage',
     name: 'Manage Recipes',
     moduleKey: 'restaurant_recipe',
     actionKey: 'manage',
-    description: 'Create recipes, edit versions and lines, compute cost, and approve.',
+    description:
+      'Create recipes, edit versions and lines, compute cost, and approve.',
   },
   {
     code: 'product.view',
@@ -594,6 +608,105 @@ export const PERMISSION_DEFINITIONS = [
     description: 'Create and post purchase returns.',
   },
   {
+    code: 'purchase.rfq_view',
+    name: 'View RFQs',
+    moduleKey: 'purchase',
+    actionKey: 'rfq_view',
+    description: 'View requests for quotation and supplier responses.',
+  },
+  {
+    code: 'purchase.rfq_manage',
+    name: 'Manage RFQs',
+    moduleKey: 'purchase',
+    actionKey: 'rfq_manage',
+    description: 'Create, revise, issue, and cancel requests for quotation.',
+  },
+  {
+    code: 'purchase.quotation_view',
+    name: 'View Quotations',
+    moduleKey: 'purchase',
+    actionKey: 'quotation_view',
+    description: 'View supplier quotations and the comparison matrix.',
+  },
+  {
+    code: 'purchase.quotation_manage',
+    name: 'Manage Quotations',
+    moduleKey: 'purchase',
+    actionKey: 'quotation_manage',
+    description: 'Record, revise, and approve supplier quotations.',
+  },
+  {
+    code: 'purchase.quotation_award',
+    name: 'Award Quotations',
+    moduleKey: 'purchase',
+    actionKey: 'quotation_award',
+    description: 'Award a quotation and convert it to a purchase order.',
+  },
+  {
+    code: 'purchase.invoice_view',
+    name: 'View Supplier Invoices',
+    moduleKey: 'purchase',
+    actionKey: 'invoice_view',
+    description: 'View supplier invoices and payables.',
+  },
+  {
+    code: 'purchase.invoice_manage',
+    name: 'Manage Supplier Invoices',
+    moduleKey: 'purchase',
+    actionKey: 'invoice_manage',
+    description: 'Create, approve, and post supplier invoices.',
+  },
+  {
+    code: 'purchase.invoice_match',
+    name: 'Match Supplier Invoices',
+    moduleKey: 'purchase',
+    actionKey: 'invoice_match',
+    description: 'Perform PO/GRN/invoice three-way matching.',
+  },
+  {
+    code: 'purchase.payment_view',
+    name: 'View Supplier Payments',
+    moduleKey: 'purchase',
+    actionKey: 'payment_view',
+    description: 'View supplier payments and allocations.',
+  },
+  {
+    code: 'purchase.payment_manage',
+    name: 'Manage Supplier Payments',
+    moduleKey: 'purchase',
+    actionKey: 'payment_manage',
+    description: 'Record, allocate, and post supplier payments.',
+  },
+  {
+    code: 'purchase.landed_cost_manage',
+    name: 'Manage Landed Cost',
+    moduleKey: 'purchase',
+    actionKey: 'landed_cost_manage',
+    description: 'Create landed-cost vouchers and allocate to inventory.',
+  },
+  {
+    code: 'purchase.debit_note_manage',
+    name: 'Manage Debit Notes',
+    moduleKey: 'purchase',
+    actionKey: 'debit_note_manage',
+    description: 'Create and issue supplier debit notes.',
+  },
+  {
+    code: 'purchase.approval_action',
+    name: 'Act on Purchase Approvals',
+    moduleKey: 'purchase',
+    actionKey: 'approval_action',
+    description: 'Approve, reject, delegate, or escalate purchase approvals.',
+  },
+  {
+    code: 'purchase.config_manage',
+    name: 'Manage Purchase Settings',
+    moduleKey: 'purchase',
+    actionKey: 'config_manage',
+    description:
+      'Manage supplier categories, approval workflows, and purchase lookups.',
+  },
+  {
     code: 'sales.order_view',
     name: 'View Sales Orders',
     moduleKey: 'sales',
@@ -738,21 +851,24 @@ export const PERMISSION_DEFINITIONS = [
     name: 'Complete Production',
     moduleKey: 'production',
     actionKey: 'complete',
-    description: 'Receive finished goods from production (post PRODUCTION_OUTPUT).',
+    description:
+      'Receive finished goods from production (post PRODUCTION_OUTPUT).',
   },
   {
     code: 'crm.view',
     name: 'View CRM',
     moduleKey: 'crm',
     actionKey: 'view',
-    description: 'Access CRM customer intelligence surfaces and the customer 360 view.',
+    description:
+      'Access CRM customer intelligence surfaces and the customer 360 view.',
   },
   {
     code: 'crm.profile_manage',
     name: 'Manage Customer Profiles',
     moduleKey: 'crm',
     actionKey: 'profile_manage',
-    description: 'Maintain customer profiles, contacts, addresses, preferences, tags, and consent.',
+    description:
+      'Maintain customer profiles, contacts, addresses, preferences, tags, and consent.',
   },
   {
     code: 'crm.timeline_view',
@@ -822,28 +938,30 @@ export const PERMISSION_DEFINITIONS = [
     name: 'Manage CRM Settings',
     moduleKey: 'crm',
     actionKey: 'settings_manage',
-    description: 'Manage CRM configuration: custom fields, groups, and projector operations.',
+    description:
+      'Manage CRM configuration: custom fields, groups, and projector operations.',
   },
 ] as const
 
 export type RoleCode = (typeof ROLE_DEFINITIONS)[number]['code']
 export type PermissionCode = (typeof PERMISSION_DEFINITIONS)[number]['code']
 export const PERMISSION_CODES = PERMISSION_DEFINITIONS.map(
-  (definition) => definition.code
+  (definition) => definition.code,
 ) as [PermissionCode, ...PermissionCode[]]
 
-const ROLE_DEFINITION_BY_CODE: Record<string, (typeof ROLE_DEFINITIONS)[number]> =
-  Object.fromEntries(
-    ROLE_DEFINITIONS.map((definition) => [definition.code, definition])
-  ) as Record<string, (typeof ROLE_DEFINITIONS)[number]>
+const ROLE_DEFINITION_BY_CODE: Record<
+  string,
+  (typeof ROLE_DEFINITIONS)[number]
+> = Object.fromEntries(
+  ROLE_DEFINITIONS.map((definition) => [definition.code, definition]),
+) as Record<string, (typeof ROLE_DEFINITIONS)[number]>
 
 export const ROLE_RANKS: Record<string, number> = Object.fromEntries(
-  ROLE_DEFINITIONS.map((definition) => [definition.code, definition.rank])
+  ROLE_DEFINITIONS.map((definition) => [definition.code, definition.rank]),
 ) as Record<string, number>
 
-export const TENANT_ASSIGNABLE_ROLE_CODES: Array<RoleCode> = ROLE_DEFINITIONS.map(
-  (definition) => definition.code
-)
+export const TENANT_ASSIGNABLE_ROLE_CODES: Array<RoleCode> =
+  ROLE_DEFINITIONS.map((definition) => definition.code)
 
 export const ROLE_PERMISSION_MAP: Record<RoleCode, Array<PermissionCode>> = {
   super_admin: PERMISSION_DEFINITIONS.map((permission) => permission.code),
@@ -895,6 +1013,20 @@ export const ROLE_PERMISSION_MAP: Record<RoleCode, Array<PermissionCode>> = {
     'purchase.po_approve',
     'purchase.po_receive',
     'purchase.return_manage',
+    'purchase.rfq_view',
+    'purchase.rfq_manage',
+    'purchase.quotation_view',
+    'purchase.quotation_manage',
+    'purchase.quotation_award',
+    'purchase.invoice_view',
+    'purchase.invoice_manage',
+    'purchase.invoice_match',
+    'purchase.payment_view',
+    'purchase.payment_manage',
+    'purchase.landed_cost_manage',
+    'purchase.debit_note_manage',
+    'purchase.approval_action',
+    'purchase.config_manage',
     'sales.order_view',
     'sales.order_create',
     'sales.order_confirm',
@@ -1002,7 +1134,11 @@ export const ROLE_PERMISSION_MAP: Record<RoleCode, Array<PermissionCode>> = {
     'res.orders.view',
     'res.menu.view',
   ],
-  'res:user': ['profile.view_self', 'profile.update_self', 'res.dashboard.view'],
+  'res:user': [
+    'profile.view_self',
+    'profile.update_self',
+    'res.dashboard.view',
+  ],
   inventory_manager: [
     'tenant.view',
     'dashboard.view',
@@ -1085,6 +1221,20 @@ export const ROLE_PERMISSION_MAP: Record<RoleCode, Array<PermissionCode>> = {
     'purchase.po_approve',
     'purchase.po_receive',
     'purchase.return_manage',
+    'purchase.rfq_view',
+    'purchase.rfq_manage',
+    'purchase.quotation_view',
+    'purchase.quotation_manage',
+    'purchase.quotation_award',
+    'purchase.invoice_view',
+    'purchase.invoice_manage',
+    'purchase.invoice_match',
+    'purchase.payment_view',
+    'purchase.payment_manage',
+    'purchase.landed_cost_manage',
+    'purchase.debit_note_manage',
+    'purchase.approval_action',
+    'purchase.config_manage',
     'note.manage',
   ],
   sales_manager: [
@@ -1179,11 +1329,13 @@ export function getRoleDefinition(roleCode: string) {
 
 export function isTenantAssignableRole(roleCode: string): roleCode is RoleCode {
   return TENANT_ASSIGNABLE_ROLE_CODES.includes(
-    normalizeRoleCode(roleCode) as RoleCode
+    normalizeRoleCode(roleCode) as RoleCode,
   )
 }
 
-export function isPermissionCode(permissionCode: string): permissionCode is PermissionCode {
+export function isPermissionCode(
+  permissionCode: string,
+): permissionCode is PermissionCode {
   return PERMISSION_CODES.includes(permissionCode as PermissionCode)
 }
 

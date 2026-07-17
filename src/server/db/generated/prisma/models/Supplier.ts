@@ -28,10 +28,18 @@ export type AggregateSupplier = {
 
 export type SupplierAvgAggregateOutputType = {
   creditLimit: runtime.Decimal | null
+  rating: runtime.Decimal | null
+  leadTimeDays: number | null
+  currentBalance: runtime.Decimal | null
+  versionNumber: number | null
 }
 
 export type SupplierSumAggregateOutputType = {
   creditLimit: runtime.Decimal | null
+  rating: runtime.Decimal | null
+  leadTimeDays: number | null
+  currentBalance: runtime.Decimal | null
+  versionNumber: number | null
 }
 
 export type SupplierMinAggregateOutputType = {
@@ -45,6 +53,18 @@ export type SupplierMinAggregateOutputType = {
   paymentTerms: string | null
   currencyCode: string | null
   creditLimit: runtime.Decimal | null
+  categoryId: string | null
+  statusCode: string | null
+  rating: runtime.Decimal | null
+  leadTimeDays: number | null
+  isPreferred: boolean | null
+  currentBalance: runtime.Decimal | null
+  companyId: string | null
+  branchId: string | null
+  versionNumber: number | null
+  createdBy: string | null
+  updatedBy: string | null
+  deletedBy: string | null
   isActive: boolean | null
   createdAt: Date | null
   updatedAt: Date | null
@@ -62,6 +82,18 @@ export type SupplierMaxAggregateOutputType = {
   paymentTerms: string | null
   currencyCode: string | null
   creditLimit: runtime.Decimal | null
+  categoryId: string | null
+  statusCode: string | null
+  rating: runtime.Decimal | null
+  leadTimeDays: number | null
+  isPreferred: boolean | null
+  currentBalance: runtime.Decimal | null
+  companyId: string | null
+  branchId: string | null
+  versionNumber: number | null
+  createdBy: string | null
+  updatedBy: string | null
+  deletedBy: string | null
   isActive: boolean | null
   createdAt: Date | null
   updatedAt: Date | null
@@ -80,6 +112,19 @@ export type SupplierCountAggregateOutputType = {
   paymentTerms: number
   currencyCode: number
   creditLimit: number
+  categoryId: number
+  statusCode: number
+  rating: number
+  leadTimeDays: number
+  isPreferred: number
+  currentBalance: number
+  tags: number
+  companyId: number
+  branchId: number
+  versionNumber: number
+  createdBy: number
+  updatedBy: number
+  deletedBy: number
   isActive: number
   createdAt: number
   updatedAt: number
@@ -90,10 +135,18 @@ export type SupplierCountAggregateOutputType = {
 
 export type SupplierAvgAggregateInputType = {
   creditLimit?: true
+  rating?: true
+  leadTimeDays?: true
+  currentBalance?: true
+  versionNumber?: true
 }
 
 export type SupplierSumAggregateInputType = {
   creditLimit?: true
+  rating?: true
+  leadTimeDays?: true
+  currentBalance?: true
+  versionNumber?: true
 }
 
 export type SupplierMinAggregateInputType = {
@@ -107,6 +160,18 @@ export type SupplierMinAggregateInputType = {
   paymentTerms?: true
   currencyCode?: true
   creditLimit?: true
+  categoryId?: true
+  statusCode?: true
+  rating?: true
+  leadTimeDays?: true
+  isPreferred?: true
+  currentBalance?: true
+  companyId?: true
+  branchId?: true
+  versionNumber?: true
+  createdBy?: true
+  updatedBy?: true
+  deletedBy?: true
   isActive?: true
   createdAt?: true
   updatedAt?: true
@@ -124,6 +189,18 @@ export type SupplierMaxAggregateInputType = {
   paymentTerms?: true
   currencyCode?: true
   creditLimit?: true
+  categoryId?: true
+  statusCode?: true
+  rating?: true
+  leadTimeDays?: true
+  isPreferred?: true
+  currentBalance?: true
+  companyId?: true
+  branchId?: true
+  versionNumber?: true
+  createdBy?: true
+  updatedBy?: true
+  deletedBy?: true
   isActive?: true
   createdAt?: true
   updatedAt?: true
@@ -142,6 +219,19 @@ export type SupplierCountAggregateInputType = {
   paymentTerms?: true
   currencyCode?: true
   creditLimit?: true
+  categoryId?: true
+  statusCode?: true
+  rating?: true
+  leadTimeDays?: true
+  isPreferred?: true
+  currentBalance?: true
+  tags?: true
+  companyId?: true
+  branchId?: true
+  versionNumber?: true
+  createdBy?: true
+  updatedBy?: true
+  deletedBy?: true
   isActive?: true
   createdAt?: true
   updatedAt?: true
@@ -247,6 +337,19 @@ export type SupplierGroupByOutputType = {
   paymentTerms: string | null
   currencyCode: string
   creditLimit: runtime.Decimal | null
+  categoryId: string | null
+  statusCode: string
+  rating: runtime.Decimal | null
+  leadTimeDays: number | null
+  isPreferred: boolean
+  currentBalance: runtime.Decimal
+  tags: runtime.JsonValue | null
+  companyId: string | null
+  branchId: string | null
+  versionNumber: number
+  createdBy: string | null
+  updatedBy: string | null
+  deletedBy: string | null
   isActive: boolean
   createdAt: Date
   updatedAt: Date
@@ -288,6 +391,19 @@ export type SupplierWhereInput = {
   paymentTerms?: Prisma.StringNullableFilter<"Supplier"> | string | null
   currencyCode?: Prisma.StringFilter<"Supplier"> | string
   creditLimit?: Prisma.DecimalNullableFilter<"Supplier"> | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  categoryId?: Prisma.UuidNullableFilter<"Supplier"> | string | null
+  statusCode?: Prisma.StringFilter<"Supplier"> | string
+  rating?: Prisma.DecimalNullableFilter<"Supplier"> | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  leadTimeDays?: Prisma.IntNullableFilter<"Supplier"> | number | null
+  isPreferred?: Prisma.BoolFilter<"Supplier"> | boolean
+  currentBalance?: Prisma.DecimalFilter<"Supplier"> | runtime.Decimal | runtime.DecimalJsLike | number | string
+  tags?: Prisma.JsonNullableFilter<"Supplier">
+  companyId?: Prisma.UuidNullableFilter<"Supplier"> | string | null
+  branchId?: Prisma.UuidNullableFilter<"Supplier"> | string | null
+  versionNumber?: Prisma.IntFilter<"Supplier"> | number
+  createdBy?: Prisma.UuidNullableFilter<"Supplier"> | string | null
+  updatedBy?: Prisma.UuidNullableFilter<"Supplier"> | string | null
+  deletedBy?: Prisma.UuidNullableFilter<"Supplier"> | string | null
   isActive?: Prisma.BoolFilter<"Supplier"> | boolean
   createdAt?: Prisma.DateTimeFilter<"Supplier"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"Supplier"> | Date | string
@@ -308,6 +424,19 @@ export type SupplierOrderByWithRelationInput = {
   paymentTerms?: Prisma.SortOrderInput | Prisma.SortOrder
   currencyCode?: Prisma.SortOrder
   creditLimit?: Prisma.SortOrderInput | Prisma.SortOrder
+  categoryId?: Prisma.SortOrderInput | Prisma.SortOrder
+  statusCode?: Prisma.SortOrder
+  rating?: Prisma.SortOrderInput | Prisma.SortOrder
+  leadTimeDays?: Prisma.SortOrderInput | Prisma.SortOrder
+  isPreferred?: Prisma.SortOrder
+  currentBalance?: Prisma.SortOrder
+  tags?: Prisma.SortOrderInput | Prisma.SortOrder
+  companyId?: Prisma.SortOrderInput | Prisma.SortOrder
+  branchId?: Prisma.SortOrderInput | Prisma.SortOrder
+  versionNumber?: Prisma.SortOrder
+  createdBy?: Prisma.SortOrderInput | Prisma.SortOrder
+  updatedBy?: Prisma.SortOrderInput | Prisma.SortOrder
+  deletedBy?: Prisma.SortOrderInput | Prisma.SortOrder
   isActive?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
@@ -332,6 +461,19 @@ export type SupplierWhereUniqueInput = Prisma.AtLeast<{
   paymentTerms?: Prisma.StringNullableFilter<"Supplier"> | string | null
   currencyCode?: Prisma.StringFilter<"Supplier"> | string
   creditLimit?: Prisma.DecimalNullableFilter<"Supplier"> | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  categoryId?: Prisma.UuidNullableFilter<"Supplier"> | string | null
+  statusCode?: Prisma.StringFilter<"Supplier"> | string
+  rating?: Prisma.DecimalNullableFilter<"Supplier"> | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  leadTimeDays?: Prisma.IntNullableFilter<"Supplier"> | number | null
+  isPreferred?: Prisma.BoolFilter<"Supplier"> | boolean
+  currentBalance?: Prisma.DecimalFilter<"Supplier"> | runtime.Decimal | runtime.DecimalJsLike | number | string
+  tags?: Prisma.JsonNullableFilter<"Supplier">
+  companyId?: Prisma.UuidNullableFilter<"Supplier"> | string | null
+  branchId?: Prisma.UuidNullableFilter<"Supplier"> | string | null
+  versionNumber?: Prisma.IntFilter<"Supplier"> | number
+  createdBy?: Prisma.UuidNullableFilter<"Supplier"> | string | null
+  updatedBy?: Prisma.UuidNullableFilter<"Supplier"> | string | null
+  deletedBy?: Prisma.UuidNullableFilter<"Supplier"> | string | null
   isActive?: Prisma.BoolFilter<"Supplier"> | boolean
   createdAt?: Prisma.DateTimeFilter<"Supplier"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"Supplier"> | Date | string
@@ -352,6 +494,19 @@ export type SupplierOrderByWithAggregationInput = {
   paymentTerms?: Prisma.SortOrderInput | Prisma.SortOrder
   currencyCode?: Prisma.SortOrder
   creditLimit?: Prisma.SortOrderInput | Prisma.SortOrder
+  categoryId?: Prisma.SortOrderInput | Prisma.SortOrder
+  statusCode?: Prisma.SortOrder
+  rating?: Prisma.SortOrderInput | Prisma.SortOrder
+  leadTimeDays?: Prisma.SortOrderInput | Prisma.SortOrder
+  isPreferred?: Prisma.SortOrder
+  currentBalance?: Prisma.SortOrder
+  tags?: Prisma.SortOrderInput | Prisma.SortOrder
+  companyId?: Prisma.SortOrderInput | Prisma.SortOrder
+  branchId?: Prisma.SortOrderInput | Prisma.SortOrder
+  versionNumber?: Prisma.SortOrder
+  createdBy?: Prisma.SortOrderInput | Prisma.SortOrder
+  updatedBy?: Prisma.SortOrderInput | Prisma.SortOrder
+  deletedBy?: Prisma.SortOrderInput | Prisma.SortOrder
   isActive?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
@@ -378,6 +533,19 @@ export type SupplierScalarWhereWithAggregatesInput = {
   paymentTerms?: Prisma.StringNullableWithAggregatesFilter<"Supplier"> | string | null
   currencyCode?: Prisma.StringWithAggregatesFilter<"Supplier"> | string
   creditLimit?: Prisma.DecimalNullableWithAggregatesFilter<"Supplier"> | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  categoryId?: Prisma.UuidNullableWithAggregatesFilter<"Supplier"> | string | null
+  statusCode?: Prisma.StringWithAggregatesFilter<"Supplier"> | string
+  rating?: Prisma.DecimalNullableWithAggregatesFilter<"Supplier"> | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  leadTimeDays?: Prisma.IntNullableWithAggregatesFilter<"Supplier"> | number | null
+  isPreferred?: Prisma.BoolWithAggregatesFilter<"Supplier"> | boolean
+  currentBalance?: Prisma.DecimalWithAggregatesFilter<"Supplier"> | runtime.Decimal | runtime.DecimalJsLike | number | string
+  tags?: Prisma.JsonNullableWithAggregatesFilter<"Supplier">
+  companyId?: Prisma.UuidNullableWithAggregatesFilter<"Supplier"> | string | null
+  branchId?: Prisma.UuidNullableWithAggregatesFilter<"Supplier"> | string | null
+  versionNumber?: Prisma.IntWithAggregatesFilter<"Supplier"> | number
+  createdBy?: Prisma.UuidNullableWithAggregatesFilter<"Supplier"> | string | null
+  updatedBy?: Prisma.UuidNullableWithAggregatesFilter<"Supplier"> | string | null
+  deletedBy?: Prisma.UuidNullableWithAggregatesFilter<"Supplier"> | string | null
   isActive?: Prisma.BoolWithAggregatesFilter<"Supplier"> | boolean
   createdAt?: Prisma.DateTimeWithAggregatesFilter<"Supplier"> | Date | string
   updatedAt?: Prisma.DateTimeWithAggregatesFilter<"Supplier"> | Date | string
@@ -395,6 +563,19 @@ export type SupplierCreateInput = {
   paymentTerms?: string | null
   currencyCode?: string
   creditLimit?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  categoryId?: string | null
+  statusCode?: string
+  rating?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  leadTimeDays?: number | null
+  isPreferred?: boolean
+  currentBalance?: runtime.Decimal | runtime.DecimalJsLike | number | string
+  tags?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  companyId?: string | null
+  branchId?: string | null
+  versionNumber?: number
+  createdBy?: string | null
+  updatedBy?: string | null
+  deletedBy?: string | null
   isActive?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -415,6 +596,19 @@ export type SupplierUncheckedCreateInput = {
   paymentTerms?: string | null
   currencyCode?: string
   creditLimit?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  categoryId?: string | null
+  statusCode?: string
+  rating?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  leadTimeDays?: number | null
+  isPreferred?: boolean
+  currentBalance?: runtime.Decimal | runtime.DecimalJsLike | number | string
+  tags?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  companyId?: string | null
+  branchId?: string | null
+  versionNumber?: number
+  createdBy?: string | null
+  updatedBy?: string | null
+  deletedBy?: string | null
   isActive?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -433,6 +627,19 @@ export type SupplierUpdateInput = {
   paymentTerms?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   currencyCode?: Prisma.StringFieldUpdateOperationsInput | string
   creditLimit?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  categoryId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  statusCode?: Prisma.StringFieldUpdateOperationsInput | string
+  rating?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  leadTimeDays?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  isPreferred?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  currentBalance?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  tags?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  companyId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  branchId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  versionNumber?: Prisma.IntFieldUpdateOperationsInput | number
+  createdBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  updatedBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  deletedBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -453,6 +660,19 @@ export type SupplierUncheckedUpdateInput = {
   paymentTerms?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   currencyCode?: Prisma.StringFieldUpdateOperationsInput | string
   creditLimit?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  categoryId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  statusCode?: Prisma.StringFieldUpdateOperationsInput | string
+  rating?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  leadTimeDays?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  isPreferred?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  currentBalance?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  tags?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  companyId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  branchId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  versionNumber?: Prisma.IntFieldUpdateOperationsInput | number
+  createdBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  updatedBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  deletedBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -472,6 +692,19 @@ export type SupplierCreateManyInput = {
   paymentTerms?: string | null
   currencyCode?: string
   creditLimit?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  categoryId?: string | null
+  statusCode?: string
+  rating?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  leadTimeDays?: number | null
+  isPreferred?: boolean
+  currentBalance?: runtime.Decimal | runtime.DecimalJsLike | number | string
+  tags?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  companyId?: string | null
+  branchId?: string | null
+  versionNumber?: number
+  createdBy?: string | null
+  updatedBy?: string | null
+  deletedBy?: string | null
   isActive?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -489,6 +722,19 @@ export type SupplierUpdateManyMutationInput = {
   paymentTerms?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   currencyCode?: Prisma.StringFieldUpdateOperationsInput | string
   creditLimit?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  categoryId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  statusCode?: Prisma.StringFieldUpdateOperationsInput | string
+  rating?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  leadTimeDays?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  isPreferred?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  currentBalance?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  tags?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  companyId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  branchId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  versionNumber?: Prisma.IntFieldUpdateOperationsInput | number
+  createdBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  updatedBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  deletedBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -507,6 +753,19 @@ export type SupplierUncheckedUpdateManyInput = {
   paymentTerms?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   currencyCode?: Prisma.StringFieldUpdateOperationsInput | string
   creditLimit?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  categoryId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  statusCode?: Prisma.StringFieldUpdateOperationsInput | string
+  rating?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  leadTimeDays?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  isPreferred?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  currentBalance?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  tags?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  companyId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  branchId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  versionNumber?: Prisma.IntFieldUpdateOperationsInput | number
+  createdBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  updatedBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  deletedBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -545,6 +804,19 @@ export type SupplierCountOrderByAggregateInput = {
   paymentTerms?: Prisma.SortOrder
   currencyCode?: Prisma.SortOrder
   creditLimit?: Prisma.SortOrder
+  categoryId?: Prisma.SortOrder
+  statusCode?: Prisma.SortOrder
+  rating?: Prisma.SortOrder
+  leadTimeDays?: Prisma.SortOrder
+  isPreferred?: Prisma.SortOrder
+  currentBalance?: Prisma.SortOrder
+  tags?: Prisma.SortOrder
+  companyId?: Prisma.SortOrder
+  branchId?: Prisma.SortOrder
+  versionNumber?: Prisma.SortOrder
+  createdBy?: Prisma.SortOrder
+  updatedBy?: Prisma.SortOrder
+  deletedBy?: Prisma.SortOrder
   isActive?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
@@ -553,6 +825,10 @@ export type SupplierCountOrderByAggregateInput = {
 
 export type SupplierAvgOrderByAggregateInput = {
   creditLimit?: Prisma.SortOrder
+  rating?: Prisma.SortOrder
+  leadTimeDays?: Prisma.SortOrder
+  currentBalance?: Prisma.SortOrder
+  versionNumber?: Prisma.SortOrder
 }
 
 export type SupplierMaxOrderByAggregateInput = {
@@ -566,6 +842,18 @@ export type SupplierMaxOrderByAggregateInput = {
   paymentTerms?: Prisma.SortOrder
   currencyCode?: Prisma.SortOrder
   creditLimit?: Prisma.SortOrder
+  categoryId?: Prisma.SortOrder
+  statusCode?: Prisma.SortOrder
+  rating?: Prisma.SortOrder
+  leadTimeDays?: Prisma.SortOrder
+  isPreferred?: Prisma.SortOrder
+  currentBalance?: Prisma.SortOrder
+  companyId?: Prisma.SortOrder
+  branchId?: Prisma.SortOrder
+  versionNumber?: Prisma.SortOrder
+  createdBy?: Prisma.SortOrder
+  updatedBy?: Prisma.SortOrder
+  deletedBy?: Prisma.SortOrder
   isActive?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
@@ -583,6 +871,18 @@ export type SupplierMinOrderByAggregateInput = {
   paymentTerms?: Prisma.SortOrder
   currencyCode?: Prisma.SortOrder
   creditLimit?: Prisma.SortOrder
+  categoryId?: Prisma.SortOrder
+  statusCode?: Prisma.SortOrder
+  rating?: Prisma.SortOrder
+  leadTimeDays?: Prisma.SortOrder
+  isPreferred?: Prisma.SortOrder
+  currentBalance?: Prisma.SortOrder
+  companyId?: Prisma.SortOrder
+  branchId?: Prisma.SortOrder
+  versionNumber?: Prisma.SortOrder
+  createdBy?: Prisma.SortOrder
+  updatedBy?: Prisma.SortOrder
+  deletedBy?: Prisma.SortOrder
   isActive?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
@@ -591,6 +891,10 @@ export type SupplierMinOrderByAggregateInput = {
 
 export type SupplierSumOrderByAggregateInput = {
   creditLimit?: Prisma.SortOrder
+  rating?: Prisma.SortOrder
+  leadTimeDays?: Prisma.SortOrder
+  currentBalance?: Prisma.SortOrder
+  versionNumber?: Prisma.SortOrder
 }
 
 export type SupplierCreateNestedManyWithoutTenantInput = {
@@ -660,6 +964,19 @@ export type SupplierCreateWithoutTenantInput = {
   paymentTerms?: string | null
   currencyCode?: string
   creditLimit?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  categoryId?: string | null
+  statusCode?: string
+  rating?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  leadTimeDays?: number | null
+  isPreferred?: boolean
+  currentBalance?: runtime.Decimal | runtime.DecimalJsLike | number | string
+  tags?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  companyId?: string | null
+  branchId?: string | null
+  versionNumber?: number
+  createdBy?: string | null
+  updatedBy?: string | null
+  deletedBy?: string | null
   isActive?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -678,6 +995,19 @@ export type SupplierUncheckedCreateWithoutTenantInput = {
   paymentTerms?: string | null
   currencyCode?: string
   creditLimit?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  categoryId?: string | null
+  statusCode?: string
+  rating?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  leadTimeDays?: number | null
+  isPreferred?: boolean
+  currentBalance?: runtime.Decimal | runtime.DecimalJsLike | number | string
+  tags?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  companyId?: string | null
+  branchId?: string | null
+  versionNumber?: number
+  createdBy?: string | null
+  updatedBy?: string | null
+  deletedBy?: string | null
   isActive?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -726,6 +1056,19 @@ export type SupplierScalarWhereInput = {
   paymentTerms?: Prisma.StringNullableFilter<"Supplier"> | string | null
   currencyCode?: Prisma.StringFilter<"Supplier"> | string
   creditLimit?: Prisma.DecimalNullableFilter<"Supplier"> | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  categoryId?: Prisma.UuidNullableFilter<"Supplier"> | string | null
+  statusCode?: Prisma.StringFilter<"Supplier"> | string
+  rating?: Prisma.DecimalNullableFilter<"Supplier"> | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  leadTimeDays?: Prisma.IntNullableFilter<"Supplier"> | number | null
+  isPreferred?: Prisma.BoolFilter<"Supplier"> | boolean
+  currentBalance?: Prisma.DecimalFilter<"Supplier"> | runtime.Decimal | runtime.DecimalJsLike | number | string
+  tags?: Prisma.JsonNullableFilter<"Supplier">
+  companyId?: Prisma.UuidNullableFilter<"Supplier"> | string | null
+  branchId?: Prisma.UuidNullableFilter<"Supplier"> | string | null
+  versionNumber?: Prisma.IntFilter<"Supplier"> | number
+  createdBy?: Prisma.UuidNullableFilter<"Supplier"> | string | null
+  updatedBy?: Prisma.UuidNullableFilter<"Supplier"> | string | null
+  deletedBy?: Prisma.UuidNullableFilter<"Supplier"> | string | null
   isActive?: Prisma.BoolFilter<"Supplier"> | boolean
   createdAt?: Prisma.DateTimeFilter<"Supplier"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"Supplier"> | Date | string
@@ -743,6 +1086,19 @@ export type SupplierCreateWithoutProductSuppliersInput = {
   paymentTerms?: string | null
   currencyCode?: string
   creditLimit?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  categoryId?: string | null
+  statusCode?: string
+  rating?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  leadTimeDays?: number | null
+  isPreferred?: boolean
+  currentBalance?: runtime.Decimal | runtime.DecimalJsLike | number | string
+  tags?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  companyId?: string | null
+  branchId?: string | null
+  versionNumber?: number
+  createdBy?: string | null
+  updatedBy?: string | null
+  deletedBy?: string | null
   isActive?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -762,6 +1118,19 @@ export type SupplierUncheckedCreateWithoutProductSuppliersInput = {
   paymentTerms?: string | null
   currencyCode?: string
   creditLimit?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  categoryId?: string | null
+  statusCode?: string
+  rating?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  leadTimeDays?: number | null
+  isPreferred?: boolean
+  currentBalance?: runtime.Decimal | runtime.DecimalJsLike | number | string
+  tags?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  companyId?: string | null
+  branchId?: string | null
+  versionNumber?: number
+  createdBy?: string | null
+  updatedBy?: string | null
+  deletedBy?: string | null
   isActive?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -795,6 +1164,19 @@ export type SupplierUpdateWithoutProductSuppliersInput = {
   paymentTerms?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   currencyCode?: Prisma.StringFieldUpdateOperationsInput | string
   creditLimit?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  categoryId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  statusCode?: Prisma.StringFieldUpdateOperationsInput | string
+  rating?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  leadTimeDays?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  isPreferred?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  currentBalance?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  tags?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  companyId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  branchId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  versionNumber?: Prisma.IntFieldUpdateOperationsInput | number
+  createdBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  updatedBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  deletedBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -814,6 +1196,19 @@ export type SupplierUncheckedUpdateWithoutProductSuppliersInput = {
   paymentTerms?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   currencyCode?: Prisma.StringFieldUpdateOperationsInput | string
   creditLimit?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  categoryId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  statusCode?: Prisma.StringFieldUpdateOperationsInput | string
+  rating?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  leadTimeDays?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  isPreferred?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  currentBalance?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  tags?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  companyId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  branchId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  versionNumber?: Prisma.IntFieldUpdateOperationsInput | number
+  createdBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  updatedBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  deletedBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -831,6 +1226,19 @@ export type SupplierCreateManyTenantInput = {
   paymentTerms?: string | null
   currencyCode?: string
   creditLimit?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  categoryId?: string | null
+  statusCode?: string
+  rating?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  leadTimeDays?: number | null
+  isPreferred?: boolean
+  currentBalance?: runtime.Decimal | runtime.DecimalJsLike | number | string
+  tags?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  companyId?: string | null
+  branchId?: string | null
+  versionNumber?: number
+  createdBy?: string | null
+  updatedBy?: string | null
+  deletedBy?: string | null
   isActive?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -848,6 +1256,19 @@ export type SupplierUpdateWithoutTenantInput = {
   paymentTerms?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   currencyCode?: Prisma.StringFieldUpdateOperationsInput | string
   creditLimit?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  categoryId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  statusCode?: Prisma.StringFieldUpdateOperationsInput | string
+  rating?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  leadTimeDays?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  isPreferred?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  currentBalance?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  tags?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  companyId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  branchId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  versionNumber?: Prisma.IntFieldUpdateOperationsInput | number
+  createdBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  updatedBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  deletedBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -866,6 +1287,19 @@ export type SupplierUncheckedUpdateWithoutTenantInput = {
   paymentTerms?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   currencyCode?: Prisma.StringFieldUpdateOperationsInput | string
   creditLimit?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  categoryId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  statusCode?: Prisma.StringFieldUpdateOperationsInput | string
+  rating?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  leadTimeDays?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  isPreferred?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  currentBalance?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  tags?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  companyId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  branchId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  versionNumber?: Prisma.IntFieldUpdateOperationsInput | number
+  createdBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  updatedBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  deletedBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -884,6 +1318,19 @@ export type SupplierUncheckedUpdateManyWithoutTenantInput = {
   paymentTerms?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   currencyCode?: Prisma.StringFieldUpdateOperationsInput | string
   creditLimit?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  categoryId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  statusCode?: Prisma.StringFieldUpdateOperationsInput | string
+  rating?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  leadTimeDays?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  isPreferred?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  currentBalance?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  tags?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  companyId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  branchId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  versionNumber?: Prisma.IntFieldUpdateOperationsInput | number
+  createdBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  updatedBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  deletedBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -933,6 +1380,19 @@ export type SupplierSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs
   paymentTerms?: boolean
   currencyCode?: boolean
   creditLimit?: boolean
+  categoryId?: boolean
+  statusCode?: boolean
+  rating?: boolean
+  leadTimeDays?: boolean
+  isPreferred?: boolean
+  currentBalance?: boolean
+  tags?: boolean
+  companyId?: boolean
+  branchId?: boolean
+  versionNumber?: boolean
+  createdBy?: boolean
+  updatedBy?: boolean
+  deletedBy?: boolean
   isActive?: boolean
   createdAt?: boolean
   updatedAt?: boolean
@@ -954,6 +1414,19 @@ export type SupplierSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Exte
   paymentTerms?: boolean
   currencyCode?: boolean
   creditLimit?: boolean
+  categoryId?: boolean
+  statusCode?: boolean
+  rating?: boolean
+  leadTimeDays?: boolean
+  isPreferred?: boolean
+  currentBalance?: boolean
+  tags?: boolean
+  companyId?: boolean
+  branchId?: boolean
+  versionNumber?: boolean
+  createdBy?: boolean
+  updatedBy?: boolean
+  deletedBy?: boolean
   isActive?: boolean
   createdAt?: boolean
   updatedAt?: boolean
@@ -973,6 +1446,19 @@ export type SupplierSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Exte
   paymentTerms?: boolean
   currencyCode?: boolean
   creditLimit?: boolean
+  categoryId?: boolean
+  statusCode?: boolean
+  rating?: boolean
+  leadTimeDays?: boolean
+  isPreferred?: boolean
+  currentBalance?: boolean
+  tags?: boolean
+  companyId?: boolean
+  branchId?: boolean
+  versionNumber?: boolean
+  createdBy?: boolean
+  updatedBy?: boolean
+  deletedBy?: boolean
   isActive?: boolean
   createdAt?: boolean
   updatedAt?: boolean
@@ -992,13 +1478,26 @@ export type SupplierSelectScalar = {
   paymentTerms?: boolean
   currencyCode?: boolean
   creditLimit?: boolean
+  categoryId?: boolean
+  statusCode?: boolean
+  rating?: boolean
+  leadTimeDays?: boolean
+  isPreferred?: boolean
+  currentBalance?: boolean
+  tags?: boolean
+  companyId?: boolean
+  branchId?: boolean
+  versionNumber?: boolean
+  createdBy?: boolean
+  updatedBy?: boolean
+  deletedBy?: boolean
   isActive?: boolean
   createdAt?: boolean
   updatedAt?: boolean
   deletedAt?: boolean
 }
 
-export type SupplierOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "tenantId" | "code" | "name" | "taxId" | "email" | "phone" | "addressJson" | "paymentTerms" | "currencyCode" | "creditLimit" | "isActive" | "createdAt" | "updatedAt" | "deletedAt", ExtArgs["result"]["supplier"]>
+export type SupplierOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "tenantId" | "code" | "name" | "taxId" | "email" | "phone" | "addressJson" | "paymentTerms" | "currencyCode" | "creditLimit" | "categoryId" | "statusCode" | "rating" | "leadTimeDays" | "isPreferred" | "currentBalance" | "tags" | "companyId" | "branchId" | "versionNumber" | "createdBy" | "updatedBy" | "deletedBy" | "isActive" | "createdAt" | "updatedAt" | "deletedAt", ExtArgs["result"]["supplier"]>
 export type SupplierInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   tenant?: boolean | Prisma.TenantAccountDefaultArgs<ExtArgs>
   productSuppliers?: boolean | Prisma.Supplier$productSuppliersArgs<ExtArgs>
@@ -1029,6 +1528,19 @@ export type $SupplierPayload<ExtArgs extends runtime.Types.Extensions.InternalAr
     paymentTerms: string | null
     currencyCode: string
     creditLimit: runtime.Decimal | null
+    categoryId: string | null
+    statusCode: string
+    rating: runtime.Decimal | null
+    leadTimeDays: number | null
+    isPreferred: boolean
+    currentBalance: runtime.Decimal
+    tags: runtime.JsonValue | null
+    companyId: string | null
+    branchId: string | null
+    versionNumber: number
+    createdBy: string | null
+    updatedBy: string | null
+    deletedBy: string | null
     isActive: boolean
     createdAt: Date
     updatedAt: Date
@@ -1469,6 +1981,19 @@ export interface SupplierFieldRefs {
   readonly paymentTerms: Prisma.FieldRef<"Supplier", 'String'>
   readonly currencyCode: Prisma.FieldRef<"Supplier", 'String'>
   readonly creditLimit: Prisma.FieldRef<"Supplier", 'Decimal'>
+  readonly categoryId: Prisma.FieldRef<"Supplier", 'String'>
+  readonly statusCode: Prisma.FieldRef<"Supplier", 'String'>
+  readonly rating: Prisma.FieldRef<"Supplier", 'Decimal'>
+  readonly leadTimeDays: Prisma.FieldRef<"Supplier", 'Int'>
+  readonly isPreferred: Prisma.FieldRef<"Supplier", 'Boolean'>
+  readonly currentBalance: Prisma.FieldRef<"Supplier", 'Decimal'>
+  readonly tags: Prisma.FieldRef<"Supplier", 'Json'>
+  readonly companyId: Prisma.FieldRef<"Supplier", 'String'>
+  readonly branchId: Prisma.FieldRef<"Supplier", 'String'>
+  readonly versionNumber: Prisma.FieldRef<"Supplier", 'Int'>
+  readonly createdBy: Prisma.FieldRef<"Supplier", 'String'>
+  readonly updatedBy: Prisma.FieldRef<"Supplier", 'String'>
+  readonly deletedBy: Prisma.FieldRef<"Supplier", 'String'>
   readonly isActive: Prisma.FieldRef<"Supplier", 'Boolean'>
   readonly createdAt: Prisma.FieldRef<"Supplier", 'DateTime'>
   readonly updatedAt: Prisma.FieldRef<"Supplier", 'DateTime'>
