@@ -1,8 +1,8 @@
 {
   "app": {
-    "title": "Meridian Control Room",
+    "title": "Bluewave Control Room",
     "subtitle": "Multitenant inventory, restaurant, POS, and system operations",
-    "deckTitle": "Meridian Operations Deck"
+    "deckTitle": "Bluewave Operations Deck"
   },
   "actions": {
     "switchWorkspace": "Switch workspace",
@@ -78,6 +78,11 @@
     "crmLoyalty": "Loyalty",
     "crmSegments": "Segments",
     "crmAnalytics": "Customer Analytics",
+    "finance": "Finance",
+    "financeAccounts": "Chart of Accounts",
+    "financeJournals": "Journal Entries",
+    "financeFiscal": "Fiscal Calendar",
+    "financeSettings": "Financial Settings",
     "systemAdmin": "System Admin",
     "systemSecurity": "Security Center",
     "systemRoles": "Roles",

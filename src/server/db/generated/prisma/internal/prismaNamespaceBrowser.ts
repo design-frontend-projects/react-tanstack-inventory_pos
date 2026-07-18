@@ -241,7 +241,93 @@ export const ModelName = {
   PodAttachment: 'PodAttachment',
   PodCustomFieldDefinition: 'PodCustomFieldDefinition',
   PodCustomFieldValue: 'PodCustomFieldValue',
-  PodNotification: 'PodNotification'
+  PodNotification: 'PodNotification',
+  FinAccountClass: 'FinAccountClass',
+  FinAccountType: 'FinAccountType',
+  FinAccount: 'FinAccount',
+  FinAccountMapping: 'FinAccountMapping',
+  FinFiscalYear: 'FinFiscalYear',
+  FinFiscalPeriod: 'FinFiscalPeriod',
+  FinPeriodModuleLock: 'FinPeriodModuleLock',
+  FinJournalType: 'FinJournalType',
+  FinJournalEntry: 'FinJournalEntry',
+  FinJournalLine: 'FinJournalLine',
+  FinJournalTemplate: 'FinJournalTemplate',
+  FinJournalTemplateLine: 'FinJournalTemplateLine',
+  FinRecurringJournalSchedule: 'FinRecurringJournalSchedule',
+  FinGlBalance: 'FinGlBalance',
+  FinCustomerLedgerEntry: 'FinCustomerLedgerEntry',
+  FinCustomerLedgerApplication: 'FinCustomerLedgerApplication',
+  FinArReceipt: 'FinArReceipt',
+  FinArReceiptAllocation: 'FinArReceiptAllocation',
+  FinCustomerFinancialProfile: 'FinCustomerFinancialProfile',
+  FinDunningLevel: 'FinDunningLevel',
+  FinDunningRun: 'FinDunningRun',
+  FinDunningRunEntry: 'FinDunningRunEntry',
+  FinVendorLedgerEntry: 'FinVendorLedgerEntry',
+  FinVendorLedgerApplication: 'FinVendorLedgerApplication',
+  FinSupplierFinancialProfile: 'FinSupplierFinancialProfile',
+  FinPaymentRun: 'FinPaymentRun',
+  FinPaymentRunLine: 'FinPaymentRunLine',
+  FinCashbox: 'FinCashbox',
+  FinCashTransaction: 'FinCashTransaction',
+  FinFundsTransfer: 'FinFundsTransfer',
+  FinCashFlowCategory: 'FinCashFlowCategory',
+  FinBankAccount: 'FinBankAccount',
+  FinBankStatement: 'FinBankStatement',
+  FinBankStatementLine: 'FinBankStatementLine',
+  FinBankReconciliation: 'FinBankReconciliation',
+  FinBankReconciliationMatch: 'FinBankReconciliationMatch',
+  FinBankMatchingRule: 'FinBankMatchingRule',
+  FinChequeBook: 'FinChequeBook',
+  FinCheque: 'FinCheque',
+  FinTaxAuthority: 'FinTaxAuthority',
+  FinTaxType: 'FinTaxType',
+  FinTaxCode: 'FinTaxCode',
+  FinTaxCodeRate: 'FinTaxCodeRate',
+  FinTaxCodeMapping: 'FinTaxCodeMapping',
+  FinTaxTransaction: 'FinTaxTransaction',
+  FinTaxReturn: 'FinTaxReturn',
+  FinTaxReturnLine: 'FinTaxReturnLine',
+  FinWhtCertificate: 'FinWhtCertificate',
+  FinCurrency: 'FinCurrency',
+  FinExchangeRate: 'FinExchangeRate',
+  FinFxRevaluationRun: 'FinFxRevaluationRun',
+  FinFxRevaluationLine: 'FinFxRevaluationLine',
+  FinCostCenter: 'FinCostCenter',
+  FinProject: 'FinProject',
+  FinAnalysisDimension: 'FinAnalysisDimension',
+  FinAnalysisDimensionValue: 'FinAnalysisDimensionValue',
+  FinJournalLineDimension: 'FinJournalLineDimension',
+  FinBudget: 'FinBudget',
+  FinBudgetLine: 'FinBudgetLine',
+  FinBudgetRevision: 'FinBudgetRevision',
+  FinBudgetTransfer: 'FinBudgetTransfer',
+  FinBudgetControlPolicy: 'FinBudgetControlPolicy',
+  FinAssetCategory: 'FinAssetCategory',
+  FinDepreciationMethod: 'FinDepreciationMethod',
+  FinAsset: 'FinAsset',
+  FinAssetDepreciationSchedule: 'FinAssetDepreciationSchedule',
+  FinDepreciationRun: 'FinDepreciationRun',
+  FinAssetDepreciationEntry: 'FinAssetDepreciationEntry',
+  FinAssetDisposal: 'FinAssetDisposal',
+  FinAssetRevaluation: 'FinAssetRevaluation',
+  FinAssetTransfer: 'FinAssetTransfer',
+  FinCloseTaskTemplate: 'FinCloseTaskTemplate',
+  FinPeriodCloseRun: 'FinPeriodCloseRun',
+  FinPeriodCloseRunTask: 'FinPeriodCloseRunTask',
+  FinYearCloseRun: 'FinYearCloseRun',
+  FinOpeningBalanceBatch: 'FinOpeningBalanceBatch',
+  FinOpeningBalanceLine: 'FinOpeningBalanceLine',
+  FinAllocationRule: 'FinAllocationRule',
+  FinAllocationRuleTarget: 'FinAllocationRuleTarget',
+  FinAllocationRun: 'FinAllocationRun',
+  FinSettings: 'FinSettings',
+  FinPostingRule: 'FinPostingRule',
+  FinPostingRuleLine: 'FinPostingRuleLine',
+  FinPostingQueue: 'FinPostingQueue',
+  FinEventCursor: 'FinEventCursor',
+  FinPaymentTerm: 'FinPaymentTerm'
 } as const
 
 export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -3923,6 +4009,1806 @@ export const PodNotificationScalarFieldEnum = {
 } as const
 
 export type PodNotificationScalarFieldEnum = (typeof PodNotificationScalarFieldEnum)[keyof typeof PodNotificationScalarFieldEnum]
+
+
+export const FinAccountClassScalarFieldEnum = {
+  id: 'id',
+  tenantId: 'tenantId',
+  code: 'code',
+  name: 'name',
+  nameAr: 'nameAr',
+  normalBalanceSide: 'normalBalanceSide',
+  displayOrder: 'displayOrder',
+  isActive: 'isActive',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type FinAccountClassScalarFieldEnum = (typeof FinAccountClassScalarFieldEnum)[keyof typeof FinAccountClassScalarFieldEnum]
+
+
+export const FinAccountTypeScalarFieldEnum = {
+  id: 'id',
+  tenantId: 'tenantId',
+  accountClassId: 'accountClassId',
+  code: 'code',
+  name: 'name',
+  nameAr: 'nameAr',
+  isControlType: 'isControlType',
+  controlDomain: 'controlDomain',
+  cashFlowSection: 'cashFlowSection',
+  displayOrder: 'displayOrder',
+  isActive: 'isActive',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type FinAccountTypeScalarFieldEnum = (typeof FinAccountTypeScalarFieldEnum)[keyof typeof FinAccountTypeScalarFieldEnum]
+
+
+export const FinAccountScalarFieldEnum = {
+  id: 'id',
+  tenantId: 'tenantId',
+  code: 'code',
+  name: 'name',
+  nameAr: 'nameAr',
+  description: 'description',
+  parentAccountId: 'parentAccountId',
+  accountTypeId: 'accountTypeId',
+  level: 'level',
+  path: 'path',
+  isLeaf: 'isLeaf',
+  isControlAccount: 'isControlAccount',
+  controlDomain: 'controlDomain',
+  allowManualJournal: 'allowManualJournal',
+  currencyCode: 'currencyCode',
+  cashFlowCategoryId: 'cashFlowCategoryId',
+  branchId: 'branchId',
+  isActive: 'isActive',
+  versionNumber: 'versionNumber',
+  createdBy: 'createdBy',
+  updatedBy: 'updatedBy',
+  deletedBy: 'deletedBy',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt',
+  deletedAt: 'deletedAt'
+} as const
+
+export type FinAccountScalarFieldEnum = (typeof FinAccountScalarFieldEnum)[keyof typeof FinAccountScalarFieldEnum]
+
+
+export const FinAccountMappingScalarFieldEnum = {
+  id: 'id',
+  tenantId: 'tenantId',
+  entityType: 'entityType',
+  entityId: 'entityId',
+  entityCode: 'entityCode',
+  mappingRole: 'mappingRole',
+  accountId: 'accountId',
+  isActive: 'isActive',
+  createdBy: 'createdBy',
+  updatedBy: 'updatedBy',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type FinAccountMappingScalarFieldEnum = (typeof FinAccountMappingScalarFieldEnum)[keyof typeof FinAccountMappingScalarFieldEnum]
+
+
+export const FinFiscalYearScalarFieldEnum = {
+  id: 'id',
+  tenantId: 'tenantId',
+  code: 'code',
+  startDate: 'startDate',
+  endDate: 'endDate',
+  statusCode: 'statusCode',
+  closedAt: 'closedAt',
+  closedByProfileId: 'closedByProfileId',
+  versionNumber: 'versionNumber',
+  createdBy: 'createdBy',
+  updatedBy: 'updatedBy',
+  deletedBy: 'deletedBy',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt',
+  deletedAt: 'deletedAt'
+} as const
+
+export type FinFiscalYearScalarFieldEnum = (typeof FinFiscalYearScalarFieldEnum)[keyof typeof FinFiscalYearScalarFieldEnum]
+
+
+export const FinFiscalPeriodScalarFieldEnum = {
+  id: 'id',
+  tenantId: 'tenantId',
+  fiscalYearId: 'fiscalYearId',
+  periodNumber: 'periodNumber',
+  name: 'name',
+  startDate: 'startDate',
+  endDate: 'endDate',
+  statusCode: 'statusCode',
+  isAdjustmentPeriod: 'isAdjustmentPeriod',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type FinFiscalPeriodScalarFieldEnum = (typeof FinFiscalPeriodScalarFieldEnum)[keyof typeof FinFiscalPeriodScalarFieldEnum]
+
+
+export const FinPeriodModuleLockScalarFieldEnum = {
+  id: 'id',
+  tenantId: 'tenantId',
+  fiscalPeriodId: 'fiscalPeriodId',
+  moduleCode: 'moduleCode',
+  lockedAt: 'lockedAt',
+  lockedByProfileId: 'lockedByProfileId',
+  createdAt: 'createdAt'
+} as const
+
+export type FinPeriodModuleLockScalarFieldEnum = (typeof FinPeriodModuleLockScalarFieldEnum)[keyof typeof FinPeriodModuleLockScalarFieldEnum]
+
+
+export const FinJournalTypeScalarFieldEnum = {
+  id: 'id',
+  tenantId: 'tenantId',
+  code: 'code',
+  name: 'name',
+  nameAr: 'nameAr',
+  documentType: 'documentType',
+  defaultPrefix: 'defaultPrefix',
+  sortOrder: 'sortOrder',
+  isActive: 'isActive',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type FinJournalTypeScalarFieldEnum = (typeof FinJournalTypeScalarFieldEnum)[keyof typeof FinJournalTypeScalarFieldEnum]
+
+
+export const FinJournalEntryScalarFieldEnum = {
+  id: 'id',
+  tenantId: 'tenantId',
+  entryNumber: 'entryNumber',
+  journalTypeId: 'journalTypeId',
+  entryDate: 'entryDate',
+  fiscalPeriodId: 'fiscalPeriodId',
+  statusCode: 'statusCode',
+  sourceDocType: 'sourceDocType',
+  sourceDocId: 'sourceDocId',
+  sourceEventType: 'sourceEventType',
+  referenceNumber: 'referenceNumber',
+  memo: 'memo',
+  currencyCode: 'currencyCode',
+  totalBaseDebit: 'totalBaseDebit',
+  totalBaseCredit: 'totalBaseCredit',
+  reversalOfEntryId: 'reversalOfEntryId',
+  isPosted: 'isPosted',
+  postedAt: 'postedAt',
+  postedByProfileId: 'postedByProfileId',
+  approvalRequestId: 'approvalRequestId',
+  correlationId: 'correlationId',
+  versionNumber: 'versionNumber',
+  createdBy: 'createdBy',
+  updatedBy: 'updatedBy',
+  deletedBy: 'deletedBy',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt',
+  deletedAt: 'deletedAt'
+} as const
+
+export type FinJournalEntryScalarFieldEnum = (typeof FinJournalEntryScalarFieldEnum)[keyof typeof FinJournalEntryScalarFieldEnum]
+
+
+export const FinJournalLineScalarFieldEnum = {
+  id: 'id',
+  tenantId: 'tenantId',
+  entryId: 'entryId',
+  lineNumber: 'lineNumber',
+  accountId: 'accountId',
+  description: 'description',
+  currencyCode: 'currencyCode',
+  exchangeRate: 'exchangeRate',
+  debitAmount: 'debitAmount',
+  creditAmount: 'creditAmount',
+  baseDebitAmount: 'baseDebitAmount',
+  baseCreditAmount: 'baseCreditAmount',
+  partyType: 'partyType',
+  partyId: 'partyId',
+  costCenterId: 'costCenterId',
+  projectId: 'projectId',
+  branchId: 'branchId',
+  warehouseId: 'warehouseId',
+  taxCodeId: 'taxCodeId',
+  sourceLineId: 'sourceLineId',
+  createdAt: 'createdAt'
+} as const
+
+export type FinJournalLineScalarFieldEnum = (typeof FinJournalLineScalarFieldEnum)[keyof typeof FinJournalLineScalarFieldEnum]
+
+
+export const FinJournalTemplateScalarFieldEnum = {
+  id: 'id',
+  tenantId: 'tenantId',
+  code: 'code',
+  name: 'name',
+  nameAr: 'nameAr',
+  journalTypeId: 'journalTypeId',
+  description: 'description',
+  isActive: 'isActive',
+  versionNumber: 'versionNumber',
+  createdBy: 'createdBy',
+  updatedBy: 'updatedBy',
+  deletedBy: 'deletedBy',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt',
+  deletedAt: 'deletedAt'
+} as const
+
+export type FinJournalTemplateScalarFieldEnum = (typeof FinJournalTemplateScalarFieldEnum)[keyof typeof FinJournalTemplateScalarFieldEnum]
+
+
+export const FinJournalTemplateLineScalarFieldEnum = {
+  id: 'id',
+  tenantId: 'tenantId',
+  templateId: 'templateId',
+  lineNumber: 'lineNumber',
+  accountId: 'accountId',
+  side: 'side',
+  amountFormula: 'amountFormula',
+  fixedAmount: 'fixedAmount',
+  percentOfTotal: 'percentOfTotal',
+  description: 'description',
+  costCenterId: 'costCenterId',
+  projectId: 'projectId',
+  createdAt: 'createdAt'
+} as const
+
+export type FinJournalTemplateLineScalarFieldEnum = (typeof FinJournalTemplateLineScalarFieldEnum)[keyof typeof FinJournalTemplateLineScalarFieldEnum]
+
+
+export const FinRecurringJournalScheduleScalarFieldEnum = {
+  id: 'id',
+  tenantId: 'tenantId',
+  templateId: 'templateId',
+  name: 'name',
+  frequencyCode: 'frequencyCode',
+  intervalCount: 'intervalCount',
+  nextRunDate: 'nextRunDate',
+  lastRunDate: 'lastRunDate',
+  endDate: 'endDate',
+  autoPost: 'autoPost',
+  statusCode: 'statusCode',
+  versionNumber: 'versionNumber',
+  createdBy: 'createdBy',
+  updatedBy: 'updatedBy',
+  deletedBy: 'deletedBy',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt',
+  deletedAt: 'deletedAt'
+} as const
+
+export type FinRecurringJournalScheduleScalarFieldEnum = (typeof FinRecurringJournalScheduleScalarFieldEnum)[keyof typeof FinRecurringJournalScheduleScalarFieldEnum]
+
+
+export const FinGlBalanceScalarFieldEnum = {
+  id: 'id',
+  tenantId: 'tenantId',
+  accountId: 'accountId',
+  fiscalPeriodId: 'fiscalPeriodId',
+  currencyCode: 'currencyCode',
+  openingDebit: 'openingDebit',
+  openingCredit: 'openingCredit',
+  periodDebit: 'periodDebit',
+  periodCredit: 'periodCredit',
+  baseOpeningDebit: 'baseOpeningDebit',
+  baseOpeningCredit: 'baseOpeningCredit',
+  basePeriodDebit: 'basePeriodDebit',
+  basePeriodCredit: 'basePeriodCredit',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type FinGlBalanceScalarFieldEnum = (typeof FinGlBalanceScalarFieldEnum)[keyof typeof FinGlBalanceScalarFieldEnum]
+
+
+export const FinCustomerLedgerEntryScalarFieldEnum = {
+  id: 'id',
+  tenantId: 'tenantId',
+  customerId: 'customerId',
+  journalEntryId: 'journalEntryId',
+  journalLineId: 'journalLineId',
+  entryDate: 'entryDate',
+  documentType: 'documentType',
+  sourceDocType: 'sourceDocType',
+  sourceDocId: 'sourceDocId',
+  documentNumber: 'documentNumber',
+  currencyCode: 'currencyCode',
+  exchangeRate: 'exchangeRate',
+  amount: 'amount',
+  baseAmount: 'baseAmount',
+  remainingAmount: 'remainingAmount',
+  dueDate: 'dueDate',
+  isOpen: 'isOpen',
+  memo: 'memo',
+  createdAt: 'createdAt'
+} as const
+
+export type FinCustomerLedgerEntryScalarFieldEnum = (typeof FinCustomerLedgerEntryScalarFieldEnum)[keyof typeof FinCustomerLedgerEntryScalarFieldEnum]
+
+
+export const FinCustomerLedgerApplicationScalarFieldEnum = {
+  id: 'id',
+  tenantId: 'tenantId',
+  fromEntryId: 'fromEntryId',
+  toEntryId: 'toEntryId',
+  appliedAmount: 'appliedAmount',
+  appliedBaseAmount: 'appliedBaseAmount',
+  fxGainLossBase: 'fxGainLossBase',
+  applicationDate: 'applicationDate',
+  journalEntryId: 'journalEntryId',
+  unappliedAt: 'unappliedAt',
+  createdBy: 'createdBy',
+  createdAt: 'createdAt'
+} as const
+
+export type FinCustomerLedgerApplicationScalarFieldEnum = (typeof FinCustomerLedgerApplicationScalarFieldEnum)[keyof typeof FinCustomerLedgerApplicationScalarFieldEnum]
+
+
+export const FinArReceiptScalarFieldEnum = {
+  id: 'id',
+  tenantId: 'tenantId',
+  documentNumber: 'documentNumber',
+  customerId: 'customerId',
+  receiptDate: 'receiptDate',
+  paymentMethodCode: 'paymentMethodCode',
+  bankAccountId: 'bankAccountId',
+  cashboxId: 'cashboxId',
+  currencyCode: 'currencyCode',
+  exchangeRate: 'exchangeRate',
+  amount: 'amount',
+  allocatedAmount: 'allocatedAmount',
+  unallocatedAmount: 'unallocatedAmount',
+  referenceNumber: 'referenceNumber',
+  isAdvance: 'isAdvance',
+  notes: 'notes',
+  statusCode: 'statusCode',
+  isPosted: 'isPosted',
+  postedAt: 'postedAt',
+  postedByProfileId: 'postedByProfileId',
+  journalEntryId: 'journalEntryId',
+  approvalRequestId: 'approvalRequestId',
+  correlationId: 'correlationId',
+  isActive: 'isActive',
+  versionNumber: 'versionNumber',
+  createdBy: 'createdBy',
+  updatedBy: 'updatedBy',
+  deletedBy: 'deletedBy',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt',
+  deletedAt: 'deletedAt'
+} as const
+
+export type FinArReceiptScalarFieldEnum = (typeof FinArReceiptScalarFieldEnum)[keyof typeof FinArReceiptScalarFieldEnum]
+
+
+export const FinArReceiptAllocationScalarFieldEnum = {
+  id: 'id',
+  tenantId: 'tenantId',
+  receiptId: 'receiptId',
+  salesInvoiceId: 'salesInvoiceId',
+  posSaleId: 'posSaleId',
+  financialNoteId: 'financialNoteId',
+  customerLedgerEntryId: 'customerLedgerEntryId',
+  allocatedAmount: 'allocatedAmount',
+  discountTaken: 'discountTaken',
+  createdAt: 'createdAt'
+} as const
+
+export type FinArReceiptAllocationScalarFieldEnum = (typeof FinArReceiptAllocationScalarFieldEnum)[keyof typeof FinArReceiptAllocationScalarFieldEnum]
+
+
+export const FinCustomerFinancialProfileScalarFieldEnum = {
+  id: 'id',
+  tenantId: 'tenantId',
+  customerId: 'customerId',
+  arControlAccountId: 'arControlAccountId',
+  paymentTermId: 'paymentTermId',
+  creditHold: 'creditHold',
+  dunningLevelId: 'dunningLevelId',
+  statementDelivery: 'statementDelivery',
+  notes: 'notes',
+  versionNumber: 'versionNumber',
+  createdBy: 'createdBy',
+  updatedBy: 'updatedBy',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type FinCustomerFinancialProfileScalarFieldEnum = (typeof FinCustomerFinancialProfileScalarFieldEnum)[keyof typeof FinCustomerFinancialProfileScalarFieldEnum]
+
+
+export const FinDunningLevelScalarFieldEnum = {
+  id: 'id',
+  tenantId: 'tenantId',
+  levelNumber: 'levelNumber',
+  name: 'name',
+  nameAr: 'nameAr',
+  daysOverdue: 'daysOverdue',
+  feeAmount: 'feeAmount',
+  blockSales: 'blockSales',
+  isActive: 'isActive',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type FinDunningLevelScalarFieldEnum = (typeof FinDunningLevelScalarFieldEnum)[keyof typeof FinDunningLevelScalarFieldEnum]
+
+
+export const FinDunningRunScalarFieldEnum = {
+  id: 'id',
+  tenantId: 'tenantId',
+  runNumber: 'runNumber',
+  runDate: 'runDate',
+  statusCode: 'statusCode',
+  executedByProfileId: 'executedByProfileId',
+  notes: 'notes',
+  versionNumber: 'versionNumber',
+  createdBy: 'createdBy',
+  updatedBy: 'updatedBy',
+  deletedBy: 'deletedBy',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt',
+  deletedAt: 'deletedAt'
+} as const
+
+export type FinDunningRunScalarFieldEnum = (typeof FinDunningRunScalarFieldEnum)[keyof typeof FinDunningRunScalarFieldEnum]
+
+
+export const FinDunningRunEntryScalarFieldEnum = {
+  id: 'id',
+  tenantId: 'tenantId',
+  runId: 'runId',
+  customerId: 'customerId',
+  ledgerEntryId: 'ledgerEntryId',
+  dunningLevelId: 'dunningLevelId',
+  amountDue: 'amountDue',
+  notificationId: 'notificationId',
+  createdAt: 'createdAt'
+} as const
+
+export type FinDunningRunEntryScalarFieldEnum = (typeof FinDunningRunEntryScalarFieldEnum)[keyof typeof FinDunningRunEntryScalarFieldEnum]
+
+
+export const FinVendorLedgerEntryScalarFieldEnum = {
+  id: 'id',
+  tenantId: 'tenantId',
+  supplierId: 'supplierId',
+  journalEntryId: 'journalEntryId',
+  journalLineId: 'journalLineId',
+  entryDate: 'entryDate',
+  documentType: 'documentType',
+  sourceDocType: 'sourceDocType',
+  sourceDocId: 'sourceDocId',
+  documentNumber: 'documentNumber',
+  currencyCode: 'currencyCode',
+  exchangeRate: 'exchangeRate',
+  amount: 'amount',
+  baseAmount: 'baseAmount',
+  remainingAmount: 'remainingAmount',
+  dueDate: 'dueDate',
+  isOpen: 'isOpen',
+  memo: 'memo',
+  createdAt: 'createdAt'
+} as const
+
+export type FinVendorLedgerEntryScalarFieldEnum = (typeof FinVendorLedgerEntryScalarFieldEnum)[keyof typeof FinVendorLedgerEntryScalarFieldEnum]
+
+
+export const FinVendorLedgerApplicationScalarFieldEnum = {
+  id: 'id',
+  tenantId: 'tenantId',
+  fromEntryId: 'fromEntryId',
+  toEntryId: 'toEntryId',
+  appliedAmount: 'appliedAmount',
+  appliedBaseAmount: 'appliedBaseAmount',
+  fxGainLossBase: 'fxGainLossBase',
+  applicationDate: 'applicationDate',
+  journalEntryId: 'journalEntryId',
+  unappliedAt: 'unappliedAt',
+  createdBy: 'createdBy',
+  createdAt: 'createdAt'
+} as const
+
+export type FinVendorLedgerApplicationScalarFieldEnum = (typeof FinVendorLedgerApplicationScalarFieldEnum)[keyof typeof FinVendorLedgerApplicationScalarFieldEnum]
+
+
+export const FinSupplierFinancialProfileScalarFieldEnum = {
+  id: 'id',
+  tenantId: 'tenantId',
+  supplierId: 'supplierId',
+  apControlAccountId: 'apControlAccountId',
+  defaultExpenseAccountId: 'defaultExpenseAccountId',
+  paymentTermId: 'paymentTermId',
+  whtApplicable: 'whtApplicable',
+  whtTaxCodeId: 'whtTaxCodeId',
+  notes: 'notes',
+  versionNumber: 'versionNumber',
+  createdBy: 'createdBy',
+  updatedBy: 'updatedBy',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type FinSupplierFinancialProfileScalarFieldEnum = (typeof FinSupplierFinancialProfileScalarFieldEnum)[keyof typeof FinSupplierFinancialProfileScalarFieldEnum]
+
+
+export const FinPaymentRunScalarFieldEnum = {
+  id: 'id',
+  tenantId: 'tenantId',
+  runNumber: 'runNumber',
+  runDate: 'runDate',
+  bankAccountId: 'bankAccountId',
+  paymentMethodCode: 'paymentMethodCode',
+  selectionCriteria: 'selectionCriteria',
+  statusCode: 'statusCode',
+  totalProposed: 'totalProposed',
+  totalExecuted: 'totalExecuted',
+  approvalRequestId: 'approvalRequestId',
+  executedAt: 'executedAt',
+  versionNumber: 'versionNumber',
+  createdBy: 'createdBy',
+  updatedBy: 'updatedBy',
+  deletedBy: 'deletedBy',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt',
+  deletedAt: 'deletedAt'
+} as const
+
+export type FinPaymentRunScalarFieldEnum = (typeof FinPaymentRunScalarFieldEnum)[keyof typeof FinPaymentRunScalarFieldEnum]
+
+
+export const FinPaymentRunLineScalarFieldEnum = {
+  id: 'id',
+  tenantId: 'tenantId',
+  runId: 'runId',
+  supplierId: 'supplierId',
+  supplierInvoiceId: 'supplierInvoiceId',
+  financialNoteId: 'financialNoteId',
+  vendorLedgerEntryId: 'vendorLedgerEntryId',
+  dueDate: 'dueDate',
+  outstandingAmount: 'outstandingAmount',
+  proposedAmount: 'proposedAmount',
+  discountAmount: 'discountAmount',
+  statusCode: 'statusCode',
+  resultingSupplierPaymentId: 'resultingSupplierPaymentId',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type FinPaymentRunLineScalarFieldEnum = (typeof FinPaymentRunLineScalarFieldEnum)[keyof typeof FinPaymentRunLineScalarFieldEnum]
+
+
+export const FinCashboxScalarFieldEnum = {
+  id: 'id',
+  tenantId: 'tenantId',
+  code: 'code',
+  name: 'name',
+  nameAr: 'nameAr',
+  glAccountId: 'glAccountId',
+  branchId: 'branchId',
+  currencyCode: 'currencyCode',
+  custodianProfileId: 'custodianProfileId',
+  floatLimit: 'floatLimit',
+  currentBalance: 'currentBalance',
+  isActive: 'isActive',
+  versionNumber: 'versionNumber',
+  createdBy: 'createdBy',
+  updatedBy: 'updatedBy',
+  deletedBy: 'deletedBy',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt',
+  deletedAt: 'deletedAt'
+} as const
+
+export type FinCashboxScalarFieldEnum = (typeof FinCashboxScalarFieldEnum)[keyof typeof FinCashboxScalarFieldEnum]
+
+
+export const FinCashTransactionScalarFieldEnum = {
+  id: 'id',
+  tenantId: 'tenantId',
+  documentNumber: 'documentNumber',
+  cashboxId: 'cashboxId',
+  transactionType: 'transactionType',
+  counterAccountId: 'counterAccountId',
+  partyType: 'partyType',
+  partyId: 'partyId',
+  transactionDate: 'transactionDate',
+  currencyCode: 'currencyCode',
+  exchangeRate: 'exchangeRate',
+  amount: 'amount',
+  referenceNumber: 'referenceNumber',
+  notes: 'notes',
+  posSessionId: 'posSessionId',
+  statusCode: 'statusCode',
+  isPosted: 'isPosted',
+  postedAt: 'postedAt',
+  postedByProfileId: 'postedByProfileId',
+  journalEntryId: 'journalEntryId',
+  correlationId: 'correlationId',
+  versionNumber: 'versionNumber',
+  createdBy: 'createdBy',
+  updatedBy: 'updatedBy',
+  deletedBy: 'deletedBy',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt',
+  deletedAt: 'deletedAt'
+} as const
+
+export type FinCashTransactionScalarFieldEnum = (typeof FinCashTransactionScalarFieldEnum)[keyof typeof FinCashTransactionScalarFieldEnum]
+
+
+export const FinFundsTransferScalarFieldEnum = {
+  id: 'id',
+  tenantId: 'tenantId',
+  documentNumber: 'documentNumber',
+  transferDate: 'transferDate',
+  fromBankAccountId: 'fromBankAccountId',
+  fromCashboxId: 'fromCashboxId',
+  toBankAccountId: 'toBankAccountId',
+  toCashboxId: 'toCashboxId',
+  amount: 'amount',
+  fromCurrencyCode: 'fromCurrencyCode',
+  toCurrencyCode: 'toCurrencyCode',
+  exchangeRate: 'exchangeRate',
+  receivedAmount: 'receivedAmount',
+  inTransitAccountId: 'inTransitAccountId',
+  statusCode: 'statusCode',
+  journalEntryId: 'journalEntryId',
+  completionJournalEntryId: 'completionJournalEntryId',
+  notes: 'notes',
+  isPosted: 'isPosted',
+  postedAt: 'postedAt',
+  postedByProfileId: 'postedByProfileId',
+  versionNumber: 'versionNumber',
+  createdBy: 'createdBy',
+  updatedBy: 'updatedBy',
+  deletedBy: 'deletedBy',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt',
+  deletedAt: 'deletedAt'
+} as const
+
+export type FinFundsTransferScalarFieldEnum = (typeof FinFundsTransferScalarFieldEnum)[keyof typeof FinFundsTransferScalarFieldEnum]
+
+
+export const FinCashFlowCategoryScalarFieldEnum = {
+  id: 'id',
+  tenantId: 'tenantId',
+  code: 'code',
+  section: 'section',
+  name: 'name',
+  nameAr: 'nameAr',
+  sortOrder: 'sortOrder',
+  isActive: 'isActive',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type FinCashFlowCategoryScalarFieldEnum = (typeof FinCashFlowCategoryScalarFieldEnum)[keyof typeof FinCashFlowCategoryScalarFieldEnum]
+
+
+export const FinBankAccountScalarFieldEnum = {
+  id: 'id',
+  tenantId: 'tenantId',
+  code: 'code',
+  bankName: 'bankName',
+  accountName: 'accountName',
+  accountNumber: 'accountNumber',
+  iban: 'iban',
+  swiftCode: 'swiftCode',
+  currencyCode: 'currencyCode',
+  glAccountId: 'glAccountId',
+  branchId: 'branchId',
+  currentBalance: 'currentBalance',
+  isActive: 'isActive',
+  versionNumber: 'versionNumber',
+  createdBy: 'createdBy',
+  updatedBy: 'updatedBy',
+  deletedBy: 'deletedBy',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt',
+  deletedAt: 'deletedAt'
+} as const
+
+export type FinBankAccountScalarFieldEnum = (typeof FinBankAccountScalarFieldEnum)[keyof typeof FinBankAccountScalarFieldEnum]
+
+
+export const FinBankStatementScalarFieldEnum = {
+  id: 'id',
+  tenantId: 'tenantId',
+  bankAccountId: 'bankAccountId',
+  statementDate: 'statementDate',
+  referenceNumber: 'referenceNumber',
+  openingBalance: 'openingBalance',
+  closingBalance: 'closingBalance',
+  importSource: 'importSource',
+  statusCode: 'statusCode',
+  versionNumber: 'versionNumber',
+  createdBy: 'createdBy',
+  updatedBy: 'updatedBy',
+  deletedBy: 'deletedBy',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt',
+  deletedAt: 'deletedAt'
+} as const
+
+export type FinBankStatementScalarFieldEnum = (typeof FinBankStatementScalarFieldEnum)[keyof typeof FinBankStatementScalarFieldEnum]
+
+
+export const FinBankStatementLineScalarFieldEnum = {
+  id: 'id',
+  tenantId: 'tenantId',
+  statementId: 'statementId',
+  lineDate: 'lineDate',
+  description: 'description',
+  reference: 'reference',
+  amount: 'amount',
+  balanceAfter: 'balanceAfter',
+  matchStatusCode: 'matchStatusCode',
+  externalId: 'externalId',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type FinBankStatementLineScalarFieldEnum = (typeof FinBankStatementLineScalarFieldEnum)[keyof typeof FinBankStatementLineScalarFieldEnum]
+
+
+export const FinBankReconciliationScalarFieldEnum = {
+  id: 'id',
+  tenantId: 'tenantId',
+  bankAccountId: 'bankAccountId',
+  asOfDate: 'asOfDate',
+  statementBalance: 'statementBalance',
+  glBalance: 'glBalance',
+  unreconciledDifference: 'unreconciledDifference',
+  statusCode: 'statusCode',
+  completedAt: 'completedAt',
+  completedByProfileId: 'completedByProfileId',
+  versionNumber: 'versionNumber',
+  createdBy: 'createdBy',
+  updatedBy: 'updatedBy',
+  deletedBy: 'deletedBy',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt',
+  deletedAt: 'deletedAt'
+} as const
+
+export type FinBankReconciliationScalarFieldEnum = (typeof FinBankReconciliationScalarFieldEnum)[keyof typeof FinBankReconciliationScalarFieldEnum]
+
+
+export const FinBankReconciliationMatchScalarFieldEnum = {
+  id: 'id',
+  tenantId: 'tenantId',
+  reconciliationId: 'reconciliationId',
+  statementLineId: 'statementLineId',
+  journalLineId: 'journalLineId',
+  adjustmentJournalEntryId: 'adjustmentJournalEntryId',
+  matchedAmount: 'matchedAmount',
+  matchType: 'matchType',
+  createdBy: 'createdBy',
+  createdAt: 'createdAt'
+} as const
+
+export type FinBankReconciliationMatchScalarFieldEnum = (typeof FinBankReconciliationMatchScalarFieldEnum)[keyof typeof FinBankReconciliationMatchScalarFieldEnum]
+
+
+export const FinBankMatchingRuleScalarFieldEnum = {
+  id: 'id',
+  tenantId: 'tenantId',
+  bankAccountId: 'bankAccountId',
+  name: 'name',
+  pattern: 'pattern',
+  matchField: 'matchField',
+  counterAccountId: 'counterAccountId',
+  priority: 'priority',
+  isActive: 'isActive',
+  versionNumber: 'versionNumber',
+  createdBy: 'createdBy',
+  updatedBy: 'updatedBy',
+  deletedBy: 'deletedBy',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt',
+  deletedAt: 'deletedAt'
+} as const
+
+export type FinBankMatchingRuleScalarFieldEnum = (typeof FinBankMatchingRuleScalarFieldEnum)[keyof typeof FinBankMatchingRuleScalarFieldEnum]
+
+
+export const FinChequeBookScalarFieldEnum = {
+  id: 'id',
+  tenantId: 'tenantId',
+  bankAccountId: 'bankAccountId',
+  bookNumber: 'bookNumber',
+  startNumber: 'startNumber',
+  endNumber: 'endNumber',
+  nextNumber: 'nextNumber',
+  statusCode: 'statusCode',
+  createdBy: 'createdBy',
+  updatedBy: 'updatedBy',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt',
+  deletedAt: 'deletedAt'
+} as const
+
+export type FinChequeBookScalarFieldEnum = (typeof FinChequeBookScalarFieldEnum)[keyof typeof FinChequeBookScalarFieldEnum]
+
+
+export const FinChequeScalarFieldEnum = {
+  id: 'id',
+  tenantId: 'tenantId',
+  chequeNumber: 'chequeNumber',
+  direction: 'direction',
+  bankAccountId: 'bankAccountId',
+  chequeBookId: 'chequeBookId',
+  partyType: 'partyType',
+  partyId: 'partyId',
+  payeeName: 'payeeName',
+  amount: 'amount',
+  currencyCode: 'currencyCode',
+  chequeDate: 'chequeDate',
+  maturityDate: 'maturityDate',
+  statusCode: 'statusCode',
+  memo: 'memo',
+  sourceDocType: 'sourceDocType',
+  sourceDocId: 'sourceDocId',
+  clearingJournalEntryId: 'clearingJournalEntryId',
+  versionNumber: 'versionNumber',
+  createdBy: 'createdBy',
+  updatedBy: 'updatedBy',
+  deletedBy: 'deletedBy',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt',
+  deletedAt: 'deletedAt'
+} as const
+
+export type FinChequeScalarFieldEnum = (typeof FinChequeScalarFieldEnum)[keyof typeof FinChequeScalarFieldEnum]
+
+
+export const FinTaxAuthorityScalarFieldEnum = {
+  id: 'id',
+  tenantId: 'tenantId',
+  code: 'code',
+  name: 'name',
+  nameAr: 'nameAr',
+  registrationNumber: 'registrationNumber',
+  payableAccountId: 'payableAccountId',
+  receivableAccountId: 'receivableAccountId',
+  isActive: 'isActive',
+  versionNumber: 'versionNumber',
+  createdBy: 'createdBy',
+  updatedBy: 'updatedBy',
+  deletedBy: 'deletedBy',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt',
+  deletedAt: 'deletedAt'
+} as const
+
+export type FinTaxAuthorityScalarFieldEnum = (typeof FinTaxAuthorityScalarFieldEnum)[keyof typeof FinTaxAuthorityScalarFieldEnum]
+
+
+export const FinTaxTypeScalarFieldEnum = {
+  id: 'id',
+  tenantId: 'tenantId',
+  code: 'code',
+  name: 'name',
+  nameAr: 'nameAr',
+  direction: 'direction',
+  isActive: 'isActive',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type FinTaxTypeScalarFieldEnum = (typeof FinTaxTypeScalarFieldEnum)[keyof typeof FinTaxTypeScalarFieldEnum]
+
+
+export const FinTaxCodeScalarFieldEnum = {
+  id: 'id',
+  tenantId: 'tenantId',
+  code: 'code',
+  name: 'name',
+  nameAr: 'nameAr',
+  taxTypeId: 'taxTypeId',
+  authorityId: 'authorityId',
+  inputAccountId: 'inputAccountId',
+  outputAccountId: 'outputAccountId',
+  reportingBoxCode: 'reportingBoxCode',
+  isInclusive: 'isInclusive',
+  isActive: 'isActive',
+  versionNumber: 'versionNumber',
+  createdBy: 'createdBy',
+  updatedBy: 'updatedBy',
+  deletedBy: 'deletedBy',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt',
+  deletedAt: 'deletedAt'
+} as const
+
+export type FinTaxCodeScalarFieldEnum = (typeof FinTaxCodeScalarFieldEnum)[keyof typeof FinTaxCodeScalarFieldEnum]
+
+
+export const FinTaxCodeRateScalarFieldEnum = {
+  id: 'id',
+  tenantId: 'tenantId',
+  taxCodeId: 'taxCodeId',
+  rate: 'rate',
+  effectiveFrom: 'effectiveFrom',
+  effectiveTo: 'effectiveTo',
+  createdBy: 'createdBy',
+  createdAt: 'createdAt'
+} as const
+
+export type FinTaxCodeRateScalarFieldEnum = (typeof FinTaxCodeRateScalarFieldEnum)[keyof typeof FinTaxCodeRateScalarFieldEnum]
+
+
+export const FinTaxCodeMappingScalarFieldEnum = {
+  id: 'id',
+  tenantId: 'tenantId',
+  taxRateId: 'taxRateId',
+  resTaxConfigId: 'resTaxConfigId',
+  taxCodeId: 'taxCodeId',
+  createdAt: 'createdAt'
+} as const
+
+export type FinTaxCodeMappingScalarFieldEnum = (typeof FinTaxCodeMappingScalarFieldEnum)[keyof typeof FinTaxCodeMappingScalarFieldEnum]
+
+
+export const FinTaxTransactionScalarFieldEnum = {
+  id: 'id',
+  tenantId: 'tenantId',
+  journalEntryId: 'journalEntryId',
+  journalLineId: 'journalLineId',
+  taxCodeId: 'taxCodeId',
+  direction: 'direction',
+  taxableBaseAmount: 'taxableBaseAmount',
+  taxAmount: 'taxAmount',
+  baseTaxAmount: 'baseTaxAmount',
+  currencyCode: 'currencyCode',
+  transactionDate: 'transactionDate',
+  sourceDocType: 'sourceDocType',
+  sourceDocId: 'sourceDocId',
+  partyType: 'partyType',
+  partyId: 'partyId',
+  taxReturnId: 'taxReturnId',
+  createdAt: 'createdAt'
+} as const
+
+export type FinTaxTransactionScalarFieldEnum = (typeof FinTaxTransactionScalarFieldEnum)[keyof typeof FinTaxTransactionScalarFieldEnum]
+
+
+export const FinTaxReturnScalarFieldEnum = {
+  id: 'id',
+  tenantId: 'tenantId',
+  returnNumber: 'returnNumber',
+  authorityId: 'authorityId',
+  periodStart: 'periodStart',
+  periodEnd: 'periodEnd',
+  statusCode: 'statusCode',
+  filedAt: 'filedAt',
+  filedByProfileId: 'filedByProfileId',
+  netPayable: 'netPayable',
+  paymentJournalEntryId: 'paymentJournalEntryId',
+  notes: 'notes',
+  versionNumber: 'versionNumber',
+  createdBy: 'createdBy',
+  updatedBy: 'updatedBy',
+  deletedBy: 'deletedBy',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt',
+  deletedAt: 'deletedAt'
+} as const
+
+export type FinTaxReturnScalarFieldEnum = (typeof FinTaxReturnScalarFieldEnum)[keyof typeof FinTaxReturnScalarFieldEnum]
+
+
+export const FinTaxReturnLineScalarFieldEnum = {
+  id: 'id',
+  tenantId: 'tenantId',
+  returnId: 'returnId',
+  boxCode: 'boxCode',
+  description: 'description',
+  taxableAmount: 'taxableAmount',
+  taxAmount: 'taxAmount',
+  sortOrder: 'sortOrder',
+  createdAt: 'createdAt'
+} as const
+
+export type FinTaxReturnLineScalarFieldEnum = (typeof FinTaxReturnLineScalarFieldEnum)[keyof typeof FinTaxReturnLineScalarFieldEnum]
+
+
+export const FinWhtCertificateScalarFieldEnum = {
+  id: 'id',
+  tenantId: 'tenantId',
+  certificateNumber: 'certificateNumber',
+  supplierId: 'supplierId',
+  customerId: 'customerId',
+  taxCodeId: 'taxCodeId',
+  baseAmount: 'baseAmount',
+  whtAmount: 'whtAmount',
+  sourceDocType: 'sourceDocType',
+  sourceDocId: 'sourceDocId',
+  issueDate: 'issueDate',
+  statusCode: 'statusCode',
+  notes: 'notes',
+  versionNumber: 'versionNumber',
+  createdBy: 'createdBy',
+  updatedBy: 'updatedBy',
+  deletedBy: 'deletedBy',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt',
+  deletedAt: 'deletedAt'
+} as const
+
+export type FinWhtCertificateScalarFieldEnum = (typeof FinWhtCertificateScalarFieldEnum)[keyof typeof FinWhtCertificateScalarFieldEnum]
+
+
+export const FinCurrencyScalarFieldEnum = {
+  id: 'id',
+  tenantId: 'tenantId',
+  code: 'code',
+  name: 'name',
+  nameAr: 'nameAr',
+  symbol: 'symbol',
+  decimalPlaces: 'decimalPlaces',
+  isActive: 'isActive',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type FinCurrencyScalarFieldEnum = (typeof FinCurrencyScalarFieldEnum)[keyof typeof FinCurrencyScalarFieldEnum]
+
+
+export const FinExchangeRateScalarFieldEnum = {
+  id: 'id',
+  tenantId: 'tenantId',
+  fromCurrencyCode: 'fromCurrencyCode',
+  toCurrencyCode: 'toCurrencyCode',
+  rateDate: 'rateDate',
+  rate: 'rate',
+  rateType: 'rateType',
+  source: 'source',
+  createdBy: 'createdBy',
+  createdAt: 'createdAt'
+} as const
+
+export type FinExchangeRateScalarFieldEnum = (typeof FinExchangeRateScalarFieldEnum)[keyof typeof FinExchangeRateScalarFieldEnum]
+
+
+export const FinFxRevaluationRunScalarFieldEnum = {
+  id: 'id',
+  tenantId: 'tenantId',
+  runNumber: 'runNumber',
+  asOfDate: 'asOfDate',
+  rateType: 'rateType',
+  statusCode: 'statusCode',
+  journalEntryId: 'journalEntryId',
+  reversalJournalEntryId: 'reversalJournalEntryId',
+  totalGainBase: 'totalGainBase',
+  totalLossBase: 'totalLossBase',
+  versionNumber: 'versionNumber',
+  createdBy: 'createdBy',
+  updatedBy: 'updatedBy',
+  deletedBy: 'deletedBy',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt',
+  deletedAt: 'deletedAt'
+} as const
+
+export type FinFxRevaluationRunScalarFieldEnum = (typeof FinFxRevaluationRunScalarFieldEnum)[keyof typeof FinFxRevaluationRunScalarFieldEnum]
+
+
+export const FinFxRevaluationLineScalarFieldEnum = {
+  id: 'id',
+  tenantId: 'tenantId',
+  runId: 'runId',
+  accountId: 'accountId',
+  partyType: 'partyType',
+  partyId: 'partyId',
+  currencyCode: 'currencyCode',
+  foreignBalance: 'foreignBalance',
+  oldRate: 'oldRate',
+  newRate: 'newRate',
+  oldBaseBalance: 'oldBaseBalance',
+  newBaseBalance: 'newBaseBalance',
+  gainLossBase: 'gainLossBase',
+  createdAt: 'createdAt'
+} as const
+
+export type FinFxRevaluationLineScalarFieldEnum = (typeof FinFxRevaluationLineScalarFieldEnum)[keyof typeof FinFxRevaluationLineScalarFieldEnum]
+
+
+export const FinCostCenterScalarFieldEnum = {
+  id: 'id',
+  tenantId: 'tenantId',
+  code: 'code',
+  name: 'name',
+  nameAr: 'nameAr',
+  parentCostCenterId: 'parentCostCenterId',
+  managerProfileId: 'managerProfileId',
+  branchId: 'branchId',
+  isActive: 'isActive',
+  versionNumber: 'versionNumber',
+  createdBy: 'createdBy',
+  updatedBy: 'updatedBy',
+  deletedBy: 'deletedBy',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt',
+  deletedAt: 'deletedAt'
+} as const
+
+export type FinCostCenterScalarFieldEnum = (typeof FinCostCenterScalarFieldEnum)[keyof typeof FinCostCenterScalarFieldEnum]
+
+
+export const FinProjectScalarFieldEnum = {
+  id: 'id',
+  tenantId: 'tenantId',
+  code: 'code',
+  name: 'name',
+  nameAr: 'nameAr',
+  customerId: 'customerId',
+  startDate: 'startDate',
+  endDate: 'endDate',
+  statusCode: 'statusCode',
+  budgetAmount: 'budgetAmount',
+  managerProfileId: 'managerProfileId',
+  isActive: 'isActive',
+  versionNumber: 'versionNumber',
+  createdBy: 'createdBy',
+  updatedBy: 'updatedBy',
+  deletedBy: 'deletedBy',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt',
+  deletedAt: 'deletedAt'
+} as const
+
+export type FinProjectScalarFieldEnum = (typeof FinProjectScalarFieldEnum)[keyof typeof FinProjectScalarFieldEnum]
+
+
+export const FinAnalysisDimensionScalarFieldEnum = {
+  id: 'id',
+  tenantId: 'tenantId',
+  code: 'code',
+  name: 'name',
+  nameAr: 'nameAr',
+  isRequiredOnPosting: 'isRequiredOnPosting',
+  isActive: 'isActive',
+  createdBy: 'createdBy',
+  updatedBy: 'updatedBy',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt',
+  deletedAt: 'deletedAt'
+} as const
+
+export type FinAnalysisDimensionScalarFieldEnum = (typeof FinAnalysisDimensionScalarFieldEnum)[keyof typeof FinAnalysisDimensionScalarFieldEnum]
+
+
+export const FinAnalysisDimensionValueScalarFieldEnum = {
+  id: 'id',
+  tenantId: 'tenantId',
+  dimensionId: 'dimensionId',
+  code: 'code',
+  name: 'name',
+  nameAr: 'nameAr',
+  isActive: 'isActive',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt',
+  deletedAt: 'deletedAt'
+} as const
+
+export type FinAnalysisDimensionValueScalarFieldEnum = (typeof FinAnalysisDimensionValueScalarFieldEnum)[keyof typeof FinAnalysisDimensionValueScalarFieldEnum]
+
+
+export const FinJournalLineDimensionScalarFieldEnum = {
+  id: 'id',
+  tenantId: 'tenantId',
+  journalLineId: 'journalLineId',
+  dimensionId: 'dimensionId',
+  dimensionValueId: 'dimensionValueId',
+  createdAt: 'createdAt'
+} as const
+
+export type FinJournalLineDimensionScalarFieldEnum = (typeof FinJournalLineDimensionScalarFieldEnum)[keyof typeof FinJournalLineDimensionScalarFieldEnum]
+
+
+export const FinBudgetScalarFieldEnum = {
+  id: 'id',
+  tenantId: 'tenantId',
+  code: 'code',
+  name: 'name',
+  nameAr: 'nameAr',
+  fiscalYearId: 'fiscalYearId',
+  statusCode: 'statusCode',
+  revisionNumber: 'revisionNumber',
+  approvalRequestId: 'approvalRequestId',
+  notes: 'notes',
+  versionNumber: 'versionNumber',
+  createdBy: 'createdBy',
+  updatedBy: 'updatedBy',
+  deletedBy: 'deletedBy',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt',
+  deletedAt: 'deletedAt'
+} as const
+
+export type FinBudgetScalarFieldEnum = (typeof FinBudgetScalarFieldEnum)[keyof typeof FinBudgetScalarFieldEnum]
+
+
+export const FinBudgetLineScalarFieldEnum = {
+  id: 'id',
+  tenantId: 'tenantId',
+  budgetId: 'budgetId',
+  accountId: 'accountId',
+  fiscalPeriodId: 'fiscalPeriodId',
+  costCenterId: 'costCenterId',
+  projectId: 'projectId',
+  amount: 'amount',
+  notes: 'notes',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type FinBudgetLineScalarFieldEnum = (typeof FinBudgetLineScalarFieldEnum)[keyof typeof FinBudgetLineScalarFieldEnum]
+
+
+export const FinBudgetRevisionScalarFieldEnum = {
+  id: 'id',
+  tenantId: 'tenantId',
+  budgetId: 'budgetId',
+  revisionNumber: 'revisionNumber',
+  reason: 'reason',
+  revisedByProfileId: 'revisedByProfileId',
+  snapshot: 'snapshot',
+  createdAt: 'createdAt'
+} as const
+
+export type FinBudgetRevisionScalarFieldEnum = (typeof FinBudgetRevisionScalarFieldEnum)[keyof typeof FinBudgetRevisionScalarFieldEnum]
+
+
+export const FinBudgetTransferScalarFieldEnum = {
+  id: 'id',
+  tenantId: 'tenantId',
+  transferNumber: 'transferNumber',
+  fromBudgetLineId: 'fromBudgetLineId',
+  toBudgetLineId: 'toBudgetLineId',
+  amount: 'amount',
+  reason: 'reason',
+  statusCode: 'statusCode',
+  approvalRequestId: 'approvalRequestId',
+  versionNumber: 'versionNumber',
+  createdBy: 'createdBy',
+  updatedBy: 'updatedBy',
+  deletedBy: 'deletedBy',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt',
+  deletedAt: 'deletedAt'
+} as const
+
+export type FinBudgetTransferScalarFieldEnum = (typeof FinBudgetTransferScalarFieldEnum)[keyof typeof FinBudgetTransferScalarFieldEnum]
+
+
+export const FinBudgetControlPolicyScalarFieldEnum = {
+  id: 'id',
+  tenantId: 'tenantId',
+  accountId: 'accountId',
+  accountTypeId: 'accountTypeId',
+  costCenterId: 'costCenterId',
+  controlAction: 'controlAction',
+  toleranceRate: 'toleranceRate',
+  isActive: 'isActive',
+  createdBy: 'createdBy',
+  updatedBy: 'updatedBy',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt',
+  deletedAt: 'deletedAt'
+} as const
+
+export type FinBudgetControlPolicyScalarFieldEnum = (typeof FinBudgetControlPolicyScalarFieldEnum)[keyof typeof FinBudgetControlPolicyScalarFieldEnum]
+
+
+export const FinAssetCategoryScalarFieldEnum = {
+  id: 'id',
+  tenantId: 'tenantId',
+  code: 'code',
+  name: 'name',
+  nameAr: 'nameAr',
+  assetAccountId: 'assetAccountId',
+  accumDepreciationAccountId: 'accumDepreciationAccountId',
+  depreciationExpenseAccountId: 'depreciationExpenseAccountId',
+  disposalGainLossAccountId: 'disposalGainLossAccountId',
+  defaultMethodCode: 'defaultMethodCode',
+  defaultUsefulLifeMonths: 'defaultUsefulLifeMonths',
+  isActive: 'isActive',
+  versionNumber: 'versionNumber',
+  createdBy: 'createdBy',
+  updatedBy: 'updatedBy',
+  deletedBy: 'deletedBy',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt',
+  deletedAt: 'deletedAt'
+} as const
+
+export type FinAssetCategoryScalarFieldEnum = (typeof FinAssetCategoryScalarFieldEnum)[keyof typeof FinAssetCategoryScalarFieldEnum]
+
+
+export const FinDepreciationMethodScalarFieldEnum = {
+  id: 'id',
+  tenantId: 'tenantId',
+  code: 'code',
+  name: 'name',
+  nameAr: 'nameAr',
+  calculationStrategy: 'calculationStrategy',
+  isActive: 'isActive',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type FinDepreciationMethodScalarFieldEnum = (typeof FinDepreciationMethodScalarFieldEnum)[keyof typeof FinDepreciationMethodScalarFieldEnum]
+
+
+export const FinAssetScalarFieldEnum = {
+  id: 'id',
+  tenantId: 'tenantId',
+  assetNumber: 'assetNumber',
+  name: 'name',
+  nameAr: 'nameAr',
+  categoryId: 'categoryId',
+  acquisitionDate: 'acquisitionDate',
+  inServiceDate: 'inServiceDate',
+  acquisitionCost: 'acquisitionCost',
+  salvageValue: 'salvageValue',
+  usefulLifeMonths: 'usefulLifeMonths',
+  depreciationMethodCode: 'depreciationMethodCode',
+  statusCode: 'statusCode',
+  branchId: 'branchId',
+  warehouseId: 'warehouseId',
+  costCenterId: 'costCenterId',
+  custodianProfileId: 'custodianProfileId',
+  serialNumber: 'serialNumber',
+  sourceDocType: 'sourceDocType',
+  sourceDocId: 'sourceDocId',
+  accumulatedDepreciation: 'accumulatedDepreciation',
+  capitalizationJournalEntryId: 'capitalizationJournalEntryId',
+  disposedAt: 'disposedAt',
+  versionNumber: 'versionNumber',
+  createdBy: 'createdBy',
+  updatedBy: 'updatedBy',
+  deletedBy: 'deletedBy',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt',
+  deletedAt: 'deletedAt'
+} as const
+
+export type FinAssetScalarFieldEnum = (typeof FinAssetScalarFieldEnum)[keyof typeof FinAssetScalarFieldEnum]
+
+
+export const FinAssetDepreciationScheduleScalarFieldEnum = {
+  id: 'id',
+  tenantId: 'tenantId',
+  assetId: 'assetId',
+  fiscalPeriodId: 'fiscalPeriodId',
+  plannedAmount: 'plannedAmount',
+  postedAmount: 'postedAmount',
+  statusCode: 'statusCode',
+  postedRunId: 'postedRunId',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type FinAssetDepreciationScheduleScalarFieldEnum = (typeof FinAssetDepreciationScheduleScalarFieldEnum)[keyof typeof FinAssetDepreciationScheduleScalarFieldEnum]
+
+
+export const FinDepreciationRunScalarFieldEnum = {
+  id: 'id',
+  tenantId: 'tenantId',
+  runNumber: 'runNumber',
+  fiscalPeriodId: 'fiscalPeriodId',
+  statusCode: 'statusCode',
+  journalEntryId: 'journalEntryId',
+  assetCount: 'assetCount',
+  totalAmount: 'totalAmount',
+  versionNumber: 'versionNumber',
+  createdBy: 'createdBy',
+  updatedBy: 'updatedBy',
+  deletedBy: 'deletedBy',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt',
+  deletedAt: 'deletedAt'
+} as const
+
+export type FinDepreciationRunScalarFieldEnum = (typeof FinDepreciationRunScalarFieldEnum)[keyof typeof FinDepreciationRunScalarFieldEnum]
+
+
+export const FinAssetDepreciationEntryScalarFieldEnum = {
+  id: 'id',
+  tenantId: 'tenantId',
+  runId: 'runId',
+  assetId: 'assetId',
+  scheduleId: 'scheduleId',
+  amount: 'amount',
+  accumulatedAfter: 'accumulatedAfter',
+  bookValueAfter: 'bookValueAfter',
+  createdAt: 'createdAt'
+} as const
+
+export type FinAssetDepreciationEntryScalarFieldEnum = (typeof FinAssetDepreciationEntryScalarFieldEnum)[keyof typeof FinAssetDepreciationEntryScalarFieldEnum]
+
+
+export const FinAssetDisposalScalarFieldEnum = {
+  id: 'id',
+  tenantId: 'tenantId',
+  disposalNumber: 'disposalNumber',
+  assetId: 'assetId',
+  disposalDate: 'disposalDate',
+  disposalType: 'disposalType',
+  proceedsAmount: 'proceedsAmount',
+  netBookValue: 'netBookValue',
+  gainLossAmount: 'gainLossAmount',
+  journalEntryId: 'journalEntryId',
+  statusCode: 'statusCode',
+  notes: 'notes',
+  versionNumber: 'versionNumber',
+  createdBy: 'createdBy',
+  updatedBy: 'updatedBy',
+  deletedBy: 'deletedBy',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt',
+  deletedAt: 'deletedAt'
+} as const
+
+export type FinAssetDisposalScalarFieldEnum = (typeof FinAssetDisposalScalarFieldEnum)[keyof typeof FinAssetDisposalScalarFieldEnum]
+
+
+export const FinAssetRevaluationScalarFieldEnum = {
+  id: 'id',
+  tenantId: 'tenantId',
+  assetId: 'assetId',
+  revaluationDate: 'revaluationDate',
+  oldValue: 'oldValue',
+  newValue: 'newValue',
+  journalEntryId: 'journalEntryId',
+  statusCode: 'statusCode',
+  reason: 'reason',
+  versionNumber: 'versionNumber',
+  createdBy: 'createdBy',
+  updatedBy: 'updatedBy',
+  deletedBy: 'deletedBy',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt',
+  deletedAt: 'deletedAt'
+} as const
+
+export type FinAssetRevaluationScalarFieldEnum = (typeof FinAssetRevaluationScalarFieldEnum)[keyof typeof FinAssetRevaluationScalarFieldEnum]
+
+
+export const FinAssetTransferScalarFieldEnum = {
+  id: 'id',
+  tenantId: 'tenantId',
+  assetId: 'assetId',
+  transferDate: 'transferDate',
+  fromBranchId: 'fromBranchId',
+  toBranchId: 'toBranchId',
+  fromCostCenterId: 'fromCostCenterId',
+  toCostCenterId: 'toCostCenterId',
+  fromCustodianProfileId: 'fromCustodianProfileId',
+  toCustodianProfileId: 'toCustodianProfileId',
+  journalEntryId: 'journalEntryId',
+  notes: 'notes',
+  createdBy: 'createdBy',
+  createdAt: 'createdAt'
+} as const
+
+export type FinAssetTransferScalarFieldEnum = (typeof FinAssetTransferScalarFieldEnum)[keyof typeof FinAssetTransferScalarFieldEnum]
+
+
+export const FinCloseTaskTemplateScalarFieldEnum = {
+  id: 'id',
+  tenantId: 'tenantId',
+  code: 'code',
+  name: 'name',
+  nameAr: 'nameAr',
+  moduleCode: 'moduleCode',
+  sequence: 'sequence',
+  isRequired: 'isRequired',
+  isActive: 'isActive',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type FinCloseTaskTemplateScalarFieldEnum = (typeof FinCloseTaskTemplateScalarFieldEnum)[keyof typeof FinCloseTaskTemplateScalarFieldEnum]
+
+
+export const FinPeriodCloseRunScalarFieldEnum = {
+  id: 'id',
+  tenantId: 'tenantId',
+  fiscalPeriodId: 'fiscalPeriodId',
+  statusCode: 'statusCode',
+  startedAt: 'startedAt',
+  completedAt: 'completedAt',
+  closedByProfileId: 'closedByProfileId',
+  notes: 'notes',
+  versionNumber: 'versionNumber',
+  createdBy: 'createdBy',
+  updatedBy: 'updatedBy',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type FinPeriodCloseRunScalarFieldEnum = (typeof FinPeriodCloseRunScalarFieldEnum)[keyof typeof FinPeriodCloseRunScalarFieldEnum]
+
+
+export const FinPeriodCloseRunTaskScalarFieldEnum = {
+  id: 'id',
+  tenantId: 'tenantId',
+  closeRunId: 'closeRunId',
+  templateId: 'templateId',
+  code: 'code',
+  name: 'name',
+  statusCode: 'statusCode',
+  completedAt: 'completedAt',
+  completedByProfileId: 'completedByProfileId',
+  notes: 'notes',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type FinPeriodCloseRunTaskScalarFieldEnum = (typeof FinPeriodCloseRunTaskScalarFieldEnum)[keyof typeof FinPeriodCloseRunTaskScalarFieldEnum]
+
+
+export const FinYearCloseRunScalarFieldEnum = {
+  id: 'id',
+  tenantId: 'tenantId',
+  fiscalYearId: 'fiscalYearId',
+  retainedEarningsAccountId: 'retainedEarningsAccountId',
+  closingJournalEntryId: 'closingJournalEntryId',
+  openingJournalEntryId: 'openingJournalEntryId',
+  statusCode: 'statusCode',
+  totalPlSwept: 'totalPlSwept',
+  executedAt: 'executedAt',
+  executedByProfileId: 'executedByProfileId',
+  versionNumber: 'versionNumber',
+  createdBy: 'createdBy',
+  updatedBy: 'updatedBy',
+  deletedBy: 'deletedBy',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt',
+  deletedAt: 'deletedAt'
+} as const
+
+export type FinYearCloseRunScalarFieldEnum = (typeof FinYearCloseRunScalarFieldEnum)[keyof typeof FinYearCloseRunScalarFieldEnum]
+
+
+export const FinOpeningBalanceBatchScalarFieldEnum = {
+  id: 'id',
+  tenantId: 'tenantId',
+  batchNumber: 'batchNumber',
+  asOfDate: 'asOfDate',
+  statusCode: 'statusCode',
+  journalEntryId: 'journalEntryId',
+  totalDebit: 'totalDebit',
+  totalCredit: 'totalCredit',
+  notes: 'notes',
+  versionNumber: 'versionNumber',
+  createdBy: 'createdBy',
+  updatedBy: 'updatedBy',
+  deletedBy: 'deletedBy',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt',
+  deletedAt: 'deletedAt'
+} as const
+
+export type FinOpeningBalanceBatchScalarFieldEnum = (typeof FinOpeningBalanceBatchScalarFieldEnum)[keyof typeof FinOpeningBalanceBatchScalarFieldEnum]
+
+
+export const FinOpeningBalanceLineScalarFieldEnum = {
+  id: 'id',
+  tenantId: 'tenantId',
+  batchId: 'batchId',
+  accountId: 'accountId',
+  partyType: 'partyType',
+  partyId: 'partyId',
+  sourceDocRef: 'sourceDocRef',
+  currencyCode: 'currencyCode',
+  exchangeRate: 'exchangeRate',
+  debitAmount: 'debitAmount',
+  creditAmount: 'creditAmount',
+  baseDebitAmount: 'baseDebitAmount',
+  baseCreditAmount: 'baseCreditAmount',
+  dueDate: 'dueDate',
+  createdAt: 'createdAt'
+} as const
+
+export type FinOpeningBalanceLineScalarFieldEnum = (typeof FinOpeningBalanceLineScalarFieldEnum)[keyof typeof FinOpeningBalanceLineScalarFieldEnum]
+
+
+export const FinAllocationRuleScalarFieldEnum = {
+  id: 'id',
+  tenantId: 'tenantId',
+  code: 'code',
+  name: 'name',
+  nameAr: 'nameAr',
+  sourceAccountId: 'sourceAccountId',
+  allocationBasis: 'allocationBasis',
+  journalTypeId: 'journalTypeId',
+  isActive: 'isActive',
+  versionNumber: 'versionNumber',
+  createdBy: 'createdBy',
+  updatedBy: 'updatedBy',
+  deletedBy: 'deletedBy',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt',
+  deletedAt: 'deletedAt'
+} as const
+
+export type FinAllocationRuleScalarFieldEnum = (typeof FinAllocationRuleScalarFieldEnum)[keyof typeof FinAllocationRuleScalarFieldEnum]
+
+
+export const FinAllocationRuleTargetScalarFieldEnum = {
+  id: 'id',
+  tenantId: 'tenantId',
+  ruleId: 'ruleId',
+  targetAccountId: 'targetAccountId',
+  costCenterId: 'costCenterId',
+  projectId: 'projectId',
+  percentage: 'percentage',
+  createdAt: 'createdAt'
+} as const
+
+export type FinAllocationRuleTargetScalarFieldEnum = (typeof FinAllocationRuleTargetScalarFieldEnum)[keyof typeof FinAllocationRuleTargetScalarFieldEnum]
+
+
+export const FinAllocationRunScalarFieldEnum = {
+  id: 'id',
+  tenantId: 'tenantId',
+  runNumber: 'runNumber',
+  ruleId: 'ruleId',
+  fiscalPeriodId: 'fiscalPeriodId',
+  sourceAmount: 'sourceAmount',
+  statusCode: 'statusCode',
+  journalEntryId: 'journalEntryId',
+  executedAt: 'executedAt',
+  versionNumber: 'versionNumber',
+  createdBy: 'createdBy',
+  updatedBy: 'updatedBy',
+  deletedBy: 'deletedBy',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt',
+  deletedAt: 'deletedAt'
+} as const
+
+export type FinAllocationRunScalarFieldEnum = (typeof FinAllocationRunScalarFieldEnum)[keyof typeof FinAllocationRunScalarFieldEnum]
+
+
+export const FinSettingsScalarFieldEnum = {
+  id: 'id',
+  tenantId: 'tenantId',
+  baseCurrencyCode: 'baseCurrencyCode',
+  retainedEarningsAccountId: 'retainedEarningsAccountId',
+  fxRealizedGainAccountId: 'fxRealizedGainAccountId',
+  fxRealizedLossAccountId: 'fxRealizedLossAccountId',
+  fxUnrealizedGainAccountId: 'fxUnrealizedGainAccountId',
+  fxUnrealizedLossAccountId: 'fxUnrealizedLossAccountId',
+  roundingAccountId: 'roundingAccountId',
+  suspenseAccountId: 'suspenseAccountId',
+  defaultArControlAccountId: 'defaultArControlAccountId',
+  defaultApControlAccountId: 'defaultApControlAccountId',
+  grniAccountId: 'grniAccountId',
+  inventoryAccountId: 'inventoryAccountId',
+  cogsAccountId: 'cogsAccountId',
+  salesRevenueAccountId: 'salesRevenueAccountId',
+  salesDiscountAccountId: 'salesDiscountAccountId',
+  bankClearingAccountId: 'bankClearingAccountId',
+  writeOffAccountId: 'writeOffAccountId',
+  strictAccountResolution: 'strictAccountResolution',
+  postingModes: 'postingModes',
+  financeStartDate: 'financeStartDate',
+  isInitialized: 'isInitialized',
+  versionNumber: 'versionNumber',
+  createdBy: 'createdBy',
+  updatedBy: 'updatedBy',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type FinSettingsScalarFieldEnum = (typeof FinSettingsScalarFieldEnum)[keyof typeof FinSettingsScalarFieldEnum]
+
+
+export const FinPostingRuleScalarFieldEnum = {
+  id: 'id',
+  tenantId: 'tenantId',
+  eventType: 'eventType',
+  sourceDocType: 'sourceDocType',
+  journalTypeCode: 'journalTypeCode',
+  description: 'description',
+  priority: 'priority',
+  conditions: 'conditions',
+  isActive: 'isActive',
+  createdBy: 'createdBy',
+  updatedBy: 'updatedBy',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt',
+  deletedAt: 'deletedAt'
+} as const
+
+export type FinPostingRuleScalarFieldEnum = (typeof FinPostingRuleScalarFieldEnum)[keyof typeof FinPostingRuleScalarFieldEnum]
+
+
+export const FinPostingRuleLineScalarFieldEnum = {
+  id: 'id',
+  tenantId: 'tenantId',
+  ruleId: 'ruleId',
+  lineNumber: 'lineNumber',
+  lineRole: 'lineRole',
+  side: 'side',
+  accountSource: 'accountSource',
+  accountId: 'accountId',
+  mappingEntityType: 'mappingEntityType',
+  mappingRole: 'mappingRole',
+  settingsField: 'settingsField',
+  amountSelector: 'amountSelector',
+  multiplier: 'multiplier',
+  description: 'description',
+  createdAt: 'createdAt'
+} as const
+
+export type FinPostingRuleLineScalarFieldEnum = (typeof FinPostingRuleLineScalarFieldEnum)[keyof typeof FinPostingRuleLineScalarFieldEnum]
+
+
+export const FinPostingQueueScalarFieldEnum = {
+  id: 'id',
+  tenantId: 'tenantId',
+  domainEventId: 'domainEventId',
+  eventType: 'eventType',
+  sourceDocType: 'sourceDocType',
+  sourceDocId: 'sourceDocId',
+  payload: 'payload',
+  statusCode: 'statusCode',
+  attemptCount: 'attemptCount',
+  lastError: 'lastError',
+  journalEntryId: 'journalEntryId',
+  nextAttemptAt: 'nextAttemptAt',
+  processedAt: 'processedAt',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type FinPostingQueueScalarFieldEnum = (typeof FinPostingQueueScalarFieldEnum)[keyof typeof FinPostingQueueScalarFieldEnum]
+
+
+export const FinEventCursorScalarFieldEnum = {
+  id: 'id',
+  tenantId: 'tenantId',
+  consumerName: 'consumerName',
+  lastEventId: 'lastEventId',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type FinEventCursorScalarFieldEnum = (typeof FinEventCursorScalarFieldEnum)[keyof typeof FinEventCursorScalarFieldEnum]
+
+
+export const FinPaymentTermScalarFieldEnum = {
+  id: 'id',
+  tenantId: 'tenantId',
+  code: 'code',
+  name: 'name',
+  nameAr: 'nameAr',
+  dueDays: 'dueDays',
+  discountDays: 'discountDays',
+  discountRate: 'discountRate',
+  isEndOfMonth: 'isEndOfMonth',
+  isActive: 'isActive',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type FinPaymentTermScalarFieldEnum = (typeof FinPaymentTermScalarFieldEnum)[keyof typeof FinPaymentTermScalarFieldEnum]
 
 
 export const SortOrder = {

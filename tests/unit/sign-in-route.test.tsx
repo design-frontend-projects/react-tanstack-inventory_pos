@@ -96,7 +96,7 @@ describe('SignInPage', () => {
       expect(mocks.requestSignInOtpMock).toHaveBeenCalledWith('owner@example.com')
     })
 
-    expect(screen.getByText(/enter the 6-digit code sent to owner@example.com/i)).toBeTruthy()
+    expect(screen.getByText(/enter the 8-digit code sent to owner@example.com/i)).toBeTruthy()
     expect(screen.getByLabelText(/8-digit code/i)).toBeTruthy()
   })
 

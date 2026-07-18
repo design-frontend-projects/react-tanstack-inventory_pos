@@ -220,6 +220,23 @@ export interface ApprovalDecisionPayload {
   actorProfileId?: string | null
 }
 
+// --- Finance (Spec 006) ------------------------------------------------------
+
+export interface FinJournalEntryPostedPayload {
+  entryNumber: string
+  journalTypeId: string
+  totalBaseDebit: string
+  totalBaseCredit: string
+  sourceDocType?: string | null
+  sourceDocId?: string | null
+}
+
+export interface FinJournalEntryReversedPayload {
+  entryNumber: string
+  reversalEntryId: string
+  reversalEntryNumber: string
+}
+
 // Maps every event type to its payload shape. Deferred contexts (dining,
 // delivery, campaigns, tickets, feedback) reserve their event names in
 // specs/003-crm/data-model.md Appendix A and are added here when implemented.
@@ -260,6 +277,8 @@ export interface DomainEventPayloadMap {
   'supplier_payment.posted': SupplierPaymentPayload
   'landed_cost.posted': LandedCostPayload
   'purchase_approval.decided': ApprovalDecisionPayload
+  'fin_journal_entry.posted': FinJournalEntryPostedPayload
+  'fin_journal_entry.reversed': FinJournalEntryReversedPayload
 }
 
 export type DomainEventType = keyof DomainEventPayloadMap
@@ -301,6 +320,8 @@ export const DOMAIN_EVENT_TYPES = [
   'supplier_payment.posted',
   'landed_cost.posted',
   'purchase_approval.decided',
+  'fin_journal_entry.posted',
+  'fin_journal_entry.reversed',
 ] as const satisfies ReadonlyArray<DomainEventType>
 
 export function isDomainEventType(value: string): value is DomainEventType {

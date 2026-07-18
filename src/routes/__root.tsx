@@ -21,7 +21,7 @@ export const Route = createRootRoute({
         content: 'width=device-width, initial-scale=1',
       },
       {
-        title: 'Meridian Control Room',
+        title: 'Bluewave Control Room',
       },
     ],
     links: [

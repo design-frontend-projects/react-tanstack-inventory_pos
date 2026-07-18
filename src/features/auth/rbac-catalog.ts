@@ -131,6 +131,14 @@ export const ROLE_DEFINITIONS = [
     isSystem: true,
     rank: 57,
   },
+  {
+    code: 'finance_manager',
+    name: 'Finance Manager',
+    description:
+      'Manages the accounting engine: chart of accounts, fiscal calendar, journals, and financial settings.',
+    isSystem: true,
+    rank: 63,
+  },
 ] as const
 
 export const PERMISSION_DEFINITIONS = [
@@ -941,6 +949,71 @@ export const PERMISSION_DEFINITIONS = [
     description:
       'Manage CRM configuration: custom fields, groups, and projector operations.',
   },
+  {
+    code: 'finance.account_view',
+    name: 'View Chart of Accounts',
+    moduleKey: 'finance',
+    actionKey: 'account_view',
+    description: 'View the chart of accounts, account types, and mappings.',
+  },
+  {
+    code: 'finance.account_manage',
+    name: 'Manage Chart of Accounts',
+    moduleKey: 'finance',
+    actionKey: 'account_manage',
+    description: 'Create, update, and deactivate GL accounts.',
+  },
+  {
+    code: 'finance.fiscal_manage',
+    name: 'Manage Fiscal Calendar',
+    moduleKey: 'finance',
+    actionKey: 'fiscal_manage',
+    description: 'Create fiscal years and open, close, or lock periods.',
+  },
+  {
+    code: 'finance.journal_view',
+    name: 'View Journals',
+    moduleKey: 'finance',
+    actionKey: 'journal_view',
+    description: 'View journal entries, journal types, and the trial balance.',
+  },
+  {
+    code: 'finance.journal_create',
+    name: 'Create Journal Entries',
+    moduleKey: 'finance',
+    actionKey: 'journal_create',
+    description: 'Create and edit draft manual journal entries.',
+  },
+  {
+    code: 'finance.journal_post',
+    name: 'Post Journal Entries',
+    moduleKey: 'finance',
+    actionKey: 'journal_post',
+    description: 'Post draft journal entries to the general ledger.',
+  },
+  {
+    code: 'finance.journal_reverse',
+    name: 'Reverse Journal Entries',
+    moduleKey: 'finance',
+    actionKey: 'journal_reverse',
+    description: 'Reverse posted journal entries (reversal-only corrections).',
+  },
+  {
+    code: 'finance.settings_manage',
+    name: 'Manage Financial Settings',
+    moduleKey: 'finance',
+    actionKey: 'settings_manage',
+    description:
+      'Bootstrap tenant finance and manage default accounts, currencies, and exchange rates.',
+  },
+  {
+    code: 'finance.posting_manage',
+    name: 'Manage Posting Rules',
+    moduleKey: 'finance',
+    actionKey: 'posting_manage',
+    description:
+      'Configure posting rules and operational-entity account mappings.',
+  },
 ] as const
 
 export type RoleCode = (typeof ROLE_DEFINITIONS)[number]['code']
@@ -1060,6 +1133,35 @@ export const ROLE_PERMISSION_MAP: Record<RoleCode, Array<PermissionCode>> = {
     'crm.segment_manage',
     'crm.analytics_view',
     'crm.settings_manage',
+    'finance.account_view',
+    'finance.account_manage',
+    'finance.fiscal_manage',
+    'finance.journal_view',
+    'finance.journal_create',
+    'finance.journal_post',
+    'finance.journal_reverse',
+    'finance.settings_manage',
+    'finance.posting_manage',
+  ],
+  finance_manager: [
+    'tenant.view',
+    'dashboard.view',
+    'profile.view_self',
+    'profile.update_self',
+    'supplier.view',
+    'customer.view',
+    'purchase.invoice_view',
+    'purchase.payment_view',
+    'inventory.view_valuation',
+    'finance.account_view',
+    'finance.account_manage',
+    'finance.fiscal_manage',
+    'finance.journal_view',
+    'finance.journal_create',
+    'finance.journal_post',
+    'finance.journal_reverse',
+    'finance.settings_manage',
+    'finance.posting_manage',
   ],
   'res:super_admin': [
     'tenant.view',

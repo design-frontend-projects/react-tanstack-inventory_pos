@@ -28,8 +28,8 @@ vi.mock('#/features/layout/use-navigation-tree', () => ({
 
 const memberships: WorkspaceMembership[] = [
   {
-    tenantId: 'meridian-foods',
-    tenantName: 'Meridian Foods Group',
+    tenantId: 'Bluewave-foods',
+    tenantName: 'Bluewave Foods Group',
     roleCode: 'super_admin',
     roleLabel: 'Super Admin',
     isOwner: true,
@@ -49,7 +49,7 @@ const memberships: WorkspaceMembership[] = [
 
 function renderTopCommand({
   pathname = '/dashboard',
-  activeTenantId = 'meridian-foods',
+  activeTenantId = 'Bluewave-foods',
   onNavigate = vi.fn(),
   onSelectWorkspace = vi.fn(),
 }: {

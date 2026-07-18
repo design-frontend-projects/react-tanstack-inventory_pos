@@ -996,3 +996,433 @@ export type PodCustomFieldValue = Prisma.PodCustomFieldValueModel
  * 
  */
 export type PodNotification = Prisma.PodNotificationModel
+/**
+ * Model FinAccountClass
+ * 
+ */
+export type FinAccountClass = Prisma.FinAccountClassModel
+/**
+ * Model FinAccountType
+ * 
+ */
+export type FinAccountType = Prisma.FinAccountTypeModel
+/**
+ * Model FinAccount
+ * 
+ */
+export type FinAccount = Prisma.FinAccountModel
+/**
+ * Model FinAccountMapping
+ * 
+ */
+export type FinAccountMapping = Prisma.FinAccountMappingModel
+/**
+ * Model FinFiscalYear
+ * 
+ */
+export type FinFiscalYear = Prisma.FinFiscalYearModel
+/**
+ * Model FinFiscalPeriod
+ * 
+ */
+export type FinFiscalPeriod = Prisma.FinFiscalPeriodModel
+/**
+ * Model FinPeriodModuleLock
+ * 
+ */
+export type FinPeriodModuleLock = Prisma.FinPeriodModuleLockModel
+/**
+ * Model FinJournalType
+ * 
+ */
+export type FinJournalType = Prisma.FinJournalTypeModel
+/**
+ * Model FinJournalEntry
+ * 
+ */
+export type FinJournalEntry = Prisma.FinJournalEntryModel
+/**
+ * Model FinJournalLine
+ * 
+ */
+export type FinJournalLine = Prisma.FinJournalLineModel
+/**
+ * Model FinJournalTemplate
+ * 
+ */
+export type FinJournalTemplate = Prisma.FinJournalTemplateModel
+/**
+ * Model FinJournalTemplateLine
+ * 
+ */
+export type FinJournalTemplateLine = Prisma.FinJournalTemplateLineModel
+/**
+ * Model FinRecurringJournalSchedule
+ * 
+ */
+export type FinRecurringJournalSchedule = Prisma.FinRecurringJournalScheduleModel
+/**
+ * Model FinGlBalance
+ * 
+ */
+export type FinGlBalance = Prisma.FinGlBalanceModel
+/**
+ * Model FinCustomerLedgerEntry
+ * 
+ */
+export type FinCustomerLedgerEntry = Prisma.FinCustomerLedgerEntryModel
+/**
+ * Model FinCustomerLedgerApplication
+ * 
+ */
+export type FinCustomerLedgerApplication = Prisma.FinCustomerLedgerApplicationModel
+/**
+ * Model FinArReceipt
+ * 
+ */
+export type FinArReceipt = Prisma.FinArReceiptModel
+/**
+ * Model FinArReceiptAllocation
+ * 
+ */
+export type FinArReceiptAllocation = Prisma.FinArReceiptAllocationModel
+/**
+ * Model FinCustomerFinancialProfile
+ * 
+ */
+export type FinCustomerFinancialProfile = Prisma.FinCustomerFinancialProfileModel
+/**
+ * Model FinDunningLevel
+ * 
+ */
+export type FinDunningLevel = Prisma.FinDunningLevelModel
+/**
+ * Model FinDunningRun
+ * 
+ */
+export type FinDunningRun = Prisma.FinDunningRunModel
+/**
+ * Model FinDunningRunEntry
+ * 
+ */
+export type FinDunningRunEntry = Prisma.FinDunningRunEntryModel
+/**
+ * Model FinVendorLedgerEntry
+ * 
+ */
+export type FinVendorLedgerEntry = Prisma.FinVendorLedgerEntryModel
+/**
+ * Model FinVendorLedgerApplication
+ * 
+ */
+export type FinVendorLedgerApplication = Prisma.FinVendorLedgerApplicationModel
+/**
+ * Model FinSupplierFinancialProfile
+ * 
+ */
+export type FinSupplierFinancialProfile = Prisma.FinSupplierFinancialProfileModel
+/**
+ * Model FinPaymentRun
+ * 
+ */
+export type FinPaymentRun = Prisma.FinPaymentRunModel
+/**
+ * Model FinPaymentRunLine
+ * 
+ */
+export type FinPaymentRunLine = Prisma.FinPaymentRunLineModel
+/**
+ * Model FinCashbox
+ * 
+ */
+export type FinCashbox = Prisma.FinCashboxModel
+/**
+ * Model FinCashTransaction
+ * 
+ */
+export type FinCashTransaction = Prisma.FinCashTransactionModel
+/**
+ * Model FinFundsTransfer
+ * 
+ */
+export type FinFundsTransfer = Prisma.FinFundsTransferModel
+/**
+ * Model FinCashFlowCategory
+ * 
+ */
+export type FinCashFlowCategory = Prisma.FinCashFlowCategoryModel
+/**
+ * Model FinBankAccount
+ * 
+ */
+export type FinBankAccount = Prisma.FinBankAccountModel
+/**
+ * Model FinBankStatement
+ * 
+ */
+export type FinBankStatement = Prisma.FinBankStatementModel
+/**
+ * Model FinBankStatementLine
+ * 
+ */
+export type FinBankStatementLine = Prisma.FinBankStatementLineModel
+/**
+ * Model FinBankReconciliation
+ * 
+ */
+export type FinBankReconciliation = Prisma.FinBankReconciliationModel
+/**
+ * Model FinBankReconciliationMatch
+ * 
+ */
+export type FinBankReconciliationMatch = Prisma.FinBankReconciliationMatchModel
+/**
+ * Model FinBankMatchingRule
+ * 
+ */
+export type FinBankMatchingRule = Prisma.FinBankMatchingRuleModel
+/**
+ * Model FinChequeBook
+ * 
+ */
+export type FinChequeBook = Prisma.FinChequeBookModel
+/**
+ * Model FinCheque
+ * 
+ */
+export type FinCheque = Prisma.FinChequeModel
+/**
+ * Model FinTaxAuthority
+ * 
+ */
+export type FinTaxAuthority = Prisma.FinTaxAuthorityModel
+/**
+ * Model FinTaxType
+ * 
+ */
+export type FinTaxType = Prisma.FinTaxTypeModel
+/**
+ * Model FinTaxCode
+ * 
+ */
+export type FinTaxCode = Prisma.FinTaxCodeModel
+/**
+ * Model FinTaxCodeRate
+ * 
+ */
+export type FinTaxCodeRate = Prisma.FinTaxCodeRateModel
+/**
+ * Model FinTaxCodeMapping
+ * 
+ */
+export type FinTaxCodeMapping = Prisma.FinTaxCodeMappingModel
+/**
+ * Model FinTaxTransaction
+ * 
+ */
+export type FinTaxTransaction = Prisma.FinTaxTransactionModel
+/**
+ * Model FinTaxReturn
+ * 
+ */
+export type FinTaxReturn = Prisma.FinTaxReturnModel
+/**
+ * Model FinTaxReturnLine
+ * 
+ */
+export type FinTaxReturnLine = Prisma.FinTaxReturnLineModel
+/**
+ * Model FinWhtCertificate
+ * 
+ */
+export type FinWhtCertificate = Prisma.FinWhtCertificateModel
+/**
+ * Model FinCurrency
+ * 
+ */
+export type FinCurrency = Prisma.FinCurrencyModel
+/**
+ * Model FinExchangeRate
+ * 
+ */
+export type FinExchangeRate = Prisma.FinExchangeRateModel
+/**
+ * Model FinFxRevaluationRun
+ * 
+ */
+export type FinFxRevaluationRun = Prisma.FinFxRevaluationRunModel
+/**
+ * Model FinFxRevaluationLine
+ * 
+ */
+export type FinFxRevaluationLine = Prisma.FinFxRevaluationLineModel
+/**
+ * Model FinCostCenter
+ * 
+ */
+export type FinCostCenter = Prisma.FinCostCenterModel
+/**
+ * Model FinProject
+ * 
+ */
+export type FinProject = Prisma.FinProjectModel
+/**
+ * Model FinAnalysisDimension
+ * 
+ */
+export type FinAnalysisDimension = Prisma.FinAnalysisDimensionModel
+/**
+ * Model FinAnalysisDimensionValue
+ * 
+ */
+export type FinAnalysisDimensionValue = Prisma.FinAnalysisDimensionValueModel
+/**
+ * Model FinJournalLineDimension
+ * 
+ */
+export type FinJournalLineDimension = Prisma.FinJournalLineDimensionModel
+/**
+ * Model FinBudget
+ * 
+ */
+export type FinBudget = Prisma.FinBudgetModel
+/**
+ * Model FinBudgetLine
+ * 
+ */
+export type FinBudgetLine = Prisma.FinBudgetLineModel
+/**
+ * Model FinBudgetRevision
+ * 
+ */
+export type FinBudgetRevision = Prisma.FinBudgetRevisionModel
+/**
+ * Model FinBudgetTransfer
+ * 
+ */
+export type FinBudgetTransfer = Prisma.FinBudgetTransferModel
+/**
+ * Model FinBudgetControlPolicy
+ * 
+ */
+export type FinBudgetControlPolicy = Prisma.FinBudgetControlPolicyModel
+/**
+ * Model FinAssetCategory
+ * 
+ */
+export type FinAssetCategory = Prisma.FinAssetCategoryModel
+/**
+ * Model FinDepreciationMethod
+ * 
+ */
+export type FinDepreciationMethod = Prisma.FinDepreciationMethodModel
+/**
+ * Model FinAsset
+ * 
+ */
+export type FinAsset = Prisma.FinAssetModel
+/**
+ * Model FinAssetDepreciationSchedule
+ * 
+ */
+export type FinAssetDepreciationSchedule = Prisma.FinAssetDepreciationScheduleModel
+/**
+ * Model FinDepreciationRun
+ * 
+ */
+export type FinDepreciationRun = Prisma.FinDepreciationRunModel
+/**
+ * Model FinAssetDepreciationEntry
+ * 
+ */
+export type FinAssetDepreciationEntry = Prisma.FinAssetDepreciationEntryModel
+/**
+ * Model FinAssetDisposal
+ * 
+ */
+export type FinAssetDisposal = Prisma.FinAssetDisposalModel
+/**
+ * Model FinAssetRevaluation
+ * 
+ */
+export type FinAssetRevaluation = Prisma.FinAssetRevaluationModel
+/**
+ * Model FinAssetTransfer
+ * 
+ */
+export type FinAssetTransfer = Prisma.FinAssetTransferModel
+/**
+ * Model FinCloseTaskTemplate
+ * 
+ */
+export type FinCloseTaskTemplate = Prisma.FinCloseTaskTemplateModel
+/**
+ * Model FinPeriodCloseRun
+ * 
+ */
+export type FinPeriodCloseRun = Prisma.FinPeriodCloseRunModel
+/**
+ * Model FinPeriodCloseRunTask
+ * 
+ */
+export type FinPeriodCloseRunTask = Prisma.FinPeriodCloseRunTaskModel
+/**
+ * Model FinYearCloseRun
+ * 
+ */
+export type FinYearCloseRun = Prisma.FinYearCloseRunModel
+/**
+ * Model FinOpeningBalanceBatch
+ * 
+ */
+export type FinOpeningBalanceBatch = Prisma.FinOpeningBalanceBatchModel
+/**
+ * Model FinOpeningBalanceLine
+ * 
+ */
+export type FinOpeningBalanceLine = Prisma.FinOpeningBalanceLineModel
+/**
+ * Model FinAllocationRule
+ * 
+ */
+export type FinAllocationRule = Prisma.FinAllocationRuleModel
+/**
+ * Model FinAllocationRuleTarget
+ * 
+ */
+export type FinAllocationRuleTarget = Prisma.FinAllocationRuleTargetModel
+/**
+ * Model FinAllocationRun
+ * 
+ */
+export type FinAllocationRun = Prisma.FinAllocationRunModel
+/**
+ * Model FinSettings
+ * 
+ */
+export type FinSettings = Prisma.FinSettingsModel
+/**
+ * Model FinPostingRule
+ * 
+ */
+export type FinPostingRule = Prisma.FinPostingRuleModel
+/**
+ * Model FinPostingRuleLine
+ * 
+ */
+export type FinPostingRuleLine = Prisma.FinPostingRuleLineModel
+/**
+ * Model FinPostingQueue
+ * 
+ */
+export type FinPostingQueue = Prisma.FinPostingQueueModel
+/**
+ * Model FinEventCursor
+ * 
+ */
+export type FinEventCursor = Prisma.FinEventCursorModel
+/**
+ * Model FinPaymentTerm
+ * 
+ */
+export type FinPaymentTerm = Prisma.FinPaymentTermModel

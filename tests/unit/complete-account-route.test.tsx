@@ -95,7 +95,7 @@ describe('CompleteAccountPage', () => {
       target: { value: 'Hassan' },
     })
     fireEvent.change(screen.getByPlaceholderText('Tenant name'), {
-      target: { value: 'Meridian Foods' },
+      target: { value: 'Bluewave Foods' },
     })
     fireEvent.change(screen.getByPlaceholderText('Timezone'), {
       target: { value: 'Africa/Cairo' },
@@ -113,7 +113,7 @@ describe('CompleteAccountPage', () => {
         data: expect.objectContaining({
           accessToken: 'access-token',
           registrationId: '550e8400-e29b-41d4-a716-446655440000',
-          tenantName: 'Meridian Foods',
+          tenantName: 'Bluewave Foods',
           timezone: 'Africa/Cairo',
         }),
       })

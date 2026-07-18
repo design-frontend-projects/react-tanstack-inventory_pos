@@ -18,7 +18,7 @@ function About() {
               variant="outline"
               className="rounded-full border-border/60 bg-background/60"
             >
-              About Meridian
+              About Bluewave
             </Badge>
             <span className="ops-kicker">Shared product system</span>
           </div>

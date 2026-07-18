@@ -119,7 +119,7 @@ export function SignInPage() {
     setToken('')
     setStep('verify')
     setSuccessMessage(
-      `Enter the 6-digit code sent to ${parsedEmail.data.email}.`,
+      `Enter the 8-digit code sent to ${parsedEmail.data.email}.`,
     )
   }
 

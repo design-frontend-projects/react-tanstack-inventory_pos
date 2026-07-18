@@ -11,14 +11,14 @@ describe('preferences store', () => {
   })
 
   it('persists the active tenant', () => {
-    usePreferencesStore.getState().setActiveTenantId('tenant-meridian')
+    usePreferencesStore.getState().setActiveTenantId('tenant-Bluewave')
 
-    expect(usePreferencesStore.getState().activeTenantId).toBe('tenant-meridian')
+    expect(usePreferencesStore.getState().activeTenantId).toBe('tenant-Bluewave')
 
     const persistedState = window.localStorage.getItem(
       'inventory-pos-preferences'
     )
 
-    expect(persistedState).toContain('"activeTenantId":"tenant-meridian"')
+    expect(persistedState).toContain('"activeTenantId":"tenant-Bluewave"')
   })
 })
