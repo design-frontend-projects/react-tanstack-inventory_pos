@@ -88,7 +88,26 @@ export const orderCompleteSchema = z.object({
         amount: decimalString,
         reference: z.string().trim().max(200).nullish(),
         giftCardId: z.string().uuid().nullish(),
+        splitLabel: z.string().trim().min(1).max(100).nullish(),
       })
     )
     .min(1),
+})
+
+export const orderItemStatusUpdateSchema = z.object({
+  orderId: z.string().uuid(),
+  itemIds: z.array(z.string().uuid()).min(1).optional(),
+  toStatus: z.enum(['FIRED', 'PREPARING', 'READY', 'SERVED']),
+})
+
+export const orderItemVoidSchema = z.object({
+  orderId: z.string().uuid(),
+  itemId: z.string().uuid(),
+  reason: z.string().trim().max(500).nullish(),
+})
+
+export const orderTransferSchema = z.object({
+  orderId: z.string().uuid(),
+  toTableId: z.string().uuid(),
+  reason: z.string().trim().max(500).nullish(),
 })

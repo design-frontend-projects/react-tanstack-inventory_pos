@@ -1,10 +1,13 @@
 import { describe, expect, it } from 'vitest'
 import {
   allowedTransitions,
+  canItemTransition,
   canTransition,
   hasActiveReservation,
   hasConsumedInventory,
   isTerminal,
+  ITEM_STATUS_FLOW,
+  itemStatusRank,
 } from '#/server/restaurant/orders/order-state-machine'
 import {
   computeLineTotal,
@@ -38,6 +41,38 @@ describe('order state machine', () => {
     expect(hasConsumedInventory('CONFIRMED')).toBe(false)
     expect(hasActiveReservation('CONFIRMED')).toBe(true)
     expect(hasActiveReservation('DRAFT')).toBe(false)
+  })
+})
+
+describe('order item status machine', () => {
+  it('allows forward moves, including skips', () => {
+    expect(canItemTransition('PENDING', 'FIRED')).toBe(true)
+    expect(canItemTransition('FIRED', 'PREPARING')).toBe(true)
+    expect(canItemTransition('FIRED', 'READY')).toBe(true)
+    expect(canItemTransition('READY', 'SERVED')).toBe(true)
+  })
+
+  it('rejects backward moves and no-ops', () => {
+    expect(canItemTransition('READY', 'PREPARING')).toBe(false)
+    expect(canItemTransition('SERVED', 'READY')).toBe(false)
+    expect(canItemTransition('FIRED', 'FIRED')).toBe(false)
+  })
+
+  it('keeps VOIDED outside the kitchen flow', () => {
+    expect(canItemTransition('VOIDED', 'FIRED')).toBe(false)
+    expect(canItemTransition('PENDING', 'VOIDED')).toBe(false)
+    expect(itemStatusRank('VOIDED')).toBe(-1)
+  })
+
+  it('ranks the flow in kitchen order', () => {
+    expect(ITEM_STATUS_FLOW).toEqual([
+      'PENDING',
+      'FIRED',
+      'PREPARING',
+      'READY',
+      'SERVED',
+    ])
+    expect(itemStatusRank('READY')).toBeGreaterThan(itemStatusRank('PREPARING'))
   })
 })
 

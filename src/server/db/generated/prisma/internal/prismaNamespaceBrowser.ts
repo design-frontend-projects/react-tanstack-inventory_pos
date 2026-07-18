@@ -165,6 +165,7 @@ export const ModelName = {
   ResTableSection: 'ResTableSection',
   ResTable: 'ResTable',
   ResTableQrCode: 'ResTableQrCode',
+  ResFloorStaffAssignment: 'ResFloorStaffAssignment',
   ResServiceType: 'ResServiceType',
   ResShift: 'ResShift',
   ResKitchenStation: 'ResKitchenStation',
@@ -239,7 +240,8 @@ export const ModelName = {
   PodSupplierPaymentAllocation: 'PodSupplierPaymentAllocation',
   PodAttachment: 'PodAttachment',
   PodCustomFieldDefinition: 'PodCustomFieldDefinition',
-  PodCustomFieldValue: 'PodCustomFieldValue'
+  PodCustomFieldValue: 'PodCustomFieldValue',
+  PodNotification: 'PodNotification'
 } as const
 
 export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -2492,6 +2494,23 @@ export const ResTableQrCodeScalarFieldEnum = {
 export type ResTableQrCodeScalarFieldEnum = (typeof ResTableQrCodeScalarFieldEnum)[keyof typeof ResTableQrCodeScalarFieldEnum]
 
 
+export const ResFloorStaffAssignmentScalarFieldEnum = {
+  id: 'id',
+  tenantId: 'tenantId',
+  branchId: 'branchId',
+  diningAreaId: 'diningAreaId',
+  sectionId: 'sectionId',
+  tableId: 'tableId',
+  profileId: 'profileId',
+  role: 'role',
+  isActive: 'isActive',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type ResFloorStaffAssignmentScalarFieldEnum = (typeof ResFloorStaffAssignmentScalarFieldEnum)[keyof typeof ResFloorStaffAssignmentScalarFieldEnum]
+
+
 export const ResServiceTypeScalarFieldEnum = {
   id: 'id',
   tenantId: 'tenantId',
@@ -3887,6 +3906,23 @@ export const PodCustomFieldValueScalarFieldEnum = {
 } as const
 
 export type PodCustomFieldValueScalarFieldEnum = (typeof PodCustomFieldValueScalarFieldEnum)[keyof typeof PodCustomFieldValueScalarFieldEnum]
+
+
+export const PodNotificationScalarFieldEnum = {
+  id: 'id',
+  tenantId: 'tenantId',
+  recipientProfileId: 'recipientProfileId',
+  eventType: 'eventType',
+  title: 'title',
+  body: 'body',
+  entityType: 'entityType',
+  entityId: 'entityId',
+  isRead: 'isRead',
+  readAt: 'readAt',
+  createdAt: 'createdAt'
+} as const
+
+export type PodNotificationScalarFieldEnum = (typeof PodNotificationScalarFieldEnum)[keyof typeof PodNotificationScalarFieldEnum]
 
 
 export const SortOrder = {

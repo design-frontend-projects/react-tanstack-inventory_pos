@@ -69,3 +69,37 @@ export function hasConsumedInventory(status: ResOrderStatusValue): boolean {
 export function hasActiveReservation(status: ResOrderStatusValue): boolean {
   return RESERVED_STATUSES.includes(status)
 }
+
+// --- Order-item status machine ----------------------------------------------
+// Items advance forward-only through the kitchen flow; skipping ahead is legal
+// (FIRED -> READY), moving backward is not. VOIDED is handled by the dedicated
+// void-item flow, never by a plain status advance.
+
+export type ResOrderItemStatusValue =
+  | 'PENDING'
+  | 'FIRED'
+  | 'PREPARING'
+  | 'READY'
+  | 'SERVED'
+  | 'VOIDED'
+
+export const ITEM_STATUS_FLOW: ReadonlyArray<ResOrderItemStatusValue> = [
+  'PENDING',
+  'FIRED',
+  'PREPARING',
+  'READY',
+  'SERVED',
+]
+
+export function itemStatusRank(status: ResOrderItemStatusValue): number {
+  return ITEM_STATUS_FLOW.indexOf(status)
+}
+
+export function canItemTransition(
+  from: ResOrderItemStatusValue,
+  to: ResOrderItemStatusValue
+): boolean {
+  const fromRank = itemStatusRank(from)
+  const toRank = itemStatusRank(to)
+  return fromRank >= 0 && toRank >= 0 && toRank > fromRank
+}

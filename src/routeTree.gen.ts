@@ -37,9 +37,11 @@ import { Route as AppRestaurantTablesRouteImport } from './routes/_app/restauran
 import { Route as AppRestaurantSettingsRouteImport } from './routes/_app/restaurant/settings'
 import { Route as AppRestaurantMenuRouteImport } from './routes/_app/restaurant/menu'
 import { Route as AppRestaurantKitchenRouteImport } from './routes/_app/restaurant/kitchen'
+import { Route as AppRestaurantFloorPlanRouteImport } from './routes/_app/restaurant/floor-plan'
 import { Route as AppPurchaseSuppliersRouteImport } from './routes/_app/purchase/suppliers'
 import { Route as AppPurchaseRfqsRouteImport } from './routes/_app/purchase/rfqs'
 import { Route as AppPurchaseQuotationsRouteImport } from './routes/_app/purchase/quotations'
+import { Route as AppPurchasePaymentsRouteImport } from './routes/_app/purchase/payments'
 import { Route as AppPurchaseInvoicesRouteImport } from './routes/_app/purchase/invoices'
 import { Route as AppPurchaseApprovalsRouteImport } from './routes/_app/purchase/approvals'
 import { Route as AppPosReturnsRouteImport } from './routes/_app/pos/returns'
@@ -50,6 +52,8 @@ import { Route as AppCrmSegmentsRouteImport } from './routes/_app/crm/segments'
 import { Route as AppCrmLoyaltyRouteImport } from './routes/_app/crm/loyalty'
 import { Route as AppCrmCustomersRouteImport } from './routes/_app/crm/customers'
 import { Route as AppCrmAnalyticsRouteImport } from './routes/_app/crm/analytics'
+import { Route as AppRestaurantOrdersIndexRouteImport } from './routes/_app/restaurant/orders/index'
+import { Route as AppRestaurantOrdersOrderIdRouteImport } from './routes/_app/restaurant/orders/$orderId'
 
 const AboutRoute = AboutRouteImport.update({
   id: '/about',
@@ -190,6 +194,11 @@ const AppRestaurantKitchenRoute = AppRestaurantKitchenRouteImport.update({
   path: '/restaurant/kitchen',
   getParentRoute: () => AppRoute,
 } as any)
+const AppRestaurantFloorPlanRoute = AppRestaurantFloorPlanRouteImport.update({
+  id: '/restaurant/floor-plan',
+  path: '/restaurant/floor-plan',
+  getParentRoute: () => AppRoute,
+} as any)
 const AppPurchaseSuppliersRoute = AppPurchaseSuppliersRouteImport.update({
   id: '/purchase/suppliers',
   path: '/purchase/suppliers',
@@ -203,6 +212,11 @@ const AppPurchaseRfqsRoute = AppPurchaseRfqsRouteImport.update({
 const AppPurchaseQuotationsRoute = AppPurchaseQuotationsRouteImport.update({
   id: '/purchase/quotations',
   path: '/purchase/quotations',
+  getParentRoute: () => AppRoute,
+} as any)
+const AppPurchasePaymentsRoute = AppPurchasePaymentsRouteImport.update({
+  id: '/purchase/payments',
+  path: '/purchase/payments',
   getParentRoute: () => AppRoute,
 } as any)
 const AppPurchaseInvoicesRoute = AppPurchaseInvoicesRouteImport.update({
@@ -255,6 +269,18 @@ const AppCrmAnalyticsRoute = AppCrmAnalyticsRouteImport.update({
   path: '/crm/analytics',
   getParentRoute: () => AppRoute,
 } as any)
+const AppRestaurantOrdersIndexRoute =
+  AppRestaurantOrdersIndexRouteImport.update({
+    id: '/restaurant/orders/',
+    path: '/restaurant/orders/',
+    getParentRoute: () => AppRoute,
+  } as any)
+const AppRestaurantOrdersOrderIdRoute =
+  AppRestaurantOrdersOrderIdRouteImport.update({
+    id: '/restaurant/orders/$orderId',
+    path: '/restaurant/orders/$orderId',
+    getParentRoute: () => AppRoute,
+  } as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
@@ -278,9 +304,11 @@ export interface FileRoutesByFullPath {
   '/pos/returns': typeof AppPosReturnsRoute
   '/purchase/approvals': typeof AppPurchaseApprovalsRoute
   '/purchase/invoices': typeof AppPurchaseInvoicesRoute
+  '/purchase/payments': typeof AppPurchasePaymentsRoute
   '/purchase/quotations': typeof AppPurchaseQuotationsRoute
   '/purchase/rfqs': typeof AppPurchaseRfqsRoute
   '/purchase/suppliers': typeof AppPurchaseSuppliersRoute
+  '/restaurant/floor-plan': typeof AppRestaurantFloorPlanRoute
   '/restaurant/kitchen': typeof AppRestaurantKitchenRoute
   '/restaurant/menu': typeof AppRestaurantMenuRoute
   '/restaurant/settings': typeof AppRestaurantSettingsRoute
@@ -296,6 +324,8 @@ export interface FileRoutesByFullPath {
   '/outlets/': typeof AppOutletsIndexRoute
   '/pos/': typeof AppPosIndexRoute
   '/purchase/': typeof AppPurchaseIndexRoute
+  '/restaurant/orders/$orderId': typeof AppRestaurantOrdersOrderIdRoute
+  '/restaurant/orders/': typeof AppRestaurantOrdersIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
@@ -319,9 +349,11 @@ export interface FileRoutesByTo {
   '/pos/returns': typeof AppPosReturnsRoute
   '/purchase/approvals': typeof AppPurchaseApprovalsRoute
   '/purchase/invoices': typeof AppPurchaseInvoicesRoute
+  '/purchase/payments': typeof AppPurchasePaymentsRoute
   '/purchase/quotations': typeof AppPurchaseQuotationsRoute
   '/purchase/rfqs': typeof AppPurchaseRfqsRoute
   '/purchase/suppliers': typeof AppPurchaseSuppliersRoute
+  '/restaurant/floor-plan': typeof AppRestaurantFloorPlanRoute
   '/restaurant/kitchen': typeof AppRestaurantKitchenRoute
   '/restaurant/menu': typeof AppRestaurantMenuRoute
   '/restaurant/settings': typeof AppRestaurantSettingsRoute
@@ -337,6 +369,8 @@ export interface FileRoutesByTo {
   '/outlets': typeof AppOutletsIndexRoute
   '/pos': typeof AppPosIndexRoute
   '/purchase': typeof AppPurchaseIndexRoute
+  '/restaurant/orders/$orderId': typeof AppRestaurantOrdersOrderIdRoute
+  '/restaurant/orders': typeof AppRestaurantOrdersIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -363,9 +397,11 @@ export interface FileRoutesById {
   '/_app/pos/returns': typeof AppPosReturnsRoute
   '/_app/purchase/approvals': typeof AppPurchaseApprovalsRoute
   '/_app/purchase/invoices': typeof AppPurchaseInvoicesRoute
+  '/_app/purchase/payments': typeof AppPurchasePaymentsRoute
   '/_app/purchase/quotations': typeof AppPurchaseQuotationsRoute
   '/_app/purchase/rfqs': typeof AppPurchaseRfqsRoute
   '/_app/purchase/suppliers': typeof AppPurchaseSuppliersRoute
+  '/_app/restaurant/floor-plan': typeof AppRestaurantFloorPlanRoute
   '/_app/restaurant/kitchen': typeof AppRestaurantKitchenRoute
   '/_app/restaurant/menu': typeof AppRestaurantMenuRoute
   '/_app/restaurant/settings': typeof AppRestaurantSettingsRoute
@@ -381,6 +417,8 @@ export interface FileRoutesById {
   '/_app/outlets/': typeof AppOutletsIndexRoute
   '/_app/pos/': typeof AppPosIndexRoute
   '/_app/purchase/': typeof AppPurchaseIndexRoute
+  '/_app/restaurant/orders/$orderId': typeof AppRestaurantOrdersOrderIdRoute
+  '/_app/restaurant/orders/': typeof AppRestaurantOrdersIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -406,9 +444,11 @@ export interface FileRouteTypes {
     | '/pos/returns'
     | '/purchase/approvals'
     | '/purchase/invoices'
+    | '/purchase/payments'
     | '/purchase/quotations'
     | '/purchase/rfqs'
     | '/purchase/suppliers'
+    | '/restaurant/floor-plan'
     | '/restaurant/kitchen'
     | '/restaurant/menu'
     | '/restaurant/settings'
@@ -424,6 +464,8 @@ export interface FileRouteTypes {
     | '/outlets/'
     | '/pos/'
     | '/purchase/'
+    | '/restaurant/orders/$orderId'
+    | '/restaurant/orders/'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
@@ -447,9 +489,11 @@ export interface FileRouteTypes {
     | '/pos/returns'
     | '/purchase/approvals'
     | '/purchase/invoices'
+    | '/purchase/payments'
     | '/purchase/quotations'
     | '/purchase/rfqs'
     | '/purchase/suppliers'
+    | '/restaurant/floor-plan'
     | '/restaurant/kitchen'
     | '/restaurant/menu'
     | '/restaurant/settings'
@@ -465,6 +509,8 @@ export interface FileRouteTypes {
     | '/outlets'
     | '/pos'
     | '/purchase'
+    | '/restaurant/orders/$orderId'
+    | '/restaurant/orders'
   id:
     | '__root__'
     | '/'
@@ -490,9 +536,11 @@ export interface FileRouteTypes {
     | '/_app/pos/returns'
     | '/_app/purchase/approvals'
     | '/_app/purchase/invoices'
+    | '/_app/purchase/payments'
     | '/_app/purchase/quotations'
     | '/_app/purchase/rfqs'
     | '/_app/purchase/suppliers'
+    | '/_app/restaurant/floor-plan'
     | '/_app/restaurant/kitchen'
     | '/_app/restaurant/menu'
     | '/_app/restaurant/settings'
@@ -508,6 +556,8 @@ export interface FileRouteTypes {
     | '/_app/outlets/'
     | '/_app/pos/'
     | '/_app/purchase/'
+    | '/_app/restaurant/orders/$orderId'
+    | '/_app/restaurant/orders/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -715,6 +765,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AppRestaurantKitchenRouteImport
       parentRoute: typeof AppRoute
     }
+    '/_app/restaurant/floor-plan': {
+      id: '/_app/restaurant/floor-plan'
+      path: '/restaurant/floor-plan'
+      fullPath: '/restaurant/floor-plan'
+      preLoaderRoute: typeof AppRestaurantFloorPlanRouteImport
+      parentRoute: typeof AppRoute
+    }
     '/_app/purchase/suppliers': {
       id: '/_app/purchase/suppliers'
       path: '/purchase/suppliers'
@@ -734,6 +791,13 @@ declare module '@tanstack/react-router' {
       path: '/purchase/quotations'
       fullPath: '/purchase/quotations'
       preLoaderRoute: typeof AppPurchaseQuotationsRouteImport
+      parentRoute: typeof AppRoute
+    }
+    '/_app/purchase/payments': {
+      id: '/_app/purchase/payments'
+      path: '/purchase/payments'
+      fullPath: '/purchase/payments'
+      preLoaderRoute: typeof AppPurchasePaymentsRouteImport
       parentRoute: typeof AppRoute
     }
     '/_app/purchase/invoices': {
@@ -806,6 +870,20 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AppCrmAnalyticsRouteImport
       parentRoute: typeof AppRoute
     }
+    '/_app/restaurant/orders/': {
+      id: '/_app/restaurant/orders/'
+      path: '/restaurant/orders'
+      fullPath: '/restaurant/orders/'
+      preLoaderRoute: typeof AppRestaurantOrdersIndexRouteImport
+      parentRoute: typeof AppRoute
+    }
+    '/_app/restaurant/orders/$orderId': {
+      id: '/_app/restaurant/orders/$orderId'
+      path: '/restaurant/orders/$orderId'
+      fullPath: '/restaurant/orders/$orderId'
+      preLoaderRoute: typeof AppRestaurantOrdersOrderIdRouteImport
+      parentRoute: typeof AppRoute
+    }
   }
 }
 
@@ -822,9 +900,11 @@ interface AppRouteChildren {
   AppPosReturnsRoute: typeof AppPosReturnsRoute
   AppPurchaseApprovalsRoute: typeof AppPurchaseApprovalsRoute
   AppPurchaseInvoicesRoute: typeof AppPurchaseInvoicesRoute
+  AppPurchasePaymentsRoute: typeof AppPurchasePaymentsRoute
   AppPurchaseQuotationsRoute: typeof AppPurchaseQuotationsRoute
   AppPurchaseRfqsRoute: typeof AppPurchaseRfqsRoute
   AppPurchaseSuppliersRoute: typeof AppPurchaseSuppliersRoute
+  AppRestaurantFloorPlanRoute: typeof AppRestaurantFloorPlanRoute
   AppRestaurantKitchenRoute: typeof AppRestaurantKitchenRoute
   AppRestaurantMenuRoute: typeof AppRestaurantMenuRoute
   AppRestaurantSettingsRoute: typeof AppRestaurantSettingsRoute
@@ -840,6 +920,8 @@ interface AppRouteChildren {
   AppOutletsIndexRoute: typeof AppOutletsIndexRoute
   AppPosIndexRoute: typeof AppPosIndexRoute
   AppPurchaseIndexRoute: typeof AppPurchaseIndexRoute
+  AppRestaurantOrdersOrderIdRoute: typeof AppRestaurantOrdersOrderIdRoute
+  AppRestaurantOrdersIndexRoute: typeof AppRestaurantOrdersIndexRoute
 }
 
 const AppRouteChildren: AppRouteChildren = {
@@ -855,9 +937,11 @@ const AppRouteChildren: AppRouteChildren = {
   AppPosReturnsRoute: AppPosReturnsRoute,
   AppPurchaseApprovalsRoute: AppPurchaseApprovalsRoute,
   AppPurchaseInvoicesRoute: AppPurchaseInvoicesRoute,
+  AppPurchasePaymentsRoute: AppPurchasePaymentsRoute,
   AppPurchaseQuotationsRoute: AppPurchaseQuotationsRoute,
   AppPurchaseRfqsRoute: AppPurchaseRfqsRoute,
   AppPurchaseSuppliersRoute: AppPurchaseSuppliersRoute,
+  AppRestaurantFloorPlanRoute: AppRestaurantFloorPlanRoute,
   AppRestaurantKitchenRoute: AppRestaurantKitchenRoute,
   AppRestaurantMenuRoute: AppRestaurantMenuRoute,
   AppRestaurantSettingsRoute: AppRestaurantSettingsRoute,
@@ -873,6 +957,8 @@ const AppRouteChildren: AppRouteChildren = {
   AppOutletsIndexRoute: AppOutletsIndexRoute,
   AppPosIndexRoute: AppPosIndexRoute,
   AppPurchaseIndexRoute: AppPurchaseIndexRoute,
+  AppRestaurantOrdersOrderIdRoute: AppRestaurantOrdersOrderIdRoute,
+  AppRestaurantOrdersIndexRoute: AppRestaurantOrdersIndexRoute,
 }
 
 const AppRouteWithChildren = AppRoute._addFileChildren(AppRouteChildren)

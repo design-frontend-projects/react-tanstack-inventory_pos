@@ -6,12 +6,21 @@ import { appendDomainEvent } from '#/server/events/event-outbox'
 import { serializeOrder } from '#/server/restaurant/orders/order-dto'
 import { computeOrderTotals } from '#/server/restaurant/orders/order-totals'
 import type { TotalsCharge, TotalsItem } from '#/server/restaurant/orders/order-totals'
-import { canTransition, hasConsumedInventory } from '#/server/restaurant/orders/order-state-machine'
-import type { ResOrderStatusValue } from '#/server/restaurant/orders/order-state-machine'
+import {
+  canItemTransition,
+  canTransition,
+  hasConsumedInventory,
+  itemStatusRank,
+} from '#/server/restaurant/orders/order-state-machine'
+import type {
+  ResOrderItemStatusValue,
+  ResOrderStatusValue,
+} from '#/server/restaurant/orders/order-state-machine'
 import { consumeOrderInventory } from '#/server/restaurant/orders/inventory-consumption'
 import * as orderRepo from '#/server/repos/res-order-repo'
 import * as branchRepo from '#/server/repos/res-branch-repo'
 import * as itemRepo from '#/server/repos/res-menu-item-repo'
+import * as tableRepo from '#/server/repos/res-table-repo'
 import * as sequenceRepo from '#/server/repos/res-number-sequence-repo'
 import type { CurrentUserContext } from '#/types/auth'
 import type { RestaurantOrderLine } from '#/server/events/domain-event-types'
@@ -58,6 +67,9 @@ export async function createOrder(
 
   const order = await prisma.$transaction(async (tx) => {
     if (input.tableId) {
+      // Serialize concurrent seat/transfer attempts on the same table before
+      // running the one-active-order-per-table check (no DB constraint backs it).
+      await tableRepo.lockTableForUpdate(tenantId, input.tableId, tx)
       const active = await orderRepo.findActiveOrderForTable(
         tenantId,
         input.branchId,
@@ -190,7 +202,8 @@ async function recomputeTotals(
   orderId: string,
   tx: Prisma.TransactionClient
 ) {
-  const items = await orderRepo.listItems(tenantId, orderId, tx)
+  const allItems = await orderRepo.listItems(tenantId, orderId, tx)
+  const items = allItems.filter((item) => item.status !== 'VOIDED')
   const charges = await tx.resOrderCharge.findMany({ where: { tenantId, orderId } })
   const discounts = await tx.resOrderDiscount.findMany({ where: { tenantId, orderId } })
 
@@ -233,7 +246,60 @@ export async function transition(
   }
 
   await prisma.$transaction(async (tx) => {
-    await orderRepo.setStatus(tenantId, id, toStatus, {}, tx)
+    const extra: Record<string, unknown> = {}
+    if (toStatus === 'CONFIRMED') {
+      extra.confirmedAt = new Date()
+    }
+    if (toStatus === 'SERVED') {
+      extra.servedAt = new Date()
+    }
+
+    // Atomic compare-and-set: a concurrent transition (double-tap on "Mark
+    // served" / "Bump") loses here and must not re-run the side effects below.
+    const won = await orderRepo.setStatusIf(
+      tenantId,
+      id,
+      order.status,
+      toStatus,
+      extra,
+      tx
+    )
+    if (!won) {
+      throw new ConflictError('Order status changed — refresh and retry')
+    }
+
+    // Serving is the consumption point of the state machine: post the inventory
+    // movements here so completing a SERVED order later doesn't skip them.
+    if (toStatus === 'SERVED' && !hasConsumedInventory(order.status as ResOrderStatusValue)) {
+      const items = await orderRepo.listItems(tenantId, id, tx)
+      const consumable = items.filter((item) => item.status !== 'VOIDED')
+
+      await consumeOrderInventory(tx, {
+        tenantId,
+        order: {
+          id: order.id,
+          orderNumber: order.orderNumber,
+          warehouseId: order.warehouseId,
+          locationId: order.locationId,
+        },
+        items: consumable.map((i) => ({
+          id: i.id,
+          menuItemId: i.menuItemId,
+          quantity: i.quantity,
+        })),
+        performedByProfileId: context.profileId,
+      })
+
+      // Everything that reached the guest is served.
+      await orderRepo.updateItemStatuses(
+        tenantId,
+        id,
+        consumable.filter((i) => i.status !== 'SERVED').map((i) => i.id),
+        'SERVED',
+        tx
+      )
+    }
+
     await orderRepo.appendOrderEvent(
       tenantId,
       {
@@ -250,11 +316,329 @@ export async function transition(
   return getOrder(context, tenantId, id)
 }
 
+// --- Item-level kitchen progression -----------------------------------------
+
+export interface UpdateItemStatusInput {
+  orderId: string
+  itemIds?: Array<string>
+  toStatus: 'FIRED' | 'PREPARING' | 'READY' | 'SERVED'
+}
+
+// Advance order items through the kitchen flow (forward-only, idempotent for
+// items already at or past the target). Auto-advances the parent order when the
+// item states imply it: first PREPARING item moves a CONFIRMED order to
+// PREPARING; all items READY+ moves the order to READY. Order-level SERVED
+// stays an explicit action (it posts inventory movements).
+export async function updateItemStatus(
+  context: CurrentUserContext,
+  tenantId: string,
+  input: UpdateItemStatusInput
+) {
+  const order = await orderRepo.findOrderById(tenantId, input.orderId)
+  if (!order) {
+    throw new NotFoundError('Order not found')
+  }
+  const orderStatus = order.status as ResOrderStatusValue
+  if (['COMPLETED', 'CANCELLED', 'REFUNDED', 'VOIDED'].includes(orderStatus)) {
+    throw new ValidationError('Order is closed — item statuses can no longer change')
+  }
+
+  const items = await orderRepo.listItems(tenantId, input.orderId)
+  const targeted = input.itemIds?.length
+    ? items.filter((item) => input.itemIds?.includes(item.id))
+    : items
+
+  const eligible = targeted.filter((item) =>
+    canItemTransition(item.status as ResOrderItemStatusValue, input.toStatus)
+  )
+
+  if (input.itemIds?.length && eligible.length === 0) {
+    throw new ValidationError('No selected items can move to that status')
+  }
+
+  await prisma.$transaction(async (tx) => {
+    await orderRepo.updateItemStatuses(
+      tenantId,
+      input.orderId,
+      eligible.map((item) => item.id),
+      input.toStatus,
+      tx
+    )
+
+    // Project the post-update item states to decide order auto-advance.
+    const eligibleIds = new Set(eligible.map((item) => item.id))
+    const nextStates = items
+      .filter((item) => item.status !== 'VOIDED')
+      .map((item) =>
+        eligibleIds.has(item.id)
+          ? input.toStatus
+          : (item.status as ResOrderItemStatusValue)
+      )
+
+    let nextOrderStatus: ResOrderStatusValue | null = null
+    const allReadyOrBeyond =
+      nextStates.length > 0 &&
+      nextStates.every((status) => itemStatusRank(status) >= itemStatusRank('READY'))
+
+    if (allReadyOrBeyond && canTransition(orderStatus, 'READY')) {
+      nextOrderStatus = 'READY'
+    } else if (
+      input.toStatus === 'PREPARING' &&
+      canTransition(orderStatus, 'PREPARING')
+    ) {
+      nextOrderStatus = 'PREPARING'
+    }
+
+    if (nextOrderStatus && nextOrderStatus !== orderStatus) {
+      await orderRepo.setStatus(tenantId, input.orderId, nextOrderStatus, {}, tx)
+    }
+
+    await orderRepo.appendOrderEvent(
+      tenantId,
+      {
+        orderId: input.orderId,
+        fromStatus: order.status,
+        toStatus: nextOrderStatus ?? order.status,
+        actorProfileId: context.profileId,
+        payloadJson: {
+          kind: 'item_status',
+          itemIds: eligible.map((item) => item.id),
+          toStatus: input.toStatus,
+        },
+      },
+      tx
+    )
+  })
+
+  return getOrder(context, tenantId, input.orderId)
+}
+
+// Void a single line before inventory has been consumed; totals are recomputed
+// without it. The row is kept for the audit trail.
+export async function voidOrderItem(
+  context: CurrentUserContext,
+  tenantId: string,
+  input: { orderId: string; itemId: string; reason?: string | null }
+) {
+  const order = await orderRepo.findOrderById(tenantId, input.orderId)
+  if (!order) {
+    throw new NotFoundError('Order not found')
+  }
+  const orderStatus = order.status as ResOrderStatusValue
+  if (
+    hasConsumedInventory(orderStatus) ||
+    ['CANCELLED', 'VOIDED'].includes(orderStatus)
+  ) {
+    throw new ValidationError('Items can no longer be removed from this order')
+  }
+
+  const items = await orderRepo.listItems(tenantId, input.orderId)
+  const item = items.find((candidate) => candidate.id === input.itemId)
+  if (!item) {
+    throw new NotFoundError('Order item not found')
+  }
+  if (item.status === 'VOIDED') {
+    throw new ValidationError('Item is already voided')
+  }
+
+  await prisma.$transaction(async (tx) => {
+    await orderRepo.updateItemStatuses(tenantId, input.orderId, [item.id], 'VOIDED', tx)
+    await recomputeTotals(tenantId, input.orderId, tx)
+    await orderRepo.appendOrderEvent(
+      tenantId,
+      {
+        orderId: input.orderId,
+        fromStatus: order.status,
+        toStatus: order.status,
+        actorProfileId: context.profileId,
+        reason: input.reason ?? null,
+        payloadJson: { kind: 'item_void', itemId: item.id, name: item.name },
+      },
+      tx
+    )
+  })
+
+  return getOrder(context, tenantId, input.orderId)
+}
+
+// Move an active order to another table (classic table transfer). The target
+// must be free, active, and in the same branch.
+export async function transferOrderTable(
+  context: CurrentUserContext,
+  tenantId: string,
+  input: { orderId: string; toTableId: string; reason?: string | null }
+) {
+  const order = await orderRepo.findOrderById(tenantId, input.orderId)
+  if (!order) {
+    throw new NotFoundError('Order not found')
+  }
+  const orderStatus = order.status as ResOrderStatusValue
+  if (['COMPLETED', 'CANCELLED', 'REFUNDED', 'VOIDED'].includes(orderStatus)) {
+    throw new ValidationError('Closed orders cannot be transferred')
+  }
+  if (order.tableId === input.toTableId) {
+    throw new ValidationError('Order is already on that table')
+  }
+
+  const target = await tableRepo.findTableById(tenantId, input.toTableId)
+  if (!target || !target.isActive || target.branchId !== order.branchId) {
+    throw new NotFoundError('Target table not found in this branch')
+  }
+  if (target.status === 'BLOCKED') {
+    throw new ConflictError('Target table is blocked')
+  }
+
+  await prisma.$transaction(async (tx) => {
+    // Serialize with concurrent seats/transfers targeting the same table.
+    await tableRepo.lockTableForUpdate(tenantId, input.toTableId, tx)
+    const occupied = await orderRepo.findActiveOrderForTable(
+      tenantId,
+      order.branchId,
+      input.toTableId,
+      tx
+    )
+    if (occupied) {
+      throw new ConflictError('Target table already has an active order')
+    }
+
+    await orderRepo.setOrderTable(tenantId, input.orderId, input.toTableId, tx)
+    await orderRepo.addTransfer(
+      tenantId,
+      {
+        orderId: input.orderId,
+        fromTableId: order.tableId,
+        toTableId: input.toTableId,
+        actorProfileId: context.profileId,
+      },
+      tx
+    )
+    await orderRepo.appendOrderEvent(
+      tenantId,
+      {
+        orderId: input.orderId,
+        fromStatus: order.status,
+        toStatus: order.status,
+        actorProfileId: context.profileId,
+        reason: input.reason ?? null,
+        payloadJson: {
+          kind: 'table_transfer',
+          fromTableId: order.tableId,
+          toTableId: input.toTableId,
+        },
+      },
+      tx
+    )
+  })
+
+  return getOrder(context, tenantId, input.orderId)
+}
+
+// --- Kitchen board projection ------------------------------------------------
+
+export interface KitchenBoardTicketItem {
+  id: string
+  name: string
+  quantity: string
+  status: string
+  stationId: string | null
+  specialRequest: string | null
+  modifiers: Array<{ name: string; quantity: number }>
+}
+
+export interface KitchenBoardTicket {
+  orderId: string
+  orderNumber: string
+  status: string
+  orderType: string
+  tableCode: string | null
+  guestCount: number
+  notes: string | null
+  kitchenNotes: string | null
+  confirmedAt: string
+  totalItemCount: number
+  items: Array<KitchenBoardTicketItem>
+}
+
+// Tickets are derived from in-kitchen orders' items; when a station filter is
+// given, each ticket keeps only that station's items (tickets left empty are
+// dropped) while totalItemCount still reflects the whole order.
+export async function getKitchenBoard(
+  _context: CurrentUserContext,
+  tenantId: string,
+  input: { branchId: string; stationId?: string | null }
+): Promise<Array<KitchenBoardTicket>> {
+  const orders = await prisma.resOrder.findMany({
+    where: {
+      tenantId,
+      branchId: input.branchId,
+      deletedAt: null,
+      status: { in: ['CONFIRMED', 'PREPARING', 'COOKING', 'READY'] },
+    },
+    include: { items: { include: { modifiers: true } } },
+    orderBy: { createdAt: 'asc' },
+    take: 100,
+  })
+
+  const tableIds = [
+    ...new Set(orders.map((order) => order.tableId).filter(Boolean) as Array<string>),
+  ]
+  const tables = tableIds.length
+    ? await prisma.resTable.findMany({
+        where: { tenantId, id: { in: tableIds } },
+        select: { id: true, code: true },
+      })
+    : []
+  const tableCodes = new Map(tables.map((table) => [table.id, table.code]))
+
+  const tickets: Array<KitchenBoardTicket> = []
+
+  for (const order of orders) {
+    const liveItems = order.items.filter((item) => item.status !== 'VOIDED')
+    const stationItems = input.stationId
+      ? liveItems.filter((item) => item.stationId === input.stationId)
+      : liveItems
+
+    if (stationItems.length === 0) {
+      continue
+    }
+
+    tickets.push({
+      orderId: order.id,
+      orderNumber: order.orderNumber,
+      status: order.status,
+      orderType: order.orderType,
+      tableCode: order.tableId ? (tableCodes.get(order.tableId) ?? null) : null,
+      guestCount: order.guestCount,
+      notes: order.notes,
+      kitchenNotes: order.kitchenNotes,
+      confirmedAt: (order.confirmedAt ?? order.createdAt).toISOString(),
+      totalItemCount: liveItems.length,
+      items: stationItems.map((item) => ({
+        id: item.id,
+        name: item.name,
+        quantity: item.quantity.toString(),
+        status: item.status,
+        stationId: item.stationId,
+        specialRequest: item.specialRequest,
+        modifiers: item.modifiers.map((modifier) => ({
+          name: modifier.name,
+          quantity: modifier.quantity,
+        })),
+      })),
+    })
+  }
+
+  return tickets
+}
+
 export interface PaymentInput {
   method: ResPaymentMethod
   amount: string
   reference?: string | null
   giftCardId?: string | null
+  // Optional named bill split; payments sharing a label become one
+  // ResOrderSplit row with the summed amount.
+  splitLabel?: string | null
 }
 
 // Settle and complete an order: record payments, consume inventory (once),
@@ -274,7 +658,22 @@ export async function completeOrder(
   }
 
   await prisma.$transaction(async (tx) => {
-    const items = await orderRepo.listItems(tenantId, id, tx)
+    // Atomic compare-and-set first — a concurrent completion loses here and the
+    // payments/consumption below never run twice.
+    const won = await orderRepo.setStatusIf(
+      tenantId,
+      id,
+      order.status,
+      'COMPLETED',
+      { completedAt: new Date(), closedByProfileId: context.profileId },
+      tx
+    )
+    if (!won) {
+      throw new ConflictError('Order status changed — refresh and retry')
+    }
+
+    const allItems = await orderRepo.listItems(tenantId, id, tx)
+    const items = allItems.filter((item) => item.status !== 'VOIDED')
 
     // Consume inventory once, if not already consumed by a prior SERVED transition.
     if (!hasConsumedInventory(order.status as ResOrderStatusValue)) {
@@ -291,6 +690,27 @@ export async function completeOrder(
       })
     }
 
+    // Named bill splits: payments sharing a splitLabel settle one split row.
+    const splitIdsByLabel = new Map<string, string>()
+    const splitLabels = [
+      ...new Set(
+        payments
+          .map((payment) => payment.splitLabel?.trim())
+          .filter((label): label is string => Boolean(label))
+      ),
+    ]
+    for (const label of splitLabels) {
+      const splitAmount = payments
+        .filter((payment) => payment.splitLabel?.trim() === label)
+        .reduce((sum, payment) => sum.plus(new Prisma.Decimal(payment.amount)), new Prisma.Decimal(0))
+      const split = await orderRepo.addSplit(
+        tenantId,
+        { orderId: id, label, amount: splitAmount.toString(), isPaid: true },
+        tx
+      )
+      splitIdsByLabel.set(label, split.id)
+    }
+
     let paid = new Prisma.Decimal(0)
     for (const payment of payments) {
       await orderRepo.addPayment(
@@ -301,6 +721,9 @@ export async function completeOrder(
           amount: payment.amount,
           reference: payment.reference ?? null,
           giftCardId: payment.giftCardId ?? null,
+          splitId: payment.splitLabel?.trim()
+            ? (splitIdsByLabel.get(payment.splitLabel.trim()) ?? null)
+            : null,
           createdByProfileId: context.profileId,
         },
         tx
@@ -313,10 +736,6 @@ export async function completeOrder(
     }
 
     await orderRepo.incrementAmountPaid(tenantId, id, paid.toString(), tx)
-    await orderRepo.setStatus(tenantId, id, 'COMPLETED', {
-      completedAt: new Date(),
-      closedByProfileId: context.profileId,
-    }, tx)
     await orderRepo.appendOrderEvent(
       tenantId,
       { orderId: id, fromStatus: order.status, toStatus: 'COMPLETED', actorProfileId: context.profileId },

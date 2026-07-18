@@ -5,10 +5,15 @@ import {
 } from '#/server/auth/errors'
 import { prisma } from '#/server/db/client'
 import { appendDomainEvent } from '#/server/events/event-outbox'
+import {
+  notify,
+  resolveStepRecipients,
+} from '#/server/notifications/notification-service'
 import { createAuditLog } from '#/server/repos/audit-log-repo'
 import * as workflowRepo from '#/server/repos/pod-approval-workflow-repo'
 import * as requestRepo from '#/server/repos/pod-approval-request-repo'
 import * as invoiceRepo from '#/server/repos/pod-supplier-invoice-repo'
+import * as paymentRepo from '#/server/repos/pod-supplier-payment-repo'
 import * as poRepo from '#/server/repos/purchase-order-repo'
 import {
   serializeApprovalRequest,
@@ -21,8 +26,8 @@ import {
   nextStepOrder,
   selectWorkflow,
   shouldAutoApprove,
-  type RoutableWorkflow,
 } from '#/server/purchasing/approval-routing'
+import type { RoutableWorkflow } from '#/server/purchasing/approval-routing'
 import type { CurrentUserContext } from '#/types/auth'
 import type { PrismaClientLike } from '#/server/db/types'
 
@@ -55,6 +60,18 @@ async function applyApprovalToDocument(
       entityId,
       outcome === 'approved' ? 'approved' : 'draft',
       { updatedBy: actorProfileId },
+      tx,
+    )
+  }
+
+  if (entityType === 'supplier_payment') {
+    // Same shape as invoices: no 'rejected' status — rejection returns the
+    // payment to draft for correction or cancellation.
+    await paymentRepo.updatePaymentStatus(
+      tenantId,
+      entityId,
+      outcome === 'approved' ? 'approved' : 'draft',
+      actorProfileId,
       tx,
     )
   }
@@ -159,6 +176,23 @@ export async function openApprovalRequest(
       actorProfileId: context.profileId,
     },
   })
+
+  // Alert the first step's approvers (role members or the named profile).
+  await notify(
+    tx,
+    tenantId,
+    await resolveStepRecipients(tenantId, steps[0], tx),
+    context.profileId,
+    {
+      eventType: 'approval.requested',
+      title: `Approval requested: ${input.entityType.replace(/_/g, ' ')}`,
+      body: input.amount
+        ? `Amount ${input.amount} ${input.currencyCode ?? ''}`.trim()
+        : null,
+      entityType: input.entityType,
+      entityId: input.entityId,
+    },
+  )
 
   return {
     requestId: request.id,
@@ -319,6 +353,58 @@ export async function actOnApproval(
           actorProfileId: context.profileId,
         },
       })
+    }
+
+    // In-app alerts: the requester learns the outcome; an advanced request
+    // alerts the next step's approvers; a delegation alerts the delegate.
+    const entityLabel = request.entityType.replace(/_/g, ' ')
+
+    if (outcome === 'approved' || outcome === 'rejected') {
+      await notify(
+        tx,
+        tenantId,
+        request.requestedByProfileId ? [request.requestedByProfileId] : [],
+        context.profileId,
+        {
+          eventType: `approval.${outcome}`,
+          title: `Your ${entityLabel} was ${outcome}`,
+          entityType: request.entityType,
+          entityId: request.entityId,
+        },
+      )
+    } else if (input.action === 'approve') {
+      const nextStep = findStep(steps, currentStepOrder)
+
+      if (nextStep) {
+        await notify(
+          tx,
+          tenantId,
+          await resolveStepRecipients(tenantId, nextStep, tx),
+          context.profileId,
+          {
+            eventType: 'approval.requested',
+            title: `Approval requested: ${entityLabel}`,
+            body: request.amount
+              ? `Amount ${request.amount.toString()} ${request.currencyCode ?? ''}`.trim()
+              : null,
+            entityType: request.entityType,
+            entityId: request.entityId,
+          },
+        )
+      }
+    } else if (input.action === 'delegate' && input.delegateToProfileId) {
+      await notify(
+        tx,
+        tenantId,
+        [input.delegateToProfileId],
+        context.profileId,
+        {
+          eventType: 'approval.delegated',
+          title: `An approval was delegated to you: ${entityLabel}`,
+          entityType: request.entityType,
+          entityId: request.entityId,
+        },
+      )
     }
 
     await createAuditLog(

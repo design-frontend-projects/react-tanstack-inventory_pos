@@ -107,6 +107,59 @@ export function attachModifierGroup(
   return itemRepo.attachModifierGroup(tenantId, input)
 }
 
+// Everything the order-taking screen needs to configure one item: variants plus
+// attached modifier groups with per-item overrides resolved and their modifiers.
+export async function getItemOrderingDetail(
+  _context: CurrentUserContext,
+  tenantId: string,
+  id: string
+) {
+  const item = await itemRepo.findMenuItemById(tenantId, id)
+  if (!item) {
+    throw new NotFoundError('Menu item not found')
+  }
+
+  const [variants, links] = await Promise.all([
+    itemRepo.listVariants(tenantId, id),
+    itemRepo.listItemModifierGroups(tenantId, id),
+  ])
+
+  const groupIds = links.map((link) => link.modifierGroupId)
+  const [groups, allModifiers] = await Promise.all([
+    modifierRepo.listModifierGroupsByIds(tenantId, groupIds),
+    modifierRepo.listModifiersByGroupIds(tenantId, groupIds),
+  ])
+  const groupsById = new Map(groups.map((group) => [group.id, group]))
+
+  const modifierGroups = links.flatMap((link) => {
+    const group = groupsById.get(link.modifierGroupId)
+    if (!group) {
+      return []
+    }
+
+    return [
+      {
+        groupId: group.id,
+        name: group.name,
+        selectionType: group.selectionType,
+        isRequired: link.isRequiredOverride ?? group.isRequired,
+        minSelect: link.minSelectOverride ?? group.minSelect,
+        maxSelect: link.maxSelectOverride ?? group.maxSelect,
+        displayOrder: link.displayOrder,
+        modifiers: allModifiers
+          .filter((modifier) => modifier.groupId === group.id)
+          .map(serializeModifier),
+      },
+    ]
+  })
+
+  return {
+    item: serializeMenuItem(item),
+    variants: variants.map(serializeVariant),
+    modifierGroups,
+  }
+}
+
 // Resolve the effective price of a menu item for a service type / channel / time.
 export async function resolveItemPrice(
   _context: CurrentUserContext,

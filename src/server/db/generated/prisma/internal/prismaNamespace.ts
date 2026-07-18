@@ -498,6 +498,7 @@ export const ModelName = {
   ResTableSection: 'ResTableSection',
   ResTable: 'ResTable',
   ResTableQrCode: 'ResTableQrCode',
+  ResFloorStaffAssignment: 'ResFloorStaffAssignment',
   ResServiceType: 'ResServiceType',
   ResShift: 'ResShift',
   ResKitchenStation: 'ResKitchenStation',
@@ -572,7 +573,8 @@ export const ModelName = {
   PodSupplierPaymentAllocation: 'PodSupplierPaymentAllocation',
   PodAttachment: 'PodAttachment',
   PodCustomFieldDefinition: 'PodCustomFieldDefinition',
-  PodCustomFieldValue: 'PodCustomFieldValue'
+  PodCustomFieldValue: 'PodCustomFieldValue',
+  PodNotification: 'PodNotification'
 } as const
 
 export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -588,7 +590,7 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
     omit: GlobalOmitOptions
   }
   meta: {
-    modelProps: "profile" | "tenantAccount" | "tenantUser" | "role" | "permission" | "rolePermission" | "tenantUserRole" | "tenantUserPermission" | "user_invitations" | "auditLog" | "preferenceProfile" | "tenantRegistrationRequest" | "module" | "tenantModule" | "tenantScreen" | "screen" | "screenAction" | "documentSequence" | "brand" | "productCategory" | "unitOfMeasure" | "uomConversion" | "product" | "productVariant" | "productBarcode" | "productImage" | "productSupplier" | "priceList" | "productPrice" | "bundleComponent" | "attribute" | "attributeOption" | "productAttributeValue" | "productTag" | "productTagLink" | "supplier" | "customer" | "taxRate" | "warehouse" | "warehouseLocation" | "stockBalance" | "inventoryMovement" | "costLayer" | "stockAdjustment" | "stockAdjustmentLine" | "ownerActivityOption" | "ownerSubscriptionPlan" | "ownerSubscriptionPlanFeature" | "ownerTenantSubscription" | "stockTransfer" | "stockTransferLine" | "purchaseRequisition" | "purchaseRequisitionLine" | "purchaseOrder" | "purchaseOrderLine" | "goodsReceipt" | "goodsReceiptLine" | "purchaseReturn" | "purchaseReturnLine" | "salesOrder" | "salesOrderLine" | "salesInvoice" | "salesInvoiceLine" | "posSession" | "posSale" | "posSaleLine" | "posPayment" | "salesReturn" | "salesReturnLine" | "financialNote" | "stockReservation" | "lot" | "serialNumber" | "billOfMaterials" | "bomComponent" | "productionOrder" | "productionMaterial" | "productionOutput" | "reorderRule" | "stockSnapshot" | "domainEvent" | "crmProjectionCursor" | "crmCustomerProfile" | "crmCustomerContact" | "crmCustomerAddress" | "crmCustomerRelationship" | "crmCommunicationConsent" | "crmCustomerPreference" | "crmTag" | "crmCustomerTag" | "crmCustomerGroup" | "crmCustomerGroupMember" | "crmCustomFieldDefinition" | "crmCustomFieldValue" | "crmTimelineEntry" | "crmLoyaltySettings" | "crmLoyaltyTier" | "crmLoyaltyAccount" | "crmLoyaltyLedgerEntry" | "crmLoyaltyEarnRule" | "crmCustomerMetrics" | "crmCustomerMetricsMonthly" | "crmSegment" | "crmSegmentMember" | "crmCustomerScore" | "resRestaurant" | "resBranch" | "resBranchMember" | "resBusinessHours" | "resHoliday" | "resDiningArea" | "resTableSection" | "resTable" | "resTableQrCode" | "resServiceType" | "resShift" | "resKitchenStation" | "resKitchenPrinter" | "resReceiptTemplate" | "resTaxConfig" | "resServiceChargeRule" | "resDeliverySettings" | "resTakeawaySettings" | "resNumberSequence" | "resRestaurantSettings" | "resBranchSettings" | "resMenu" | "resMenuCategory" | "resMenuItem" | "resMenuItemVariant" | "resMenuItemPrice" | "resModifierGroup" | "resModifier" | "resMenuItemModifierGroup" | "resCombo" | "resComboComponent" | "resMenuItemAllergen" | "resMenuItemTag" | "resMenuAvailability" | "resCrossSell" | "resRecipe" | "resRecipeVersion" | "resRecipeLine" | "resRecipeSubRecipe" | "resRecipeStep" | "resRecipeApproval" | "resOrder" | "resOrderItem" | "resOrderItemModifier" | "resOrderPayment" | "resOrderDiscount" | "resOrderCharge" | "resOrderSplit" | "resOrderTransfer" | "resOrderEvent" | "resVoidReason" | "resCancelReason" | "podDocumentStatus" | "podStatusTransition" | "podSupplierCategory" | "podReturnReason" | "podPaymentMethod" | "podLandedCostType" | "podIncoterm" | "podDebitNoteReason" | "podSupplierContact" | "podSupplierAddress" | "podSupplierBankAccount" | "podRfq" | "podRfqItem" | "podRfqSupplier" | "podSupplierQuotation" | "podSupplierQuotationItem" | "podApprovalWorkflow" | "podApprovalWorkflowStep" | "podApprovalRequest" | "podApprovalAction" | "podSupplierInvoice" | "podSupplierInvoiceItem" | "podSupplierInvoiceMatch" | "podDebitNoteLine" | "podLandedCostVoucher" | "podLandedCostCharge" | "podLandedCostAllocation" | "podSupplierPayment" | "podSupplierPaymentAllocation" | "podAttachment" | "podCustomFieldDefinition" | "podCustomFieldValue"
+    modelProps: "profile" | "tenantAccount" | "tenantUser" | "role" | "permission" | "rolePermission" | "tenantUserRole" | "tenantUserPermission" | "user_invitations" | "auditLog" | "preferenceProfile" | "tenantRegistrationRequest" | "module" | "tenantModule" | "tenantScreen" | "screen" | "screenAction" | "documentSequence" | "brand" | "productCategory" | "unitOfMeasure" | "uomConversion" | "product" | "productVariant" | "productBarcode" | "productImage" | "productSupplier" | "priceList" | "productPrice" | "bundleComponent" | "attribute" | "attributeOption" | "productAttributeValue" | "productTag" | "productTagLink" | "supplier" | "customer" | "taxRate" | "warehouse" | "warehouseLocation" | "stockBalance" | "inventoryMovement" | "costLayer" | "stockAdjustment" | "stockAdjustmentLine" | "ownerActivityOption" | "ownerSubscriptionPlan" | "ownerSubscriptionPlanFeature" | "ownerTenantSubscription" | "stockTransfer" | "stockTransferLine" | "purchaseRequisition" | "purchaseRequisitionLine" | "purchaseOrder" | "purchaseOrderLine" | "goodsReceipt" | "goodsReceiptLine" | "purchaseReturn" | "purchaseReturnLine" | "salesOrder" | "salesOrderLine" | "salesInvoice" | "salesInvoiceLine" | "posSession" | "posSale" | "posSaleLine" | "posPayment" | "salesReturn" | "salesReturnLine" | "financialNote" | "stockReservation" | "lot" | "serialNumber" | "billOfMaterials" | "bomComponent" | "productionOrder" | "productionMaterial" | "productionOutput" | "reorderRule" | "stockSnapshot" | "domainEvent" | "crmProjectionCursor" | "crmCustomerProfile" | "crmCustomerContact" | "crmCustomerAddress" | "crmCustomerRelationship" | "crmCommunicationConsent" | "crmCustomerPreference" | "crmTag" | "crmCustomerTag" | "crmCustomerGroup" | "crmCustomerGroupMember" | "crmCustomFieldDefinition" | "crmCustomFieldValue" | "crmTimelineEntry" | "crmLoyaltySettings" | "crmLoyaltyTier" | "crmLoyaltyAccount" | "crmLoyaltyLedgerEntry" | "crmLoyaltyEarnRule" | "crmCustomerMetrics" | "crmCustomerMetricsMonthly" | "crmSegment" | "crmSegmentMember" | "crmCustomerScore" | "resRestaurant" | "resBranch" | "resBranchMember" | "resBusinessHours" | "resHoliday" | "resDiningArea" | "resTableSection" | "resTable" | "resTableQrCode" | "resFloorStaffAssignment" | "resServiceType" | "resShift" | "resKitchenStation" | "resKitchenPrinter" | "resReceiptTemplate" | "resTaxConfig" | "resServiceChargeRule" | "resDeliverySettings" | "resTakeawaySettings" | "resNumberSequence" | "resRestaurantSettings" | "resBranchSettings" | "resMenu" | "resMenuCategory" | "resMenuItem" | "resMenuItemVariant" | "resMenuItemPrice" | "resModifierGroup" | "resModifier" | "resMenuItemModifierGroup" | "resCombo" | "resComboComponent" | "resMenuItemAllergen" | "resMenuItemTag" | "resMenuAvailability" | "resCrossSell" | "resRecipe" | "resRecipeVersion" | "resRecipeLine" | "resRecipeSubRecipe" | "resRecipeStep" | "resRecipeApproval" | "resOrder" | "resOrderItem" | "resOrderItemModifier" | "resOrderPayment" | "resOrderDiscount" | "resOrderCharge" | "resOrderSplit" | "resOrderTransfer" | "resOrderEvent" | "resVoidReason" | "resCancelReason" | "podDocumentStatus" | "podStatusTransition" | "podSupplierCategory" | "podReturnReason" | "podPaymentMethod" | "podLandedCostType" | "podIncoterm" | "podDebitNoteReason" | "podSupplierContact" | "podSupplierAddress" | "podSupplierBankAccount" | "podRfq" | "podRfqItem" | "podRfqSupplier" | "podSupplierQuotation" | "podSupplierQuotationItem" | "podApprovalWorkflow" | "podApprovalWorkflowStep" | "podApprovalRequest" | "podApprovalAction" | "podSupplierInvoice" | "podSupplierInvoiceItem" | "podSupplierInvoiceMatch" | "podDebitNoteLine" | "podLandedCostVoucher" | "podLandedCostCharge" | "podLandedCostAllocation" | "podSupplierPayment" | "podSupplierPaymentAllocation" | "podAttachment" | "podCustomFieldDefinition" | "podCustomFieldValue" | "podNotification"
     txIsolationLevel: TransactionIsolationLevel
   }
   model: {
@@ -9028,6 +9030,80 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
         }
       }
     }
+    ResFloorStaffAssignment: {
+      payload: Prisma.$ResFloorStaffAssignmentPayload<ExtArgs>
+      fields: Prisma.ResFloorStaffAssignmentFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.ResFloorStaffAssignmentFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ResFloorStaffAssignmentPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.ResFloorStaffAssignmentFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ResFloorStaffAssignmentPayload>
+        }
+        findFirst: {
+          args: Prisma.ResFloorStaffAssignmentFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ResFloorStaffAssignmentPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.ResFloorStaffAssignmentFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ResFloorStaffAssignmentPayload>
+        }
+        findMany: {
+          args: Prisma.ResFloorStaffAssignmentFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ResFloorStaffAssignmentPayload>[]
+        }
+        create: {
+          args: Prisma.ResFloorStaffAssignmentCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ResFloorStaffAssignmentPayload>
+        }
+        createMany: {
+          args: Prisma.ResFloorStaffAssignmentCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.ResFloorStaffAssignmentCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ResFloorStaffAssignmentPayload>[]
+        }
+        delete: {
+          args: Prisma.ResFloorStaffAssignmentDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ResFloorStaffAssignmentPayload>
+        }
+        update: {
+          args: Prisma.ResFloorStaffAssignmentUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ResFloorStaffAssignmentPayload>
+        }
+        deleteMany: {
+          args: Prisma.ResFloorStaffAssignmentDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.ResFloorStaffAssignmentUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.ResFloorStaffAssignmentUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ResFloorStaffAssignmentPayload>[]
+        }
+        upsert: {
+          args: Prisma.ResFloorStaffAssignmentUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ResFloorStaffAssignmentPayload>
+        }
+        aggregate: {
+          args: Prisma.ResFloorStaffAssignmentAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateResFloorStaffAssignment>
+        }
+        groupBy: {
+          args: Prisma.ResFloorStaffAssignmentGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.ResFloorStaffAssignmentGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.ResFloorStaffAssignmentCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.ResFloorStaffAssignmentCountAggregateOutputType> | number
+        }
+      }
+    }
     ResServiceType: {
       payload: Prisma.$ResServiceTypePayload<ExtArgs>
       fields: Prisma.ResServiceTypeFieldRefs
@@ -14578,6 +14654,80 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
         }
       }
     }
+    PodNotification: {
+      payload: Prisma.$PodNotificationPayload<ExtArgs>
+      fields: Prisma.PodNotificationFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.PodNotificationFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PodNotificationPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.PodNotificationFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PodNotificationPayload>
+        }
+        findFirst: {
+          args: Prisma.PodNotificationFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PodNotificationPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.PodNotificationFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PodNotificationPayload>
+        }
+        findMany: {
+          args: Prisma.PodNotificationFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PodNotificationPayload>[]
+        }
+        create: {
+          args: Prisma.PodNotificationCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PodNotificationPayload>
+        }
+        createMany: {
+          args: Prisma.PodNotificationCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.PodNotificationCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PodNotificationPayload>[]
+        }
+        delete: {
+          args: Prisma.PodNotificationDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PodNotificationPayload>
+        }
+        update: {
+          args: Prisma.PodNotificationUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PodNotificationPayload>
+        }
+        deleteMany: {
+          args: Prisma.PodNotificationDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.PodNotificationUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.PodNotificationUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PodNotificationPayload>[]
+        }
+        upsert: {
+          args: Prisma.PodNotificationUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PodNotificationPayload>
+        }
+        aggregate: {
+          args: Prisma.PodNotificationAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregatePodNotification>
+        }
+        groupBy: {
+          args: Prisma.PodNotificationGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.PodNotificationGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.PodNotificationCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.PodNotificationCountAggregateOutputType> | number
+        }
+      }
+    }
   }
 } & {
   other: {
@@ -16851,6 +17001,23 @@ export const ResTableQrCodeScalarFieldEnum = {
 export type ResTableQrCodeScalarFieldEnum = (typeof ResTableQrCodeScalarFieldEnum)[keyof typeof ResTableQrCodeScalarFieldEnum]
 
 
+export const ResFloorStaffAssignmentScalarFieldEnum = {
+  id: 'id',
+  tenantId: 'tenantId',
+  branchId: 'branchId',
+  diningAreaId: 'diningAreaId',
+  sectionId: 'sectionId',
+  tableId: 'tableId',
+  profileId: 'profileId',
+  role: 'role',
+  isActive: 'isActive',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type ResFloorStaffAssignmentScalarFieldEnum = (typeof ResFloorStaffAssignmentScalarFieldEnum)[keyof typeof ResFloorStaffAssignmentScalarFieldEnum]
+
+
 export const ResServiceTypeScalarFieldEnum = {
   id: 'id',
   tenantId: 'tenantId',
@@ -18248,6 +18415,23 @@ export const PodCustomFieldValueScalarFieldEnum = {
 export type PodCustomFieldValueScalarFieldEnum = (typeof PodCustomFieldValueScalarFieldEnum)[keyof typeof PodCustomFieldValueScalarFieldEnum]
 
 
+export const PodNotificationScalarFieldEnum = {
+  id: 'id',
+  tenantId: 'tenantId',
+  recipientProfileId: 'recipientProfileId',
+  eventType: 'eventType',
+  title: 'title',
+  body: 'body',
+  entityType: 'entityType',
+  entityId: 'entityId',
+  isRead: 'isRead',
+  readAt: 'readAt',
+  createdAt: 'createdAt'
+} as const
+
+export type PodNotificationScalarFieldEnum = (typeof PodNotificationScalarFieldEnum)[keyof typeof PodNotificationScalarFieldEnum]
+
+
 export const SortOrder = {
   asc: 'asc',
   desc: 'desc'
@@ -19276,6 +19460,20 @@ export type ListEnumResTableStatusFieldRefInput<$PrismaModel> = FieldRefInputTyp
 
 
 /**
+ * Reference to a field of type 'ResFloorStaffRole'
+ */
+export type EnumResFloorStaffRoleFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'ResFloorStaffRole'>
+    
+
+
+/**
+ * Reference to a field of type 'ResFloorStaffRole[]'
+ */
+export type ListEnumResFloorStaffRoleFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'ResFloorStaffRole[]'>
+    
+
+
+/**
  * Reference to a field of type 'ResServiceKind'
  */
 export type EnumResServiceKindFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'ResServiceKind'>
@@ -19791,6 +19989,7 @@ export type GlobalOmitConfig = {
   resTableSection?: Prisma.ResTableSectionOmit
   resTable?: Prisma.ResTableOmit
   resTableQrCode?: Prisma.ResTableQrCodeOmit
+  resFloorStaffAssignment?: Prisma.ResFloorStaffAssignmentOmit
   resServiceType?: Prisma.ResServiceTypeOmit
   resShift?: Prisma.ResShiftOmit
   resKitchenStation?: Prisma.ResKitchenStationOmit
@@ -19866,6 +20065,7 @@ export type GlobalOmitConfig = {
   podAttachment?: Prisma.PodAttachmentOmit
   podCustomFieldDefinition?: Prisma.PodCustomFieldDefinitionOmit
   podCustomFieldValue?: Prisma.PodCustomFieldValueOmit
+  podNotification?: Prisma.PodNotificationOmit
 }
 
 /* Types for Logging */

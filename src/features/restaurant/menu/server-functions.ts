@@ -76,6 +76,13 @@ export const createCategoryServerFn = createServerFn({ method: 'POST' })
 
 // --- Menu items -------------------------------------------------------------
 
+export const getMenuItemOrderingDetailServerFn = createServerFn({ method: 'POST' })
+  .inputValidator(base.extend({ id: idSchema }))
+  .handler(async ({ data }) => {
+    const context = await resolveContext(data, VIEW)
+    return menu.getItemOrderingDetail(context, data.tenantId, data.id)
+  })
+
 export const listMenuItemsServerFn = createServerFn({ method: 'POST' })
   .inputValidator(base.extend({ categoryId: idSchema.optional() }))
   .handler(async ({ data }) => {

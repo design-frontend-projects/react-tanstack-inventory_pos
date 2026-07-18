@@ -215,6 +215,17 @@ export function createVariant(
 
 // --- Attaching modifier groups ----------------------------------------------
 
+export function listItemModifierGroups(
+  tenantId: string,
+  menuItemId: string,
+  client: PrismaClientLike = prisma
+) {
+  return client.resMenuItemModifierGroup.findMany({
+    where: { tenantId, menuItemId },
+    orderBy: { displayOrder: 'asc' },
+  })
+}
+
 export function attachModifierGroup(
   tenantId: string,
   input: {

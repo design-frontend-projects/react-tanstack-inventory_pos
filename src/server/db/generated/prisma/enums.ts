@@ -738,6 +738,14 @@ export const ResTableStatus = {
 export type ResTableStatus = (typeof ResTableStatus)[keyof typeof ResTableStatus]
 
 
+export const ResFloorStaffRole = {
+  FLOOR_MANAGER: 'FLOOR_MANAGER',
+  WAITER: 'WAITER'
+} as const
+
+export type ResFloorStaffRole = (typeof ResFloorStaffRole)[keyof typeof ResFloorStaffRole]
+
+
 export const ResServiceKind = {
   DINE_IN: 'DINE_IN',
   TAKEAWAY: 'TAKEAWAY',

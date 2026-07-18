@@ -588,6 +588,11 @@ export type ResTable = Prisma.ResTableModel
  */
 export type ResTableQrCode = Prisma.ResTableQrCodeModel
 /**
+ * Model ResFloorStaffAssignment
+ * 
+ */
+export type ResFloorStaffAssignment = Prisma.ResFloorStaffAssignmentModel
+/**
  * Model ResServiceType
  * 
  */
@@ -962,3 +967,8 @@ export type PodCustomFieldDefinition = Prisma.PodCustomFieldDefinitionModel
  * 
  */
 export type PodCustomFieldValue = Prisma.PodCustomFieldValueModel
+/**
+ * Model PodNotification
+ * 
+ */
+export type PodNotification = Prisma.PodNotificationModel

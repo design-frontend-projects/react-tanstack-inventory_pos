@@ -27,6 +27,8 @@ export type AppNavRouteTo =
   | '/restaurant/kitchen'
   | '/restaurant/menu'
   | '/restaurant/tables'
+  | '/restaurant/orders'
+  | '/restaurant/floor-plan'
   | '/pos'
   | '/pos/orders'
   | '/pos/returns'
@@ -156,10 +158,30 @@ export const appNavSections: AppNavSection[] = [
     icon: ChefHat,
     titleKey: 'nav.restaurant',
     fallbackTitle: 'Restaurant',
-    rootTo: '/restaurant/kitchen',
-    keywords: ['restaurant', 'kitchen', 'menu', 'tables', 'service'],
+    rootTo: '/restaurant/tables',
+    keywords: ['restaurant', 'kitchen', 'menu', 'tables', 'service', 'floor'],
     permissions: ['res.dashboard.view'],
     items: [
+      {
+        id: 'restaurant-tables',
+        sectionId: 'restaurant',
+        to: '/restaurant/tables',
+        icon: ReceiptText,
+        titleKey: 'nav.restaurantTables',
+        fallbackTitle: 'Live Floor',
+        keywords: ['tables', 'service', 'covers', 'floor', 'seating'],
+        permissions: ['res.orders.view', 'res.floor.manage'],
+      },
+      {
+        id: 'restaurant-orders',
+        sectionId: 'restaurant',
+        to: '/restaurant/orders',
+        icon: ClipboardList,
+        titleKey: 'nav.restaurantOrders',
+        fallbackTitle: 'Orders',
+        keywords: ['orders', 'tickets', 'takeaway', 'delivery', 'payment'],
+        permissions: ['res.orders.view'],
+      },
       {
         id: 'restaurant-kitchen',
         sectionId: 'restaurant',
@@ -176,19 +198,19 @@ export const appNavSections: AppNavSection[] = [
         to: '/restaurant/menu',
         icon: ShoppingBasket,
         titleKey: 'nav.restaurantMenu',
-        fallbackTitle: 'Menu Engineering',
+        fallbackTitle: 'Menu',
         keywords: ['menu', 'items', 'pricing', 'engineering'],
-        permissions: ['res.dashboard.view'],
+        permissions: ['res.menu.view', 'res.dashboard.view'],
       },
       {
-        id: 'restaurant-tables',
+        id: 'restaurant-floor-plan',
         sectionId: 'restaurant',
-        to: '/restaurant/tables',
-        icon: ReceiptText,
-        titleKey: 'nav.restaurantTables',
-        fallbackTitle: 'Table Service',
-        keywords: ['tables', 'service', 'covers', 'floor'],
-        permissions: ['res.floor.manage'],
+        to: '/restaurant/floor-plan',
+        icon: MapPinned,
+        titleKey: 'nav.restaurantFloorPlan',
+        fallbackTitle: 'Floor Plan',
+        keywords: ['floor plan', 'areas', 'sections', 'tables', 'staff', 'waiters'],
+        permissions: ['res.settings.manage', 'res.floor.manage'],
       },
     ],
   },

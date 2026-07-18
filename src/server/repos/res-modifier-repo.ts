@@ -70,6 +70,35 @@ export function createModifierGroup(
   })
 }
 
+export function listModifierGroupsByIds(
+  tenantId: string,
+  ids: ReadonlyArray<string>,
+  client: PrismaClientLike = prisma
+) {
+  if (ids.length === 0) {
+    return Promise.resolve([])
+  }
+
+  return client.resModifierGroup.findMany({
+    where: { tenantId, id: { in: [...ids] }, deletedAt: null },
+  })
+}
+
+export function listModifiersByGroupIds(
+  tenantId: string,
+  groupIds: ReadonlyArray<string>,
+  client: PrismaClientLike = prisma
+) {
+  if (groupIds.length === 0) {
+    return Promise.resolve([])
+  }
+
+  return client.resModifier.findMany({
+    where: { tenantId, groupId: { in: [...groupIds] }, deletedAt: null, isActive: true },
+    orderBy: [{ displayOrder: 'asc' }, { name: 'asc' }],
+  })
+}
+
 export function listModifiers(
   tenantId: string,
   groupId: string,

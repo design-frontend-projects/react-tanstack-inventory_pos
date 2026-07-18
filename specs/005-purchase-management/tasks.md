@@ -59,18 +59,18 @@ purchasing infrastructure.
 
 ## Phase 6 — Supplier payments (AP)
 
-- [ ] Repos: `pod-supplier-payment-repo.ts`, `pod-supplier-payment-allocation-repo.ts`.
-- [ ] `supplier-payment-service.ts` — create (numbering), allocate (update invoice paid/status), advance payments, post (`pod_recompute_supplier_balance`, emit `supplier_payment.posted`).
-- [ ] Routes: `purchase/payments.tsx`.
-- [ ] Tests: allocation, advances, over-allocation guard, balance/aging.
+- [x] Repos: `pod-supplier-payment-repo.ts`, `pod-supplier-payment-allocation-repo.ts`.
+- [x] `supplier-payment-service.ts` — create (numbering), allocate (update invoice paid/status), advance payments, post (`pod_recompute_supplier_balance`, emit `supplier_payment.posted`).
+- [x] Routes: `purchase/payments.tsx`.
+- [x] Tests: allocation, advances, over-allocation guard, balance/aging.
 
 ## Phase 7 — Reporting, notifications, hardening
 
-- [ ] Scheduled `pod_refresh_reporting_matviews()` job (first refresh non-concurrent).
-- [ ] Reporting routes/screens over `pod_v_*` and `pod_mv_*`.
-- [ ] **Build the missing notification service** (server-side; none exists today) + subscribe purchasing events.
-- [ ] **Wire the RLS `app.current_tenant_id` GUC** into any non-owner DB access path.
-- [ ] Attachments upload/storage integration; custom-field UI.
+- [x] On-demand matview refresh (`refreshPurchaseReportingServerFn`, config-gated; handles the WITH NO DATA first refresh non-concurrently). A cron scheduler is still an infra follow-up.
+- [x] Reporting over `pod_v_*` and `pod_mv_*` — live purchasing overview (`/purchase`): AP aging, supplier balances, spend trend, supplier performance, open-PO exposure, 3-way-match exceptions.
+- [x] **Notification service built** — `pod_notifications` table + service; approval routing/decisions/delegations write transactional in-app alerts; inbox on the purchasing overview.
+- [x] **RLS GUC helper** — `withTenantRls(tenantId, fn)` (`src/server/db/tenant-rls.ts`) sets the GUC with SET LOCAL semantics inside a transaction; ready for any future non-owner DB role (the pooled owner connection bypasses RLS by design).
+- [x] Attachments metadata + custom-field server API (register/list/delete, definitions + values with required/unknown-key validation). Storage-bucket upload UI still pending.
 - [ ] Partitioning + extra indexes if volume warrants (see performance.md).
 - [ ] E2E flows (Playwright): PR→PO→GRN→Invoice→Payment; RFQ→Quotation→PO.
 

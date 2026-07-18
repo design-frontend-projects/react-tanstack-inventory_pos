@@ -1,5 +1,5 @@
 import { prisma } from '#/server/db/client'
-import { Prisma } from '#/server/db/generated/prisma/client'
+import type { Prisma } from '#/server/db/generated/prisma/client'
 import type { PrismaClientLike } from '#/server/db/types'
 
 export interface ApprovalRequestCreateInput {

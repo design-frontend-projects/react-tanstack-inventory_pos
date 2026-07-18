@@ -2,6 +2,7 @@ import { prisma } from '#/server/db/client'
 import type {
   ResOrderChannel,
   ResOrderChargeKind,
+  ResOrderItemStatus,
   ResOrderStatus,
   ResOrderType,
   ResPaymentMethod,
@@ -178,6 +179,7 @@ export function addPayment(
     amount: string | number
     reference?: string | null
     giftCardId?: string | null
+    splitId?: string | null
     createdByProfileId?: string | null
   },
   client: PrismaClientLike = prisma
@@ -190,9 +192,80 @@ export function addPayment(
       amount: input.amount,
       reference: input.reference ?? null,
       giftCardId: input.giftCardId ?? null,
+      splitId: input.splitId ?? null,
       createdByProfileId: input.createdByProfileId ?? null,
       status: 'CAPTURED',
     },
+  })
+}
+
+export function addSplit(
+  tenantId: string,
+  input: {
+    orderId: string
+    label?: string | null
+    amount: string | number
+    isPaid?: boolean
+  },
+  client: PrismaClientLike = prisma
+) {
+  return client.resOrderSplit.create({
+    data: {
+      tenantId,
+      orderId: input.orderId,
+      splitType: 'amount',
+      label: input.label ?? null,
+      amount: input.amount,
+      isPaid: input.isPaid ?? false,
+    },
+  })
+}
+
+export function addTransfer(
+  tenantId: string,
+  input: {
+    orderId: string
+    fromTableId?: string | null
+    toTableId?: string | null
+    actorProfileId?: string | null
+  },
+  client: PrismaClientLike = prisma
+) {
+  return client.resOrderTransfer.create({
+    data: {
+      tenantId,
+      orderId: input.orderId,
+      transferType: 'table',
+      fromTableId: input.fromTableId ?? null,
+      toTableId: input.toTableId ?? null,
+      actorProfileId: input.actorProfileId ?? null,
+    },
+  })
+}
+
+export async function setOrderTable(
+  tenantId: string,
+  id: string,
+  tableId: string | null,
+  client: PrismaClientLike = prisma
+) {
+  await client.resOrder.updateMany({ where: { id, tenantId }, data: { tableId } })
+}
+
+export async function updateItemStatuses(
+  tenantId: string,
+  orderId: string,
+  itemIds: ReadonlyArray<string>,
+  status: ResOrderItemStatus,
+  client: PrismaClientLike = prisma
+) {
+  if (itemIds.length === 0) {
+    return
+  }
+
+  await client.resOrderItem.updateMany({
+    where: { tenantId, orderId, id: { in: [...itemIds] } },
+    data: { status },
   })
 }
 
@@ -254,6 +327,24 @@ export async function updateOrderTotals(
   client: PrismaClientLike = prisma
 ) {
   await client.resOrder.updateMany({ where: { id, tenantId }, data: totals })
+}
+
+// Atomic compare-and-set on the order status. Returns false when the row is no
+// longer in `fromStatus` — the caller lost a concurrent transition and must
+// abort instead of re-running side effects (e.g. inventory consumption).
+export async function setStatusIf(
+  tenantId: string,
+  id: string,
+  fromStatus: ResOrderStatus,
+  toStatus: ResOrderStatus,
+  extra: Record<string, unknown> = {},
+  client: PrismaClientLike = prisma
+) {
+  const result = await client.resOrder.updateMany({
+    where: { id, tenantId, status: fromStatus },
+    data: { status: toStatus, ...extra },
+  })
+  return result.count > 0
 }
 
 export async function setStatus(

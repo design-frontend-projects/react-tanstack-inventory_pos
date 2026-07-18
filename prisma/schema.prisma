@@ -255,6 +255,7 @@ model TenantAccount {
   resTableSections         ResTableSection[]
   resTables                ResTable[]
   resTableQrCodes          ResTableQrCode[]
+  resFloorStaffAssignments ResFloorStaffAssignment[]
   resServiceTypes          ResServiceType[]
   resShifts                ResShift[]
   resKitchenStations       ResKitchenStation[]
@@ -330,6 +331,7 @@ model TenantAccount {
   podAttachments           PodAttachment[]
   podCustomFieldDefinitions PodCustomFieldDefinition[]
   podCustomFieldValues     PodCustomFieldValue[]
+  podNotifications         PodNotification[]
 
   @@map("tenant_accounts")
 }
@@ -3467,6 +3469,13 @@ enum ResTableStatus {
   @@map("ResTableStatus")
 }
 
+enum ResFloorStaffRole {
+  FLOOR_MANAGER @map("floor_manager")
+  WAITER        @map("waiter")
+
+  @@map("ResFloorStaffRole")
+}
+
 enum ResServiceKind {
   DINE_IN     @map("dine_in")
   TAKEAWAY    @map("takeaway")
@@ -3689,6 +3698,30 @@ model ResTableQrCode {
 
   @@index([tenantId, tableId], map: "res_table_qr_codes_tenant_table_idx")
   @@map("res_table_qr_codes")
+}
+
+// Assigns tenant members to floor-service scopes. FLOOR_MANAGER rows are always
+// area-level (sectionId/tableId null); WAITER rows may narrow to a section or a
+// single table. Scoped uniqueness is enforced in the service layer because
+// Postgres treats NULLs as distinct inside unique indexes.
+model ResFloorStaffAssignment {
+  id           String            @id @default(uuid()) @db.Uuid
+  tenantId     String            @map("tenant_id") @db.Uuid
+  branchId     String            @map("branch_id") @db.Uuid
+  diningAreaId String            @map("dining_area_id") @db.Uuid
+  sectionId    String?           @map("section_id") @db.Uuid
+  tableId      String?           @map("table_id") @db.Uuid
+  profileId    String            @map("profile_id") @db.Uuid
+  role         ResFloorStaffRole @default(WAITER)
+  isActive     Boolean           @default(true) @map("is_active")
+  createdAt    DateTime          @default(now()) @map("created_at")
+  updatedAt    DateTime          @updatedAt @map("updated_at")
+  tenant       TenantAccount     @relation(fields: [tenantId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+
+  @@index([tenantId, branchId], map: "res_floor_staff_assignments_tenant_branch_idx")
+  @@index([tenantId, diningAreaId], map: "res_floor_staff_assignments_tenant_area_idx")
+  @@index([tenantId, profileId], map: "res_floor_staff_assignments_tenant_profile_idx")
+  @@map("res_floor_staff_assignments")
 }
 
 model ResServiceType {
@@ -5436,4 +5469,28 @@ model PodCustomFieldValue {
   @@unique([tenantId, definitionId, entityId], map: "pod_custom_field_values_grain_unique")
   @@index([tenantId, entityType, entityId], map: "pod_custom_field_values_entity_idx")
   @@map("pod_custom_field_values")
+}
+
+// --- In-app notifications (Spec 005 Phase 7) ---------------------------------
+// Server-side notification inbox. Rows are written transactionally alongside
+// the business action that triggers them (approval routing, postings) and read
+// by the recipient's notification panel.
+
+model PodNotification {
+  id                 String        @id @default(uuid()) @db.Uuid
+  tenantId           String        @map("tenant_id") @db.Uuid
+  recipientProfileId String        @map("recipient_profile_id") @db.Uuid
+  eventType          String        @map("event_type")
+  title              String
+  body               String?
+  entityType         String?       @map("entity_type")
+  entityId           String?       @map("entity_id") @db.Uuid
+  isRead             Boolean       @default(false) @map("is_read")
+  readAt             DateTime?     @map("read_at")
+  createdAt          DateTime      @default(now()) @map("created_at")
+  tenant             TenantAccount @relation(fields: [tenantId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+
+  @@index([tenantId, recipientProfileId, isRead, createdAt(sort: Desc)], map: "pod_notifications_inbox_idx")
+  @@index([tenantId, entityType, entityId], map: "pod_notifications_entity_idx")
+  @@map("pod_notifications")
 }

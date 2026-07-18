@@ -1557,6 +1557,23 @@ export type EnumResTableStatusWithAggregatesFilter<$PrismaModel = never> = {
   _max?: Prisma.NestedEnumResTableStatusFilter<$PrismaModel>
 }
 
+export type EnumResFloorStaffRoleFilter<$PrismaModel = never> = {
+  equals?: $Enums.ResFloorStaffRole | Prisma.EnumResFloorStaffRoleFieldRefInput<$PrismaModel>
+  in?: $Enums.ResFloorStaffRole[] | Prisma.ListEnumResFloorStaffRoleFieldRefInput<$PrismaModel>
+  notIn?: $Enums.ResFloorStaffRole[] | Prisma.ListEnumResFloorStaffRoleFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumResFloorStaffRoleFilter<$PrismaModel> | $Enums.ResFloorStaffRole
+}
+
+export type EnumResFloorStaffRoleWithAggregatesFilter<$PrismaModel = never> = {
+  equals?: $Enums.ResFloorStaffRole | Prisma.EnumResFloorStaffRoleFieldRefInput<$PrismaModel>
+  in?: $Enums.ResFloorStaffRole[] | Prisma.ListEnumResFloorStaffRoleFieldRefInput<$PrismaModel>
+  notIn?: $Enums.ResFloorStaffRole[] | Prisma.ListEnumResFloorStaffRoleFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumResFloorStaffRoleWithAggregatesFilter<$PrismaModel> | $Enums.ResFloorStaffRole
+  _count?: Prisma.NestedIntFilter<$PrismaModel>
+  _min?: Prisma.NestedEnumResFloorStaffRoleFilter<$PrismaModel>
+  _max?: Prisma.NestedEnumResFloorStaffRoleFilter<$PrismaModel>
+}
+
 export type EnumResServiceKindFilter<$PrismaModel = never> = {
   equals?: $Enums.ResServiceKind | Prisma.EnumResServiceKindFieldRefInput<$PrismaModel>
   in?: $Enums.ResServiceKind[] | Prisma.ListEnumResServiceKindFieldRefInput<$PrismaModel>
@@ -3427,6 +3444,23 @@ export type NestedEnumResTableStatusWithAggregatesFilter<$PrismaModel = never> =
   _count?: Prisma.NestedIntFilter<$PrismaModel>
   _min?: Prisma.NestedEnumResTableStatusFilter<$PrismaModel>
   _max?: Prisma.NestedEnumResTableStatusFilter<$PrismaModel>
+}
+
+export type NestedEnumResFloorStaffRoleFilter<$PrismaModel = never> = {
+  equals?: $Enums.ResFloorStaffRole | Prisma.EnumResFloorStaffRoleFieldRefInput<$PrismaModel>
+  in?: $Enums.ResFloorStaffRole[] | Prisma.ListEnumResFloorStaffRoleFieldRefInput<$PrismaModel>
+  notIn?: $Enums.ResFloorStaffRole[] | Prisma.ListEnumResFloorStaffRoleFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumResFloorStaffRoleFilter<$PrismaModel> | $Enums.ResFloorStaffRole
+}
+
+export type NestedEnumResFloorStaffRoleWithAggregatesFilter<$PrismaModel = never> = {
+  equals?: $Enums.ResFloorStaffRole | Prisma.EnumResFloorStaffRoleFieldRefInput<$PrismaModel>
+  in?: $Enums.ResFloorStaffRole[] | Prisma.ListEnumResFloorStaffRoleFieldRefInput<$PrismaModel>
+  notIn?: $Enums.ResFloorStaffRole[] | Prisma.ListEnumResFloorStaffRoleFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumResFloorStaffRoleWithAggregatesFilter<$PrismaModel> | $Enums.ResFloorStaffRole
+  _count?: Prisma.NestedIntFilter<$PrismaModel>
+  _min?: Prisma.NestedEnumResFloorStaffRoleFilter<$PrismaModel>
+  _max?: Prisma.NestedEnumResFloorStaffRoleFilter<$PrismaModel>
 }
 
 export type NestedEnumResServiceKindFilter<$PrismaModel = never> = {
