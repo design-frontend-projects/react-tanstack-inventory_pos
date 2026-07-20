@@ -22,6 +22,10 @@ const SCOPE_QUERY_PREFIXES: Record<string, Array<string>> = {
   orders: ['res-orders', 'res-order', 'res-floor-status'],
   kitchen: ['res-kitchen-board', 'res-orders', 'res-order'],
   menu: ['res-menus', 'res-menu-categories', 'res-menu-items'],
+  reservations: ['res-reservations', 'res-waitlist'],
+  takeaway: ['res-takeaway-board'],
+  delivery: ['res-deliveries', 'res-drivers', 'res-delivery-zones'],
+  events: ['res-events', 'res-catering-jobs'],
 }
 
 export function useRestaurantRealtime() {

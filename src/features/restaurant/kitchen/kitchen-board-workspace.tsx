@@ -1,7 +1,7 @@
 'use client'
 
 import * as React from 'react'
-import { CheckCheck, ChefHat, Play } from 'lucide-react'
+import { CheckCheck, ChefHat, Play, Undo2 } from 'lucide-react'
 import {
   WorkspaceEmptyState,
   WorkspacePage,
@@ -92,6 +92,20 @@ export function KitchenBoardWorkspace() {
     setActionError(null)
     try {
       await mutations.updateItemStatus.mutateAsync({ orderId, toStatus })
+    } catch (error: unknown) {
+      setActionError(errorMessage(error))
+    }
+  }
+
+  // Recall pulls a READY ticket back to PREPARING (wrong bump, quality issue).
+  const recall = async (orderId: string, itemIds: Array<string>) => {
+    setActionError(null)
+    try {
+      await mutations.updateItemStatus.mutateAsync({
+        orderId,
+        itemIds,
+        toStatus: 'PREPARING',
+      })
     } catch (error: unknown) {
       setActionError(errorMessage(error))
     }
@@ -328,14 +342,31 @@ export function KitchenBoardWorkspace() {
                             <ChefHat data-icon="inline-start" /> All ready
                           </Button>
                         ) : (
-                          <Button
-                            size="sm"
-                            className="flex-1"
-                            disabled={mutations.transition.isPending}
-                            onClick={() => bump(ticket.orderId)}
-                          >
-                            <CheckCheck data-icon="inline-start" /> Bump · served
-                          </Button>
+                          <>
+                            <Button
+                              size="sm"
+                              variant="outline"
+                              disabled={mutations.updateItemStatus.isPending}
+                              onClick={() =>
+                                recall(
+                                  ticket.orderId,
+                                  ticket.items
+                                    .filter((item) => item.status === 'READY')
+                                    .map((item) => item.id),
+                                )
+                              }
+                            >
+                              <Undo2 data-icon="inline-start" /> Recall
+                            </Button>
+                            <Button
+                              size="sm"
+                              className="flex-1"
+                              disabled={mutations.transition.isPending}
+                              onClick={() => bump(ticket.orderId)}
+                            >
+                              <CheckCheck data-icon="inline-start" /> Bump · served
+                            </Button>
+                          </>
                         )}
                       </div>
                     ) : null}

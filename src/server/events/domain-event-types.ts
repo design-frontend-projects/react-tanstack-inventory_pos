@@ -168,6 +168,75 @@ export interface RestaurantPromotionAppliedPayload {
   discount: string
 }
 
+export interface RestaurantReservationSeatedPayload {
+  reservationId: string
+  branchId: string
+  customerId?: string | null
+  tableIds: Array<string>
+  orderId?: string | null
+}
+
+export interface RestaurantReservationCancelledPayload {
+  reservationId: string
+  customerId?: string | null
+  reason?: string | null
+}
+
+export interface RestaurantDeliveryAssignedPayload {
+  deliveryId: string
+  orderId: string
+  driverId: string
+  zoneId?: string | null
+  customerId?: string | null
+}
+
+export interface RestaurantDeliveryDeliveredPayload {
+  deliveryId: string
+  orderId: string
+  driverId?: string | null
+  customerId?: string | null
+  deliveredAt: string
+}
+
+export interface RestaurantDeliveryFailedPayload {
+  deliveryId: string
+  orderId: string
+  customerId?: string | null
+  reason?: string | null
+}
+
+export interface RestaurantGiftCardReloadedPayload {
+  cardId: string
+  amount: string
+  balanceAfter: string
+  customerId?: string | null
+}
+
+export interface RestaurantEventBookedPayload {
+  eventId: string
+  branchId: string
+  code: string
+  kind: string
+  customerId?: string | null
+  startsAt: string
+  guestCount: number
+}
+
+export interface RestaurantEventStatusPayload {
+  eventId: string
+  code: string
+  customerId?: string | null
+  statusCode: string
+}
+
+export interface RestaurantCateringStatusPayload {
+  cateringJobId: string
+  code: string
+  customerId?: string | null
+  statusCode: string
+  quoteAmount?: string
+}
+
 // --- Purchase Management (Spec 005) -----------------------------------------
 
 export interface RfqPayload {
@@ -265,9 +334,20 @@ export interface DomainEventPayloadMap {
   'restaurant_order.voided': RestaurantOrderVoidedPayload
   'restaurant_reservation.created': RestaurantReservationCreatedPayload
   'restaurant_reservation.no_show': RestaurantReservationNoShowPayload
+  'restaurant_reservation.seated': RestaurantReservationSeatedPayload
+  'restaurant_reservation.cancelled': RestaurantReservationCancelledPayload
+  'restaurant_delivery.assigned': RestaurantDeliveryAssignedPayload
+  'restaurant_delivery.delivered': RestaurantDeliveryDeliveredPayload
+  'restaurant_delivery.failed': RestaurantDeliveryFailedPayload
   'restaurant_gift_card.issued': RestaurantGiftCardIssuedPayload
   'restaurant_gift_card.redeemed': RestaurantGiftCardRedeemedPayload
+  'restaurant_gift_card.reloaded': RestaurantGiftCardReloadedPayload
   'restaurant_promotion.applied': RestaurantPromotionAppliedPayload
+  'restaurant_event.booked': RestaurantEventBookedPayload
+  'restaurant_event.completed': RestaurantEventStatusPayload
+  'restaurant_event.cancelled': RestaurantEventStatusPayload
+  'restaurant_catering.confirmed': RestaurantCateringStatusPayload
+  'restaurant_catering.completed': RestaurantCateringStatusPayload
   'rfq.issued': RfqPayload
   'rfq.awarded': RfqAwardedPayload
   'supplier_quotation.submitted': SupplierQuotationPayload
@@ -308,9 +388,20 @@ export const DOMAIN_EVENT_TYPES = [
   'restaurant_order.voided',
   'restaurant_reservation.created',
   'restaurant_reservation.no_show',
+  'restaurant_reservation.seated',
+  'restaurant_reservation.cancelled',
+  'restaurant_delivery.assigned',
+  'restaurant_delivery.delivered',
+  'restaurant_delivery.failed',
   'restaurant_gift_card.issued',
   'restaurant_gift_card.redeemed',
+  'restaurant_gift_card.reloaded',
   'restaurant_promotion.applied',
+  'restaurant_event.booked',
+  'restaurant_event.completed',
+  'restaurant_event.cancelled',
+  'restaurant_catering.confirmed',
+  'restaurant_catering.completed',
   'rfq.issued',
   'rfq.awarded',
   'supplier_quotation.submitted',

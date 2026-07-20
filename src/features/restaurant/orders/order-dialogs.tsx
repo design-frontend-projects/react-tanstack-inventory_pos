@@ -526,6 +526,35 @@ export function PaymentDialog({
             Split the bill (name each share)
           </label>
 
+          {/* One-tap even-split presets: fills N equal shares, last share
+              absorbs the rounding remainder. */}
+          <div className="flex flex-wrap items-center gap-1.5">
+            <span className="text-xs text-muted-foreground">Split evenly:</span>
+            {[2, 3, 4, 5].map((parts) => (
+              <Button
+                key={parts}
+                type="button"
+                size="xs"
+                variant="outline"
+                onClick={() => {
+                  const share = Math.floor((due / parts) * 100) / 100
+                  const lastShare = (due - share * (parts - 1)).toFixed(2)
+                  setUseSplits(true)
+                  setRows(
+                    Array.from({ length: parts }, (_, index) => ({
+                      method: 'CASH',
+                      amount:
+                        index === parts - 1 ? lastShare : share.toFixed(2),
+                      splitLabel: `Guest ${index + 1}`,
+                    })),
+                  )
+                }}
+              >
+                ×{parts}
+              </Button>
+            ))}
+          </div>
+
           {rows.map((row, index) => (
             <div
               key={index}

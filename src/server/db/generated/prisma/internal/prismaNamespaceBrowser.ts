@@ -209,6 +209,24 @@ export const ModelName = {
   ResOrderEvent: 'ResOrderEvent',
   ResVoidReason: 'ResVoidReason',
   ResCancelReason: 'ResCancelReason',
+  ResReservation: 'ResReservation',
+  ResReservationTable: 'ResReservationTable',
+  ResWaitlistEntry: 'ResWaitlistEntry',
+  ResPickup: 'ResPickup',
+  ResQrCampaign: 'ResQrCampaign',
+  ResDriver: 'ResDriver',
+  ResDeliveryZone: 'ResDeliveryZone',
+  ResDelivery: 'ResDelivery',
+  ResPromotion: 'ResPromotion',
+  ResCoupon: 'ResCoupon',
+  ResPromotionApplication: 'ResPromotionApplication',
+  ResGiftCard: 'ResGiftCard',
+  ResGiftCardTransaction: 'ResGiftCardTransaction',
+  ResEvent: 'ResEvent',
+  ResEventTask: 'ResEventTask',
+  ResEventPayment: 'ResEventPayment',
+  ResPartyBooking: 'ResPartyBooking',
+  ResCateringJob: 'ResCateringJob',
   PodDocumentStatus: 'PodDocumentStatus',
   PodStatusTransition: 'PodStatusTransition',
   PodSupplierCategory: 'PodSupplierCategory',
@@ -2554,6 +2572,10 @@ export const ResTableScalarFieldEnum = {
   seats: 'seats',
   minCapacity: 'minCapacity',
   shape: 'shape',
+  posX: 'posX',
+  posY: 'posY',
+  width: 'width',
+  height: 'height',
   status: 'status',
   isActive: 'isActive',
   createdAt: 'createdAt',
@@ -3345,6 +3367,342 @@ export const ResCancelReasonScalarFieldEnum = {
 } as const
 
 export type ResCancelReasonScalarFieldEnum = (typeof ResCancelReasonScalarFieldEnum)[keyof typeof ResCancelReasonScalarFieldEnum]
+
+
+export const ResReservationScalarFieldEnum = {
+  id: 'id',
+  tenantId: 'tenantId',
+  branchId: 'branchId',
+  code: 'code',
+  customerId: 'customerId',
+  guestName: 'guestName',
+  guestPhone: 'guestPhone',
+  partySize: 'partySize',
+  requestedAt: 'requestedAt',
+  durationMinutes: 'durationMinutes',
+  status: 'status',
+  source: 'source',
+  depositAmount: 'depositAmount',
+  depositPaidAt: 'depositPaidAt',
+  orderId: 'orderId',
+  notes: 'notes',
+  seatedAt: 'seatedAt',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt',
+  deletedAt: 'deletedAt'
+} as const
+
+export type ResReservationScalarFieldEnum = (typeof ResReservationScalarFieldEnum)[keyof typeof ResReservationScalarFieldEnum]
+
+
+export const ResReservationTableScalarFieldEnum = {
+  id: 'id',
+  tenantId: 'tenantId',
+  reservationId: 'reservationId',
+  tableId: 'tableId',
+  createdAt: 'createdAt'
+} as const
+
+export type ResReservationTableScalarFieldEnum = (typeof ResReservationTableScalarFieldEnum)[keyof typeof ResReservationTableScalarFieldEnum]
+
+
+export const ResWaitlistEntryScalarFieldEnum = {
+  id: 'id',
+  tenantId: 'tenantId',
+  branchId: 'branchId',
+  guestName: 'guestName',
+  guestPhone: 'guestPhone',
+  partySize: 'partySize',
+  priority: 'priority',
+  status: 'status',
+  quotedMinutes: 'quotedMinutes',
+  notes: 'notes',
+  notifiedAt: 'notifiedAt',
+  seatedAt: 'seatedAt',
+  reservationId: 'reservationId',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type ResWaitlistEntryScalarFieldEnum = (typeof ResWaitlistEntryScalarFieldEnum)[keyof typeof ResWaitlistEntryScalarFieldEnum]
+
+
+export const ResPickupScalarFieldEnum = {
+  id: 'id',
+  tenantId: 'tenantId',
+  branchId: 'branchId',
+  orderId: 'orderId',
+  promisedAt: 'promisedAt',
+  verificationCode: 'verificationCode',
+  counter: 'counter',
+  packedAt: 'packedAt',
+  notifiedAt: 'notifiedAt',
+  pickedUpAt: 'pickedUpAt',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type ResPickupScalarFieldEnum = (typeof ResPickupScalarFieldEnum)[keyof typeof ResPickupScalarFieldEnum]
+
+
+export const ResQrCampaignScalarFieldEnum = {
+  id: 'id',
+  tenantId: 'tenantId',
+  branchId: 'branchId',
+  name: 'name',
+  slug: 'slug',
+  target: 'target',
+  tableId: 'tableId',
+  menuId: 'menuId',
+  targetUrl: 'targetUrl',
+  scanCount: 'scanCount',
+  expiresAt: 'expiresAt',
+  isActive: 'isActive',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type ResQrCampaignScalarFieldEnum = (typeof ResQrCampaignScalarFieldEnum)[keyof typeof ResQrCampaignScalarFieldEnum]
+
+
+export const ResDriverScalarFieldEnum = {
+  id: 'id',
+  tenantId: 'tenantId',
+  branchId: 'branchId',
+  profileId: 'profileId',
+  name: 'name',
+  phone: 'phone',
+  vehicle: 'vehicle',
+  status: 'status',
+  isActive: 'isActive',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt',
+  deletedAt: 'deletedAt'
+} as const
+
+export type ResDriverScalarFieldEnum = (typeof ResDriverScalarFieldEnum)[keyof typeof ResDriverScalarFieldEnum]
+
+
+export const ResDeliveryZoneScalarFieldEnum = {
+  id: 'id',
+  tenantId: 'tenantId',
+  branchId: 'branchId',
+  name: 'name',
+  feeAmount: 'feeAmount',
+  etaMinutes: 'etaMinutes',
+  polygon: 'polygon',
+  isActive: 'isActive',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type ResDeliveryZoneScalarFieldEnum = (typeof ResDeliveryZoneScalarFieldEnum)[keyof typeof ResDeliveryZoneScalarFieldEnum]
+
+
+export const ResDeliveryScalarFieldEnum = {
+  id: 'id',
+  tenantId: 'tenantId',
+  branchId: 'branchId',
+  orderId: 'orderId',
+  driverId: 'driverId',
+  zoneId: 'zoneId',
+  status: 'status',
+  addressLine: 'addressLine',
+  addressNotes: 'addressNotes',
+  lat: 'lat',
+  lng: 'lng',
+  assignedAt: 'assignedAt',
+  pickedUpAt: 'pickedUpAt',
+  deliveredAt: 'deliveredAt',
+  proofUrl: 'proofUrl',
+  failReason: 'failReason',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type ResDeliveryScalarFieldEnum = (typeof ResDeliveryScalarFieldEnum)[keyof typeof ResDeliveryScalarFieldEnum]
+
+
+export const ResPromotionScalarFieldEnum = {
+  id: 'id',
+  tenantId: 'tenantId',
+  branchId: 'branchId',
+  name: 'name',
+  kind: 'kind',
+  status: 'status',
+  priority: 'priority',
+  stacking: 'stacking',
+  conditions: 'conditions',
+  action: 'action',
+  startsAt: 'startsAt',
+  endsAt: 'endsAt',
+  usageLimit: 'usageLimit',
+  usedCount: 'usedCount',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt',
+  deletedAt: 'deletedAt'
+} as const
+
+export type ResPromotionScalarFieldEnum = (typeof ResPromotionScalarFieldEnum)[keyof typeof ResPromotionScalarFieldEnum]
+
+
+export const ResCouponScalarFieldEnum = {
+  id: 'id',
+  tenantId: 'tenantId',
+  promotionId: 'promotionId',
+  code: 'code',
+  maxUses: 'maxUses',
+  usedCount: 'usedCount',
+  expiresAt: 'expiresAt',
+  isActive: 'isActive',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type ResCouponScalarFieldEnum = (typeof ResCouponScalarFieldEnum)[keyof typeof ResCouponScalarFieldEnum]
+
+
+export const ResPromotionApplicationScalarFieldEnum = {
+  id: 'id',
+  tenantId: 'tenantId',
+  promotionId: 'promotionId',
+  orderId: 'orderId',
+  couponId: 'couponId',
+  amount: 'amount',
+  appliedAt: 'appliedAt'
+} as const
+
+export type ResPromotionApplicationScalarFieldEnum = (typeof ResPromotionApplicationScalarFieldEnum)[keyof typeof ResPromotionApplicationScalarFieldEnum]
+
+
+export const ResGiftCardScalarFieldEnum = {
+  id: 'id',
+  tenantId: 'tenantId',
+  code: 'code',
+  customerId: 'customerId',
+  status: 'status',
+  balance: 'balance',
+  issuedAmount: 'issuedAmount',
+  expiresAt: 'expiresAt',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type ResGiftCardScalarFieldEnum = (typeof ResGiftCardScalarFieldEnum)[keyof typeof ResGiftCardScalarFieldEnum]
+
+
+export const ResGiftCardTransactionScalarFieldEnum = {
+  id: 'id',
+  tenantId: 'tenantId',
+  giftCardId: 'giftCardId',
+  kind: 'kind',
+  amount: 'amount',
+  balanceAfter: 'balanceAfter',
+  orderId: 'orderId',
+  reference: 'reference',
+  createdAt: 'createdAt'
+} as const
+
+export type ResGiftCardTransactionScalarFieldEnum = (typeof ResGiftCardTransactionScalarFieldEnum)[keyof typeof ResGiftCardTransactionScalarFieldEnum]
+
+
+export const ResEventScalarFieldEnum = {
+  id: 'id',
+  tenantId: 'tenantId',
+  branchId: 'branchId',
+  code: 'code',
+  kind: 'kind',
+  status: 'status',
+  name: 'name',
+  customerId: 'customerId',
+  hallId: 'hallId',
+  startsAt: 'startsAt',
+  endsAt: 'endsAt',
+  guestCount: 'guestCount',
+  packageJson: 'packageJson',
+  quoteAmount: 'quoteAmount',
+  notes: 'notes',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt',
+  deletedAt: 'deletedAt'
+} as const
+
+export type ResEventScalarFieldEnum = (typeof ResEventScalarFieldEnum)[keyof typeof ResEventScalarFieldEnum]
+
+
+export const ResEventTaskScalarFieldEnum = {
+  id: 'id',
+  tenantId: 'tenantId',
+  eventId: 'eventId',
+  title: 'title',
+  status: 'status',
+  dueAt: 'dueAt',
+  assigneeId: 'assigneeId',
+  sortOrder: 'sortOrder',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type ResEventTaskScalarFieldEnum = (typeof ResEventTaskScalarFieldEnum)[keyof typeof ResEventTaskScalarFieldEnum]
+
+
+export const ResEventPaymentScalarFieldEnum = {
+  id: 'id',
+  tenantId: 'tenantId',
+  eventId: 'eventId',
+  kind: 'kind',
+  amount: 'amount',
+  method: 'method',
+  reference: 'reference',
+  paidAt: 'paidAt',
+  createdAt: 'createdAt'
+} as const
+
+export type ResEventPaymentScalarFieldEnum = (typeof ResEventPaymentScalarFieldEnum)[keyof typeof ResEventPaymentScalarFieldEnum]
+
+
+export const ResPartyBookingScalarFieldEnum = {
+  id: 'id',
+  tenantId: 'tenantId',
+  eventId: 'eventId',
+  theme: 'theme',
+  decorationsJson: 'decorationsJson',
+  seatingJson: 'seatingJson',
+  vendorJson: 'vendorJson',
+  costAmount: 'costAmount',
+  revenueAmount: 'revenueAmount',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type ResPartyBookingScalarFieldEnum = (typeof ResPartyBookingScalarFieldEnum)[keyof typeof ResPartyBookingScalarFieldEnum]
+
+
+export const ResCateringJobScalarFieldEnum = {
+  id: 'id',
+  tenantId: 'tenantId',
+  branchId: 'branchId',
+  code: 'code',
+  kind: 'kind',
+  status: 'status',
+  name: 'name',
+  customerId: 'customerId',
+  eventDate: 'eventDate',
+  addressLine: 'addressLine',
+  guestCount: 'guestCount',
+  menuJson: 'menuJson',
+  equipmentJson: 'equipmentJson',
+  vehicleJson: 'vehicleJson',
+  staffJson: 'staffJson',
+  costAmount: 'costAmount',
+  quoteAmount: 'quoteAmount',
+  notes: 'notes',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt',
+  deletedAt: 'deletedAt'
+} as const
+
+export type ResCateringJobScalarFieldEnum = (typeof ResCateringJobScalarFieldEnum)[keyof typeof ResCateringJobScalarFieldEnum]
 
 
 export const PodDocumentStatusScalarFieldEnum = {

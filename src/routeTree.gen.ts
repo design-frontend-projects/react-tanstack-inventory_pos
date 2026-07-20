@@ -33,11 +33,23 @@ import { Route as AppSettingsNotificationsRouteImport } from './routes/_app/sett
 import { Route as AppSettingsModulesRouteImport } from './routes/_app/settings/modules'
 import { Route as AppSettingsIntegrationsRouteImport } from './routes/_app/settings/integrations'
 import { Route as AppSettingsAccessRouteImport } from './routes/_app/settings/access'
+import { Route as AppRestaurantWaitlistRouteImport } from './routes/_app/restaurant/waitlist'
+import { Route as AppRestaurantTakeawayRouteImport } from './routes/_app/restaurant/takeaway'
 import { Route as AppRestaurantTablesRouteImport } from './routes/_app/restaurant/tables'
 import { Route as AppRestaurantSettingsRouteImport } from './routes/_app/restaurant/settings'
+import { Route as AppRestaurantReservationsRouteImport } from './routes/_app/restaurant/reservations'
+import { Route as AppRestaurantReportsRouteImport } from './routes/_app/restaurant/reports'
+import { Route as AppRestaurantQrRouteImport } from './routes/_app/restaurant/qr'
+import { Route as AppRestaurantPromotionsRouteImport } from './routes/_app/restaurant/promotions'
 import { Route as AppRestaurantMenuRouteImport } from './routes/_app/restaurant/menu'
 import { Route as AppRestaurantKitchenRouteImport } from './routes/_app/restaurant/kitchen'
+import { Route as AppRestaurantGiftCardsRouteImport } from './routes/_app/restaurant/gift-cards'
 import { Route as AppRestaurantFloorPlanRouteImport } from './routes/_app/restaurant/floor-plan'
+import { Route as AppRestaurantEventsRouteImport } from './routes/_app/restaurant/events'
+import { Route as AppRestaurantDeliveryRouteImport } from './routes/_app/restaurant/delivery'
+import { Route as AppRestaurantDashboardRouteImport } from './routes/_app/restaurant/dashboard'
+import { Route as AppRestaurantCateringRouteImport } from './routes/_app/restaurant/catering'
+import { Route as AppRestaurantAnalyticsRouteImport } from './routes/_app/restaurant/analytics'
 import { Route as AppPurchaseSuppliersRouteImport } from './routes/_app/purchase/suppliers'
 import { Route as AppPurchaseRfqsRouteImport } from './routes/_app/purchase/rfqs'
 import { Route as AppPurchaseQuotationsRouteImport } from './routes/_app/purchase/quotations'
@@ -174,6 +186,16 @@ const AppSettingsAccessRoute = AppSettingsAccessRouteImport.update({
   path: '/settings/access',
   getParentRoute: () => AppRoute,
 } as any)
+const AppRestaurantWaitlistRoute = AppRestaurantWaitlistRouteImport.update({
+  id: '/restaurant/waitlist',
+  path: '/restaurant/waitlist',
+  getParentRoute: () => AppRoute,
+} as any)
+const AppRestaurantTakeawayRoute = AppRestaurantTakeawayRouteImport.update({
+  id: '/restaurant/takeaway',
+  path: '/restaurant/takeaway',
+  getParentRoute: () => AppRoute,
+} as any)
 const AppRestaurantTablesRoute = AppRestaurantTablesRouteImport.update({
   id: '/restaurant/tables',
   path: '/restaurant/tables',
@@ -182,6 +204,27 @@ const AppRestaurantTablesRoute = AppRestaurantTablesRouteImport.update({
 const AppRestaurantSettingsRoute = AppRestaurantSettingsRouteImport.update({
   id: '/restaurant/settings',
   path: '/restaurant/settings',
+  getParentRoute: () => AppRoute,
+} as any)
+const AppRestaurantReservationsRoute =
+  AppRestaurantReservationsRouteImport.update({
+    id: '/restaurant/reservations',
+    path: '/restaurant/reservations',
+    getParentRoute: () => AppRoute,
+  } as any)
+const AppRestaurantReportsRoute = AppRestaurantReportsRouteImport.update({
+  id: '/restaurant/reports',
+  path: '/restaurant/reports',
+  getParentRoute: () => AppRoute,
+} as any)
+const AppRestaurantQrRoute = AppRestaurantQrRouteImport.update({
+  id: '/restaurant/qr',
+  path: '/restaurant/qr',
+  getParentRoute: () => AppRoute,
+} as any)
+const AppRestaurantPromotionsRoute = AppRestaurantPromotionsRouteImport.update({
+  id: '/restaurant/promotions',
+  path: '/restaurant/promotions',
   getParentRoute: () => AppRoute,
 } as any)
 const AppRestaurantMenuRoute = AppRestaurantMenuRouteImport.update({
@@ -194,9 +237,39 @@ const AppRestaurantKitchenRoute = AppRestaurantKitchenRouteImport.update({
   path: '/restaurant/kitchen',
   getParentRoute: () => AppRoute,
 } as any)
+const AppRestaurantGiftCardsRoute = AppRestaurantGiftCardsRouteImport.update({
+  id: '/restaurant/gift-cards',
+  path: '/restaurant/gift-cards',
+  getParentRoute: () => AppRoute,
+} as any)
 const AppRestaurantFloorPlanRoute = AppRestaurantFloorPlanRouteImport.update({
   id: '/restaurant/floor-plan',
   path: '/restaurant/floor-plan',
+  getParentRoute: () => AppRoute,
+} as any)
+const AppRestaurantEventsRoute = AppRestaurantEventsRouteImport.update({
+  id: '/restaurant/events',
+  path: '/restaurant/events',
+  getParentRoute: () => AppRoute,
+} as any)
+const AppRestaurantDeliveryRoute = AppRestaurantDeliveryRouteImport.update({
+  id: '/restaurant/delivery',
+  path: '/restaurant/delivery',
+  getParentRoute: () => AppRoute,
+} as any)
+const AppRestaurantDashboardRoute = AppRestaurantDashboardRouteImport.update({
+  id: '/restaurant/dashboard',
+  path: '/restaurant/dashboard',
+  getParentRoute: () => AppRoute,
+} as any)
+const AppRestaurantCateringRoute = AppRestaurantCateringRouteImport.update({
+  id: '/restaurant/catering',
+  path: '/restaurant/catering',
+  getParentRoute: () => AppRoute,
+} as any)
+const AppRestaurantAnalyticsRoute = AppRestaurantAnalyticsRouteImport.update({
+  id: '/restaurant/analytics',
+  path: '/restaurant/analytics',
   getParentRoute: () => AppRoute,
 } as any)
 const AppPurchaseSuppliersRoute = AppPurchaseSuppliersRouteImport.update({
@@ -308,11 +381,23 @@ export interface FileRoutesByFullPath {
   '/purchase/quotations': typeof AppPurchaseQuotationsRoute
   '/purchase/rfqs': typeof AppPurchaseRfqsRoute
   '/purchase/suppliers': typeof AppPurchaseSuppliersRoute
+  '/restaurant/analytics': typeof AppRestaurantAnalyticsRoute
+  '/restaurant/catering': typeof AppRestaurantCateringRoute
+  '/restaurant/dashboard': typeof AppRestaurantDashboardRoute
+  '/restaurant/delivery': typeof AppRestaurantDeliveryRoute
+  '/restaurant/events': typeof AppRestaurantEventsRoute
   '/restaurant/floor-plan': typeof AppRestaurantFloorPlanRoute
+  '/restaurant/gift-cards': typeof AppRestaurantGiftCardsRoute
   '/restaurant/kitchen': typeof AppRestaurantKitchenRoute
   '/restaurant/menu': typeof AppRestaurantMenuRoute
+  '/restaurant/promotions': typeof AppRestaurantPromotionsRoute
+  '/restaurant/qr': typeof AppRestaurantQrRoute
+  '/restaurant/reports': typeof AppRestaurantReportsRoute
+  '/restaurant/reservations': typeof AppRestaurantReservationsRoute
   '/restaurant/settings': typeof AppRestaurantSettingsRoute
   '/restaurant/tables': typeof AppRestaurantTablesRoute
+  '/restaurant/takeaway': typeof AppRestaurantTakeawayRoute
+  '/restaurant/waitlist': typeof AppRestaurantWaitlistRoute
   '/settings/access': typeof AppSettingsAccessRoute
   '/settings/integrations': typeof AppSettingsIntegrationsRoute
   '/settings/modules': typeof AppSettingsModulesRoute
@@ -353,11 +438,23 @@ export interface FileRoutesByTo {
   '/purchase/quotations': typeof AppPurchaseQuotationsRoute
   '/purchase/rfqs': typeof AppPurchaseRfqsRoute
   '/purchase/suppliers': typeof AppPurchaseSuppliersRoute
+  '/restaurant/analytics': typeof AppRestaurantAnalyticsRoute
+  '/restaurant/catering': typeof AppRestaurantCateringRoute
+  '/restaurant/dashboard': typeof AppRestaurantDashboardRoute
+  '/restaurant/delivery': typeof AppRestaurantDeliveryRoute
+  '/restaurant/events': typeof AppRestaurantEventsRoute
   '/restaurant/floor-plan': typeof AppRestaurantFloorPlanRoute
+  '/restaurant/gift-cards': typeof AppRestaurantGiftCardsRoute
   '/restaurant/kitchen': typeof AppRestaurantKitchenRoute
   '/restaurant/menu': typeof AppRestaurantMenuRoute
+  '/restaurant/promotions': typeof AppRestaurantPromotionsRoute
+  '/restaurant/qr': typeof AppRestaurantQrRoute
+  '/restaurant/reports': typeof AppRestaurantReportsRoute
+  '/restaurant/reservations': typeof AppRestaurantReservationsRoute
   '/restaurant/settings': typeof AppRestaurantSettingsRoute
   '/restaurant/tables': typeof AppRestaurantTablesRoute
+  '/restaurant/takeaway': typeof AppRestaurantTakeawayRoute
+  '/restaurant/waitlist': typeof AppRestaurantWaitlistRoute
   '/settings/access': typeof AppSettingsAccessRoute
   '/settings/integrations': typeof AppSettingsIntegrationsRoute
   '/settings/modules': typeof AppSettingsModulesRoute
@@ -401,11 +498,23 @@ export interface FileRoutesById {
   '/_app/purchase/quotations': typeof AppPurchaseQuotationsRoute
   '/_app/purchase/rfqs': typeof AppPurchaseRfqsRoute
   '/_app/purchase/suppliers': typeof AppPurchaseSuppliersRoute
+  '/_app/restaurant/analytics': typeof AppRestaurantAnalyticsRoute
+  '/_app/restaurant/catering': typeof AppRestaurantCateringRoute
+  '/_app/restaurant/dashboard': typeof AppRestaurantDashboardRoute
+  '/_app/restaurant/delivery': typeof AppRestaurantDeliveryRoute
+  '/_app/restaurant/events': typeof AppRestaurantEventsRoute
   '/_app/restaurant/floor-plan': typeof AppRestaurantFloorPlanRoute
+  '/_app/restaurant/gift-cards': typeof AppRestaurantGiftCardsRoute
   '/_app/restaurant/kitchen': typeof AppRestaurantKitchenRoute
   '/_app/restaurant/menu': typeof AppRestaurantMenuRoute
+  '/_app/restaurant/promotions': typeof AppRestaurantPromotionsRoute
+  '/_app/restaurant/qr': typeof AppRestaurantQrRoute
+  '/_app/restaurant/reports': typeof AppRestaurantReportsRoute
+  '/_app/restaurant/reservations': typeof AppRestaurantReservationsRoute
   '/_app/restaurant/settings': typeof AppRestaurantSettingsRoute
   '/_app/restaurant/tables': typeof AppRestaurantTablesRoute
+  '/_app/restaurant/takeaway': typeof AppRestaurantTakeawayRoute
+  '/_app/restaurant/waitlist': typeof AppRestaurantWaitlistRoute
   '/_app/settings/access': typeof AppSettingsAccessRoute
   '/_app/settings/integrations': typeof AppSettingsIntegrationsRoute
   '/_app/settings/modules': typeof AppSettingsModulesRoute
@@ -448,11 +557,23 @@ export interface FileRouteTypes {
     | '/purchase/quotations'
     | '/purchase/rfqs'
     | '/purchase/suppliers'
+    | '/restaurant/analytics'
+    | '/restaurant/catering'
+    | '/restaurant/dashboard'
+    | '/restaurant/delivery'
+    | '/restaurant/events'
     | '/restaurant/floor-plan'
+    | '/restaurant/gift-cards'
     | '/restaurant/kitchen'
     | '/restaurant/menu'
+    | '/restaurant/promotions'
+    | '/restaurant/qr'
+    | '/restaurant/reports'
+    | '/restaurant/reservations'
     | '/restaurant/settings'
     | '/restaurant/tables'
+    | '/restaurant/takeaway'
+    | '/restaurant/waitlist'
     | '/settings/access'
     | '/settings/integrations'
     | '/settings/modules'
@@ -493,11 +614,23 @@ export interface FileRouteTypes {
     | '/purchase/quotations'
     | '/purchase/rfqs'
     | '/purchase/suppliers'
+    | '/restaurant/analytics'
+    | '/restaurant/catering'
+    | '/restaurant/dashboard'
+    | '/restaurant/delivery'
+    | '/restaurant/events'
     | '/restaurant/floor-plan'
+    | '/restaurant/gift-cards'
     | '/restaurant/kitchen'
     | '/restaurant/menu'
+    | '/restaurant/promotions'
+    | '/restaurant/qr'
+    | '/restaurant/reports'
+    | '/restaurant/reservations'
     | '/restaurant/settings'
     | '/restaurant/tables'
+    | '/restaurant/takeaway'
+    | '/restaurant/waitlist'
     | '/settings/access'
     | '/settings/integrations'
     | '/settings/modules'
@@ -540,11 +673,23 @@ export interface FileRouteTypes {
     | '/_app/purchase/quotations'
     | '/_app/purchase/rfqs'
     | '/_app/purchase/suppliers'
+    | '/_app/restaurant/analytics'
+    | '/_app/restaurant/catering'
+    | '/_app/restaurant/dashboard'
+    | '/_app/restaurant/delivery'
+    | '/_app/restaurant/events'
     | '/_app/restaurant/floor-plan'
+    | '/_app/restaurant/gift-cards'
     | '/_app/restaurant/kitchen'
     | '/_app/restaurant/menu'
+    | '/_app/restaurant/promotions'
+    | '/_app/restaurant/qr'
+    | '/_app/restaurant/reports'
+    | '/_app/restaurant/reservations'
     | '/_app/restaurant/settings'
     | '/_app/restaurant/tables'
+    | '/_app/restaurant/takeaway'
+    | '/_app/restaurant/waitlist'
     | '/_app/settings/access'
     | '/_app/settings/integrations'
     | '/_app/settings/modules'
@@ -737,6 +882,20 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AppSettingsAccessRouteImport
       parentRoute: typeof AppRoute
     }
+    '/_app/restaurant/waitlist': {
+      id: '/_app/restaurant/waitlist'
+      path: '/restaurant/waitlist'
+      fullPath: '/restaurant/waitlist'
+      preLoaderRoute: typeof AppRestaurantWaitlistRouteImport
+      parentRoute: typeof AppRoute
+    }
+    '/_app/restaurant/takeaway': {
+      id: '/_app/restaurant/takeaway'
+      path: '/restaurant/takeaway'
+      fullPath: '/restaurant/takeaway'
+      preLoaderRoute: typeof AppRestaurantTakeawayRouteImport
+      parentRoute: typeof AppRoute
+    }
     '/_app/restaurant/tables': {
       id: '/_app/restaurant/tables'
       path: '/restaurant/tables'
@@ -749,6 +908,34 @@ declare module '@tanstack/react-router' {
       path: '/restaurant/settings'
       fullPath: '/restaurant/settings'
       preLoaderRoute: typeof AppRestaurantSettingsRouteImport
+      parentRoute: typeof AppRoute
+    }
+    '/_app/restaurant/reservations': {
+      id: '/_app/restaurant/reservations'
+      path: '/restaurant/reservations'
+      fullPath: '/restaurant/reservations'
+      preLoaderRoute: typeof AppRestaurantReservationsRouteImport
+      parentRoute: typeof AppRoute
+    }
+    '/_app/restaurant/reports': {
+      id: '/_app/restaurant/reports'
+      path: '/restaurant/reports'
+      fullPath: '/restaurant/reports'
+      preLoaderRoute: typeof AppRestaurantReportsRouteImport
+      parentRoute: typeof AppRoute
+    }
+    '/_app/restaurant/qr': {
+      id: '/_app/restaurant/qr'
+      path: '/restaurant/qr'
+      fullPath: '/restaurant/qr'
+      preLoaderRoute: typeof AppRestaurantQrRouteImport
+      parentRoute: typeof AppRoute
+    }
+    '/_app/restaurant/promotions': {
+      id: '/_app/restaurant/promotions'
+      path: '/restaurant/promotions'
+      fullPath: '/restaurant/promotions'
+      preLoaderRoute: typeof AppRestaurantPromotionsRouteImport
       parentRoute: typeof AppRoute
     }
     '/_app/restaurant/menu': {
@@ -765,11 +952,53 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AppRestaurantKitchenRouteImport
       parentRoute: typeof AppRoute
     }
+    '/_app/restaurant/gift-cards': {
+      id: '/_app/restaurant/gift-cards'
+      path: '/restaurant/gift-cards'
+      fullPath: '/restaurant/gift-cards'
+      preLoaderRoute: typeof AppRestaurantGiftCardsRouteImport
+      parentRoute: typeof AppRoute
+    }
     '/_app/restaurant/floor-plan': {
       id: '/_app/restaurant/floor-plan'
       path: '/restaurant/floor-plan'
       fullPath: '/restaurant/floor-plan'
       preLoaderRoute: typeof AppRestaurantFloorPlanRouteImport
+      parentRoute: typeof AppRoute
+    }
+    '/_app/restaurant/events': {
+      id: '/_app/restaurant/events'
+      path: '/restaurant/events'
+      fullPath: '/restaurant/events'
+      preLoaderRoute: typeof AppRestaurantEventsRouteImport
+      parentRoute: typeof AppRoute
+    }
+    '/_app/restaurant/delivery': {
+      id: '/_app/restaurant/delivery'
+      path: '/restaurant/delivery'
+      fullPath: '/restaurant/delivery'
+      preLoaderRoute: typeof AppRestaurantDeliveryRouteImport
+      parentRoute: typeof AppRoute
+    }
+    '/_app/restaurant/dashboard': {
+      id: '/_app/restaurant/dashboard'
+      path: '/restaurant/dashboard'
+      fullPath: '/restaurant/dashboard'
+      preLoaderRoute: typeof AppRestaurantDashboardRouteImport
+      parentRoute: typeof AppRoute
+    }
+    '/_app/restaurant/catering': {
+      id: '/_app/restaurant/catering'
+      path: '/restaurant/catering'
+      fullPath: '/restaurant/catering'
+      preLoaderRoute: typeof AppRestaurantCateringRouteImport
+      parentRoute: typeof AppRoute
+    }
+    '/_app/restaurant/analytics': {
+      id: '/_app/restaurant/analytics'
+      path: '/restaurant/analytics'
+      fullPath: '/restaurant/analytics'
+      preLoaderRoute: typeof AppRestaurantAnalyticsRouteImport
       parentRoute: typeof AppRoute
     }
     '/_app/purchase/suppliers': {
@@ -904,11 +1133,23 @@ interface AppRouteChildren {
   AppPurchaseQuotationsRoute: typeof AppPurchaseQuotationsRoute
   AppPurchaseRfqsRoute: typeof AppPurchaseRfqsRoute
   AppPurchaseSuppliersRoute: typeof AppPurchaseSuppliersRoute
+  AppRestaurantAnalyticsRoute: typeof AppRestaurantAnalyticsRoute
+  AppRestaurantCateringRoute: typeof AppRestaurantCateringRoute
+  AppRestaurantDashboardRoute: typeof AppRestaurantDashboardRoute
+  AppRestaurantDeliveryRoute: typeof AppRestaurantDeliveryRoute
+  AppRestaurantEventsRoute: typeof AppRestaurantEventsRoute
   AppRestaurantFloorPlanRoute: typeof AppRestaurantFloorPlanRoute
+  AppRestaurantGiftCardsRoute: typeof AppRestaurantGiftCardsRoute
   AppRestaurantKitchenRoute: typeof AppRestaurantKitchenRoute
   AppRestaurantMenuRoute: typeof AppRestaurantMenuRoute
+  AppRestaurantPromotionsRoute: typeof AppRestaurantPromotionsRoute
+  AppRestaurantQrRoute: typeof AppRestaurantQrRoute
+  AppRestaurantReportsRoute: typeof AppRestaurantReportsRoute
+  AppRestaurantReservationsRoute: typeof AppRestaurantReservationsRoute
   AppRestaurantSettingsRoute: typeof AppRestaurantSettingsRoute
   AppRestaurantTablesRoute: typeof AppRestaurantTablesRoute
+  AppRestaurantTakeawayRoute: typeof AppRestaurantTakeawayRoute
+  AppRestaurantWaitlistRoute: typeof AppRestaurantWaitlistRoute
   AppSettingsAccessRoute: typeof AppSettingsAccessRoute
   AppSettingsIntegrationsRoute: typeof AppSettingsIntegrationsRoute
   AppSettingsModulesRoute: typeof AppSettingsModulesRoute
@@ -941,11 +1182,23 @@ const AppRouteChildren: AppRouteChildren = {
   AppPurchaseQuotationsRoute: AppPurchaseQuotationsRoute,
   AppPurchaseRfqsRoute: AppPurchaseRfqsRoute,
   AppPurchaseSuppliersRoute: AppPurchaseSuppliersRoute,
+  AppRestaurantAnalyticsRoute: AppRestaurantAnalyticsRoute,
+  AppRestaurantCateringRoute: AppRestaurantCateringRoute,
+  AppRestaurantDashboardRoute: AppRestaurantDashboardRoute,
+  AppRestaurantDeliveryRoute: AppRestaurantDeliveryRoute,
+  AppRestaurantEventsRoute: AppRestaurantEventsRoute,
   AppRestaurantFloorPlanRoute: AppRestaurantFloorPlanRoute,
+  AppRestaurantGiftCardsRoute: AppRestaurantGiftCardsRoute,
   AppRestaurantKitchenRoute: AppRestaurantKitchenRoute,
   AppRestaurantMenuRoute: AppRestaurantMenuRoute,
+  AppRestaurantPromotionsRoute: AppRestaurantPromotionsRoute,
+  AppRestaurantQrRoute: AppRestaurantQrRoute,
+  AppRestaurantReportsRoute: AppRestaurantReportsRoute,
+  AppRestaurantReservationsRoute: AppRestaurantReservationsRoute,
   AppRestaurantSettingsRoute: AppRestaurantSettingsRoute,
   AppRestaurantTablesRoute: AppRestaurantTablesRoute,
+  AppRestaurantTakeawayRoute: AppRestaurantTakeawayRoute,
+  AppRestaurantWaitlistRoute: AppRestaurantWaitlistRoute,
   AppSettingsAccessRoute: AppSettingsAccessRoute,
   AppSettingsIntegrationsRoute: AppSettingsIntegrationsRoute,
   AppSettingsModulesRoute: AppSettingsModulesRoute,

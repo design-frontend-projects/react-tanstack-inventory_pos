@@ -11,6 +11,7 @@ import {
   orderCreateSchema,
   orderItemStatusUpdateSchema,
   orderItemVoidSchema,
+  orderMergeSchema,
   orderStatusSchema,
   orderTransferSchema,
   orderTransitionSchema,
@@ -132,6 +133,15 @@ export const voidOrderItemServerFn = createServerFn({ method: 'POST' })
   .handler(async ({ data }) => {
     const context = await resolveContext(data, ['res.orders.update', 'res.orders.cancel'])
     const result = await orders.voidOrderItem(context, data.tenantId, data.input)
+    broadcastRestaurantEvent(data.tenantId, ['orders', 'kitchen', 'floor'])
+    return result
+  })
+
+export const mergeOrdersServerFn = createServerFn({ method: 'POST' })
+  .inputValidator(base.extend({ input: orderMergeSchema }))
+  .handler(async ({ data }) => {
+    const context = await resolveContext(data, ['res.orders.update'])
+    const result = await orders.mergeOrders(context, data.tenantId, data.input)
     broadcastRestaurantEvent(data.tenantId, ['orders', 'kitchen', 'floor'])
     return result
   })

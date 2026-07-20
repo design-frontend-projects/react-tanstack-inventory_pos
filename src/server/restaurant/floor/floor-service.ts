@@ -1,5 +1,6 @@
 import { prisma } from '#/server/db/client'
 import { ConflictError, NotFoundError, ValidationError } from '#/server/auth/errors'
+import { serializeTable } from '#/server/restaurant/master-data/master-data-dto'
 import * as tableRepo from '#/server/repos/res-table-repo'
 import * as floorStaffRepo from '#/server/repos/res-floor-staff-repo'
 import * as orderRepo from '#/server/repos/res-order-repo'
@@ -133,7 +134,7 @@ export async function updateTable(
   if (!updated) {
     throw new NotFoundError('Table not found')
   }
-  return updated
+  return serializeTable(updated)
 }
 
 export async function deleteTable(
@@ -180,7 +181,10 @@ export async function setTableStatus(
     throw new ConflictError('Table has an active order — settle it first')
   }
 
-  return tableRepo.updateTable(tenantId, input.tableId, { status: input.status })
+  const updated = await tableRepo.updateTable(tenantId, input.tableId, {
+    status: input.status,
+  })
+  return updated ? serializeTable(updated) : null
 }
 
 // --- Staff assignments ------------------------------------------------------

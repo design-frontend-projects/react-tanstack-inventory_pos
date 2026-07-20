@@ -53,9 +53,15 @@ describe('order item status machine', () => {
   })
 
   it('rejects backward moves and no-ops', () => {
-    expect(canItemTransition('READY', 'PREPARING')).toBe(false)
     expect(canItemTransition('SERVED', 'READY')).toBe(false)
+    expect(canItemTransition('PREPARING', 'FIRED')).toBe(false)
     expect(canItemTransition('FIRED', 'FIRED')).toBe(false)
+  })
+
+  it('allows the kitchen recall exception (READY back to PREPARING)', () => {
+    expect(canItemTransition('READY', 'PREPARING')).toBe(true)
+    // Recall never reaches past READY — a served item cannot come back.
+    expect(canItemTransition('SERVED', 'PREPARING')).toBe(false)
   })
 
   it('keeps VOIDED outside the kitchen flow', () => {

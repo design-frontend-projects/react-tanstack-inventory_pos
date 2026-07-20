@@ -3,6 +3,7 @@ import { ConflictError, NotFoundError } from '#/server/auth/errors'
 import {
   serializeBranch,
   serializeServiceChargeRule,
+  serializeTable,
   serializeTaxConfig,
 } from '#/server/restaurant/master-data/master-data-dto'
 import * as restaurantRepo from '#/server/repos/res-restaurant-repo'
@@ -163,8 +164,13 @@ export function createTableSection(
   return tableRepo.createTableSection(tenantId, input)
 }
 
-export function listTables(_context: CurrentUserContext, tenantId: string, branchId: string) {
-  return tableRepo.listTables(tenantId, branchId)
+export async function listTables(
+  _context: CurrentUserContext,
+  tenantId: string,
+  branchId: string
+) {
+  const tables = await tableRepo.listTables(tenantId, branchId)
+  return tables.map(serializeTable)
 }
 
 export async function createTable(
@@ -176,7 +182,8 @@ export async function createTable(
   if (!branch) {
     throw new NotFoundError('Branch not found')
   }
-  return tableRepo.createTable(tenantId, input)
+  const table = await tableRepo.createTable(tenantId, input)
+  return serializeTable(table)
 }
 
 // --- Service types ----------------------------------------------------------

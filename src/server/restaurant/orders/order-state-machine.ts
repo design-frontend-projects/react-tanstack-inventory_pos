@@ -22,7 +22,8 @@ const TRANSITIONS: Record<ResOrderStatusValue, ReadonlyArray<ResOrderStatusValue
   CONFIRMED: ['PREPARING', 'READY', 'CANCELLED', 'VOIDED'],
   PREPARING: ['COOKING', 'READY', 'CANCELLED', 'VOIDED'],
   COOKING: ['READY', 'CANCELLED', 'VOIDED'],
-  READY: ['SERVED', 'COMPLETED', 'CANCELLED', 'VOIDED'],
+  // READY may fall back to PREPARING when the kitchen recalls a bumped ticket.
+  READY: ['SERVED', 'COMPLETED', 'PREPARING', 'CANCELLED', 'VOIDED'],
   SERVED: ['COMPLETED', 'VOIDED'],
   COMPLETED: ['REFUNDED'],
   CANCELLED: [],
@@ -99,6 +100,11 @@ export function canItemTransition(
   from: ResOrderItemStatusValue,
   to: ResOrderItemStatusValue
 ): boolean {
+  // Kitchen recall: a READY item may be pulled back to PREPARING (wrong bump,
+  // quality issue). Inventory is unaffected — both states hold a reservation.
+  if (from === 'READY' && to === 'PREPARING') {
+    return true
+  }
   const fromRank = itemStatusRank(from)
   const toRank = itemStatusRank(to)
   return fromRank >= 0 && toRank >= 0 && toRank > fromRank

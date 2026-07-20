@@ -19,6 +19,13 @@ import {
   PaymentDialog,
   ReasonDialog,
 } from '#/features/restaurant/orders/order-dialogs'
+import { MergeOrderDialog } from '#/features/restaurant/orders/merge-order-dialog'
+import {
+  DrawerForm,
+  Field,
+  fieldInputClassName,
+} from '#/components/forms/drawer-form'
+import { usePromotionMutations } from '#/features/restaurant/promotions/use-promotions'
 import { useOrder, useOrderMutations } from '#/features/restaurant/orders/use-orders'
 import {
   errorMessage,
@@ -63,6 +70,11 @@ export function OrderWorkspace({ orderId }: { orderId: string }) {
   const [configItemId, setConfigItemId] = React.useState<string | null>(null)
   const [paymentOpen, setPaymentOpen] = React.useState(false)
   const [voidOrderOpen, setVoidOrderOpen] = React.useState(false)
+  const [mergeOpen, setMergeOpen] = React.useState(false)
+  const [promoOpen, setPromoOpen] = React.useState(false)
+  const [couponCode, setCouponCode] = React.useState('')
+  const [promoError, setPromoError] = React.useState<string | null>(null)
+  const promoMutations = usePromotionMutations()
   const [voidLine, setVoidLine] = React.useState<{ id: string; name: string } | null>(
     null,
   )
@@ -195,6 +207,28 @@ export function OrderWorkspace({ orderId }: { orderId: string }) {
               >
                 Mark served
               </Button>
+            ) : null}
+            {canUpdate && !isTerminal ? (
+              <>
+                <Button
+                  size="sm"
+                  variant="outline"
+                  onClick={() => {
+                    setCouponCode('')
+                    setPromoError(null)
+                    setPromoOpen(true)
+                  }}
+                >
+                  Promos
+                </Button>
+                <Button
+                  size="sm"
+                  variant="outline"
+                  onClick={() => setMergeOpen(true)}
+                >
+                  Merge
+                </Button>
+              </>
             ) : null}
             {canTakePayment ? (
               <Button size="sm" onClick={() => setPaymentOpen(true)}>
@@ -467,6 +501,50 @@ export function OrderWorkspace({ orderId }: { orderId: string }) {
             orderNumber: order.orderNumber,
             grandTotal: order.grandTotal,
             amountPaid: order.amountPaid,
+            currencyCode: order.currencyCode,
+          }}
+        />
+
+        <DrawerForm
+          open={promoOpen}
+          onOpenChange={setPromoOpen}
+          title="Apply promotions"
+          description="Re-evaluates all active offers against this order. Add a coupon code if the guest has one."
+          onSubmit={async () => {
+            setPromoError(null)
+            try {
+              const result = await promoMutations.applyPromotions.mutateAsync({
+                orderId: order.id,
+                couponCode: couponCode.trim() || null,
+              })
+              setPromoOpen(false)
+              if (result.applications.length === 0) {
+                setActionError('No active promotion matched this order.')
+              }
+            } catch (error: unknown) {
+              setPromoError(errorMessage(error))
+            }
+          }}
+          isPending={promoMutations.applyPromotions.isPending}
+          error={promoError}
+          submitLabel="Apply"
+        >
+          <Field label="Coupon code" hint="Optional">
+            <input
+              className={fieldInputClassName}
+              value={couponCode}
+              onChange={(event) => setCouponCode(event.target.value)}
+            />
+          </Field>
+        </DrawerForm>
+
+        <MergeOrderDialog
+          open={mergeOpen}
+          onOpenChange={setMergeOpen}
+          target={{
+            id: order.id,
+            orderNumber: order.orderNumber,
+            branchId: order.branchId,
             currencyCode: order.currencyCode,
           }}
         />

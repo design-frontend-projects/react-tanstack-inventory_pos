@@ -10,6 +10,7 @@ import {
   getKitchenBoardServerFn,
   getOrderServerFn,
   listOrdersServerFn,
+  mergeOrdersServerFn,
   transferOrderTableServerFn,
   transitionOrderServerFn,
   updateOrderItemStatusServerFn,
@@ -23,6 +24,7 @@ import type {
   orderCreateSchema,
   orderItemStatusUpdateSchema,
   orderItemVoidSchema,
+  orderMergeSchema,
   orderStatusSchema,
   orderTransferSchema,
   orderTransitionSchema,
@@ -37,6 +39,7 @@ export type OrderVoidInput = z.infer<typeof orderVoidSchema>
 export type OrderItemStatusUpdateInput = z.infer<typeof orderItemStatusUpdateSchema>
 export type OrderItemVoidInput = z.infer<typeof orderItemVoidSchema>
 export type OrderTransferInput = z.infer<typeof orderTransferSchema>
+export type OrderMergeInput = z.infer<typeof orderMergeSchema>
 export type OrderStatusValue = z.infer<typeof orderStatusSchema>
 
 export interface OrderListFilters {
@@ -168,6 +171,12 @@ export function useOrderMutations() {
     onSuccess: invalidate,
   })
 
+  const mergeOrders = useMutation({
+    mutationFn: async (input: OrderMergeInput) =>
+      mergeOrdersServerFn({ data: { ...(await payload()), input } }),
+    onSuccess: invalidate,
+  })
+
   return {
     createOrder,
     addItem,
@@ -177,5 +186,6 @@ export function useOrderMutations() {
     updateItemStatus,
     voidItem,
     transferTable,
+    mergeOrders,
   }
 }

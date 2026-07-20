@@ -55,8 +55,9 @@ describe('timeline mapper', () => {
     ).toBeNull()
   })
 
-  // Procurement events (Spec 005) are supplier/tenant-scoped, not customer
-  // events, so they legitimately do not project onto a customer timeline.
+  // Procurement events (Spec 005) are supplier/tenant-scoped and GL journal
+  // events (Spec 006 finance) are tenant-internal, not customer events, so
+  // they legitimately do not project onto a customer timeline.
   const NON_CUSTOMER_EVENT_PREFIXES = [
     'rfq.',
     'supplier_quotation.',
@@ -64,6 +65,7 @@ describe('timeline mapper', () => {
     'supplier_payment.',
     'landed_cost.',
     'purchase_approval.',
+    'fin_journal_entry.',
   ]
 
   it('maps every customer-facing catalog event type when a customer is attached', () => {

@@ -111,3 +111,8 @@ export const orderTransferSchema = z.object({
   toTableId: z.string().uuid(),
   reason: z.string().trim().max(500).nullish(),
 })
+
+export const orderMergeSchema = z.object({
+  targetId: z.string().uuid(),
+  sourceId: z.string().uuid(),
+})

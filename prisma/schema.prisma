@@ -299,6 +299,24 @@ model TenantAccount {
   resOrderEvents                ResOrderEvent[]
   resVoidReasons                ResVoidReason[]
   resCancelReasons              ResCancelReason[]
+  resReservations               ResReservation[]
+  resReservationTables          ResReservationTable[]
+  resWaitlistEntries            ResWaitlistEntry[]
+  resPickups                    ResPickup[]
+  resQrCampaigns                ResQrCampaign[]
+  resDrivers                    ResDriver[]
+  resDeliveryZones              ResDeliveryZone[]
+  resDeliveries                 ResDelivery[]
+  resPromotions                 ResPromotion[]
+  resCoupons                    ResCoupon[]
+  resPromotionApplications      ResPromotionApplication[]
+  resGiftCards                  ResGiftCard[]
+  resGiftCardTransactions       ResGiftCardTransaction[]
+  resEvents                     ResEvent[]
+  resEventTasks                 ResEventTask[]
+  resEventPayments              ResEventPayment[]
+  resPartyBookings              ResPartyBooking[]
+  resCateringJobs               ResCateringJob[]
   podDocumentStatuses           PodDocumentStatus[]
   podStatusTransitions          PodStatusTransition[]
   podSupplierCategories         PodSupplierCategory[]
@@ -3772,6 +3790,11 @@ model ResTable {
   seats       Int            @default(2)
   minCapacity Int?           @map("min_capacity")
   shape       String?
+  // Normalized [0,1] floor-designer placement; null until positioned.
+  posX        Decimal?       @map("pos_x") @db.Decimal(6, 5)
+  posY        Decimal?       @map("pos_y") @db.Decimal(6, 5)
+  width       Decimal?       @db.Decimal(6, 5)
+  height      Decimal?       @db.Decimal(6, 5)
   status      ResTableStatus @default(AVAILABLE)
   isActive    Boolean        @default(true) @map("is_active")
   createdAt   DateTime       @default(now()) @map("created_at")
@@ -4806,6 +4829,568 @@ model ResCancelReason {
 
   @@unique([tenantId, branchId, code], map: "res_cancel_reasons_tenant_branch_code_unique")
   @@map("res_cancel_reasons")
+}
+
+// ---------------------------------------------------------------------------
+// Spec 006 — Guest & front-desk (reservations, waitlist, takeaway pickup, QR
+// campaigns) and delivery dispatch (drivers, zones, deliveries).
+// ---------------------------------------------------------------------------
+
+enum ResReservationStatus {
+  REQUESTED @map("requested")
+  CONFIRMED @map("confirmed")
+  SEATED    @map("seated")
+  COMPLETED @map("completed")
+  NO_SHOW   @map("no_show")
+  CANCELLED @map("cancelled")
+
+  @@map("ResReservationStatus")
+}
+
+enum ResReservationSource {
+  PHONE   @map("phone")
+  WALK_IN @map("walk_in")
+  QR      @map("qr")
+  ONLINE  @map("online")
+
+  @@map("ResReservationSource")
+}
+
+enum ResWaitlistPriority {
+  NORMAL @map("normal")
+  FAMILY @map("family")
+  VIP    @map("vip")
+
+  @@map("ResWaitlistPriority")
+}
+
+enum ResWaitlistStatus {
+  WAITING  @map("waiting")
+  NOTIFIED @map("notified")
+  SEATED   @map("seated")
+  LEFT     @map("left")
+
+  @@map("ResWaitlistStatus")
+}
+
+enum ResQrCampaignTarget {
+  TABLE    @map("table")
+  MENU     @map("menu")
+  CAMPAIGN @map("campaign")
+
+  @@map("ResQrCampaignTarget")
+}
+
+enum ResDriverStatus {
+  OFFLINE     @map("offline")
+  AVAILABLE   @map("available")
+  ON_DELIVERY @map("on_delivery")
+
+  @@map("ResDriverStatus")
+}
+
+enum ResDeliveryStatus {
+  PENDING   @map("pending")
+  ASSIGNED  @map("assigned")
+  PICKED_UP @map("picked_up")
+  EN_ROUTE  @map("en_route")
+  DELIVERED @map("delivered")
+  FAILED    @map("failed")
+
+  @@map("ResDeliveryStatus")
+}
+
+model ResReservation {
+  id              String                @id @default(uuid()) @db.Uuid
+  tenantId        String                @map("tenant_id") @db.Uuid
+  branchId        String                @map("branch_id") @db.Uuid
+  code            String
+  customerId      String?               @map("customer_id") @db.Uuid
+  guestName       String                @map("guest_name")
+  guestPhone      String?               @map("guest_phone")
+  partySize       Int                   @default(2) @map("party_size")
+  requestedAt     DateTime              @map("requested_at")
+  durationMinutes Int                   @default(90) @map("duration_minutes")
+  status          ResReservationStatus  @default(REQUESTED)
+  source          ResReservationSource  @default(PHONE)
+  depositAmount   Decimal?              @map("deposit_amount") @db.Decimal(19, 4)
+  depositPaidAt   DateTime?             @map("deposit_paid_at")
+  orderId         String?               @map("order_id") @db.Uuid
+  notes           String?
+  seatedAt        DateTime?             @map("seated_at")
+  createdAt       DateTime              @default(now()) @map("created_at")
+  updatedAt       DateTime              @updatedAt @map("updated_at")
+  deletedAt       DateTime?             @map("deleted_at")
+  tenant          TenantAccount         @relation(fields: [tenantId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  tables          ResReservationTable[]
+
+  @@unique([tenantId, branchId, code], map: "res_reservations_tenant_branch_code_unique")
+  @@index([tenantId, branchId, requestedAt], map: "res_reservations_tenant_branch_time_idx")
+  @@index([tenantId, branchId, status], map: "res_reservations_tenant_branch_status_idx")
+  @@map("res_reservations")
+}
+
+model ResReservationTable {
+  id            String         @id @default(uuid()) @db.Uuid
+  tenantId      String         @map("tenant_id") @db.Uuid
+  reservationId String         @map("reservation_id") @db.Uuid
+  tableId       String         @map("table_id") @db.Uuid
+  createdAt     DateTime       @default(now()) @map("created_at")
+  tenant        TenantAccount  @relation(fields: [tenantId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  reservation   ResReservation @relation(fields: [reservationId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+
+  @@unique([reservationId, tableId], map: "res_reservation_tables_unique")
+  @@index([tenantId, tableId], map: "res_reservation_tables_tenant_table_idx")
+  @@map("res_reservation_tables")
+}
+
+model ResWaitlistEntry {
+  id            String              @id @default(uuid()) @db.Uuid
+  tenantId      String              @map("tenant_id") @db.Uuid
+  branchId      String              @map("branch_id") @db.Uuid
+  guestName     String              @map("guest_name")
+  guestPhone    String?             @map("guest_phone")
+  partySize     Int                 @default(2) @map("party_size")
+  priority      ResWaitlistPriority @default(NORMAL)
+  status        ResWaitlistStatus   @default(WAITING)
+  quotedMinutes Int                 @default(15) @map("quoted_minutes")
+  notes         String?
+  notifiedAt    DateTime?           @map("notified_at")
+  seatedAt      DateTime?           @map("seated_at")
+  reservationId String?             @map("reservation_id") @db.Uuid
+  createdAt     DateTime            @default(now()) @map("created_at")
+  updatedAt     DateTime            @updatedAt @map("updated_at")
+  tenant        TenantAccount       @relation(fields: [tenantId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+
+  @@index([tenantId, branchId, status], map: "res_waitlist_tenant_branch_status_idx")
+  @@map("res_waitlist_entries")
+}
+
+model ResPickup {
+  id               String        @id @default(uuid()) @db.Uuid
+  tenantId         String        @map("tenant_id") @db.Uuid
+  branchId         String        @map("branch_id") @db.Uuid
+  orderId          String        @unique @map("order_id") @db.Uuid
+  promisedAt       DateTime      @map("promised_at")
+  verificationCode String        @map("verification_code")
+  counter          String?
+  packedAt         DateTime?     @map("packed_at")
+  notifiedAt       DateTime?     @map("notified_at")
+  pickedUpAt       DateTime?     @map("picked_up_at")
+  createdAt        DateTime      @default(now()) @map("created_at")
+  updatedAt        DateTime      @updatedAt @map("updated_at")
+  tenant           TenantAccount @relation(fields: [tenantId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+
+  @@index([tenantId, branchId, promisedAt], map: "res_pickups_tenant_branch_time_idx")
+  @@map("res_pickups")
+}
+
+model ResQrCampaign {
+  id        String              @id @default(uuid()) @db.Uuid
+  tenantId  String              @map("tenant_id") @db.Uuid
+  branchId  String?             @map("branch_id") @db.Uuid
+  name      String
+  slug      String
+  target    ResQrCampaignTarget @default(MENU)
+  tableId   String?             @map("table_id") @db.Uuid
+  menuId    String?             @map("menu_id") @db.Uuid
+  targetUrl String?             @map("target_url")
+  scanCount Int                 @default(0) @map("scan_count")
+  expiresAt DateTime?           @map("expires_at")
+  isActive  Boolean             @default(true) @map("is_active")
+  createdAt DateTime            @default(now()) @map("created_at")
+  updatedAt DateTime            @updatedAt @map("updated_at")
+  tenant    TenantAccount       @relation(fields: [tenantId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+
+  @@unique([tenantId, slug], map: "res_qr_campaigns_tenant_slug_unique")
+  @@index([tenantId, branchId], map: "res_qr_campaigns_tenant_branch_idx")
+  @@map("res_qr_campaigns")
+}
+
+model ResDriver {
+  id        String          @id @default(uuid()) @db.Uuid
+  tenantId  String          @map("tenant_id") @db.Uuid
+  branchId  String?         @map("branch_id") @db.Uuid
+  profileId String?         @map("profile_id") @db.Uuid
+  name      String
+  phone     String
+  vehicle   String?
+  status    ResDriverStatus @default(OFFLINE)
+  isActive  Boolean         @default(true) @map("is_active")
+  createdAt DateTime        @default(now()) @map("created_at")
+  updatedAt DateTime        @updatedAt @map("updated_at")
+  deletedAt DateTime?       @map("deleted_at")
+  tenant    TenantAccount   @relation(fields: [tenantId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+
+  @@index([tenantId, branchId, status], map: "res_drivers_tenant_branch_status_idx")
+  @@map("res_drivers")
+}
+
+model ResDeliveryZone {
+  id         String        @id @default(uuid()) @db.Uuid
+  tenantId   String        @map("tenant_id") @db.Uuid
+  branchId   String        @map("branch_id") @db.Uuid
+  name       String
+  feeAmount  Decimal       @default(0) @map("fee_amount") @db.Decimal(19, 4)
+  etaMinutes Int           @default(45) @map("eta_minutes")
+  polygon    Json?
+  isActive   Boolean       @default(true) @map("is_active")
+  createdAt  DateTime      @default(now()) @map("created_at")
+  updatedAt  DateTime      @updatedAt @map("updated_at")
+  tenant     TenantAccount @relation(fields: [tenantId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+
+  @@index([tenantId, branchId], map: "res_delivery_zones_tenant_branch_idx")
+  @@map("res_delivery_zones")
+}
+
+model ResDelivery {
+  id           String            @id @default(uuid()) @db.Uuid
+  tenantId     String            @map("tenant_id") @db.Uuid
+  branchId     String            @map("branch_id") @db.Uuid
+  orderId      String            @unique @map("order_id") @db.Uuid
+  driverId     String?           @map("driver_id") @db.Uuid
+  zoneId       String?           @map("zone_id") @db.Uuid
+  status       ResDeliveryStatus @default(PENDING)
+  addressLine  String            @map("address_line")
+  addressNotes String?           @map("address_notes")
+  lat          Decimal?          @db.Decimal(9, 6)
+  lng          Decimal?          @db.Decimal(9, 6)
+  assignedAt   DateTime?         @map("assigned_at")
+  pickedUpAt   DateTime?         @map("picked_up_at")
+  deliveredAt  DateTime?         @map("delivered_at")
+  proofUrl     String?           @map("proof_url")
+  failReason   String?           @map("fail_reason")
+  createdAt    DateTime          @default(now()) @map("created_at")
+  updatedAt    DateTime          @updatedAt @map("updated_at")
+  tenant       TenantAccount     @relation(fields: [tenantId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+
+  @@index([tenantId, branchId, status], map: "res_deliveries_tenant_branch_status_idx")
+  @@index([tenantId, driverId], map: "res_deliveries_tenant_driver_idx")
+  @@map("res_deliveries")
+}
+
+// ---------------------------------------------------------------------------
+// Spec 006 — Growth: promotions engine, coupons, gift cards. Loyalty stays in
+// CRM (crm_loyalty_*); restaurant orders bridge via customerId + crm.loyalty_*.
+// ---------------------------------------------------------------------------
+
+enum ResPromotionKind {
+  PERCENT    @map("percent")
+  FIXED      @map("fixed")
+  BOGO       @map("bogo")
+  FREE_ITEM  @map("free_item")
+  BUNDLE     @map("bundle")
+  HAPPY_HOUR @map("happy_hour")
+  CASHBACK   @map("cashback")
+
+  @@map("ResPromotionKind")
+}
+
+enum ResPromotionStatus {
+  DRAFT  @map("draft")
+  ACTIVE @map("active")
+  PAUSED @map("paused")
+  ENDED  @map("ended")
+
+  @@map("ResPromotionStatus")
+}
+
+enum ResPromotionStacking {
+  STACKABLE @map("stackable")
+  EXCLUSIVE @map("exclusive")
+
+  @@map("ResPromotionStacking")
+}
+
+enum ResGiftCardStatus {
+  ACTIVE   @map("active")
+  FROZEN   @map("frozen")
+  EXPIRED  @map("expired")
+  DEPLETED @map("depleted")
+
+  @@map("ResGiftCardStatus")
+}
+
+enum ResGiftCardTxnKind {
+  ISSUE  @map("issue")
+  RELOAD @map("reload")
+  REDEEM @map("redeem")
+  ADJUST @map("adjust")
+
+  @@map("ResGiftCardTxnKind")
+}
+
+model ResPromotion {
+  id         String               @id @default(uuid()) @db.Uuid
+  tenantId   String               @map("tenant_id") @db.Uuid
+  branchId   String?              @map("branch_id") @db.Uuid
+  name       String
+  kind       ResPromotionKind     @default(PERCENT)
+  status     ResPromotionStatus   @default(DRAFT)
+  priority   Int                  @default(10)
+  stacking   ResPromotionStacking @default(STACKABLE)
+  // Declarative rule tree interpreted by promotion-engine.ts.
+  conditions Json                 @default("{}")
+  action     Json
+  startsAt   DateTime?            @map("starts_at")
+  endsAt     DateTime?            @map("ends_at")
+  usageLimit Int?                 @map("usage_limit")
+  usedCount  Int                  @default(0) @map("used_count")
+  createdAt  DateTime             @default(now()) @map("created_at")
+  updatedAt  DateTime             @updatedAt @map("updated_at")
+  deletedAt  DateTime?            @map("deleted_at")
+  tenant     TenantAccount        @relation(fields: [tenantId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  coupons    ResCoupon[]
+
+  @@index([tenantId, status], map: "res_promotions_tenant_status_idx")
+  @@map("res_promotions")
+}
+
+model ResCoupon {
+  id          String        @id @default(uuid()) @db.Uuid
+  tenantId    String        @map("tenant_id") @db.Uuid
+  promotionId String        @map("promotion_id") @db.Uuid
+  code        String
+  maxUses     Int?          @map("max_uses")
+  usedCount   Int           @default(0) @map("used_count")
+  expiresAt   DateTime?     @map("expires_at")
+  isActive    Boolean       @default(true) @map("is_active")
+  createdAt   DateTime      @default(now()) @map("created_at")
+  updatedAt   DateTime      @updatedAt @map("updated_at")
+  tenant      TenantAccount @relation(fields: [tenantId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  promotion   ResPromotion  @relation(fields: [promotionId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+
+  @@unique([tenantId, code], map: "res_coupons_tenant_code_unique")
+  @@map("res_coupons")
+}
+
+model ResPromotionApplication {
+  id          String        @id @default(uuid()) @db.Uuid
+  tenantId    String        @map("tenant_id") @db.Uuid
+  promotionId String        @map("promotion_id") @db.Uuid
+  orderId     String        @map("order_id") @db.Uuid
+  couponId    String?       @map("coupon_id") @db.Uuid
+  amount      Decimal       @db.Decimal(19, 4)
+  appliedAt   DateTime      @default(now()) @map("applied_at")
+  tenant      TenantAccount @relation(fields: [tenantId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+
+  @@index([tenantId, promotionId], map: "res_promotion_applications_tenant_promo_idx")
+  @@index([tenantId, orderId], map: "res_promotion_applications_tenant_order_idx")
+  @@map("res_promotion_applications")
+}
+
+model ResGiftCard {
+  id           String                   @id @default(uuid()) @db.Uuid
+  tenantId     String                   @map("tenant_id") @db.Uuid
+  code         String
+  customerId   String?                  @map("customer_id") @db.Uuid
+  status       ResGiftCardStatus        @default(ACTIVE)
+  balance      Decimal                  @default(0) @db.Decimal(19, 4)
+  issuedAmount Decimal                  @default(0) @map("issued_amount") @db.Decimal(19, 4)
+  expiresAt    DateTime?                @map("expires_at")
+  createdAt    DateTime                 @default(now()) @map("created_at")
+  updatedAt    DateTime                 @updatedAt @map("updated_at")
+  tenant       TenantAccount            @relation(fields: [tenantId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  transactions ResGiftCardTransaction[]
+
+  @@unique([tenantId, code], map: "res_gift_cards_tenant_code_unique")
+  @@index([tenantId, customerId], map: "res_gift_cards_tenant_customer_idx")
+  @@map("res_gift_cards")
+}
+
+model ResGiftCardTransaction {
+  id           String             @id @default(uuid()) @db.Uuid
+  tenantId     String             @map("tenant_id") @db.Uuid
+  giftCardId   String             @map("gift_card_id") @db.Uuid
+  kind         ResGiftCardTxnKind
+  amount       Decimal            @db.Decimal(19, 4)
+  balanceAfter Decimal            @map("balance_after") @db.Decimal(19, 4)
+  orderId      String?            @map("order_id") @db.Uuid
+  reference    String?
+  createdAt    DateTime           @default(now()) @map("created_at")
+  tenant       TenantAccount      @relation(fields: [tenantId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  giftCard     ResGiftCard        @relation(fields: [giftCardId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+
+  @@index([tenantId, giftCardId], map: "res_gift_card_txns_tenant_card_idx")
+  @@map("res_gift_card_transactions")
+}
+
+// ---------------------------------------------------------------------------
+// Spec 006 — Functions: events, party bookings, catering jobs.
+// ---------------------------------------------------------------------------
+
+enum ResEventKind {
+  BIRTHDAY   @map("birthday")
+  CORPORATE  @map("corporate")
+  WEDDING    @map("wedding")
+  FAMILY     @map("family")
+  GRADUATION @map("graduation")
+  VIP        @map("vip")
+  HOLIDAY    @map("holiday")
+  PRIVATE    @map("private")
+
+  @@map("ResEventKind")
+}
+
+enum ResEventStatus {
+  INQUIRY     @map("inquiry")
+  QUOTED      @map("quoted")
+  CONFIRMED   @map("confirmed")
+  IN_PROGRESS @map("in_progress")
+  COMPLETED   @map("completed")
+  CANCELLED   @map("cancelled")
+
+  @@map("ResEventStatus")
+}
+
+enum ResEventTaskStatus {
+  TODO  @map("todo")
+  DOING @map("doing")
+  DONE  @map("done")
+
+  @@map("ResEventTaskStatus")
+}
+
+enum ResEventPaymentKind {
+  DEPOSIT     @map("deposit")
+  INSTALLMENT @map("installment")
+  FINAL       @map("final")
+  REFUND      @map("refund")
+
+  @@map("ResEventPaymentKind")
+}
+
+enum ResCateringKind {
+  CORPORATE @map("corporate")
+  DELIVERY  @map("delivery")
+  OUTSIDE   @map("outside")
+
+  @@map("ResCateringKind")
+}
+
+enum ResCateringStatus {
+  DRAFT      @map("draft")
+  CONFIRMED  @map("confirmed")
+  PREPPING   @map("prepping")
+  DISPATCHED @map("dispatched")
+  COMPLETED  @map("completed")
+  CANCELLED  @map("cancelled")
+
+  @@map("ResCateringStatus")
+}
+
+model ResEvent {
+  id          String            @id @default(uuid()) @db.Uuid
+  tenantId    String            @map("tenant_id") @db.Uuid
+  branchId    String            @map("branch_id") @db.Uuid
+  code        String
+  kind        ResEventKind      @default(PRIVATE)
+  status      ResEventStatus    @default(INQUIRY)
+  name        String
+  customerId  String?           @map("customer_id") @db.Uuid
+  hallId      String?           @map("hall_id") @db.Uuid
+  startsAt    DateTime          @map("starts_at")
+  endsAt      DateTime          @map("ends_at")
+  guestCount  Int               @default(20) @map("guest_count")
+  // Package/menu/decoration/vendor selections captured by the wizard.
+  packageJson Json              @default("{}") @map("package_json")
+  quoteAmount Decimal           @default(0) @map("quote_amount") @db.Decimal(19, 4)
+  notes       String?
+  createdAt   DateTime          @default(now()) @map("created_at")
+  updatedAt   DateTime          @updatedAt @map("updated_at")
+  deletedAt   DateTime?         @map("deleted_at")
+  tenant      TenantAccount     @relation(fields: [tenantId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  tasks       ResEventTask[]
+  payments    ResEventPayment[]
+  party       ResPartyBooking?
+
+  @@unique([tenantId, branchId, code], map: "res_events_tenant_branch_code_unique")
+  @@index([tenantId, branchId, startsAt], map: "res_events_tenant_branch_time_idx")
+  @@index([tenantId, branchId, status], map: "res_events_tenant_branch_status_idx")
+  @@map("res_events")
+}
+
+model ResEventTask {
+  id         String             @id @default(uuid()) @db.Uuid
+  tenantId   String             @map("tenant_id") @db.Uuid
+  eventId    String             @map("event_id") @db.Uuid
+  title      String
+  status     ResEventTaskStatus @default(TODO)
+  dueAt      DateTime?          @map("due_at")
+  assigneeId String?            @map("assignee_id") @db.Uuid
+  sortOrder  Int                @default(0) @map("sort_order")
+  createdAt  DateTime           @default(now()) @map("created_at")
+  updatedAt  DateTime           @updatedAt @map("updated_at")
+  tenant     TenantAccount      @relation(fields: [tenantId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  event      ResEvent           @relation(fields: [eventId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+
+  @@index([tenantId, eventId], map: "res_event_tasks_tenant_event_idx")
+  @@map("res_event_tasks")
+}
+
+model ResEventPayment {
+  id        String              @id @default(uuid()) @db.Uuid
+  tenantId  String              @map("tenant_id") @db.Uuid
+  eventId   String              @map("event_id") @db.Uuid
+  kind      ResEventPaymentKind @default(DEPOSIT)
+  amount    Decimal             @db.Decimal(19, 4)
+  method    String              @default("cash")
+  reference String?
+  paidAt    DateTime?           @map("paid_at")
+  createdAt DateTime            @default(now()) @map("created_at")
+  tenant    TenantAccount       @relation(fields: [tenantId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  event     ResEvent            @relation(fields: [eventId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+
+  @@index([tenantId, eventId], map: "res_event_payments_tenant_event_idx")
+  @@map("res_event_payments")
+}
+
+model ResPartyBooking {
+  id              String        @id @default(uuid()) @db.Uuid
+  tenantId        String        @map("tenant_id") @db.Uuid
+  eventId         String        @unique @map("event_id") @db.Uuid
+  theme           String?
+  decorationsJson Json?         @map("decorations_json")
+  // FloorDesigner layout for hall/seating (normalized items).
+  seatingJson     Json?         @map("seating_json")
+  vendorJson      Json?         @map("vendor_json")
+  costAmount      Decimal       @default(0) @map("cost_amount") @db.Decimal(19, 4)
+  revenueAmount   Decimal       @default(0) @map("revenue_amount") @db.Decimal(19, 4)
+  createdAt       DateTime      @default(now()) @map("created_at")
+  updatedAt       DateTime      @updatedAt @map("updated_at")
+  tenant          TenantAccount @relation(fields: [tenantId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  event           ResEvent      @relation(fields: [eventId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+
+  @@map("res_party_bookings")
+}
+
+model ResCateringJob {
+  id            String            @id @default(uuid()) @db.Uuid
+  tenantId      String            @map("tenant_id") @db.Uuid
+  branchId      String            @map("branch_id") @db.Uuid
+  code          String
+  kind          ResCateringKind   @default(CORPORATE)
+  status        ResCateringStatus @default(DRAFT)
+  name          String
+  customerId    String?           @map("customer_id") @db.Uuid
+  eventDate     DateTime          @map("event_date")
+  addressLine   String?           @map("address_line")
+  guestCount    Int               @default(20) @map("guest_count")
+  menuJson      Json              @default("{}") @map("menu_json")
+  equipmentJson Json?             @map("equipment_json")
+  vehicleJson   Json?             @map("vehicle_json")
+  staffJson     Json?             @map("staff_json")
+  costAmount    Decimal           @default(0) @map("cost_amount") @db.Decimal(19, 4)
+  quoteAmount   Decimal           @default(0) @map("quote_amount") @db.Decimal(19, 4)
+  notes         String?
+  createdAt     DateTime          @default(now()) @map("created_at")
+  updatedAt     DateTime          @updatedAt @map("updated_at")
+  deletedAt     DateTime?         @map("deleted_at")
+  tenant        TenantAccount     @relation(fields: [tenantId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+
+  @@unique([tenantId, branchId, code], map: "res_catering_jobs_tenant_branch_code_unique")
+  @@index([tenantId, branchId, eventDate], map: "res_catering_jobs_tenant_branch_date_idx")
+  @@map("res_catering_jobs")
 }
 
 // ============================================================================

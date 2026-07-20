@@ -1,19 +1,28 @@
 import type { LucideIcon } from 'lucide-react'
 import {
   Award,
+  BadgePercent,
+  PartyPopper,
+  UtensilsCrossed,
   BellRing,
+  Bike,
   Boxes,
+  CalendarClock,
+  Gift,
   ChartSpline,
   ChefHat,
   ClipboardList,
   HeartHandshake,
   LayoutDashboard,
+  ListOrdered,
   MapPinned,
   PackageSearch,
   PlugZap,
+  QrCode,
   ReceiptText,
   RotateCcw,
   ShieldCheck,
+  ShoppingBag,
   ShoppingBasket,
   UsersRound,
 } from 'lucide-react'
@@ -24,11 +33,23 @@ export type AppNavRouteTo =
   | '/inventory/catalog'
   | '/inventory/stock'
   | '/outlets'
+  | '/restaurant/dashboard'
   | '/restaurant/kitchen'
   | '/restaurant/menu'
   | '/restaurant/tables'
   | '/restaurant/orders'
   | '/restaurant/floor-plan'
+  | '/restaurant/reports'
+  | '/restaurant/analytics'
+  | '/restaurant/reservations'
+  | '/restaurant/waitlist'
+  | '/restaurant/takeaway'
+  | '/restaurant/delivery'
+  | '/restaurant/qr'
+  | '/restaurant/promotions'
+  | '/restaurant/gift-cards'
+  | '/restaurant/events'
+  | '/restaurant/catering'
   | '/pos'
   | '/pos/orders'
   | '/pos/returns'
@@ -158,10 +179,20 @@ export const appNavSections: AppNavSection[] = [
     icon: ChefHat,
     titleKey: 'nav.restaurant',
     fallbackTitle: 'Restaurant',
-    rootTo: '/restaurant/tables',
+    rootTo: '/restaurant/dashboard',
     keywords: ['restaurant', 'kitchen', 'menu', 'tables', 'service', 'floor'],
     permissions: ['res.dashboard.view'],
     items: [
+      {
+        id: 'restaurant-dashboard',
+        sectionId: 'restaurant',
+        to: '/restaurant/dashboard',
+        icon: LayoutDashboard,
+        titleKey: 'nav.restaurantDashboard',
+        fallbackTitle: 'Restaurant Dashboard',
+        keywords: ['dashboard', 'kpi', 'sales', 'live', 'overview'],
+        permissions: ['res.dashboard.view'],
+      },
       {
         id: 'restaurant-tables',
         sectionId: 'restaurant',
@@ -211,6 +242,116 @@ export const appNavSections: AppNavSection[] = [
         fallbackTitle: 'Floor Plan',
         keywords: ['floor plan', 'areas', 'sections', 'tables', 'staff', 'waiters'],
         permissions: ['res.settings.manage', 'res.floor.manage'],
+      },
+      {
+        id: 'restaurant-reservations',
+        sectionId: 'restaurant',
+        to: '/restaurant/reservations',
+        icon: CalendarClock,
+        titleKey: 'nav.restaurantReservations',
+        fallbackTitle: 'Reservations',
+        keywords: ['reservations', 'bookings', 'calendar', 'guests'],
+        permissions: ['res.reservations.view', 'res.reservations.manage'],
+      },
+      {
+        id: 'restaurant-waitlist',
+        sectionId: 'restaurant',
+        to: '/restaurant/waitlist',
+        icon: ListOrdered,
+        titleKey: 'nav.restaurantWaitlist',
+        fallbackTitle: 'Waitlist',
+        keywords: ['waitlist', 'queue', 'walk-in', 'host'],
+        permissions: ['res.reservations.view', 'res.reservations.manage'],
+      },
+      {
+        id: 'restaurant-takeaway',
+        sectionId: 'restaurant',
+        to: '/restaurant/takeaway',
+        icon: ShoppingBag,
+        titleKey: 'nav.restaurantTakeaway',
+        fallbackTitle: 'Takeaway',
+        keywords: ['takeaway', 'pickup', 'counter', 'to-go'],
+        permissions: ['res.takeaway.view', 'res.takeaway.manage'],
+      },
+      {
+        id: 'restaurant-delivery',
+        sectionId: 'restaurant',
+        to: '/restaurant/delivery',
+        icon: Bike,
+        titleKey: 'nav.restaurantDelivery',
+        fallbackTitle: 'Delivery',
+        keywords: ['delivery', 'dispatch', 'drivers', 'zones'],
+        permissions: ['res.delivery.view', 'res.delivery.manage'],
+      },
+      {
+        id: 'restaurant-qr',
+        sectionId: 'restaurant',
+        to: '/restaurant/qr',
+        icon: QrCode,
+        titleKey: 'nav.restaurantQr',
+        fallbackTitle: 'QR Ordering',
+        keywords: ['qr', 'codes', 'campaigns', 'ordering'],
+        permissions: ['res.qr.manage'],
+      },
+      {
+        id: 'restaurant-promotions',
+        sectionId: 'restaurant',
+        to: '/restaurant/promotions',
+        icon: BadgePercent,
+        titleKey: 'nav.restaurantPromotions',
+        fallbackTitle: 'Promotions',
+        keywords: ['promotions', 'discounts', 'coupons', 'offers'],
+        permissions: ['res.promotions.view', 'res.promotions.manage'],
+      },
+      {
+        id: 'restaurant-gift-cards',
+        sectionId: 'restaurant',
+        to: '/restaurant/gift-cards',
+        icon: Gift,
+        titleKey: 'nav.restaurantGiftCards',
+        fallbackTitle: 'Gift Cards',
+        keywords: ['gift cards', 'stored value', 'reload', 'redeem'],
+        permissions: ['res.giftcards.view', 'res.giftcards.manage'],
+      },
+      {
+        id: 'restaurant-events',
+        sectionId: 'restaurant',
+        to: '/restaurant/events',
+        icon: PartyPopper,
+        titleKey: 'nav.restaurantEvents',
+        fallbackTitle: 'Events & Parties',
+        keywords: ['events', 'parties', 'weddings', 'banquet', 'halls'],
+        permissions: ['res.events.view', 'res.events.manage'],
+      },
+      {
+        id: 'restaurant-catering',
+        sectionId: 'restaurant',
+        to: '/restaurant/catering',
+        icon: UtensilsCrossed,
+        titleKey: 'nav.restaurantCatering',
+        fallbackTitle: 'Catering',
+        keywords: ['catering', 'corporate', 'outside events', 'jobs'],
+        permissions: ['res.catering.view', 'res.catering.manage'],
+      },
+      {
+        id: 'restaurant-reports',
+        sectionId: 'restaurant',
+        to: '/restaurant/reports',
+        icon: ClipboardList,
+        titleKey: 'nav.restaurantReports',
+        fallbackTitle: 'Reports',
+        keywords: ['reports', 'sales', 'items', 'daily'],
+        permissions: ['res.reports.view'],
+      },
+      {
+        id: 'restaurant-analytics',
+        sectionId: 'restaurant',
+        to: '/restaurant/analytics',
+        icon: ChartSpline,
+        titleKey: 'nav.restaurantAnalytics',
+        fallbackTitle: 'Analytics',
+        keywords: ['analytics', 'trends', 'heat map', 'performance'],
+        permissions: ['res.analytics.view', 'res.reports.view'],
       },
     ],
   },

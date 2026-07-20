@@ -58,9 +58,20 @@ const EVENT_TITLES: Partial<Record<string, (documentNumber: string | null) => st
   'restaurant_order.voided': (doc) => `Restaurant order ${doc ?? ''} voided`.trim(),
   'restaurant_reservation.created': () => 'Reservation created',
   'restaurant_reservation.no_show': () => 'Reservation no-show',
+  'restaurant_reservation.seated': () => 'Reservation seated',
+  'restaurant_reservation.cancelled': () => 'Reservation cancelled',
+  'restaurant_delivery.assigned': () => 'Delivery assigned to driver',
+  'restaurant_delivery.delivered': () => 'Order delivered',
+  'restaurant_delivery.failed': () => 'Delivery failed',
   'restaurant_gift_card.issued': () => 'Gift card issued',
   'restaurant_gift_card.redeemed': () => 'Gift card redeemed',
+  'restaurant_gift_card.reloaded': () => 'Gift card reloaded',
   'restaurant_promotion.applied': () => 'Promotion applied',
+  'restaurant_event.booked': () => 'Event booked',
+  'restaurant_event.completed': () => 'Event completed',
+  'restaurant_event.cancelled': () => 'Event cancelled',
+  'restaurant_catering.confirmed': () => 'Catering job confirmed',
+  'restaurant_catering.completed': () => 'Catering job completed',
 }
 
 const ENTRY_TYPE_BY_PREFIX: Array<[string, string]> = [
@@ -75,8 +86,11 @@ const ENTRY_TYPE_BY_PREFIX: Array<[string, string]> = [
   ['crm.segment', 'segment'],
   ['restaurant_order.', 'sale'],
   ['restaurant_reservation.', 'reservation'],
+  ['restaurant_delivery.', 'delivery'],
   ['restaurant_gift_card.', 'gift_card'],
   ['restaurant_promotion.', 'promotion'],
+  ['restaurant_event.', 'event'],
+  ['restaurant_catering.', 'catering'],
 ]
 
 export function mapEventToTimelineEntry(

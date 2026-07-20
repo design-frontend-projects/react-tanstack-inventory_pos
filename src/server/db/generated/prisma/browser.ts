@@ -808,6 +808,96 @@ export type ResVoidReason = Prisma.ResVoidReasonModel
  */
 export type ResCancelReason = Prisma.ResCancelReasonModel
 /**
+ * Model ResReservation
+ * 
+ */
+export type ResReservation = Prisma.ResReservationModel
+/**
+ * Model ResReservationTable
+ * 
+ */
+export type ResReservationTable = Prisma.ResReservationTableModel
+/**
+ * Model ResWaitlistEntry
+ * 
+ */
+export type ResWaitlistEntry = Prisma.ResWaitlistEntryModel
+/**
+ * Model ResPickup
+ * 
+ */
+export type ResPickup = Prisma.ResPickupModel
+/**
+ * Model ResQrCampaign
+ * 
+ */
+export type ResQrCampaign = Prisma.ResQrCampaignModel
+/**
+ * Model ResDriver
+ * 
+ */
+export type ResDriver = Prisma.ResDriverModel
+/**
+ * Model ResDeliveryZone
+ * 
+ */
+export type ResDeliveryZone = Prisma.ResDeliveryZoneModel
+/**
+ * Model ResDelivery
+ * 
+ */
+export type ResDelivery = Prisma.ResDeliveryModel
+/**
+ * Model ResPromotion
+ * 
+ */
+export type ResPromotion = Prisma.ResPromotionModel
+/**
+ * Model ResCoupon
+ * 
+ */
+export type ResCoupon = Prisma.ResCouponModel
+/**
+ * Model ResPromotionApplication
+ * 
+ */
+export type ResPromotionApplication = Prisma.ResPromotionApplicationModel
+/**
+ * Model ResGiftCard
+ * 
+ */
+export type ResGiftCard = Prisma.ResGiftCardModel
+/**
+ * Model ResGiftCardTransaction
+ * 
+ */
+export type ResGiftCardTransaction = Prisma.ResGiftCardTransactionModel
+/**
+ * Model ResEvent
+ * 
+ */
+export type ResEvent = Prisma.ResEventModel
+/**
+ * Model ResEventTask
+ * 
+ */
+export type ResEventTask = Prisma.ResEventTaskModel
+/**
+ * Model ResEventPayment
+ * 
+ */
+export type ResEventPayment = Prisma.ResEventPaymentModel
+/**
+ * Model ResPartyBooking
+ * 
+ */
+export type ResPartyBooking = Prisma.ResPartyBookingModel
+/**
+ * Model ResCateringJob
+ * 
+ */
+export type ResCateringJob = Prisma.ResCateringJobModel
+/**
  * Model PodDocumentStatus
  * 
  */

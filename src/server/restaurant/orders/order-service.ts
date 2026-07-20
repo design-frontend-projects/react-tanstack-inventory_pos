@@ -196,6 +196,16 @@ export async function addItem(
   return getOrder(_context, tenantId, input.orderId)
 }
 
+// Exposed for sibling services (e.g. promotions) that add or remove discount
+// rows and must re-derive the order rollup inside their own transaction.
+export async function recomputeOrderTotals(
+  tenantId: string,
+  orderId: string,
+  tx: Prisma.TransactionClient,
+) {
+  await recomputeTotals(tenantId, orderId, tx)
+}
+
 // Recompute and persist the order's monetary rollup from its current rows.
 async function recomputeTotals(
   tenantId: string,
@@ -788,6 +798,102 @@ export async function completeOrder(
 
 // Void an order (kitchen may already have fired); releases nothing consumed and
 // emits the void event.
+// Merge one open order into another: the source's live lines, charges, and
+// discounts move to the target, the target's totals are recomputed, and the
+// source is voided with a cross-referencing audit trail. Payments block a
+// merge — settle or refund the source first.
+export async function mergeOrders(
+  context: CurrentUserContext,
+  tenantId: string,
+  input: { targetId: string; sourceId: string }
+) {
+  if (input.targetId === input.sourceId) {
+    throw new ValidationError('Cannot merge an order into itself')
+  }
+
+  const [target, source] = await Promise.all([
+    orderRepo.findOrderById(tenantId, input.targetId),
+    orderRepo.findOrderById(tenantId, input.sourceId),
+  ])
+  if (!target || !source) {
+    throw new NotFoundError('Order not found')
+  }
+  if (target.branchId !== source.branchId) {
+    throw new ValidationError('Orders must belong to the same branch to merge')
+  }
+  const closed = ['COMPLETED', 'CANCELLED', 'REFUNDED', 'VOIDED']
+  if (closed.includes(target.status) || closed.includes(source.status)) {
+    throw new ValidationError('Closed orders cannot be merged')
+  }
+  if (new Prisma.Decimal(source.amountPaid).greaterThan(0)) {
+    throw new ValidationError(
+      'The source order has captured payments — settle or refund it first'
+    )
+  }
+
+  await prisma.$transaction(async (tx) => {
+    // Move live lines (with their kitchen statuses and modifiers), charges,
+    // and discounts onto the target.
+    await tx.resOrderItem.updateMany({
+      where: { tenantId, orderId: source.id },
+      data: { orderId: target.id },
+    })
+    await tx.resOrderCharge.updateMany({
+      where: { tenantId, orderId: source.id },
+      data: { orderId: target.id },
+    })
+    await tx.resOrderDiscount.updateMany({
+      where: { tenantId, orderId: source.id },
+      data: { orderId: target.id },
+    })
+
+    await recomputeTotals(tenantId, target.id, tx)
+    await orderRepo.updateOrderTotals(
+      tenantId,
+      source.id,
+      {
+        subtotal: '0',
+        discountTotal: '0',
+        taxTotal: '0',
+        serviceChargeTotal: '0',
+        deliveryFee: '0',
+        tipTotal: '0',
+        roundingTotal: '0',
+        grandTotal: '0',
+      },
+      tx
+    )
+    await orderRepo.setStatus(tenantId, source.id, 'VOIDED', {}, tx)
+
+    await orderRepo.appendOrderEvent(
+      tenantId,
+      {
+        orderId: source.id,
+        fromStatus: source.status,
+        toStatus: 'VOIDED',
+        actorProfileId: context.profileId,
+        reason: `Merged into ${target.orderNumber}`,
+        payloadJson: { kind: 'merge', targetOrderId: target.id },
+      },
+      tx
+    )
+    await orderRepo.appendOrderEvent(
+      tenantId,
+      {
+        orderId: target.id,
+        fromStatus: target.status,
+        toStatus: target.status,
+        actorProfileId: context.profileId,
+        reason: `Absorbed ${source.orderNumber}`,
+        payloadJson: { kind: 'merge', sourceOrderId: source.id },
+      },
+      tx
+    )
+  })
+
+  return getOrder(context, tenantId, input.targetId)
+}
+
 export async function voidOrder(
   context: CurrentUserContext,
   tenantId: string,

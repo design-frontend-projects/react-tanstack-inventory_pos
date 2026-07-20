@@ -6,7 +6,15 @@ import { serverEnv } from '#/lib/env/server'
 // through the guarded server functions. This keeps the security boundary in the
 // server fns while giving every connected screen sub-second updates.
 
-export type RestaurantRealtimeScope = 'floor' | 'orders' | 'kitchen' | 'menu'
+export type RestaurantRealtimeScope =
+  | 'floor'
+  | 'orders'
+  | 'kitchen'
+  | 'menu'
+  | 'reservations'
+  | 'takeaway'
+  | 'delivery'
+  | 'events'
 
 export function restaurantChannelTopic(tenantId: string): string {
   return `restaurant:${tenantId}`

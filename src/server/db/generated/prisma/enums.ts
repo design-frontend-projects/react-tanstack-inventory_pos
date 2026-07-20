@@ -987,3 +987,191 @@ export const ResOrderChargeKind = {
 } as const
 
 export type ResOrderChargeKind = (typeof ResOrderChargeKind)[keyof typeof ResOrderChargeKind]
+
+
+export const ResReservationStatus = {
+  REQUESTED: 'REQUESTED',
+  CONFIRMED: 'CONFIRMED',
+  SEATED: 'SEATED',
+  COMPLETED: 'COMPLETED',
+  NO_SHOW: 'NO_SHOW',
+  CANCELLED: 'CANCELLED'
+} as const
+
+export type ResReservationStatus = (typeof ResReservationStatus)[keyof typeof ResReservationStatus]
+
+
+export const ResReservationSource = {
+  PHONE: 'PHONE',
+  WALK_IN: 'WALK_IN',
+  QR: 'QR',
+  ONLINE: 'ONLINE'
+} as const
+
+export type ResReservationSource = (typeof ResReservationSource)[keyof typeof ResReservationSource]
+
+
+export const ResWaitlistPriority = {
+  NORMAL: 'NORMAL',
+  FAMILY: 'FAMILY',
+  VIP: 'VIP'
+} as const
+
+export type ResWaitlistPriority = (typeof ResWaitlistPriority)[keyof typeof ResWaitlistPriority]
+
+
+export const ResWaitlistStatus = {
+  WAITING: 'WAITING',
+  NOTIFIED: 'NOTIFIED',
+  SEATED: 'SEATED',
+  LEFT: 'LEFT'
+} as const
+
+export type ResWaitlistStatus = (typeof ResWaitlistStatus)[keyof typeof ResWaitlistStatus]
+
+
+export const ResQrCampaignTarget = {
+  TABLE: 'TABLE',
+  MENU: 'MENU',
+  CAMPAIGN: 'CAMPAIGN'
+} as const
+
+export type ResQrCampaignTarget = (typeof ResQrCampaignTarget)[keyof typeof ResQrCampaignTarget]
+
+
+export const ResDriverStatus = {
+  OFFLINE: 'OFFLINE',
+  AVAILABLE: 'AVAILABLE',
+  ON_DELIVERY: 'ON_DELIVERY'
+} as const
+
+export type ResDriverStatus = (typeof ResDriverStatus)[keyof typeof ResDriverStatus]
+
+
+export const ResDeliveryStatus = {
+  PENDING: 'PENDING',
+  ASSIGNED: 'ASSIGNED',
+  PICKED_UP: 'PICKED_UP',
+  EN_ROUTE: 'EN_ROUTE',
+  DELIVERED: 'DELIVERED',
+  FAILED: 'FAILED'
+} as const
+
+export type ResDeliveryStatus = (typeof ResDeliveryStatus)[keyof typeof ResDeliveryStatus]
+
+
+export const ResPromotionKind = {
+  PERCENT: 'PERCENT',
+  FIXED: 'FIXED',
+  BOGO: 'BOGO',
+  FREE_ITEM: 'FREE_ITEM',
+  BUNDLE: 'BUNDLE',
+  HAPPY_HOUR: 'HAPPY_HOUR',
+  CASHBACK: 'CASHBACK'
+} as const
+
+export type ResPromotionKind = (typeof ResPromotionKind)[keyof typeof ResPromotionKind]
+
+
+export const ResPromotionStatus = {
+  DRAFT: 'DRAFT',
+  ACTIVE: 'ACTIVE',
+  PAUSED: 'PAUSED',
+  ENDED: 'ENDED'
+} as const
+
+export type ResPromotionStatus = (typeof ResPromotionStatus)[keyof typeof ResPromotionStatus]
+
+
+export const ResPromotionStacking = {
+  STACKABLE: 'STACKABLE',
+  EXCLUSIVE: 'EXCLUSIVE'
+} as const
+
+export type ResPromotionStacking = (typeof ResPromotionStacking)[keyof typeof ResPromotionStacking]
+
+
+export const ResGiftCardStatus = {
+  ACTIVE: 'ACTIVE',
+  FROZEN: 'FROZEN',
+  EXPIRED: 'EXPIRED',
+  DEPLETED: 'DEPLETED'
+} as const
+
+export type ResGiftCardStatus = (typeof ResGiftCardStatus)[keyof typeof ResGiftCardStatus]
+
+
+export const ResGiftCardTxnKind = {
+  ISSUE: 'ISSUE',
+  RELOAD: 'RELOAD',
+  REDEEM: 'REDEEM',
+  ADJUST: 'ADJUST'
+} as const
+
+export type ResGiftCardTxnKind = (typeof ResGiftCardTxnKind)[keyof typeof ResGiftCardTxnKind]
+
+
+export const ResEventKind = {
+  BIRTHDAY: 'BIRTHDAY',
+  CORPORATE: 'CORPORATE',
+  WEDDING: 'WEDDING',
+  FAMILY: 'FAMILY',
+  GRADUATION: 'GRADUATION',
+  VIP: 'VIP',
+  HOLIDAY: 'HOLIDAY',
+  PRIVATE: 'PRIVATE'
+} as const
+
+export type ResEventKind = (typeof ResEventKind)[keyof typeof ResEventKind]
+
+
+export const ResEventStatus = {
+  INQUIRY: 'INQUIRY',
+  QUOTED: 'QUOTED',
+  CONFIRMED: 'CONFIRMED',
+  IN_PROGRESS: 'IN_PROGRESS',
+  COMPLETED: 'COMPLETED',
+  CANCELLED: 'CANCELLED'
+} as const
+
+export type ResEventStatus = (typeof ResEventStatus)[keyof typeof ResEventStatus]
+
+
+export const ResEventTaskStatus = {
+  TODO: 'TODO',
+  DOING: 'DOING',
+  DONE: 'DONE'
+} as const
+
+export type ResEventTaskStatus = (typeof ResEventTaskStatus)[keyof typeof ResEventTaskStatus]
+
+
+export const ResEventPaymentKind = {
+  DEPOSIT: 'DEPOSIT',
+  INSTALLMENT: 'INSTALLMENT',
+  FINAL: 'FINAL',
+  REFUND: 'REFUND'
+} as const
+
+export type ResEventPaymentKind = (typeof ResEventPaymentKind)[keyof typeof ResEventPaymentKind]
+
+
+export const ResCateringKind = {
+  CORPORATE: 'CORPORATE',
+  DELIVERY: 'DELIVERY',
+  OUTSIDE: 'OUTSIDE'
+} as const
+
+export type ResCateringKind = (typeof ResCateringKind)[keyof typeof ResCateringKind]
+
+
+export const ResCateringStatus = {
+  DRAFT: 'DRAFT',
+  CONFIRMED: 'CONFIRMED',
+  PREPPING: 'PREPPING',
+  DISPATCHED: 'DISPATCHED',
+  COMPLETED: 'COMPLETED',
+  CANCELLED: 'CANCELLED'
+} as const
+
+export type ResCateringStatus = (typeof ResCateringStatus)[keyof typeof ResCateringStatus]
