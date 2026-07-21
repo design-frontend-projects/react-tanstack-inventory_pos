@@ -422,6 +422,8 @@ export const ModelName = {
   Supplier: 'Supplier',
   Customer: 'Customer',
   TaxRate: 'TaxRate',
+  StockCountSession: 'StockCountSession',
+  StockCountLine: 'StockCountLine',
   Warehouse: 'Warehouse',
   WarehouseLocation: 'WarehouseLocation',
   StockBalance: 'StockBalance',
@@ -694,7 +696,7 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
     omit: GlobalOmitOptions
   }
   meta: {
-    modelProps: "profile" | "tenantAccount" | "tenantUser" | "role" | "permission" | "rolePermission" | "tenantUserRole" | "tenantUserPermission" | "user_invitations" | "auditLog" | "preferenceProfile" | "tenantRegistrationRequest" | "module" | "tenantModule" | "tenantScreen" | "screen" | "screenAction" | "documentSequence" | "brand" | "productCategory" | "unitOfMeasure" | "uomConversion" | "product" | "productVariant" | "productBarcode" | "productImage" | "productSupplier" | "priceList" | "productPrice" | "bundleComponent" | "attribute" | "attributeOption" | "productAttributeValue" | "productTag" | "productTagLink" | "supplier" | "customer" | "taxRate" | "warehouse" | "warehouseLocation" | "stockBalance" | "inventoryMovement" | "costLayer" | "stockAdjustment" | "stockAdjustmentLine" | "ownerActivityOption" | "ownerSubscriptionPlan" | "ownerSubscriptionPlanFeature" | "ownerTenantSubscription" | "stockTransfer" | "stockTransferLine" | "purchaseRequisition" | "purchaseRequisitionLine" | "purchaseOrder" | "purchaseOrderLine" | "goodsReceipt" | "goodsReceiptLine" | "purchaseReturn" | "purchaseReturnLine" | "salesOrder" | "salesOrderLine" | "salesInvoice" | "salesInvoiceLine" | "posSession" | "posSale" | "posSaleLine" | "posPayment" | "salesReturn" | "salesReturnLine" | "financialNote" | "stockReservation" | "lot" | "serialNumber" | "billOfMaterials" | "bomComponent" | "productionOrder" | "productionMaterial" | "productionOutput" | "reorderRule" | "stockSnapshot" | "domainEvent" | "crmProjectionCursor" | "crmCustomerProfile" | "crmCustomerContact" | "crmCustomerAddress" | "crmCustomerRelationship" | "crmCommunicationConsent" | "crmCustomerPreference" | "crmTag" | "crmCustomerTag" | "crmCustomerGroup" | "crmCustomerGroupMember" | "crmCustomFieldDefinition" | "crmCustomFieldValue" | "crmTimelineEntry" | "crmLoyaltySettings" | "crmLoyaltyTier" | "crmLoyaltyAccount" | "crmLoyaltyLedgerEntry" | "crmLoyaltyEarnRule" | "crmCustomerMetrics" | "crmCustomerMetricsMonthly" | "crmSegment" | "crmSegmentMember" | "crmCustomerScore" | "resRestaurant" | "resBranch" | "resBranchMember" | "resBusinessHours" | "resHoliday" | "resDiningArea" | "resTableSection" | "resTable" | "resTableQrCode" | "resFloorStaffAssignment" | "resServiceType" | "resShift" | "resKitchenStation" | "resKitchenPrinter" | "resReceiptTemplate" | "resTaxConfig" | "resServiceChargeRule" | "resDeliverySettings" | "resTakeawaySettings" | "resNumberSequence" | "resRestaurantSettings" | "resBranchSettings" | "resMenu" | "resMenuCategory" | "resMenuItem" | "resMenuItemVariant" | "resMenuItemPrice" | "resModifierGroup" | "resModifier" | "resMenuItemModifierGroup" | "resCombo" | "resComboComponent" | "resMenuItemAllergen" | "resMenuItemTag" | "resMenuAvailability" | "resCrossSell" | "resRecipe" | "resRecipeVersion" | "resRecipeLine" | "resRecipeSubRecipe" | "resRecipeStep" | "resRecipeApproval" | "resOrder" | "resOrderItem" | "resOrderItemModifier" | "resOrderPayment" | "resOrderDiscount" | "resOrderCharge" | "resOrderSplit" | "resOrderTransfer" | "resOrderEvent" | "resVoidReason" | "resCancelReason" | "resReservation" | "resReservationTable" | "resWaitlistEntry" | "resPickup" | "resQrCampaign" | "resDriver" | "resDeliveryZone" | "resDelivery" | "resPromotion" | "resCoupon" | "resPromotionApplication" | "resGiftCard" | "resGiftCardTransaction" | "resEvent" | "resEventTask" | "resEventPayment" | "resPartyBooking" | "resCateringJob" | "podDocumentStatus" | "podStatusTransition" | "podSupplierCategory" | "podReturnReason" | "podPaymentMethod" | "podLandedCostType" | "podIncoterm" | "podDebitNoteReason" | "podSupplierContact" | "podSupplierAddress" | "podSupplierBankAccount" | "podRfq" | "podRfqItem" | "podRfqSupplier" | "podSupplierQuotation" | "podSupplierQuotationItem" | "podApprovalWorkflow" | "podApprovalWorkflowStep" | "podApprovalRequest" | "podApprovalAction" | "podSupplierInvoice" | "podSupplierInvoiceItem" | "podSupplierInvoiceMatch" | "podDebitNoteLine" | "podLandedCostVoucher" | "podLandedCostCharge" | "podLandedCostAllocation" | "podSupplierPayment" | "podSupplierPaymentAllocation" | "podAttachment" | "podCustomFieldDefinition" | "podCustomFieldValue" | "podNotification" | "finAccountClass" | "finAccountType" | "finAccount" | "finAccountMapping" | "finFiscalYear" | "finFiscalPeriod" | "finPeriodModuleLock" | "finJournalType" | "finJournalEntry" | "finJournalLine" | "finJournalTemplate" | "finJournalTemplateLine" | "finRecurringJournalSchedule" | "finGlBalance" | "finCustomerLedgerEntry" | "finCustomerLedgerApplication" | "finArReceipt" | "finArReceiptAllocation" | "finCustomerFinancialProfile" | "finDunningLevel" | "finDunningRun" | "finDunningRunEntry" | "finVendorLedgerEntry" | "finVendorLedgerApplication" | "finSupplierFinancialProfile" | "finPaymentRun" | "finPaymentRunLine" | "finCashbox" | "finCashTransaction" | "finFundsTransfer" | "finCashFlowCategory" | "finBankAccount" | "finBankStatement" | "finBankStatementLine" | "finBankReconciliation" | "finBankReconciliationMatch" | "finBankMatchingRule" | "finChequeBook" | "finCheque" | "finTaxAuthority" | "finTaxType" | "finTaxCode" | "finTaxCodeRate" | "finTaxCodeMapping" | "finTaxTransaction" | "finTaxReturn" | "finTaxReturnLine" | "finWhtCertificate" | "finCurrency" | "finExchangeRate" | "finFxRevaluationRun" | "finFxRevaluationLine" | "finCostCenter" | "finProject" | "finAnalysisDimension" | "finAnalysisDimensionValue" | "finJournalLineDimension" | "finBudget" | "finBudgetLine" | "finBudgetRevision" | "finBudgetTransfer" | "finBudgetControlPolicy" | "finAssetCategory" | "finDepreciationMethod" | "finAsset" | "finAssetDepreciationSchedule" | "finDepreciationRun" | "finAssetDepreciationEntry" | "finAssetDisposal" | "finAssetRevaluation" | "finAssetTransfer" | "finCloseTaskTemplate" | "finPeriodCloseRun" | "finPeriodCloseRunTask" | "finYearCloseRun" | "finOpeningBalanceBatch" | "finOpeningBalanceLine" | "finAllocationRule" | "finAllocationRuleTarget" | "finAllocationRun" | "finSettings" | "finPostingRule" | "finPostingRuleLine" | "finPostingQueue" | "finEventCursor" | "finPaymentTerm"
+    modelProps: "profile" | "tenantAccount" | "tenantUser" | "role" | "permission" | "rolePermission" | "tenantUserRole" | "tenantUserPermission" | "user_invitations" | "auditLog" | "preferenceProfile" | "tenantRegistrationRequest" | "module" | "tenantModule" | "tenantScreen" | "screen" | "screenAction" | "documentSequence" | "brand" | "productCategory" | "unitOfMeasure" | "uomConversion" | "product" | "productVariant" | "productBarcode" | "productImage" | "productSupplier" | "priceList" | "productPrice" | "bundleComponent" | "attribute" | "attributeOption" | "productAttributeValue" | "productTag" | "productTagLink" | "supplier" | "customer" | "taxRate" | "stockCountSession" | "stockCountLine" | "warehouse" | "warehouseLocation" | "stockBalance" | "inventoryMovement" | "costLayer" | "stockAdjustment" | "stockAdjustmentLine" | "ownerActivityOption" | "ownerSubscriptionPlan" | "ownerSubscriptionPlanFeature" | "ownerTenantSubscription" | "stockTransfer" | "stockTransferLine" | "purchaseRequisition" | "purchaseRequisitionLine" | "purchaseOrder" | "purchaseOrderLine" | "goodsReceipt" | "goodsReceiptLine" | "purchaseReturn" | "purchaseReturnLine" | "salesOrder" | "salesOrderLine" | "salesInvoice" | "salesInvoiceLine" | "posSession" | "posSale" | "posSaleLine" | "posPayment" | "salesReturn" | "salesReturnLine" | "financialNote" | "stockReservation" | "lot" | "serialNumber" | "billOfMaterials" | "bomComponent" | "productionOrder" | "productionMaterial" | "productionOutput" | "reorderRule" | "stockSnapshot" | "domainEvent" | "crmProjectionCursor" | "crmCustomerProfile" | "crmCustomerContact" | "crmCustomerAddress" | "crmCustomerRelationship" | "crmCommunicationConsent" | "crmCustomerPreference" | "crmTag" | "crmCustomerTag" | "crmCustomerGroup" | "crmCustomerGroupMember" | "crmCustomFieldDefinition" | "crmCustomFieldValue" | "crmTimelineEntry" | "crmLoyaltySettings" | "crmLoyaltyTier" | "crmLoyaltyAccount" | "crmLoyaltyLedgerEntry" | "crmLoyaltyEarnRule" | "crmCustomerMetrics" | "crmCustomerMetricsMonthly" | "crmSegment" | "crmSegmentMember" | "crmCustomerScore" | "resRestaurant" | "resBranch" | "resBranchMember" | "resBusinessHours" | "resHoliday" | "resDiningArea" | "resTableSection" | "resTable" | "resTableQrCode" | "resFloorStaffAssignment" | "resServiceType" | "resShift" | "resKitchenStation" | "resKitchenPrinter" | "resReceiptTemplate" | "resTaxConfig" | "resServiceChargeRule" | "resDeliverySettings" | "resTakeawaySettings" | "resNumberSequence" | "resRestaurantSettings" | "resBranchSettings" | "resMenu" | "resMenuCategory" | "resMenuItem" | "resMenuItemVariant" | "resMenuItemPrice" | "resModifierGroup" | "resModifier" | "resMenuItemModifierGroup" | "resCombo" | "resComboComponent" | "resMenuItemAllergen" | "resMenuItemTag" | "resMenuAvailability" | "resCrossSell" | "resRecipe" | "resRecipeVersion" | "resRecipeLine" | "resRecipeSubRecipe" | "resRecipeStep" | "resRecipeApproval" | "resOrder" | "resOrderItem" | "resOrderItemModifier" | "resOrderPayment" | "resOrderDiscount" | "resOrderCharge" | "resOrderSplit" | "resOrderTransfer" | "resOrderEvent" | "resVoidReason" | "resCancelReason" | "resReservation" | "resReservationTable" | "resWaitlistEntry" | "resPickup" | "resQrCampaign" | "resDriver" | "resDeliveryZone" | "resDelivery" | "resPromotion" | "resCoupon" | "resPromotionApplication" | "resGiftCard" | "resGiftCardTransaction" | "resEvent" | "resEventTask" | "resEventPayment" | "resPartyBooking" | "resCateringJob" | "podDocumentStatus" | "podStatusTransition" | "podSupplierCategory" | "podReturnReason" | "podPaymentMethod" | "podLandedCostType" | "podIncoterm" | "podDebitNoteReason" | "podSupplierContact" | "podSupplierAddress" | "podSupplierBankAccount" | "podRfq" | "podRfqItem" | "podRfqSupplier" | "podSupplierQuotation" | "podSupplierQuotationItem" | "podApprovalWorkflow" | "podApprovalWorkflowStep" | "podApprovalRequest" | "podApprovalAction" | "podSupplierInvoice" | "podSupplierInvoiceItem" | "podSupplierInvoiceMatch" | "podDebitNoteLine" | "podLandedCostVoucher" | "podLandedCostCharge" | "podLandedCostAllocation" | "podSupplierPayment" | "podSupplierPaymentAllocation" | "podAttachment" | "podCustomFieldDefinition" | "podCustomFieldValue" | "podNotification" | "finAccountClass" | "finAccountType" | "finAccount" | "finAccountMapping" | "finFiscalYear" | "finFiscalPeriod" | "finPeriodModuleLock" | "finJournalType" | "finJournalEntry" | "finJournalLine" | "finJournalTemplate" | "finJournalTemplateLine" | "finRecurringJournalSchedule" | "finGlBalance" | "finCustomerLedgerEntry" | "finCustomerLedgerApplication" | "finArReceipt" | "finArReceiptAllocation" | "finCustomerFinancialProfile" | "finDunningLevel" | "finDunningRun" | "finDunningRunEntry" | "finVendorLedgerEntry" | "finVendorLedgerApplication" | "finSupplierFinancialProfile" | "finPaymentRun" | "finPaymentRunLine" | "finCashbox" | "finCashTransaction" | "finFundsTransfer" | "finCashFlowCategory" | "finBankAccount" | "finBankStatement" | "finBankStatementLine" | "finBankReconciliation" | "finBankReconciliationMatch" | "finBankMatchingRule" | "finChequeBook" | "finCheque" | "finTaxAuthority" | "finTaxType" | "finTaxCode" | "finTaxCodeRate" | "finTaxCodeMapping" | "finTaxTransaction" | "finTaxReturn" | "finTaxReturnLine" | "finWhtCertificate" | "finCurrency" | "finExchangeRate" | "finFxRevaluationRun" | "finFxRevaluationLine" | "finCostCenter" | "finProject" | "finAnalysisDimension" | "finAnalysisDimensionValue" | "finJournalLineDimension" | "finBudget" | "finBudgetLine" | "finBudgetRevision" | "finBudgetTransfer" | "finBudgetControlPolicy" | "finAssetCategory" | "finDepreciationMethod" | "finAsset" | "finAssetDepreciationSchedule" | "finDepreciationRun" | "finAssetDepreciationEntry" | "finAssetDisposal" | "finAssetRevaluation" | "finAssetTransfer" | "finCloseTaskTemplate" | "finPeriodCloseRun" | "finPeriodCloseRunTask" | "finYearCloseRun" | "finOpeningBalanceBatch" | "finOpeningBalanceLine" | "finAllocationRule" | "finAllocationRuleTarget" | "finAllocationRun" | "finSettings" | "finPostingRule" | "finPostingRuleLine" | "finPostingQueue" | "finEventCursor" | "finPaymentTerm"
     txIsolationLevel: TransactionIsolationLevel
   }
   model: {
@@ -3507,6 +3509,154 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
         count: {
           args: Prisma.TaxRateCountArgs<ExtArgs>
           result: runtime.Types.Utils.Optional<Prisma.TaxRateCountAggregateOutputType> | number
+        }
+      }
+    }
+    StockCountSession: {
+      payload: Prisma.$StockCountSessionPayload<ExtArgs>
+      fields: Prisma.StockCountSessionFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.StockCountSessionFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$StockCountSessionPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.StockCountSessionFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$StockCountSessionPayload>
+        }
+        findFirst: {
+          args: Prisma.StockCountSessionFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$StockCountSessionPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.StockCountSessionFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$StockCountSessionPayload>
+        }
+        findMany: {
+          args: Prisma.StockCountSessionFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$StockCountSessionPayload>[]
+        }
+        create: {
+          args: Prisma.StockCountSessionCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$StockCountSessionPayload>
+        }
+        createMany: {
+          args: Prisma.StockCountSessionCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.StockCountSessionCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$StockCountSessionPayload>[]
+        }
+        delete: {
+          args: Prisma.StockCountSessionDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$StockCountSessionPayload>
+        }
+        update: {
+          args: Prisma.StockCountSessionUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$StockCountSessionPayload>
+        }
+        deleteMany: {
+          args: Prisma.StockCountSessionDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.StockCountSessionUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.StockCountSessionUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$StockCountSessionPayload>[]
+        }
+        upsert: {
+          args: Prisma.StockCountSessionUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$StockCountSessionPayload>
+        }
+        aggregate: {
+          args: Prisma.StockCountSessionAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateStockCountSession>
+        }
+        groupBy: {
+          args: Prisma.StockCountSessionGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.StockCountSessionGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.StockCountSessionCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.StockCountSessionCountAggregateOutputType> | number
+        }
+      }
+    }
+    StockCountLine: {
+      payload: Prisma.$StockCountLinePayload<ExtArgs>
+      fields: Prisma.StockCountLineFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.StockCountLineFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$StockCountLinePayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.StockCountLineFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$StockCountLinePayload>
+        }
+        findFirst: {
+          args: Prisma.StockCountLineFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$StockCountLinePayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.StockCountLineFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$StockCountLinePayload>
+        }
+        findMany: {
+          args: Prisma.StockCountLineFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$StockCountLinePayload>[]
+        }
+        create: {
+          args: Prisma.StockCountLineCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$StockCountLinePayload>
+        }
+        createMany: {
+          args: Prisma.StockCountLineCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.StockCountLineCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$StockCountLinePayload>[]
+        }
+        delete: {
+          args: Prisma.StockCountLineDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$StockCountLinePayload>
+        }
+        update: {
+          args: Prisma.StockCountLineUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$StockCountLinePayload>
+        }
+        deleteMany: {
+          args: Prisma.StockCountLineDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.StockCountLineUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.StockCountLineUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$StockCountLinePayload>[]
+        }
+        upsert: {
+          args: Prisma.StockCountLineUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$StockCountLinePayload>
+        }
+        aggregate: {
+          args: Prisma.StockCountLineAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateStockCountLine>
+        }
+        groupBy: {
+          args: Prisma.StockCountLineGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.StockCountLineGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.StockCountLineCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.StockCountLineCountAggregateOutputType> | number
         }
       }
     }
@@ -23267,6 +23417,49 @@ export const TaxRateScalarFieldEnum = {
 export type TaxRateScalarFieldEnum = (typeof TaxRateScalarFieldEnum)[keyof typeof TaxRateScalarFieldEnum]
 
 
+export const StockCountSessionScalarFieldEnum = {
+  id: 'id',
+  tenantId: 'tenantId',
+  documentNumber: 'documentNumber',
+  warehouseId: 'warehouseId',
+  status: 'status',
+  isCycleCount: 'isCycleCount',
+  notes: 'notes',
+  startedAt: 'startedAt',
+  countedAt: 'countedAt',
+  postedAt: 'postedAt',
+  postedAdjustmentId: 'postedAdjustmentId',
+  createdByProfileId: 'createdByProfileId',
+  approvedByProfileId: 'approvedByProfileId',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type StockCountSessionScalarFieldEnum = (typeof StockCountSessionScalarFieldEnum)[keyof typeof StockCountSessionScalarFieldEnum]
+
+
+export const StockCountLineScalarFieldEnum = {
+  id: 'id',
+  tenantId: 'tenantId',
+  sessionId: 'sessionId',
+  lineNo: 'lineNo',
+  productId: 'productId',
+  variantId: 'variantId',
+  locationId: 'locationId',
+  lotId: 'lotId',
+  serialId: 'serialId',
+  uomId: 'uomId',
+  systemQty: 'systemQty',
+  countedQty: 'countedQty',
+  unitCost: 'unitCost',
+  notes: 'notes',
+  countedAt: 'countedAt',
+  createdAt: 'createdAt'
+} as const
+
+export type StockCountLineScalarFieldEnum = (typeof StockCountLineScalarFieldEnum)[keyof typeof StockCountLineScalarFieldEnum]
+
+
 export const WarehouseScalarFieldEnum = {
   id: 'id',
   tenantId: 'tenantId',
@@ -28798,6 +28991,20 @@ export type ListEnumTaxTypeFieldRefInput<$PrismaModel> = FieldRefInputType<$Pris
 
 
 /**
+ * Reference to a field of type 'StockCountStatus'
+ */
+export type EnumStockCountStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'StockCountStatus'>
+    
+
+
+/**
+ * Reference to a field of type 'StockCountStatus[]'
+ */
+export type ListEnumStockCountStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'StockCountStatus[]'>
+    
+
+
+/**
  * Reference to a field of type 'WarehouseType'
  */
 export type EnumWarehouseTypeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'WarehouseType'>
@@ -30105,6 +30312,8 @@ export type GlobalOmitConfig = {
   supplier?: Prisma.SupplierOmit
   customer?: Prisma.CustomerOmit
   taxRate?: Prisma.TaxRateOmit
+  stockCountSession?: Prisma.StockCountSessionOmit
+  stockCountLine?: Prisma.StockCountLineOmit
   warehouse?: Prisma.WarehouseOmit
   warehouseLocation?: Prisma.WarehouseLocationOmit
   stockBalance?: Prisma.StockBalanceOmit

@@ -360,6 +360,17 @@ export const AdjustmentReason = {
 export type AdjustmentReason = (typeof AdjustmentReason)[keyof typeof AdjustmentReason]
 
 
+export const StockCountStatus = {
+  DRAFT: 'DRAFT',
+  COUNTING: 'COUNTING',
+  REVIEW: 'REVIEW',
+  POSTED: 'POSTED',
+  CANCELLED: 'CANCELLED'
+} as const
+
+export type StockCountStatus = (typeof StockCountStatus)[keyof typeof StockCountStatus]
+
+
 export const TransferStatus = {
   DRAFT: 'DRAFT',
   CONFIRMED: 'CONFIRMED',

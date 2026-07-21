@@ -782,6 +782,23 @@ export type EnumTaxTypeWithAggregatesFilter<$PrismaModel = never> = {
   _max?: Prisma.NestedEnumTaxTypeFilter<$PrismaModel>
 }
 
+export type EnumStockCountStatusFilter<$PrismaModel = never> = {
+  equals?: $Enums.StockCountStatus | Prisma.EnumStockCountStatusFieldRefInput<$PrismaModel>
+  in?: $Enums.StockCountStatus[] | Prisma.ListEnumStockCountStatusFieldRefInput<$PrismaModel>
+  notIn?: $Enums.StockCountStatus[] | Prisma.ListEnumStockCountStatusFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumStockCountStatusFilter<$PrismaModel> | $Enums.StockCountStatus
+}
+
+export type EnumStockCountStatusWithAggregatesFilter<$PrismaModel = never> = {
+  equals?: $Enums.StockCountStatus | Prisma.EnumStockCountStatusFieldRefInput<$PrismaModel>
+  in?: $Enums.StockCountStatus[] | Prisma.ListEnumStockCountStatusFieldRefInput<$PrismaModel>
+  notIn?: $Enums.StockCountStatus[] | Prisma.ListEnumStockCountStatusFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumStockCountStatusWithAggregatesFilter<$PrismaModel> | $Enums.StockCountStatus
+  _count?: Prisma.NestedIntFilter<$PrismaModel>
+  _min?: Prisma.NestedEnumStockCountStatusFilter<$PrismaModel>
+  _max?: Prisma.NestedEnumStockCountStatusFilter<$PrismaModel>
+}
+
 export type EnumWarehouseTypeFilter<$PrismaModel = never> = {
   equals?: $Enums.WarehouseType | Prisma.EnumWarehouseTypeFieldRefInput<$PrismaModel>
   in?: $Enums.WarehouseType[] | Prisma.ListEnumWarehouseTypeFieldRefInput<$PrismaModel>
@@ -2975,6 +2992,23 @@ export type NestedEnumTaxTypeWithAggregatesFilter<$PrismaModel = never> = {
   _count?: Prisma.NestedIntFilter<$PrismaModel>
   _min?: Prisma.NestedEnumTaxTypeFilter<$PrismaModel>
   _max?: Prisma.NestedEnumTaxTypeFilter<$PrismaModel>
+}
+
+export type NestedEnumStockCountStatusFilter<$PrismaModel = never> = {
+  equals?: $Enums.StockCountStatus | Prisma.EnumStockCountStatusFieldRefInput<$PrismaModel>
+  in?: $Enums.StockCountStatus[] | Prisma.ListEnumStockCountStatusFieldRefInput<$PrismaModel>
+  notIn?: $Enums.StockCountStatus[] | Prisma.ListEnumStockCountStatusFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumStockCountStatusFilter<$PrismaModel> | $Enums.StockCountStatus
+}
+
+export type NestedEnumStockCountStatusWithAggregatesFilter<$PrismaModel = never> = {
+  equals?: $Enums.StockCountStatus | Prisma.EnumStockCountStatusFieldRefInput<$PrismaModel>
+  in?: $Enums.StockCountStatus[] | Prisma.ListEnumStockCountStatusFieldRefInput<$PrismaModel>
+  notIn?: $Enums.StockCountStatus[] | Prisma.ListEnumStockCountStatusFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumStockCountStatusWithAggregatesFilter<$PrismaModel> | $Enums.StockCountStatus
+  _count?: Prisma.NestedIntFilter<$PrismaModel>
+  _min?: Prisma.NestedEnumStockCountStatusFilter<$PrismaModel>
+  _max?: Prisma.NestedEnumStockCountStatusFilter<$PrismaModel>
 }
 
 export type NestedEnumWarehouseTypeFilter<$PrismaModel = never> = {

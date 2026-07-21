@@ -193,6 +193,8 @@ model TenantAccount {
   stockAdjustmentLines          StockAdjustmentLine[]
   stockTransfers                StockTransfer[]
   stockTransferLines            StockTransferLine[]
+  stockCountSessions            StockCountSession[]
+  stockCountLines               StockCountLine[]
   purchaseRequisitions          PurchaseRequisition[]
   purchaseRequisitionLines      PurchaseRequisitionLine[]
   purchaseOrders                PurchaseOrder[]
@@ -1505,6 +1507,68 @@ enum AdjustmentReason {
   REVALUATION @map("revaluation")
 
   @@map("AdjustmentReason")
+}
+
+enum StockCountStatus {
+  DRAFT     @map("draft")
+  COUNTING  @map("counting")
+  REVIEW    @map("review")
+  POSTED    @map("posted")
+  CANCELLED @map("cancelled")
+
+  @@map("StockCountStatus")
+}
+
+// Physical / cycle count sessions. A session snapshots system quantities,
+// collects counted quantities, then on approval delegates the variance to the
+// existing stock-adjustment service rather than posting movements itself.
+model StockCountSession {
+  id                  String            @id @default(uuid()) @db.Uuid
+  tenantId            String            @map("tenant_id") @db.Uuid
+  documentNumber      String            @map("document_number")
+  warehouseId         String            @map("warehouse_id") @db.Uuid
+  status              StockCountStatus  @default(DRAFT)
+  isCycleCount        Boolean           @default(false) @map("is_cycle_count")
+  notes               String?
+  startedAt           DateTime?         @map("started_at")
+  countedAt           DateTime?         @map("counted_at")
+  postedAt            DateTime?         @map("posted_at")
+  postedAdjustmentId  String?           @map("posted_adjustment_id") @db.Uuid
+  createdByProfileId  String?           @map("created_by_profile_id") @db.Uuid
+  approvedByProfileId String?           @map("approved_by_profile_id") @db.Uuid
+  createdAt           DateTime          @default(now()) @map("created_at")
+  updatedAt           DateTime          @updatedAt @map("updated_at")
+  tenant              TenantAccount     @relation(fields: [tenantId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  lines               StockCountLine[]
+
+  @@unique([tenantId, documentNumber], map: "stock_count_sessions_document_number_key")
+  @@index([tenantId, status], map: "stock_count_sessions_status_idx")
+  @@index([tenantId, warehouseId], map: "stock_count_sessions_warehouse_idx")
+  @@map("stock_count_sessions")
+}
+
+model StockCountLine {
+  id          String            @id @default(uuid()) @db.Uuid
+  tenantId    String            @map("tenant_id") @db.Uuid
+  sessionId   String            @map("session_id") @db.Uuid
+  lineNo      Int               @map("line_no")
+  productId   String            @map("product_id") @db.Uuid
+  variantId   String?           @map("variant_id") @db.Uuid
+  locationId  String            @map("location_id") @db.Uuid
+  lotId       String?           @map("lot_id") @db.Uuid
+  serialId    String?           @map("serial_id") @db.Uuid
+  uomId       String            @map("uom_id") @db.Uuid
+  systemQty   Decimal           @default(0) @map("system_qty") @db.Decimal(18, 4)
+  countedQty  Decimal?          @map("counted_qty") @db.Decimal(18, 4)
+  unitCost    Decimal?          @map("unit_cost") @db.Decimal(19, 6)
+  notes       String?
+  countedAt   DateTime?         @map("counted_at")
+  createdAt   DateTime          @default(now()) @map("created_at")
+  tenant      TenantAccount     @relation(fields: [tenantId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  session     StockCountSession @relation(fields: [sessionId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+
+  @@index([tenantId, sessionId], map: "stock_count_lines_session_idx")
+  @@map("stock_count_lines")
 }
 
 // --- Phase 2: warehousing ---------------------------------------------------

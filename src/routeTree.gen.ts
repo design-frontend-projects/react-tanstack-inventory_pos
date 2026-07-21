@@ -52,14 +52,23 @@ import { Route as AppRestaurantCateringRouteImport } from './routes/_app/restaur
 import { Route as AppRestaurantAnalyticsRouteImport } from './routes/_app/restaurant/analytics'
 import { Route as AppPurchaseSuppliersRouteImport } from './routes/_app/purchase/suppliers'
 import { Route as AppPurchaseRfqsRouteImport } from './routes/_app/purchase/rfqs'
+import { Route as AppPurchaseReturnsRouteImport } from './routes/_app/purchase/returns'
+import { Route as AppPurchaseRequisitionsRouteImport } from './routes/_app/purchase/requisitions'
+import { Route as AppPurchaseReceiptsRouteImport } from './routes/_app/purchase/receipts'
 import { Route as AppPurchaseQuotationsRouteImport } from './routes/_app/purchase/quotations'
 import { Route as AppPurchasePaymentsRouteImport } from './routes/_app/purchase/payments'
+import { Route as AppPurchaseOrdersRouteImport } from './routes/_app/purchase/orders'
 import { Route as AppPurchaseInvoicesRouteImport } from './routes/_app/purchase/invoices'
 import { Route as AppPurchaseApprovalsRouteImport } from './routes/_app/purchase/approvals'
 import { Route as AppPosReturnsRouteImport } from './routes/_app/pos/returns'
 import { Route as AppPosOrdersRouteImport } from './routes/_app/pos/orders'
+import { Route as AppInventoryTransfersRouteImport } from './routes/_app/inventory/transfers'
 import { Route as AppInventoryStockRouteImport } from './routes/_app/inventory/stock'
+import { Route as AppInventoryReportsRouteImport } from './routes/_app/inventory/reports'
+import { Route as AppInventoryMovementsRouteImport } from './routes/_app/inventory/movements'
+import { Route as AppInventoryCountsRouteImport } from './routes/_app/inventory/counts'
 import { Route as AppInventoryCatalogRouteImport } from './routes/_app/inventory/catalog'
+import { Route as AppInventoryAdjustmentsRouteImport } from './routes/_app/inventory/adjustments'
 import { Route as AppCrmSegmentsRouteImport } from './routes/_app/crm/segments'
 import { Route as AppCrmLoyaltyRouteImport } from './routes/_app/crm/loyalty'
 import { Route as AppCrmCustomersRouteImport } from './routes/_app/crm/customers'
@@ -282,6 +291,21 @@ const AppPurchaseRfqsRoute = AppPurchaseRfqsRouteImport.update({
   path: '/purchase/rfqs',
   getParentRoute: () => AppRoute,
 } as any)
+const AppPurchaseReturnsRoute = AppPurchaseReturnsRouteImport.update({
+  id: '/purchase/returns',
+  path: '/purchase/returns',
+  getParentRoute: () => AppRoute,
+} as any)
+const AppPurchaseRequisitionsRoute = AppPurchaseRequisitionsRouteImport.update({
+  id: '/purchase/requisitions',
+  path: '/purchase/requisitions',
+  getParentRoute: () => AppRoute,
+} as any)
+const AppPurchaseReceiptsRoute = AppPurchaseReceiptsRouteImport.update({
+  id: '/purchase/receipts',
+  path: '/purchase/receipts',
+  getParentRoute: () => AppRoute,
+} as any)
 const AppPurchaseQuotationsRoute = AppPurchaseQuotationsRouteImport.update({
   id: '/purchase/quotations',
   path: '/purchase/quotations',
@@ -290,6 +314,11 @@ const AppPurchaseQuotationsRoute = AppPurchaseQuotationsRouteImport.update({
 const AppPurchasePaymentsRoute = AppPurchasePaymentsRouteImport.update({
   id: '/purchase/payments',
   path: '/purchase/payments',
+  getParentRoute: () => AppRoute,
+} as any)
+const AppPurchaseOrdersRoute = AppPurchaseOrdersRouteImport.update({
+  id: '/purchase/orders',
+  path: '/purchase/orders',
   getParentRoute: () => AppRoute,
 } as any)
 const AppPurchaseInvoicesRoute = AppPurchaseInvoicesRouteImport.update({
@@ -312,14 +341,39 @@ const AppPosOrdersRoute = AppPosOrdersRouteImport.update({
   path: '/pos/orders',
   getParentRoute: () => AppRoute,
 } as any)
+const AppInventoryTransfersRoute = AppInventoryTransfersRouteImport.update({
+  id: '/inventory/transfers',
+  path: '/inventory/transfers',
+  getParentRoute: () => AppRoute,
+} as any)
 const AppInventoryStockRoute = AppInventoryStockRouteImport.update({
   id: '/inventory/stock',
   path: '/inventory/stock',
   getParentRoute: () => AppRoute,
 } as any)
+const AppInventoryReportsRoute = AppInventoryReportsRouteImport.update({
+  id: '/inventory/reports',
+  path: '/inventory/reports',
+  getParentRoute: () => AppRoute,
+} as any)
+const AppInventoryMovementsRoute = AppInventoryMovementsRouteImport.update({
+  id: '/inventory/movements',
+  path: '/inventory/movements',
+  getParentRoute: () => AppRoute,
+} as any)
+const AppInventoryCountsRoute = AppInventoryCountsRouteImport.update({
+  id: '/inventory/counts',
+  path: '/inventory/counts',
+  getParentRoute: () => AppRoute,
+} as any)
 const AppInventoryCatalogRoute = AppInventoryCatalogRouteImport.update({
   id: '/inventory/catalog',
   path: '/inventory/catalog',
+  getParentRoute: () => AppRoute,
+} as any)
+const AppInventoryAdjustmentsRoute = AppInventoryAdjustmentsRouteImport.update({
+  id: '/inventory/adjustments',
+  path: '/inventory/adjustments',
   getParentRoute: () => AppRoute,
 } as any)
 const AppCrmSegmentsRoute = AppCrmSegmentsRouteImport.update({
@@ -371,14 +425,23 @@ export interface FileRoutesByFullPath {
   '/crm/customers': typeof AppCrmCustomersRoute
   '/crm/loyalty': typeof AppCrmLoyaltyRoute
   '/crm/segments': typeof AppCrmSegmentsRoute
+  '/inventory/adjustments': typeof AppInventoryAdjustmentsRoute
   '/inventory/catalog': typeof AppInventoryCatalogRoute
+  '/inventory/counts': typeof AppInventoryCountsRoute
+  '/inventory/movements': typeof AppInventoryMovementsRoute
+  '/inventory/reports': typeof AppInventoryReportsRoute
   '/inventory/stock': typeof AppInventoryStockRoute
+  '/inventory/transfers': typeof AppInventoryTransfersRoute
   '/pos/orders': typeof AppPosOrdersRoute
   '/pos/returns': typeof AppPosReturnsRoute
   '/purchase/approvals': typeof AppPurchaseApprovalsRoute
   '/purchase/invoices': typeof AppPurchaseInvoicesRoute
+  '/purchase/orders': typeof AppPurchaseOrdersRoute
   '/purchase/payments': typeof AppPurchasePaymentsRoute
   '/purchase/quotations': typeof AppPurchaseQuotationsRoute
+  '/purchase/receipts': typeof AppPurchaseReceiptsRoute
+  '/purchase/requisitions': typeof AppPurchaseRequisitionsRoute
+  '/purchase/returns': typeof AppPurchaseReturnsRoute
   '/purchase/rfqs': typeof AppPurchaseRfqsRoute
   '/purchase/suppliers': typeof AppPurchaseSuppliersRoute
   '/restaurant/analytics': typeof AppRestaurantAnalyticsRoute
@@ -428,14 +491,23 @@ export interface FileRoutesByTo {
   '/crm/customers': typeof AppCrmCustomersRoute
   '/crm/loyalty': typeof AppCrmLoyaltyRoute
   '/crm/segments': typeof AppCrmSegmentsRoute
+  '/inventory/adjustments': typeof AppInventoryAdjustmentsRoute
   '/inventory/catalog': typeof AppInventoryCatalogRoute
+  '/inventory/counts': typeof AppInventoryCountsRoute
+  '/inventory/movements': typeof AppInventoryMovementsRoute
+  '/inventory/reports': typeof AppInventoryReportsRoute
   '/inventory/stock': typeof AppInventoryStockRoute
+  '/inventory/transfers': typeof AppInventoryTransfersRoute
   '/pos/orders': typeof AppPosOrdersRoute
   '/pos/returns': typeof AppPosReturnsRoute
   '/purchase/approvals': typeof AppPurchaseApprovalsRoute
   '/purchase/invoices': typeof AppPurchaseInvoicesRoute
+  '/purchase/orders': typeof AppPurchaseOrdersRoute
   '/purchase/payments': typeof AppPurchasePaymentsRoute
   '/purchase/quotations': typeof AppPurchaseQuotationsRoute
+  '/purchase/receipts': typeof AppPurchaseReceiptsRoute
+  '/purchase/requisitions': typeof AppPurchaseRequisitionsRoute
+  '/purchase/returns': typeof AppPurchaseReturnsRoute
   '/purchase/rfqs': typeof AppPurchaseRfqsRoute
   '/purchase/suppliers': typeof AppPurchaseSuppliersRoute
   '/restaurant/analytics': typeof AppRestaurantAnalyticsRoute
@@ -488,14 +560,23 @@ export interface FileRoutesById {
   '/_app/crm/customers': typeof AppCrmCustomersRoute
   '/_app/crm/loyalty': typeof AppCrmLoyaltyRoute
   '/_app/crm/segments': typeof AppCrmSegmentsRoute
+  '/_app/inventory/adjustments': typeof AppInventoryAdjustmentsRoute
   '/_app/inventory/catalog': typeof AppInventoryCatalogRoute
+  '/_app/inventory/counts': typeof AppInventoryCountsRoute
+  '/_app/inventory/movements': typeof AppInventoryMovementsRoute
+  '/_app/inventory/reports': typeof AppInventoryReportsRoute
   '/_app/inventory/stock': typeof AppInventoryStockRoute
+  '/_app/inventory/transfers': typeof AppInventoryTransfersRoute
   '/_app/pos/orders': typeof AppPosOrdersRoute
   '/_app/pos/returns': typeof AppPosReturnsRoute
   '/_app/purchase/approvals': typeof AppPurchaseApprovalsRoute
   '/_app/purchase/invoices': typeof AppPurchaseInvoicesRoute
+  '/_app/purchase/orders': typeof AppPurchaseOrdersRoute
   '/_app/purchase/payments': typeof AppPurchasePaymentsRoute
   '/_app/purchase/quotations': typeof AppPurchaseQuotationsRoute
+  '/_app/purchase/receipts': typeof AppPurchaseReceiptsRoute
+  '/_app/purchase/requisitions': typeof AppPurchaseRequisitionsRoute
+  '/_app/purchase/returns': typeof AppPurchaseReturnsRoute
   '/_app/purchase/rfqs': typeof AppPurchaseRfqsRoute
   '/_app/purchase/suppliers': typeof AppPurchaseSuppliersRoute
   '/_app/restaurant/analytics': typeof AppRestaurantAnalyticsRoute
@@ -547,14 +628,23 @@ export interface FileRouteTypes {
     | '/crm/customers'
     | '/crm/loyalty'
     | '/crm/segments'
+    | '/inventory/adjustments'
     | '/inventory/catalog'
+    | '/inventory/counts'
+    | '/inventory/movements'
+    | '/inventory/reports'
     | '/inventory/stock'
+    | '/inventory/transfers'
     | '/pos/orders'
     | '/pos/returns'
     | '/purchase/approvals'
     | '/purchase/invoices'
+    | '/purchase/orders'
     | '/purchase/payments'
     | '/purchase/quotations'
+    | '/purchase/receipts'
+    | '/purchase/requisitions'
+    | '/purchase/returns'
     | '/purchase/rfqs'
     | '/purchase/suppliers'
     | '/restaurant/analytics'
@@ -604,14 +694,23 @@ export interface FileRouteTypes {
     | '/crm/customers'
     | '/crm/loyalty'
     | '/crm/segments'
+    | '/inventory/adjustments'
     | '/inventory/catalog'
+    | '/inventory/counts'
+    | '/inventory/movements'
+    | '/inventory/reports'
     | '/inventory/stock'
+    | '/inventory/transfers'
     | '/pos/orders'
     | '/pos/returns'
     | '/purchase/approvals'
     | '/purchase/invoices'
+    | '/purchase/orders'
     | '/purchase/payments'
     | '/purchase/quotations'
+    | '/purchase/receipts'
+    | '/purchase/requisitions'
+    | '/purchase/returns'
     | '/purchase/rfqs'
     | '/purchase/suppliers'
     | '/restaurant/analytics'
@@ -663,14 +762,23 @@ export interface FileRouteTypes {
     | '/_app/crm/customers'
     | '/_app/crm/loyalty'
     | '/_app/crm/segments'
+    | '/_app/inventory/adjustments'
     | '/_app/inventory/catalog'
+    | '/_app/inventory/counts'
+    | '/_app/inventory/movements'
+    | '/_app/inventory/reports'
     | '/_app/inventory/stock'
+    | '/_app/inventory/transfers'
     | '/_app/pos/orders'
     | '/_app/pos/returns'
     | '/_app/purchase/approvals'
     | '/_app/purchase/invoices'
+    | '/_app/purchase/orders'
     | '/_app/purchase/payments'
     | '/_app/purchase/quotations'
+    | '/_app/purchase/receipts'
+    | '/_app/purchase/requisitions'
+    | '/_app/purchase/returns'
     | '/_app/purchase/rfqs'
     | '/_app/purchase/suppliers'
     | '/_app/restaurant/analytics'
@@ -1015,6 +1123,27 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AppPurchaseRfqsRouteImport
       parentRoute: typeof AppRoute
     }
+    '/_app/purchase/returns': {
+      id: '/_app/purchase/returns'
+      path: '/purchase/returns'
+      fullPath: '/purchase/returns'
+      preLoaderRoute: typeof AppPurchaseReturnsRouteImport
+      parentRoute: typeof AppRoute
+    }
+    '/_app/purchase/requisitions': {
+      id: '/_app/purchase/requisitions'
+      path: '/purchase/requisitions'
+      fullPath: '/purchase/requisitions'
+      preLoaderRoute: typeof AppPurchaseRequisitionsRouteImport
+      parentRoute: typeof AppRoute
+    }
+    '/_app/purchase/receipts': {
+      id: '/_app/purchase/receipts'
+      path: '/purchase/receipts'
+      fullPath: '/purchase/receipts'
+      preLoaderRoute: typeof AppPurchaseReceiptsRouteImport
+      parentRoute: typeof AppRoute
+    }
     '/_app/purchase/quotations': {
       id: '/_app/purchase/quotations'
       path: '/purchase/quotations'
@@ -1027,6 +1156,13 @@ declare module '@tanstack/react-router' {
       path: '/purchase/payments'
       fullPath: '/purchase/payments'
       preLoaderRoute: typeof AppPurchasePaymentsRouteImport
+      parentRoute: typeof AppRoute
+    }
+    '/_app/purchase/orders': {
+      id: '/_app/purchase/orders'
+      path: '/purchase/orders'
+      fullPath: '/purchase/orders'
+      preLoaderRoute: typeof AppPurchaseOrdersRouteImport
       parentRoute: typeof AppRoute
     }
     '/_app/purchase/invoices': {
@@ -1057,6 +1193,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AppPosOrdersRouteImport
       parentRoute: typeof AppRoute
     }
+    '/_app/inventory/transfers': {
+      id: '/_app/inventory/transfers'
+      path: '/inventory/transfers'
+      fullPath: '/inventory/transfers'
+      preLoaderRoute: typeof AppInventoryTransfersRouteImport
+      parentRoute: typeof AppRoute
+    }
     '/_app/inventory/stock': {
       id: '/_app/inventory/stock'
       path: '/inventory/stock'
@@ -1064,11 +1207,39 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AppInventoryStockRouteImport
       parentRoute: typeof AppRoute
     }
+    '/_app/inventory/reports': {
+      id: '/_app/inventory/reports'
+      path: '/inventory/reports'
+      fullPath: '/inventory/reports'
+      preLoaderRoute: typeof AppInventoryReportsRouteImport
+      parentRoute: typeof AppRoute
+    }
+    '/_app/inventory/movements': {
+      id: '/_app/inventory/movements'
+      path: '/inventory/movements'
+      fullPath: '/inventory/movements'
+      preLoaderRoute: typeof AppInventoryMovementsRouteImport
+      parentRoute: typeof AppRoute
+    }
+    '/_app/inventory/counts': {
+      id: '/_app/inventory/counts'
+      path: '/inventory/counts'
+      fullPath: '/inventory/counts'
+      preLoaderRoute: typeof AppInventoryCountsRouteImport
+      parentRoute: typeof AppRoute
+    }
     '/_app/inventory/catalog': {
       id: '/_app/inventory/catalog'
       path: '/inventory/catalog'
       fullPath: '/inventory/catalog'
       preLoaderRoute: typeof AppInventoryCatalogRouteImport
+      parentRoute: typeof AppRoute
+    }
+    '/_app/inventory/adjustments': {
+      id: '/_app/inventory/adjustments'
+      path: '/inventory/adjustments'
+      fullPath: '/inventory/adjustments'
+      preLoaderRoute: typeof AppInventoryAdjustmentsRouteImport
       parentRoute: typeof AppRoute
     }
     '/_app/crm/segments': {
@@ -1123,14 +1294,23 @@ interface AppRouteChildren {
   AppCrmCustomersRoute: typeof AppCrmCustomersRoute
   AppCrmLoyaltyRoute: typeof AppCrmLoyaltyRoute
   AppCrmSegmentsRoute: typeof AppCrmSegmentsRoute
+  AppInventoryAdjustmentsRoute: typeof AppInventoryAdjustmentsRoute
   AppInventoryCatalogRoute: typeof AppInventoryCatalogRoute
+  AppInventoryCountsRoute: typeof AppInventoryCountsRoute
+  AppInventoryMovementsRoute: typeof AppInventoryMovementsRoute
+  AppInventoryReportsRoute: typeof AppInventoryReportsRoute
   AppInventoryStockRoute: typeof AppInventoryStockRoute
+  AppInventoryTransfersRoute: typeof AppInventoryTransfersRoute
   AppPosOrdersRoute: typeof AppPosOrdersRoute
   AppPosReturnsRoute: typeof AppPosReturnsRoute
   AppPurchaseApprovalsRoute: typeof AppPurchaseApprovalsRoute
   AppPurchaseInvoicesRoute: typeof AppPurchaseInvoicesRoute
+  AppPurchaseOrdersRoute: typeof AppPurchaseOrdersRoute
   AppPurchasePaymentsRoute: typeof AppPurchasePaymentsRoute
   AppPurchaseQuotationsRoute: typeof AppPurchaseQuotationsRoute
+  AppPurchaseReceiptsRoute: typeof AppPurchaseReceiptsRoute
+  AppPurchaseRequisitionsRoute: typeof AppPurchaseRequisitionsRoute
+  AppPurchaseReturnsRoute: typeof AppPurchaseReturnsRoute
   AppPurchaseRfqsRoute: typeof AppPurchaseRfqsRoute
   AppPurchaseSuppliersRoute: typeof AppPurchaseSuppliersRoute
   AppRestaurantAnalyticsRoute: typeof AppRestaurantAnalyticsRoute
@@ -1172,14 +1352,23 @@ const AppRouteChildren: AppRouteChildren = {
   AppCrmCustomersRoute: AppCrmCustomersRoute,
   AppCrmLoyaltyRoute: AppCrmLoyaltyRoute,
   AppCrmSegmentsRoute: AppCrmSegmentsRoute,
+  AppInventoryAdjustmentsRoute: AppInventoryAdjustmentsRoute,
   AppInventoryCatalogRoute: AppInventoryCatalogRoute,
+  AppInventoryCountsRoute: AppInventoryCountsRoute,
+  AppInventoryMovementsRoute: AppInventoryMovementsRoute,
+  AppInventoryReportsRoute: AppInventoryReportsRoute,
   AppInventoryStockRoute: AppInventoryStockRoute,
+  AppInventoryTransfersRoute: AppInventoryTransfersRoute,
   AppPosOrdersRoute: AppPosOrdersRoute,
   AppPosReturnsRoute: AppPosReturnsRoute,
   AppPurchaseApprovalsRoute: AppPurchaseApprovalsRoute,
   AppPurchaseInvoicesRoute: AppPurchaseInvoicesRoute,
+  AppPurchaseOrdersRoute: AppPurchaseOrdersRoute,
   AppPurchasePaymentsRoute: AppPurchasePaymentsRoute,
   AppPurchaseQuotationsRoute: AppPurchaseQuotationsRoute,
+  AppPurchaseReceiptsRoute: AppPurchaseReceiptsRoute,
+  AppPurchaseRequisitionsRoute: AppPurchaseRequisitionsRoute,
+  AppPurchaseReturnsRoute: AppPurchaseReturnsRoute,
   AppPurchaseRfqsRoute: AppPurchaseRfqsRoute,
   AppPurchaseSuppliersRoute: AppPurchaseSuppliersRoute,
   AppRestaurantAnalyticsRoute: AppRestaurantAnalyticsRoute,
@@ -1247,12 +1436,3 @@ const rootRouteChildren: RootRouteChildren = {
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
   ._addFileTypes<FileRouteTypes>()
-
-import type { getRouter } from './router.tsx'
-import type { createStart } from '@tanstack/react-start'
-declare module '@tanstack/react-start' {
-  interface Register {
-    ssr: true
-    router: Awaited<ReturnType<typeof getRouter>>
-  }
-}

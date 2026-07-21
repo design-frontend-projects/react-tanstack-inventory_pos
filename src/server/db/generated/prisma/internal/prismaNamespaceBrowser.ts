@@ -89,6 +89,8 @@ export const ModelName = {
   Supplier: 'Supplier',
   Customer: 'Customer',
   TaxRate: 'TaxRate',
+  StockCountSession: 'StockCountSession',
+  StockCountLine: 'StockCountLine',
   Warehouse: 'Warehouse',
   WarehouseLocation: 'WarehouseLocation',
   StockBalance: 'StockBalance',
@@ -1062,6 +1064,49 @@ export const TaxRateScalarFieldEnum = {
 } as const
 
 export type TaxRateScalarFieldEnum = (typeof TaxRateScalarFieldEnum)[keyof typeof TaxRateScalarFieldEnum]
+
+
+export const StockCountSessionScalarFieldEnum = {
+  id: 'id',
+  tenantId: 'tenantId',
+  documentNumber: 'documentNumber',
+  warehouseId: 'warehouseId',
+  status: 'status',
+  isCycleCount: 'isCycleCount',
+  notes: 'notes',
+  startedAt: 'startedAt',
+  countedAt: 'countedAt',
+  postedAt: 'postedAt',
+  postedAdjustmentId: 'postedAdjustmentId',
+  createdByProfileId: 'createdByProfileId',
+  approvedByProfileId: 'approvedByProfileId',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type StockCountSessionScalarFieldEnum = (typeof StockCountSessionScalarFieldEnum)[keyof typeof StockCountSessionScalarFieldEnum]
+
+
+export const StockCountLineScalarFieldEnum = {
+  id: 'id',
+  tenantId: 'tenantId',
+  sessionId: 'sessionId',
+  lineNo: 'lineNo',
+  productId: 'productId',
+  variantId: 'variantId',
+  locationId: 'locationId',
+  lotId: 'lotId',
+  serialId: 'serialId',
+  uomId: 'uomId',
+  systemQty: 'systemQty',
+  countedQty: 'countedQty',
+  unitCost: 'unitCost',
+  notes: 'notes',
+  countedAt: 'countedAt',
+  createdAt: 'createdAt'
+} as const
+
+export type StockCountLineScalarFieldEnum = (typeof StockCountLineScalarFieldEnum)[keyof typeof StockCountLineScalarFieldEnum]
 
 
 export const WarehouseScalarFieldEnum = {

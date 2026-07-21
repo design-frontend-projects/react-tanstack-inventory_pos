@@ -1,5 +1,6 @@
 import type { LucideIcon } from 'lucide-react'
 import {
+  ArrowLeftRight,
   Award,
   BadgePercent,
   PartyPopper,
@@ -8,10 +9,15 @@ import {
   Bike,
   Boxes,
   CalendarClock,
+  ClipboardCheck,
   Gift,
   ChartSpline,
   ChefHat,
   ClipboardList,
+  PackageCheck,
+  ShoppingCart,
+  SlidersHorizontal,
+  Truck,
   HeartHandshake,
   LayoutDashboard,
   ListOrdered,
@@ -32,7 +38,23 @@ export type AppNavRouteTo =
   | '/inventory'
   | '/inventory/catalog'
   | '/inventory/stock'
+  | '/inventory/movements'
+  | '/inventory/adjustments'
+  | '/inventory/transfers'
+  | '/inventory/counts'
+  | '/inventory/reports'
   | '/outlets'
+  | '/purchase'
+  | '/purchase/requisitions'
+  | '/purchase/orders'
+  | '/purchase/receipts'
+  | '/purchase/returns'
+  | '/purchase/suppliers'
+  | '/purchase/rfqs'
+  | '/purchase/quotations'
+  | '/purchase/approvals'
+  | '/purchase/invoices'
+  | '/purchase/payments'
   | '/restaurant/dashboard'
   | '/restaurant/kitchen'
   | '/restaurant/menu'
@@ -69,6 +91,7 @@ export type AppNavRouteTo =
 export type AppNavSectionId =
   | 'overview'
   | 'inventory'
+  | 'purchasing'
   | 'restaurant'
   | 'pos'
   | 'crm'
@@ -171,6 +194,177 @@ export const appNavSections: AppNavSection[] = [
         fallbackTitle: 'Stock Ledger',
         keywords: ['stock ledger', 'movements', 'thresholds', 'balance'],
         permissions: ['inventory.view_stock', 'inventory.view_movements'],
+      },
+      {
+        id: 'inventory-movements',
+        sectionId: 'inventory',
+        to: '/inventory/movements',
+        icon: ArrowLeftRight,
+        titleKey: 'nav.inventoryMovements',
+        fallbackTitle: 'Movements',
+        keywords: ['movements', 'ledger', 'audit', 'transactions', 'history'],
+        permissions: ['inventory.view_movements'],
+      },
+      {
+        id: 'inventory-adjustments',
+        sectionId: 'inventory',
+        to: '/inventory/adjustments',
+        icon: SlidersHorizontal,
+        titleKey: 'nav.inventoryAdjustments',
+        fallbackTitle: 'Adjustments',
+        keywords: ['adjustments', 'damage', 'expiry', 'write off', 'shrinkage'],
+        permissions: ['adjustment.view'],
+      },
+      {
+        id: 'inventory-transfers',
+        sectionId: 'inventory',
+        to: '/inventory/transfers',
+        icon: Truck,
+        titleKey: 'nav.inventoryTransfers',
+        fallbackTitle: 'Transfers',
+        keywords: ['transfers', 'ship', 'receive', 'in transit', 'warehouse'],
+        permissions: ['transfer.view'],
+      },
+      {
+        id: 'inventory-counts',
+        sectionId: 'inventory',
+        to: '/inventory/counts',
+        icon: ClipboardCheck,
+        titleKey: 'nav.inventoryCounts',
+        fallbackTitle: 'Stock Counts',
+        keywords: ['stock count', 'cycle count', 'variance', 'physical count'],
+        permissions: ['inventory.count_view'],
+      },
+      {
+        id: 'inventory-reports',
+        sectionId: 'inventory',
+        to: '/inventory/reports',
+        icon: ChartSpline,
+        titleKey: 'nav.inventoryReports',
+        fallbackTitle: 'Reports',
+        keywords: ['reports', 'valuation', 'reorder', 'analytics', 'aging'],
+        permissions: ['inventory.view_valuation', 'inventory.view_stock'],
+      },
+    ],
+  },
+  {
+    id: 'purchasing',
+    icon: ShoppingCart,
+    titleKey: 'nav.purchase',
+    fallbackTitle: 'Purchasing',
+    rootTo: '/purchase',
+    keywords: ['purchasing', 'procurement', 'suppliers', 'orders', 'invoices'],
+    permissions: ['purchase.po_view', 'purchase.requisition_view', 'supplier.view'],
+    items: [
+      {
+        id: 'purchase-overview',
+        sectionId: 'purchasing',
+        to: '/purchase',
+        icon: PackageSearch,
+        titleKey: 'nav.purchaseOverview',
+        fallbackTitle: 'Overview',
+        keywords: ['purchasing overview', 'spend', 'ap aging', 'exceptions'],
+        permissions: ['purchase.po_view', 'purchase.invoice_view'],
+      },
+      {
+        id: 'purchase-requisitions',
+        sectionId: 'purchasing',
+        to: '/purchase/requisitions',
+        icon: ClipboardList,
+        titleKey: 'nav.purchaseRequisitions',
+        fallbackTitle: 'Requisitions',
+        keywords: ['requisitions', 'pr', 'requests', 'approval'],
+        permissions: ['purchase.requisition_view'],
+      },
+      {
+        id: 'purchase-orders',
+        sectionId: 'purchasing',
+        to: '/purchase/orders',
+        icon: ShoppingCart,
+        titleKey: 'nav.purchaseOrders',
+        fallbackTitle: 'Purchase Orders',
+        keywords: ['purchase orders', 'po', 'buying', 'supplier orders'],
+        permissions: ['purchase.po_view'],
+      },
+      {
+        id: 'purchase-receipts',
+        sectionId: 'purchasing',
+        to: '/purchase/receipts',
+        icon: PackageCheck,
+        titleKey: 'nav.purchaseReceipts',
+        fallbackTitle: 'Goods Receipts',
+        keywords: ['goods receipt', 'grn', 'receiving', 'inbound'],
+        permissions: ['purchase.po_receive'],
+      },
+      {
+        id: 'purchase-returns',
+        sectionId: 'purchasing',
+        to: '/purchase/returns',
+        icon: RotateCcw,
+        titleKey: 'nav.purchaseReturns',
+        fallbackTitle: 'Purchase Returns',
+        keywords: ['purchase returns', 'debit note', 'supplier return'],
+        permissions: ['purchase.return_manage'],
+      },
+      {
+        id: 'purchase-suppliers',
+        sectionId: 'purchasing',
+        to: '/purchase/suppliers',
+        icon: UsersRound,
+        titleKey: 'nav.purchaseSuppliers',
+        fallbackTitle: 'Suppliers',
+        keywords: ['suppliers', 'vendors', 'contacts', 'crm'],
+        permissions: ['supplier.view'],
+      },
+      {
+        id: 'purchase-rfqs',
+        sectionId: 'purchasing',
+        to: '/purchase/rfqs',
+        icon: ClipboardList,
+        titleKey: 'nav.purchaseRfqs',
+        fallbackTitle: 'RFQs',
+        keywords: ['rfq', 'request for quotation', 'sourcing', 'bids'],
+        permissions: ['purchase.rfq_view'],
+      },
+      {
+        id: 'purchase-quotations',
+        sectionId: 'purchasing',
+        to: '/purchase/quotations',
+        icon: ReceiptText,
+        titleKey: 'nav.purchaseQuotations',
+        fallbackTitle: 'Quotations',
+        keywords: ['quotations', 'quotes', 'comparison', 'award'],
+        permissions: ['purchase.quotation_view'],
+      },
+      {
+        id: 'purchase-approvals',
+        sectionId: 'purchasing',
+        to: '/purchase/approvals',
+        icon: ShieldCheck,
+        titleKey: 'nav.purchaseApprovals',
+        fallbackTitle: 'Approvals',
+        keywords: ['approvals', 'workflow', 'inbox', 'escalation'],
+        permissions: ['purchase.approval_action'],
+      },
+      {
+        id: 'purchase-invoices',
+        sectionId: 'purchasing',
+        to: '/purchase/invoices',
+        icon: ReceiptText,
+        titleKey: 'nav.purchaseInvoices',
+        fallbackTitle: 'Supplier Invoices',
+        keywords: ['invoices', 'ap', 'three way match', 'billing'],
+        permissions: ['purchase.invoice_view'],
+      },
+      {
+        id: 'purchase-payments',
+        sectionId: 'purchasing',
+        to: '/purchase/payments',
+        icon: BadgePercent,
+        titleKey: 'nav.purchasePayments',
+        fallbackTitle: 'Payments',
+        keywords: ['payments', 'settlement', 'remittance', 'ap'],
+        permissions: ['purchase.payment_view'],
       },
     ],
   },

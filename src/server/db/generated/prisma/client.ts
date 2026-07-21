@@ -232,6 +232,16 @@ export type Customer = Prisma.CustomerModel
  */
 export type TaxRate = Prisma.TaxRateModel
 /**
+ * Model StockCountSession
+ * 
+ */
+export type StockCountSession = Prisma.StockCountSessionModel
+/**
+ * Model StockCountLine
+ * 
+ */
+export type StockCountLine = Prisma.StockCountLineModel
+/**
  * Model Warehouse
  * 
  */
