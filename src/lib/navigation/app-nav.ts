@@ -3,18 +3,24 @@ import {
   ArrowLeftRight,
   Award,
   BadgePercent,
+  Banknote,
   PartyPopper,
   UtensilsCrossed,
   BellRing,
   Bike,
   Boxes,
   CalendarClock,
+  TrendingUp,
   ClipboardCheck,
   FolderTree,
   Gift,
   ChartSpline,
   ChefHat,
   ClipboardList,
+  BadgeCheck,
+  Landmark,
+  Layers,
+  Network,
   PackageCheck,
   ShoppingCart,
   SlidersHorizontal,
@@ -89,6 +95,27 @@ export type AppNavRouteTo =
   | '/crm/loyalty'
   | '/crm/segments'
   | '/crm/analytics'
+  | '/hr'
+  | '/hr/organization'
+  | '/hr/departments'
+  | '/hr/positions'
+  | '/hr/job-grades'
+  | '/hr/cost-centers'
+  | '/hr/employees'
+  | '/hr/recruitment'
+  | '/hr/onboarding'
+  | '/hr/attendance'
+  | '/hr/leave'
+  | '/hr/payroll'
+  | '/hr/performance'
+  | '/hr/training'
+  | '/hr/career'
+  | '/hr/workforce'
+  | '/hr/budgeting'
+  | '/hr/self-service'
+  | '/hr/assets'
+  | '/hr/expenses'
+  | '/hr/analytics'
   | '/profile'
   | '/settings/security'
   | '/settings/roles'
@@ -105,6 +132,7 @@ export type AppNavSectionId =
   | 'restaurant'
   | 'pos'
   | 'crm'
+  | 'hr'
   | 'systemAdmin'
 
 export type AppCommandGroup = 'navigation' | 'pages' | 'workspaces'
@@ -334,7 +362,11 @@ export const appNavSections: AppNavSection[] = [
     fallbackTitle: 'Purchasing',
     rootTo: '/purchase',
     keywords: ['purchasing', 'procurement', 'suppliers', 'orders', 'invoices'],
-    permissions: ['purchase.po_view', 'purchase.requisition_view', 'supplier.view'],
+    permissions: [
+      'purchase.po_view',
+      'purchase.requisition_view',
+      'supplier.view',
+    ],
     items: [
       {
         id: 'purchase-overview',
@@ -514,7 +546,14 @@ export const appNavSections: AppNavSection[] = [
         icon: MapPinned,
         titleKey: 'nav.restaurantFloorPlan',
         fallbackTitle: 'Floor Plan',
-        keywords: ['floor plan', 'areas', 'sections', 'tables', 'staff', 'waiters'],
+        keywords: [
+          'floor plan',
+          'areas',
+          'sections',
+          'tables',
+          'staff',
+          'waiters',
+        ],
         permissions: ['res.settings.manage', 'res.floor.manage'],
       },
       {
@@ -725,6 +764,247 @@ export const appNavSections: AppNavSection[] = [
         fallbackTitle: 'Customer Analytics',
         keywords: ['analytics', 'clv', 'rfm', 'churn', 'retention', 'kpis'],
         permissions: ['crm.analytics_view'],
+      },
+    ],
+  },
+  {
+    id: 'hr',
+    icon: UsersRound,
+    titleKey: 'nav.hr',
+    fallbackTitle: 'Human Resources',
+    rootTo: '/hr',
+    keywords: [
+      'hr',
+      'human resources',
+      'hcm',
+      'people',
+      'employees',
+      'payroll',
+    ],
+    permissions: ['hr.analytics_view', 'hr.employee_view', 'hr.org_view'],
+    items: [
+      {
+        id: 'hr-overview',
+        sectionId: 'hr',
+        to: '/hr',
+        icon: ChartSpline,
+        titleKey: 'nav.hr',
+        fallbackTitle: 'HR Overview',
+        keywords: ['hr overview', 'dashboard', 'headcount', 'workforce'],
+        permissions: ['hr.analytics_view'],
+      },
+      {
+        id: 'hr-organization',
+        sectionId: 'hr',
+        to: '/hr/organization',
+        icon: Network,
+        titleKey: 'nav.hrOrganization',
+        fallbackTitle: 'Organization',
+        keywords: [
+          'organization',
+          'org chart',
+          'hierarchy',
+          'companies',
+          'branches',
+        ],
+        permissions: ['hr.org_view'],
+      },
+      {
+        id: 'hr-departments',
+        sectionId: 'hr',
+        to: '/hr/departments',
+        icon: FolderTree,
+        titleKey: 'nav.hrDepartments',
+        fallbackTitle: 'Departments',
+        keywords: ['departments', 'sections', 'divisions', 'units'],
+        permissions: ['hr.org_view'],
+      },
+      {
+        id: 'hr-positions',
+        sectionId: 'hr',
+        to: '/hr/positions',
+        icon: BadgeCheck,
+        titleKey: 'nav.hrPositions',
+        fallbackTitle: 'Positions',
+        keywords: ['positions', 'jobs', 'roles', 'titles'],
+        permissions: ['hr.org_view'],
+      },
+      {
+        id: 'hr-job-grades',
+        sectionId: 'hr',
+        to: '/hr/job-grades',
+        icon: Layers,
+        titleKey: 'nav.hrJobGrades',
+        fallbackTitle: 'Job Grades',
+        keywords: ['job grades', 'salary bands', 'levels', 'pay scale'],
+        permissions: ['hr.org_view'],
+      },
+      {
+        id: 'hr-cost-centers',
+        sectionId: 'hr',
+        to: '/hr/cost-centers',
+        icon: Landmark,
+        titleKey: 'nav.hrCostCenters',
+        fallbackTitle: 'Cost Centers',
+        keywords: ['cost centers', 'budget', 'allocation'],
+        permissions: ['hr.org_view'],
+      },
+      {
+        id: 'hr-employees',
+        sectionId: 'hr',
+        to: '/hr/employees',
+        icon: UsersRound,
+        titleKey: 'nav.hrEmployees',
+        fallbackTitle: 'Employees',
+        keywords: ['employees', 'staff', 'people', 'profiles', 'headcount'],
+        permissions: ['hr.employee_view'],
+      },
+      {
+        id: 'hr-recruitment',
+        sectionId: 'hr',
+        to: '/hr/recruitment',
+        icon: ClipboardList,
+        titleKey: 'nav.hrRecruitment',
+        fallbackTitle: 'Recruitment',
+        keywords: [
+          'recruitment',
+          'ats',
+          'vacancies',
+          'candidates',
+          'interviews',
+          'offers',
+        ],
+        permissions: ['hr.recruitment_view'],
+      },
+      {
+        id: 'hr-onboarding',
+        sectionId: 'hr',
+        to: '/hr/onboarding',
+        icon: ClipboardCheck,
+        titleKey: 'nav.hrOnboarding',
+        fallbackTitle: 'Onboarding',
+        keywords: ['onboarding', 'tasks', 'new hire', 'checklist'],
+        permissions: ['hr.recruitment_view'],
+      },
+      {
+        id: 'hr-attendance',
+        sectionId: 'hr',
+        to: '/hr/attendance',
+        icon: CalendarClock,
+        titleKey: 'nav.hrAttendance',
+        fallbackTitle: 'Time & Attendance',
+        keywords: ['attendance', 'time', 'shifts', 'punches', 'overtime'],
+        permissions: ['hr.attendance_view'],
+      },
+      {
+        id: 'hr-leave',
+        sectionId: 'hr',
+        to: '/hr/leave',
+        icon: PackageCheck,
+        titleKey: 'nav.hrLeave',
+        fallbackTitle: 'Leave',
+        keywords: ['leave', 'time off', 'vacation', 'balances', 'requests'],
+        permissions: ['hr.leave_view'],
+      },
+      {
+        id: 'hr-payroll',
+        sectionId: 'hr',
+        to: '/hr/payroll',
+        icon: Banknote,
+        titleKey: 'nav.hrPayroll',
+        fallbackTitle: 'Payroll',
+        keywords: ['payroll', 'salary', 'payslip', 'runs', 'components'],
+        permissions: ['hr.payroll_view'],
+      },
+      {
+        id: 'hr-performance',
+        sectionId: 'hr',
+        to: '/hr/performance',
+        icon: TrendingUp,
+        titleKey: 'nav.hrPerformance',
+        fallbackTitle: 'Performance',
+        keywords: ['performance', 'goals', 'kpis', 'reviews', 'appraisal'],
+        permissions: ['hr.performance_view'],
+      },
+      {
+        id: 'hr-training',
+        sectionId: 'hr',
+        to: '/hr/training',
+        icon: Award,
+        titleKey: 'nav.hrTraining',
+        fallbackTitle: 'Learning',
+        keywords: ['training', 'learning', 'courses', 'certificates'],
+        permissions: ['hr.training_manage'],
+      },
+      {
+        id: 'hr-career',
+        sectionId: 'hr',
+        to: '/hr/career',
+        icon: BadgeCheck,
+        titleKey: 'nav.hrCareer',
+        fallbackTitle: 'Career',
+        keywords: ['career', 'succession', 'promotions', 'talent'],
+        permissions: ['hr.employee_view'],
+      },
+      {
+        id: 'hr-workforce',
+        sectionId: 'hr',
+        to: '/hr/workforce',
+        icon: Network,
+        titleKey: 'nav.hrWorkforce',
+        fallbackTitle: 'Workforce Planning',
+        keywords: ['workforce', 'planning', 'skills', 'headcount', 'gap'],
+        permissions: ['hr.employee_view'],
+      },
+      {
+        id: 'hr-budgeting',
+        sectionId: 'hr',
+        to: '/hr/budgeting',
+        icon: Landmark,
+        titleKey: 'nav.hrBudgeting',
+        fallbackTitle: 'HR Budgeting',
+        keywords: ['budget', 'salary budget', 'variance', 'actual'],
+        permissions: ['hr.analytics_view'],
+      },
+      {
+        id: 'hr-self-service',
+        sectionId: 'hr',
+        to: '/hr/self-service',
+        icon: BellRing,
+        titleKey: 'nav.hrSelfService',
+        fallbackTitle: 'Self Service',
+        keywords: ['self service', 'ess', 'requests', 'announcements'],
+        permissions: ['hr.employee_view'],
+      },
+      {
+        id: 'hr-assets',
+        sectionId: 'hr',
+        to: '/hr/assets',
+        icon: PackageSearch,
+        titleKey: 'nav.hrAssets',
+        fallbackTitle: 'Assets',
+        keywords: ['assets', 'laptop', 'vehicle', 'accountability'],
+        permissions: ['hr.employee_view'],
+      },
+      {
+        id: 'hr-expenses',
+        sectionId: 'hr',
+        to: '/hr/expenses',
+        icon: ReceiptText,
+        titleKey: 'nav.hrExpenses',
+        fallbackTitle: 'Travel & Expense',
+        keywords: ['expense', 'travel', 'claims', 'reimbursement'],
+        permissions: ['hr.expense_view'],
+      },
+      {
+        id: 'hr-analytics',
+        sectionId: 'hr',
+        to: '/hr/analytics',
+        icon: ChartSpline,
+        titleKey: 'nav.hrAnalytics',
+        fallbackTitle: 'HR Analytics',
+        keywords: ['analytics', 'headcount', 'turnover', 'dashboard'],
+        permissions: ['hr.analytics_view'],
       },
     ],
   },

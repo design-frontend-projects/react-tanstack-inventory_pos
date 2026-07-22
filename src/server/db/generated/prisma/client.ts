@@ -1526,3 +1526,443 @@ export type FinEventCursor = Prisma.FinEventCursorModel
  * 
  */
 export type FinPaymentTerm = Prisma.FinPaymentTermModel
+/**
+ * Model HrCompany
+ * 
+ */
+export type HrCompany = Prisma.HrCompanyModel
+/**
+ * Model HrBranch
+ * 
+ */
+export type HrBranch = Prisma.HrBranchModel
+/**
+ * Model HrBusinessUnit
+ * 
+ */
+export type HrBusinessUnit = Prisma.HrBusinessUnitModel
+/**
+ * Model HrDivision
+ * 
+ */
+export type HrDivision = Prisma.HrDivisionModel
+/**
+ * Model HrDepartment
+ * 
+ */
+export type HrDepartment = Prisma.HrDepartmentModel
+/**
+ * Model HrSection
+ * 
+ */
+export type HrSection = Prisma.HrSectionModel
+/**
+ * Model HrJobGrade
+ * 
+ */
+export type HrJobGrade = Prisma.HrJobGradeModel
+/**
+ * Model HrPosition
+ * 
+ */
+export type HrPosition = Prisma.HrPositionModel
+/**
+ * Model HrCostCenter
+ * 
+ */
+export type HrCostCenter = Prisma.HrCostCenterModel
+/**
+ * Model HrReportingStructure
+ * 
+ */
+export type HrReportingStructure = Prisma.HrReportingStructureModel
+/**
+ * Model HrEmployee
+ * 
+ */
+export type HrEmployee = Prisma.HrEmployeeModel
+/**
+ * Model HrEmployeeContact
+ * 
+ */
+export type HrEmployeeContact = Prisma.HrEmployeeContactModel
+/**
+ * Model HrEmployeeAddress
+ * 
+ */
+export type HrEmployeeAddress = Prisma.HrEmployeeAddressModel
+/**
+ * Model HrEmployeeDocument
+ * 
+ */
+export type HrEmployeeDocument = Prisma.HrEmployeeDocumentModel
+/**
+ * Model HrEmployeeBankAccount
+ * 
+ */
+export type HrEmployeeBankAccount = Prisma.HrEmployeeBankAccountModel
+/**
+ * Model HrEmployeeContract
+ * 
+ */
+export type HrEmployeeContract = Prisma.HrEmployeeContractModel
+/**
+ * Model HrEmployeeHistory
+ * 
+ */
+export type HrEmployeeHistory = Prisma.HrEmployeeHistoryModel
+/**
+ * Model HrEmployeeDependent
+ * 
+ */
+export type HrEmployeeDependent = Prisma.HrEmployeeDependentModel
+/**
+ * Model HrEmployeeEducation
+ * 
+ */
+export type HrEmployeeEducation = Prisma.HrEmployeeEducationModel
+/**
+ * Model HrEmployeeExperience
+ * 
+ */
+export type HrEmployeeExperience = Prisma.HrEmployeeExperienceModel
+/**
+ * Model HrEmployeeCertification
+ * 
+ */
+export type HrEmployeeCertification = Prisma.HrEmployeeCertificationModel
+/**
+ * Model HrEmployeeLanguage
+ * 
+ */
+export type HrEmployeeLanguage = Prisma.HrEmployeeLanguageModel
+/**
+ * Model HrJobOpening
+ * 
+ */
+export type HrJobOpening = Prisma.HrJobOpeningModel
+/**
+ * Model HrCandidate
+ * 
+ */
+export type HrCandidate = Prisma.HrCandidateModel
+/**
+ * Model HrCandidateDocument
+ * 
+ */
+export type HrCandidateDocument = Prisma.HrCandidateDocumentModel
+/**
+ * Model HrInterview
+ * 
+ */
+export type HrInterview = Prisma.HrInterviewModel
+/**
+ * Model HrInterviewFeedback
+ * 
+ */
+export type HrInterviewFeedback = Prisma.HrInterviewFeedbackModel
+/**
+ * Model HrJobOffer
+ * 
+ */
+export type HrJobOffer = Prisma.HrJobOfferModel
+/**
+ * Model HrOfferAcceptance
+ * 
+ */
+export type HrOfferAcceptance = Prisma.HrOfferAcceptanceModel
+/**
+ * Model HrOnboardingTemplate
+ * 
+ */
+export type HrOnboardingTemplate = Prisma.HrOnboardingTemplateModel
+/**
+ * Model HrOnboardingTask
+ * 
+ */
+export type HrOnboardingTask = Prisma.HrOnboardingTaskModel
+/**
+ * Model HrEmployeeOnboarding
+ * 
+ */
+export type HrEmployeeOnboarding = Prisma.HrEmployeeOnboardingModel
+/**
+ * Model HrShiftDefinition
+ * 
+ */
+export type HrShiftDefinition = Prisma.HrShiftDefinitionModel
+/**
+ * Model HrShiftPattern
+ * 
+ */
+export type HrShiftPattern = Prisma.HrShiftPatternModel
+/**
+ * Model HrShiftAssignment
+ * 
+ */
+export type HrShiftAssignment = Prisma.HrShiftAssignmentModel
+/**
+ * Model HrAttendanceLog
+ * 
+ */
+export type HrAttendanceLog = Prisma.HrAttendanceLogModel
+/**
+ * Model HrAttendanceDaily
+ * 
+ */
+export type HrAttendanceDaily = Prisma.HrAttendanceDailyModel
+/**
+ * Model HrTimesheet
+ * 
+ */
+export type HrTimesheet = Prisma.HrTimesheetModel
+/**
+ * Model HrOvertimeRequest
+ * 
+ */
+export type HrOvertimeRequest = Prisma.HrOvertimeRequestModel
+/**
+ * Model HrBreakLog
+ * 
+ */
+export type HrBreakLog = Prisma.HrBreakLogModel
+/**
+ * Model HrLeaveType
+ * 
+ */
+export type HrLeaveType = Prisma.HrLeaveTypeModel
+/**
+ * Model HrLeavePolicy
+ * 
+ */
+export type HrLeavePolicy = Prisma.HrLeavePolicyModel
+/**
+ * Model HrLeaveBalance
+ * 
+ */
+export type HrLeaveBalance = Prisma.HrLeaveBalanceModel
+/**
+ * Model HrLeaveRequest
+ * 
+ */
+export type HrLeaveRequest = Prisma.HrLeaveRequestModel
+/**
+ * Model HrLeaveApproval
+ * 
+ */
+export type HrLeaveApproval = Prisma.HrLeaveApprovalModel
+/**
+ * Model HrSalaryComponent
+ * 
+ */
+export type HrSalaryComponent = Prisma.HrSalaryComponentModel
+/**
+ * Model HrSalaryStructure
+ * 
+ */
+export type HrSalaryStructure = Prisma.HrSalaryStructureModel
+/**
+ * Model HrEmployeeSalaryComponent
+ * 
+ */
+export type HrEmployeeSalaryComponent = Prisma.HrEmployeeSalaryComponentModel
+/**
+ * Model HrPayrollPeriod
+ * 
+ */
+export type HrPayrollPeriod = Prisma.HrPayrollPeriodModel
+/**
+ * Model HrPayrollRun
+ * 
+ */
+export type HrPayrollRun = Prisma.HrPayrollRunModel
+/**
+ * Model HrPayrollDetail
+ * 
+ */
+export type HrPayrollDetail = Prisma.HrPayrollDetailModel
+/**
+ * Model HrPayrollComponentDetail
+ * 
+ */
+export type HrPayrollComponentDetail = Prisma.HrPayrollComponentDetailModel
+/**
+ * Model HrLoan
+ * 
+ */
+export type HrLoan = Prisma.HrLoanModel
+/**
+ * Model HrLoanInstallment
+ * 
+ */
+export type HrLoanInstallment = Prisma.HrLoanInstallmentModel
+/**
+ * Model HrSalaryAdvance
+ * 
+ */
+export type HrSalaryAdvance = Prisma.HrSalaryAdvanceModel
+/**
+ * Model HrEmployeeBenefit
+ * 
+ */
+export type HrEmployeeBenefit = Prisma.HrEmployeeBenefitModel
+/**
+ * Model HrCommission
+ * 
+ */
+export type HrCommission = Prisma.HrCommissionModel
+/**
+ * Model HrKpi
+ * 
+ */
+export type HrKpi = Prisma.HrKpiModel
+/**
+ * Model HrGoal
+ * 
+ */
+export type HrGoal = Prisma.HrGoalModel
+/**
+ * Model HrGoalProgress
+ * 
+ */
+export type HrGoalProgress = Prisma.HrGoalProgressModel
+/**
+ * Model HrReviewTemplate
+ * 
+ */
+export type HrReviewTemplate = Prisma.HrReviewTemplateModel
+/**
+ * Model HrPerformanceReview
+ * 
+ */
+export type HrPerformanceReview = Prisma.HrPerformanceReviewModel
+/**
+ * Model HrReviewScore
+ * 
+ */
+export type HrReviewScore = Prisma.HrReviewScoreModel
+/**
+ * Model HrTrainingCourse
+ * 
+ */
+export type HrTrainingCourse = Prisma.HrTrainingCourseModel
+/**
+ * Model HrTrainingSession
+ * 
+ */
+export type HrTrainingSession = Prisma.HrTrainingSessionModel
+/**
+ * Model HrTrainingRecord
+ * 
+ */
+export type HrTrainingRecord = Prisma.HrTrainingRecordModel
+/**
+ * Model HrTrainingCertificate
+ * 
+ */
+export type HrTrainingCertificate = Prisma.HrTrainingCertificateModel
+/**
+ * Model HrCareerPath
+ * 
+ */
+export type HrCareerPath = Prisma.HrCareerPathModel
+/**
+ * Model HrSuccessor
+ * 
+ */
+export type HrSuccessor = Prisma.HrSuccessorModel
+/**
+ * Model HrPromotion
+ * 
+ */
+export type HrPromotion = Prisma.HrPromotionModel
+/**
+ * Model HrSkill
+ * 
+ */
+export type HrSkill = Prisma.HrSkillModel
+/**
+ * Model HrEmployeeSkill
+ * 
+ */
+export type HrEmployeeSkill = Prisma.HrEmployeeSkillModel
+/**
+ * Model HrWorkforcePlan
+ * 
+ */
+export type HrWorkforcePlan = Prisma.HrWorkforcePlanModel
+/**
+ * Model HrWorkforceRequirement
+ * 
+ */
+export type HrWorkforceRequirement = Prisma.HrWorkforceRequirementModel
+/**
+ * Model HrSkillRequirement
+ * 
+ */
+export type HrSkillRequirement = Prisma.HrSkillRequirementModel
+/**
+ * Model HrBudgetYear
+ * 
+ */
+export type HrBudgetYear = Prisma.HrBudgetYearModel
+/**
+ * Model HrBudgetDepartment
+ * 
+ */
+export type HrBudgetDepartment = Prisma.HrBudgetDepartmentModel
+/**
+ * Model HrBudgetPosition
+ * 
+ */
+export type HrBudgetPosition = Prisma.HrBudgetPositionModel
+/**
+ * Model HrBudgetActual
+ * 
+ */
+export type HrBudgetActual = Prisma.HrBudgetActualModel
+/**
+ * Model HrEmployeeRequest
+ * 
+ */
+export type HrEmployeeRequest = Prisma.HrEmployeeRequestModel
+/**
+ * Model HrEmployeeNotification
+ * 
+ */
+export type HrEmployeeNotification = Prisma.HrEmployeeNotificationModel
+/**
+ * Model HrEmployeeAnnouncement
+ * 
+ */
+export type HrEmployeeAnnouncement = Prisma.HrEmployeeAnnouncementModel
+/**
+ * Model HrEmployeeDocumentShared
+ * 
+ */
+export type HrEmployeeDocumentShared = Prisma.HrEmployeeDocumentSharedModel
+/**
+ * Model HrEmployeeAsset
+ * 
+ */
+export type HrEmployeeAsset = Prisma.HrEmployeeAssetModel
+/**
+ * Model HrTravelRequest
+ * 
+ */
+export type HrTravelRequest = Prisma.HrTravelRequestModel
+/**
+ * Model HrExpenseClaim
+ * 
+ */
+export type HrExpenseClaim = Prisma.HrExpenseClaimModel
+/**
+ * Model HrExpenseClaimLine
+ * 
+ */
+export type HrExpenseClaimLine = Prisma.HrExpenseClaimLineModel
+/**
+ * Model HrExpenseReimbursement
+ * 
+ */
+export type HrExpenseReimbursement = Prisma.HrExpenseReimbursementModel

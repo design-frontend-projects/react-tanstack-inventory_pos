@@ -9,6 +9,7 @@ import {
   notify,
   resolveStepRecipients,
 } from '#/server/notifications/notification-service'
+import { syncHrDocumentStatus } from '#/server/hr/approval-sync'
 import { createAuditLog } from '#/server/repos/audit-log-repo'
 import * as workflowRepo from '#/server/repos/pod-approval-workflow-repo'
 import * as requestRepo from '#/server/repos/pod-approval-request-repo'
@@ -75,6 +76,11 @@ async function applyApprovalToDocument(
       tx,
     )
   }
+
+  // HR documents (loans, advances, payroll runs, expense/travel, promotions,
+  // offers, timesheets, overtime, workforce/budget plans) route through the
+  // same generic engine; the HR module owns their status mapping.
+  await syncHrDocumentStatus(tenantId, entityType, entityId, outcome, actorProfileId, tx)
   // Future: 'purchase_requisition' lands in its phase.
 }
 

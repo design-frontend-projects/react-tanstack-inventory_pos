@@ -26,6 +26,7 @@ import { Route as AppPurchaseIndexRouteImport } from './routes/_app/purchase/ind
 import { Route as AppPosIndexRouteImport } from './routes/_app/pos/index'
 import { Route as AppOutletsIndexRouteImport } from './routes/_app/outlets/index'
 import { Route as AppInventoryIndexRouteImport } from './routes/_app/inventory/index'
+import { Route as AppHrIndexRouteImport } from './routes/_app/hr/index'
 import { Route as AppSettingsUsersRouteImport } from './routes/_app/settings/users'
 import { Route as AppSettingsSecurityRouteImport } from './routes/_app/settings/security'
 import { Route as AppSettingsRolesRouteImport } from './routes/_app/settings/roles'
@@ -76,6 +77,26 @@ import { Route as AppInventoryCategoriesRouteImport } from './routes/_app/invent
 import { Route as AppInventoryCatalogRouteImport } from './routes/_app/inventory/catalog'
 import { Route as AppInventoryBrandsRouteImport } from './routes/_app/inventory/brands'
 import { Route as AppInventoryAdjustmentsRouteImport } from './routes/_app/inventory/adjustments'
+import { Route as AppHrWorkforceRouteImport } from './routes/_app/hr/workforce'
+import { Route as AppHrTrainingRouteImport } from './routes/_app/hr/training'
+import { Route as AppHrSelfServiceRouteImport } from './routes/_app/hr/self-service'
+import { Route as AppHrRecruitmentRouteImport } from './routes/_app/hr/recruitment'
+import { Route as AppHrPositionsRouteImport } from './routes/_app/hr/positions'
+import { Route as AppHrPerformanceRouteImport } from './routes/_app/hr/performance'
+import { Route as AppHrPayrollRouteImport } from './routes/_app/hr/payroll'
+import { Route as AppHrOrganizationRouteImport } from './routes/_app/hr/organization'
+import { Route as AppHrOnboardingRouteImport } from './routes/_app/hr/onboarding'
+import { Route as AppHrLeaveRouteImport } from './routes/_app/hr/leave'
+import { Route as AppHrJobGradesRouteImport } from './routes/_app/hr/job-grades'
+import { Route as AppHrExpensesRouteImport } from './routes/_app/hr/expenses'
+import { Route as AppHrEmployeesRouteImport } from './routes/_app/hr/employees'
+import { Route as AppHrDepartmentsRouteImport } from './routes/_app/hr/departments'
+import { Route as AppHrCostCentersRouteImport } from './routes/_app/hr/cost-centers'
+import { Route as AppHrCareerRouteImport } from './routes/_app/hr/career'
+import { Route as AppHrBudgetingRouteImport } from './routes/_app/hr/budgeting'
+import { Route as AppHrAttendanceRouteImport } from './routes/_app/hr/attendance'
+import { Route as AppHrAssetsRouteImport } from './routes/_app/hr/assets'
+import { Route as AppHrAnalyticsRouteImport } from './routes/_app/hr/analytics'
 import { Route as AppCrmSegmentsRouteImport } from './routes/_app/crm/segments'
 import { Route as AppCrmLoyaltyRouteImport } from './routes/_app/crm/loyalty'
 import { Route as AppCrmCustomersRouteImport } from './routes/_app/crm/customers'
@@ -83,6 +104,7 @@ import { Route as AppCrmAnalyticsRouteImport } from './routes/_app/crm/analytics
 import { Route as AppRestaurantOrdersIndexRouteImport } from './routes/_app/restaurant/orders/index'
 import { Route as AppRestaurantOrdersOrderIdRouteImport } from './routes/_app/restaurant/orders/$orderId'
 import { Route as AppInventoryCatalogProductIdRouteImport } from './routes/_app/inventory/catalog_.$productId'
+import { Route as AppHrEmployeesEmployeeIdRouteImport } from './routes/_app/hr/employees_.$employeeId'
 
 const AboutRoute = AboutRouteImport.update({
   id: '/about',
@@ -165,6 +187,11 @@ const AppOutletsIndexRoute = AppOutletsIndexRouteImport.update({
 const AppInventoryIndexRoute = AppInventoryIndexRouteImport.update({
   id: '/inventory/',
   path: '/inventory/',
+  getParentRoute: () => AppRoute,
+} as any)
+const AppHrIndexRoute = AppHrIndexRouteImport.update({
+  id: '/hr/',
+  path: '/hr/',
   getParentRoute: () => AppRoute,
 } as any)
 const AppSettingsUsersRoute = AppSettingsUsersRouteImport.update({
@@ -420,6 +447,106 @@ const AppInventoryAdjustmentsRoute = AppInventoryAdjustmentsRouteImport.update({
   path: '/inventory/adjustments',
   getParentRoute: () => AppRoute,
 } as any)
+const AppHrWorkforceRoute = AppHrWorkforceRouteImport.update({
+  id: '/hr/workforce',
+  path: '/hr/workforce',
+  getParentRoute: () => AppRoute,
+} as any)
+const AppHrTrainingRoute = AppHrTrainingRouteImport.update({
+  id: '/hr/training',
+  path: '/hr/training',
+  getParentRoute: () => AppRoute,
+} as any)
+const AppHrSelfServiceRoute = AppHrSelfServiceRouteImport.update({
+  id: '/hr/self-service',
+  path: '/hr/self-service',
+  getParentRoute: () => AppRoute,
+} as any)
+const AppHrRecruitmentRoute = AppHrRecruitmentRouteImport.update({
+  id: '/hr/recruitment',
+  path: '/hr/recruitment',
+  getParentRoute: () => AppRoute,
+} as any)
+const AppHrPositionsRoute = AppHrPositionsRouteImport.update({
+  id: '/hr/positions',
+  path: '/hr/positions',
+  getParentRoute: () => AppRoute,
+} as any)
+const AppHrPerformanceRoute = AppHrPerformanceRouteImport.update({
+  id: '/hr/performance',
+  path: '/hr/performance',
+  getParentRoute: () => AppRoute,
+} as any)
+const AppHrPayrollRoute = AppHrPayrollRouteImport.update({
+  id: '/hr/payroll',
+  path: '/hr/payroll',
+  getParentRoute: () => AppRoute,
+} as any)
+const AppHrOrganizationRoute = AppHrOrganizationRouteImport.update({
+  id: '/hr/organization',
+  path: '/hr/organization',
+  getParentRoute: () => AppRoute,
+} as any)
+const AppHrOnboardingRoute = AppHrOnboardingRouteImport.update({
+  id: '/hr/onboarding',
+  path: '/hr/onboarding',
+  getParentRoute: () => AppRoute,
+} as any)
+const AppHrLeaveRoute = AppHrLeaveRouteImport.update({
+  id: '/hr/leave',
+  path: '/hr/leave',
+  getParentRoute: () => AppRoute,
+} as any)
+const AppHrJobGradesRoute = AppHrJobGradesRouteImport.update({
+  id: '/hr/job-grades',
+  path: '/hr/job-grades',
+  getParentRoute: () => AppRoute,
+} as any)
+const AppHrExpensesRoute = AppHrExpensesRouteImport.update({
+  id: '/hr/expenses',
+  path: '/hr/expenses',
+  getParentRoute: () => AppRoute,
+} as any)
+const AppHrEmployeesRoute = AppHrEmployeesRouteImport.update({
+  id: '/hr/employees',
+  path: '/hr/employees',
+  getParentRoute: () => AppRoute,
+} as any)
+const AppHrDepartmentsRoute = AppHrDepartmentsRouteImport.update({
+  id: '/hr/departments',
+  path: '/hr/departments',
+  getParentRoute: () => AppRoute,
+} as any)
+const AppHrCostCentersRoute = AppHrCostCentersRouteImport.update({
+  id: '/hr/cost-centers',
+  path: '/hr/cost-centers',
+  getParentRoute: () => AppRoute,
+} as any)
+const AppHrCareerRoute = AppHrCareerRouteImport.update({
+  id: '/hr/career',
+  path: '/hr/career',
+  getParentRoute: () => AppRoute,
+} as any)
+const AppHrBudgetingRoute = AppHrBudgetingRouteImport.update({
+  id: '/hr/budgeting',
+  path: '/hr/budgeting',
+  getParentRoute: () => AppRoute,
+} as any)
+const AppHrAttendanceRoute = AppHrAttendanceRouteImport.update({
+  id: '/hr/attendance',
+  path: '/hr/attendance',
+  getParentRoute: () => AppRoute,
+} as any)
+const AppHrAssetsRoute = AppHrAssetsRouteImport.update({
+  id: '/hr/assets',
+  path: '/hr/assets',
+  getParentRoute: () => AppRoute,
+} as any)
+const AppHrAnalyticsRoute = AppHrAnalyticsRouteImport.update({
+  id: '/hr/analytics',
+  path: '/hr/analytics',
+  getParentRoute: () => AppRoute,
+} as any)
 const AppCrmSegmentsRoute = AppCrmSegmentsRouteImport.update({
   id: '/crm/segments',
   path: '/crm/segments',
@@ -458,6 +585,12 @@ const AppInventoryCatalogProductIdRoute =
     path: '/inventory/catalog/$productId',
     getParentRoute: () => AppRoute,
   } as any)
+const AppHrEmployeesEmployeeIdRoute =
+  AppHrEmployeesEmployeeIdRouteImport.update({
+    id: '/hr/employees_/$employeeId',
+    path: '/hr/employees/$employeeId',
+    getParentRoute: () => AppRoute,
+  } as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
@@ -475,6 +608,26 @@ export interface FileRoutesByFullPath {
   '/crm/customers': typeof AppCrmCustomersRoute
   '/crm/loyalty': typeof AppCrmLoyaltyRoute
   '/crm/segments': typeof AppCrmSegmentsRoute
+  '/hr/analytics': typeof AppHrAnalyticsRoute
+  '/hr/assets': typeof AppHrAssetsRoute
+  '/hr/attendance': typeof AppHrAttendanceRoute
+  '/hr/budgeting': typeof AppHrBudgetingRoute
+  '/hr/career': typeof AppHrCareerRoute
+  '/hr/cost-centers': typeof AppHrCostCentersRoute
+  '/hr/departments': typeof AppHrDepartmentsRoute
+  '/hr/employees': typeof AppHrEmployeesRoute
+  '/hr/expenses': typeof AppHrExpensesRoute
+  '/hr/job-grades': typeof AppHrJobGradesRoute
+  '/hr/leave': typeof AppHrLeaveRoute
+  '/hr/onboarding': typeof AppHrOnboardingRoute
+  '/hr/organization': typeof AppHrOrganizationRoute
+  '/hr/payroll': typeof AppHrPayrollRoute
+  '/hr/performance': typeof AppHrPerformanceRoute
+  '/hr/positions': typeof AppHrPositionsRoute
+  '/hr/recruitment': typeof AppHrRecruitmentRoute
+  '/hr/self-service': typeof AppHrSelfServiceRoute
+  '/hr/training': typeof AppHrTrainingRoute
+  '/hr/workforce': typeof AppHrWorkforceRoute
   '/inventory/adjustments': typeof AppInventoryAdjustmentsRoute
   '/inventory/brands': typeof AppInventoryBrandsRoute
   '/inventory/catalog': typeof AppInventoryCatalogRoute
@@ -525,10 +678,12 @@ export interface FileRoutesByFullPath {
   '/settings/roles': typeof AppSettingsRolesRoute
   '/settings/security': typeof AppSettingsSecurityRoute
   '/settings/users': typeof AppSettingsUsersRoute
+  '/hr/': typeof AppHrIndexRoute
   '/inventory/': typeof AppInventoryIndexRoute
   '/outlets/': typeof AppOutletsIndexRoute
   '/pos/': typeof AppPosIndexRoute
   '/purchase/': typeof AppPurchaseIndexRoute
+  '/hr/employees/$employeeId': typeof AppHrEmployeesEmployeeIdRoute
   '/inventory/catalog/$productId': typeof AppInventoryCatalogProductIdRoute
   '/restaurant/orders/$orderId': typeof AppRestaurantOrdersOrderIdRoute
   '/restaurant/orders/': typeof AppRestaurantOrdersIndexRoute
@@ -549,6 +704,26 @@ export interface FileRoutesByTo {
   '/crm/customers': typeof AppCrmCustomersRoute
   '/crm/loyalty': typeof AppCrmLoyaltyRoute
   '/crm/segments': typeof AppCrmSegmentsRoute
+  '/hr/analytics': typeof AppHrAnalyticsRoute
+  '/hr/assets': typeof AppHrAssetsRoute
+  '/hr/attendance': typeof AppHrAttendanceRoute
+  '/hr/budgeting': typeof AppHrBudgetingRoute
+  '/hr/career': typeof AppHrCareerRoute
+  '/hr/cost-centers': typeof AppHrCostCentersRoute
+  '/hr/departments': typeof AppHrDepartmentsRoute
+  '/hr/employees': typeof AppHrEmployeesRoute
+  '/hr/expenses': typeof AppHrExpensesRoute
+  '/hr/job-grades': typeof AppHrJobGradesRoute
+  '/hr/leave': typeof AppHrLeaveRoute
+  '/hr/onboarding': typeof AppHrOnboardingRoute
+  '/hr/organization': typeof AppHrOrganizationRoute
+  '/hr/payroll': typeof AppHrPayrollRoute
+  '/hr/performance': typeof AppHrPerformanceRoute
+  '/hr/positions': typeof AppHrPositionsRoute
+  '/hr/recruitment': typeof AppHrRecruitmentRoute
+  '/hr/self-service': typeof AppHrSelfServiceRoute
+  '/hr/training': typeof AppHrTrainingRoute
+  '/hr/workforce': typeof AppHrWorkforceRoute
   '/inventory/adjustments': typeof AppInventoryAdjustmentsRoute
   '/inventory/brands': typeof AppInventoryBrandsRoute
   '/inventory/catalog': typeof AppInventoryCatalogRoute
@@ -599,10 +774,12 @@ export interface FileRoutesByTo {
   '/settings/roles': typeof AppSettingsRolesRoute
   '/settings/security': typeof AppSettingsSecurityRoute
   '/settings/users': typeof AppSettingsUsersRoute
+  '/hr': typeof AppHrIndexRoute
   '/inventory': typeof AppInventoryIndexRoute
   '/outlets': typeof AppOutletsIndexRoute
   '/pos': typeof AppPosIndexRoute
   '/purchase': typeof AppPurchaseIndexRoute
+  '/hr/employees/$employeeId': typeof AppHrEmployeesEmployeeIdRoute
   '/inventory/catalog/$productId': typeof AppInventoryCatalogProductIdRoute
   '/restaurant/orders/$orderId': typeof AppRestaurantOrdersOrderIdRoute
   '/restaurant/orders': typeof AppRestaurantOrdersIndexRoute
@@ -626,6 +803,26 @@ export interface FileRoutesById {
   '/_app/crm/customers': typeof AppCrmCustomersRoute
   '/_app/crm/loyalty': typeof AppCrmLoyaltyRoute
   '/_app/crm/segments': typeof AppCrmSegmentsRoute
+  '/_app/hr/analytics': typeof AppHrAnalyticsRoute
+  '/_app/hr/assets': typeof AppHrAssetsRoute
+  '/_app/hr/attendance': typeof AppHrAttendanceRoute
+  '/_app/hr/budgeting': typeof AppHrBudgetingRoute
+  '/_app/hr/career': typeof AppHrCareerRoute
+  '/_app/hr/cost-centers': typeof AppHrCostCentersRoute
+  '/_app/hr/departments': typeof AppHrDepartmentsRoute
+  '/_app/hr/employees': typeof AppHrEmployeesRoute
+  '/_app/hr/expenses': typeof AppHrExpensesRoute
+  '/_app/hr/job-grades': typeof AppHrJobGradesRoute
+  '/_app/hr/leave': typeof AppHrLeaveRoute
+  '/_app/hr/onboarding': typeof AppHrOnboardingRoute
+  '/_app/hr/organization': typeof AppHrOrganizationRoute
+  '/_app/hr/payroll': typeof AppHrPayrollRoute
+  '/_app/hr/performance': typeof AppHrPerformanceRoute
+  '/_app/hr/positions': typeof AppHrPositionsRoute
+  '/_app/hr/recruitment': typeof AppHrRecruitmentRoute
+  '/_app/hr/self-service': typeof AppHrSelfServiceRoute
+  '/_app/hr/training': typeof AppHrTrainingRoute
+  '/_app/hr/workforce': typeof AppHrWorkforceRoute
   '/_app/inventory/adjustments': typeof AppInventoryAdjustmentsRoute
   '/_app/inventory/brands': typeof AppInventoryBrandsRoute
   '/_app/inventory/catalog': typeof AppInventoryCatalogRoute
@@ -676,10 +873,12 @@ export interface FileRoutesById {
   '/_app/settings/roles': typeof AppSettingsRolesRoute
   '/_app/settings/security': typeof AppSettingsSecurityRoute
   '/_app/settings/users': typeof AppSettingsUsersRoute
+  '/_app/hr/': typeof AppHrIndexRoute
   '/_app/inventory/': typeof AppInventoryIndexRoute
   '/_app/outlets/': typeof AppOutletsIndexRoute
   '/_app/pos/': typeof AppPosIndexRoute
   '/_app/purchase/': typeof AppPurchaseIndexRoute
+  '/_app/hr/employees_/$employeeId': typeof AppHrEmployeesEmployeeIdRoute
   '/_app/inventory/catalog_/$productId': typeof AppInventoryCatalogProductIdRoute
   '/_app/restaurant/orders/$orderId': typeof AppRestaurantOrdersOrderIdRoute
   '/_app/restaurant/orders/': typeof AppRestaurantOrdersIndexRoute
@@ -702,6 +901,26 @@ export interface FileRouteTypes {
     | '/crm/customers'
     | '/crm/loyalty'
     | '/crm/segments'
+    | '/hr/analytics'
+    | '/hr/assets'
+    | '/hr/attendance'
+    | '/hr/budgeting'
+    | '/hr/career'
+    | '/hr/cost-centers'
+    | '/hr/departments'
+    | '/hr/employees'
+    | '/hr/expenses'
+    | '/hr/job-grades'
+    | '/hr/leave'
+    | '/hr/onboarding'
+    | '/hr/organization'
+    | '/hr/payroll'
+    | '/hr/performance'
+    | '/hr/positions'
+    | '/hr/recruitment'
+    | '/hr/self-service'
+    | '/hr/training'
+    | '/hr/workforce'
     | '/inventory/adjustments'
     | '/inventory/brands'
     | '/inventory/catalog'
@@ -752,10 +971,12 @@ export interface FileRouteTypes {
     | '/settings/roles'
     | '/settings/security'
     | '/settings/users'
+    | '/hr/'
     | '/inventory/'
     | '/outlets/'
     | '/pos/'
     | '/purchase/'
+    | '/hr/employees/$employeeId'
     | '/inventory/catalog/$productId'
     | '/restaurant/orders/$orderId'
     | '/restaurant/orders/'
@@ -776,6 +997,26 @@ export interface FileRouteTypes {
     | '/crm/customers'
     | '/crm/loyalty'
     | '/crm/segments'
+    | '/hr/analytics'
+    | '/hr/assets'
+    | '/hr/attendance'
+    | '/hr/budgeting'
+    | '/hr/career'
+    | '/hr/cost-centers'
+    | '/hr/departments'
+    | '/hr/employees'
+    | '/hr/expenses'
+    | '/hr/job-grades'
+    | '/hr/leave'
+    | '/hr/onboarding'
+    | '/hr/organization'
+    | '/hr/payroll'
+    | '/hr/performance'
+    | '/hr/positions'
+    | '/hr/recruitment'
+    | '/hr/self-service'
+    | '/hr/training'
+    | '/hr/workforce'
     | '/inventory/adjustments'
     | '/inventory/brands'
     | '/inventory/catalog'
@@ -826,10 +1067,12 @@ export interface FileRouteTypes {
     | '/settings/roles'
     | '/settings/security'
     | '/settings/users'
+    | '/hr'
     | '/inventory'
     | '/outlets'
     | '/pos'
     | '/purchase'
+    | '/hr/employees/$employeeId'
     | '/inventory/catalog/$productId'
     | '/restaurant/orders/$orderId'
     | '/restaurant/orders'
@@ -852,6 +1095,26 @@ export interface FileRouteTypes {
     | '/_app/crm/customers'
     | '/_app/crm/loyalty'
     | '/_app/crm/segments'
+    | '/_app/hr/analytics'
+    | '/_app/hr/assets'
+    | '/_app/hr/attendance'
+    | '/_app/hr/budgeting'
+    | '/_app/hr/career'
+    | '/_app/hr/cost-centers'
+    | '/_app/hr/departments'
+    | '/_app/hr/employees'
+    | '/_app/hr/expenses'
+    | '/_app/hr/job-grades'
+    | '/_app/hr/leave'
+    | '/_app/hr/onboarding'
+    | '/_app/hr/organization'
+    | '/_app/hr/payroll'
+    | '/_app/hr/performance'
+    | '/_app/hr/positions'
+    | '/_app/hr/recruitment'
+    | '/_app/hr/self-service'
+    | '/_app/hr/training'
+    | '/_app/hr/workforce'
     | '/_app/inventory/adjustments'
     | '/_app/inventory/brands'
     | '/_app/inventory/catalog'
@@ -902,10 +1165,12 @@ export interface FileRouteTypes {
     | '/_app/settings/roles'
     | '/_app/settings/security'
     | '/_app/settings/users'
+    | '/_app/hr/'
     | '/_app/inventory/'
     | '/_app/outlets/'
     | '/_app/pos/'
     | '/_app/purchase/'
+    | '/_app/hr/employees_/$employeeId'
     | '/_app/inventory/catalog_/$productId'
     | '/_app/restaurant/orders/$orderId'
     | '/_app/restaurant/orders/'
@@ -1037,6 +1302,13 @@ declare module '@tanstack/react-router' {
       path: '/inventory'
       fullPath: '/inventory/'
       preLoaderRoute: typeof AppInventoryIndexRouteImport
+      parentRoute: typeof AppRoute
+    }
+    '/_app/hr/': {
+      id: '/_app/hr/'
+      path: '/hr'
+      fullPath: '/hr/'
+      preLoaderRoute: typeof AppHrIndexRouteImport
       parentRoute: typeof AppRoute
     }
     '/_app/settings/users': {
@@ -1389,6 +1661,146 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AppInventoryAdjustmentsRouteImport
       parentRoute: typeof AppRoute
     }
+    '/_app/hr/workforce': {
+      id: '/_app/hr/workforce'
+      path: '/hr/workforce'
+      fullPath: '/hr/workforce'
+      preLoaderRoute: typeof AppHrWorkforceRouteImport
+      parentRoute: typeof AppRoute
+    }
+    '/_app/hr/training': {
+      id: '/_app/hr/training'
+      path: '/hr/training'
+      fullPath: '/hr/training'
+      preLoaderRoute: typeof AppHrTrainingRouteImport
+      parentRoute: typeof AppRoute
+    }
+    '/_app/hr/self-service': {
+      id: '/_app/hr/self-service'
+      path: '/hr/self-service'
+      fullPath: '/hr/self-service'
+      preLoaderRoute: typeof AppHrSelfServiceRouteImport
+      parentRoute: typeof AppRoute
+    }
+    '/_app/hr/recruitment': {
+      id: '/_app/hr/recruitment'
+      path: '/hr/recruitment'
+      fullPath: '/hr/recruitment'
+      preLoaderRoute: typeof AppHrRecruitmentRouteImport
+      parentRoute: typeof AppRoute
+    }
+    '/_app/hr/positions': {
+      id: '/_app/hr/positions'
+      path: '/hr/positions'
+      fullPath: '/hr/positions'
+      preLoaderRoute: typeof AppHrPositionsRouteImport
+      parentRoute: typeof AppRoute
+    }
+    '/_app/hr/performance': {
+      id: '/_app/hr/performance'
+      path: '/hr/performance'
+      fullPath: '/hr/performance'
+      preLoaderRoute: typeof AppHrPerformanceRouteImport
+      parentRoute: typeof AppRoute
+    }
+    '/_app/hr/payroll': {
+      id: '/_app/hr/payroll'
+      path: '/hr/payroll'
+      fullPath: '/hr/payroll'
+      preLoaderRoute: typeof AppHrPayrollRouteImport
+      parentRoute: typeof AppRoute
+    }
+    '/_app/hr/organization': {
+      id: '/_app/hr/organization'
+      path: '/hr/organization'
+      fullPath: '/hr/organization'
+      preLoaderRoute: typeof AppHrOrganizationRouteImport
+      parentRoute: typeof AppRoute
+    }
+    '/_app/hr/onboarding': {
+      id: '/_app/hr/onboarding'
+      path: '/hr/onboarding'
+      fullPath: '/hr/onboarding'
+      preLoaderRoute: typeof AppHrOnboardingRouteImport
+      parentRoute: typeof AppRoute
+    }
+    '/_app/hr/leave': {
+      id: '/_app/hr/leave'
+      path: '/hr/leave'
+      fullPath: '/hr/leave'
+      preLoaderRoute: typeof AppHrLeaveRouteImport
+      parentRoute: typeof AppRoute
+    }
+    '/_app/hr/job-grades': {
+      id: '/_app/hr/job-grades'
+      path: '/hr/job-grades'
+      fullPath: '/hr/job-grades'
+      preLoaderRoute: typeof AppHrJobGradesRouteImport
+      parentRoute: typeof AppRoute
+    }
+    '/_app/hr/expenses': {
+      id: '/_app/hr/expenses'
+      path: '/hr/expenses'
+      fullPath: '/hr/expenses'
+      preLoaderRoute: typeof AppHrExpensesRouteImport
+      parentRoute: typeof AppRoute
+    }
+    '/_app/hr/employees': {
+      id: '/_app/hr/employees'
+      path: '/hr/employees'
+      fullPath: '/hr/employees'
+      preLoaderRoute: typeof AppHrEmployeesRouteImport
+      parentRoute: typeof AppRoute
+    }
+    '/_app/hr/departments': {
+      id: '/_app/hr/departments'
+      path: '/hr/departments'
+      fullPath: '/hr/departments'
+      preLoaderRoute: typeof AppHrDepartmentsRouteImport
+      parentRoute: typeof AppRoute
+    }
+    '/_app/hr/cost-centers': {
+      id: '/_app/hr/cost-centers'
+      path: '/hr/cost-centers'
+      fullPath: '/hr/cost-centers'
+      preLoaderRoute: typeof AppHrCostCentersRouteImport
+      parentRoute: typeof AppRoute
+    }
+    '/_app/hr/career': {
+      id: '/_app/hr/career'
+      path: '/hr/career'
+      fullPath: '/hr/career'
+      preLoaderRoute: typeof AppHrCareerRouteImport
+      parentRoute: typeof AppRoute
+    }
+    '/_app/hr/budgeting': {
+      id: '/_app/hr/budgeting'
+      path: '/hr/budgeting'
+      fullPath: '/hr/budgeting'
+      preLoaderRoute: typeof AppHrBudgetingRouteImport
+      parentRoute: typeof AppRoute
+    }
+    '/_app/hr/attendance': {
+      id: '/_app/hr/attendance'
+      path: '/hr/attendance'
+      fullPath: '/hr/attendance'
+      preLoaderRoute: typeof AppHrAttendanceRouteImport
+      parentRoute: typeof AppRoute
+    }
+    '/_app/hr/assets': {
+      id: '/_app/hr/assets'
+      path: '/hr/assets'
+      fullPath: '/hr/assets'
+      preLoaderRoute: typeof AppHrAssetsRouteImport
+      parentRoute: typeof AppRoute
+    }
+    '/_app/hr/analytics': {
+      id: '/_app/hr/analytics'
+      path: '/hr/analytics'
+      fullPath: '/hr/analytics'
+      preLoaderRoute: typeof AppHrAnalyticsRouteImport
+      parentRoute: typeof AppRoute
+    }
     '/_app/crm/segments': {
       id: '/_app/crm/segments'
       path: '/crm/segments'
@@ -1438,6 +1850,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AppInventoryCatalogProductIdRouteImport
       parentRoute: typeof AppRoute
     }
+    '/_app/hr/employees_/$employeeId': {
+      id: '/_app/hr/employees_/$employeeId'
+      path: '/hr/employees/$employeeId'
+      fullPath: '/hr/employees/$employeeId'
+      preLoaderRoute: typeof AppHrEmployeesEmployeeIdRouteImport
+      parentRoute: typeof AppRoute
+    }
   }
 }
 
@@ -1448,6 +1867,26 @@ interface AppRouteChildren {
   AppCrmCustomersRoute: typeof AppCrmCustomersRoute
   AppCrmLoyaltyRoute: typeof AppCrmLoyaltyRoute
   AppCrmSegmentsRoute: typeof AppCrmSegmentsRoute
+  AppHrAnalyticsRoute: typeof AppHrAnalyticsRoute
+  AppHrAssetsRoute: typeof AppHrAssetsRoute
+  AppHrAttendanceRoute: typeof AppHrAttendanceRoute
+  AppHrBudgetingRoute: typeof AppHrBudgetingRoute
+  AppHrCareerRoute: typeof AppHrCareerRoute
+  AppHrCostCentersRoute: typeof AppHrCostCentersRoute
+  AppHrDepartmentsRoute: typeof AppHrDepartmentsRoute
+  AppHrEmployeesRoute: typeof AppHrEmployeesRoute
+  AppHrExpensesRoute: typeof AppHrExpensesRoute
+  AppHrJobGradesRoute: typeof AppHrJobGradesRoute
+  AppHrLeaveRoute: typeof AppHrLeaveRoute
+  AppHrOnboardingRoute: typeof AppHrOnboardingRoute
+  AppHrOrganizationRoute: typeof AppHrOrganizationRoute
+  AppHrPayrollRoute: typeof AppHrPayrollRoute
+  AppHrPerformanceRoute: typeof AppHrPerformanceRoute
+  AppHrPositionsRoute: typeof AppHrPositionsRoute
+  AppHrRecruitmentRoute: typeof AppHrRecruitmentRoute
+  AppHrSelfServiceRoute: typeof AppHrSelfServiceRoute
+  AppHrTrainingRoute: typeof AppHrTrainingRoute
+  AppHrWorkforceRoute: typeof AppHrWorkforceRoute
   AppInventoryAdjustmentsRoute: typeof AppInventoryAdjustmentsRoute
   AppInventoryBrandsRoute: typeof AppInventoryBrandsRoute
   AppInventoryCatalogRoute: typeof AppInventoryCatalogRoute
@@ -1498,10 +1937,12 @@ interface AppRouteChildren {
   AppSettingsRolesRoute: typeof AppSettingsRolesRoute
   AppSettingsSecurityRoute: typeof AppSettingsSecurityRoute
   AppSettingsUsersRoute: typeof AppSettingsUsersRoute
+  AppHrIndexRoute: typeof AppHrIndexRoute
   AppInventoryIndexRoute: typeof AppInventoryIndexRoute
   AppOutletsIndexRoute: typeof AppOutletsIndexRoute
   AppPosIndexRoute: typeof AppPosIndexRoute
   AppPurchaseIndexRoute: typeof AppPurchaseIndexRoute
+  AppHrEmployeesEmployeeIdRoute: typeof AppHrEmployeesEmployeeIdRoute
   AppInventoryCatalogProductIdRoute: typeof AppInventoryCatalogProductIdRoute
   AppRestaurantOrdersOrderIdRoute: typeof AppRestaurantOrdersOrderIdRoute
   AppRestaurantOrdersIndexRoute: typeof AppRestaurantOrdersIndexRoute
@@ -1514,6 +1955,26 @@ const AppRouteChildren: AppRouteChildren = {
   AppCrmCustomersRoute: AppCrmCustomersRoute,
   AppCrmLoyaltyRoute: AppCrmLoyaltyRoute,
   AppCrmSegmentsRoute: AppCrmSegmentsRoute,
+  AppHrAnalyticsRoute: AppHrAnalyticsRoute,
+  AppHrAssetsRoute: AppHrAssetsRoute,
+  AppHrAttendanceRoute: AppHrAttendanceRoute,
+  AppHrBudgetingRoute: AppHrBudgetingRoute,
+  AppHrCareerRoute: AppHrCareerRoute,
+  AppHrCostCentersRoute: AppHrCostCentersRoute,
+  AppHrDepartmentsRoute: AppHrDepartmentsRoute,
+  AppHrEmployeesRoute: AppHrEmployeesRoute,
+  AppHrExpensesRoute: AppHrExpensesRoute,
+  AppHrJobGradesRoute: AppHrJobGradesRoute,
+  AppHrLeaveRoute: AppHrLeaveRoute,
+  AppHrOnboardingRoute: AppHrOnboardingRoute,
+  AppHrOrganizationRoute: AppHrOrganizationRoute,
+  AppHrPayrollRoute: AppHrPayrollRoute,
+  AppHrPerformanceRoute: AppHrPerformanceRoute,
+  AppHrPositionsRoute: AppHrPositionsRoute,
+  AppHrRecruitmentRoute: AppHrRecruitmentRoute,
+  AppHrSelfServiceRoute: AppHrSelfServiceRoute,
+  AppHrTrainingRoute: AppHrTrainingRoute,
+  AppHrWorkforceRoute: AppHrWorkforceRoute,
   AppInventoryAdjustmentsRoute: AppInventoryAdjustmentsRoute,
   AppInventoryBrandsRoute: AppInventoryBrandsRoute,
   AppInventoryCatalogRoute: AppInventoryCatalogRoute,
@@ -1564,10 +2025,12 @@ const AppRouteChildren: AppRouteChildren = {
   AppSettingsRolesRoute: AppSettingsRolesRoute,
   AppSettingsSecurityRoute: AppSettingsSecurityRoute,
   AppSettingsUsersRoute: AppSettingsUsersRoute,
+  AppHrIndexRoute: AppHrIndexRoute,
   AppInventoryIndexRoute: AppInventoryIndexRoute,
   AppOutletsIndexRoute: AppOutletsIndexRoute,
   AppPosIndexRoute: AppPosIndexRoute,
   AppPurchaseIndexRoute: AppPurchaseIndexRoute,
+  AppHrEmployeesEmployeeIdRoute: AppHrEmployeesEmployeeIdRoute,
   AppInventoryCatalogProductIdRoute: AppInventoryCatalogProductIdRoute,
   AppRestaurantOrdersOrderIdRoute: AppRestaurantOrdersOrderIdRoute,
   AppRestaurantOrdersIndexRoute: AppRestaurantOrdersIndexRoute,
@@ -1606,12 +2069,3 @@ const rootRouteChildren: RootRouteChildren = {
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
   ._addFileTypes<FileRouteTypes>()
-
-import type { getRouter } from './router.tsx'
-import type { createStart } from '@tanstack/react-start'
-declare module '@tanstack/react-start' {
-  interface Register {
-    ssr: true
-    router: Awaited<ReturnType<typeof getRouter>>
-  }
-}

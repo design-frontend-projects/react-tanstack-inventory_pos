@@ -347,7 +347,95 @@ export const ModelName = {
   FinPostingRuleLine: 'FinPostingRuleLine',
   FinPostingQueue: 'FinPostingQueue',
   FinEventCursor: 'FinEventCursor',
-  FinPaymentTerm: 'FinPaymentTerm'
+  FinPaymentTerm: 'FinPaymentTerm',
+  HrCompany: 'HrCompany',
+  HrBranch: 'HrBranch',
+  HrBusinessUnit: 'HrBusinessUnit',
+  HrDivision: 'HrDivision',
+  HrDepartment: 'HrDepartment',
+  HrSection: 'HrSection',
+  HrJobGrade: 'HrJobGrade',
+  HrPosition: 'HrPosition',
+  HrCostCenter: 'HrCostCenter',
+  HrReportingStructure: 'HrReportingStructure',
+  HrEmployee: 'HrEmployee',
+  HrEmployeeContact: 'HrEmployeeContact',
+  HrEmployeeAddress: 'HrEmployeeAddress',
+  HrEmployeeDocument: 'HrEmployeeDocument',
+  HrEmployeeBankAccount: 'HrEmployeeBankAccount',
+  HrEmployeeContract: 'HrEmployeeContract',
+  HrEmployeeHistory: 'HrEmployeeHistory',
+  HrEmployeeDependent: 'HrEmployeeDependent',
+  HrEmployeeEducation: 'HrEmployeeEducation',
+  HrEmployeeExperience: 'HrEmployeeExperience',
+  HrEmployeeCertification: 'HrEmployeeCertification',
+  HrEmployeeLanguage: 'HrEmployeeLanguage',
+  HrJobOpening: 'HrJobOpening',
+  HrCandidate: 'HrCandidate',
+  HrCandidateDocument: 'HrCandidateDocument',
+  HrInterview: 'HrInterview',
+  HrInterviewFeedback: 'HrInterviewFeedback',
+  HrJobOffer: 'HrJobOffer',
+  HrOfferAcceptance: 'HrOfferAcceptance',
+  HrOnboardingTemplate: 'HrOnboardingTemplate',
+  HrOnboardingTask: 'HrOnboardingTask',
+  HrEmployeeOnboarding: 'HrEmployeeOnboarding',
+  HrShiftDefinition: 'HrShiftDefinition',
+  HrShiftPattern: 'HrShiftPattern',
+  HrShiftAssignment: 'HrShiftAssignment',
+  HrAttendanceLog: 'HrAttendanceLog',
+  HrAttendanceDaily: 'HrAttendanceDaily',
+  HrTimesheet: 'HrTimesheet',
+  HrOvertimeRequest: 'HrOvertimeRequest',
+  HrBreakLog: 'HrBreakLog',
+  HrLeaveType: 'HrLeaveType',
+  HrLeavePolicy: 'HrLeavePolicy',
+  HrLeaveBalance: 'HrLeaveBalance',
+  HrLeaveRequest: 'HrLeaveRequest',
+  HrLeaveApproval: 'HrLeaveApproval',
+  HrSalaryComponent: 'HrSalaryComponent',
+  HrSalaryStructure: 'HrSalaryStructure',
+  HrEmployeeSalaryComponent: 'HrEmployeeSalaryComponent',
+  HrPayrollPeriod: 'HrPayrollPeriod',
+  HrPayrollRun: 'HrPayrollRun',
+  HrPayrollDetail: 'HrPayrollDetail',
+  HrPayrollComponentDetail: 'HrPayrollComponentDetail',
+  HrLoan: 'HrLoan',
+  HrLoanInstallment: 'HrLoanInstallment',
+  HrSalaryAdvance: 'HrSalaryAdvance',
+  HrEmployeeBenefit: 'HrEmployeeBenefit',
+  HrCommission: 'HrCommission',
+  HrKpi: 'HrKpi',
+  HrGoal: 'HrGoal',
+  HrGoalProgress: 'HrGoalProgress',
+  HrReviewTemplate: 'HrReviewTemplate',
+  HrPerformanceReview: 'HrPerformanceReview',
+  HrReviewScore: 'HrReviewScore',
+  HrTrainingCourse: 'HrTrainingCourse',
+  HrTrainingSession: 'HrTrainingSession',
+  HrTrainingRecord: 'HrTrainingRecord',
+  HrTrainingCertificate: 'HrTrainingCertificate',
+  HrCareerPath: 'HrCareerPath',
+  HrSuccessor: 'HrSuccessor',
+  HrPromotion: 'HrPromotion',
+  HrSkill: 'HrSkill',
+  HrEmployeeSkill: 'HrEmployeeSkill',
+  HrWorkforcePlan: 'HrWorkforcePlan',
+  HrWorkforceRequirement: 'HrWorkforceRequirement',
+  HrSkillRequirement: 'HrSkillRequirement',
+  HrBudgetYear: 'HrBudgetYear',
+  HrBudgetDepartment: 'HrBudgetDepartment',
+  HrBudgetPosition: 'HrBudgetPosition',
+  HrBudgetActual: 'HrBudgetActual',
+  HrEmployeeRequest: 'HrEmployeeRequest',
+  HrEmployeeNotification: 'HrEmployeeNotification',
+  HrEmployeeAnnouncement: 'HrEmployeeAnnouncement',
+  HrEmployeeDocumentShared: 'HrEmployeeDocumentShared',
+  HrEmployeeAsset: 'HrEmployeeAsset',
+  HrTravelRequest: 'HrTravelRequest',
+  HrExpenseClaim: 'HrExpenseClaim',
+  HrExpenseClaimLine: 'HrExpenseClaimLine',
+  HrExpenseReimbursement: 'HrExpenseReimbursement'
 } as const
 
 export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -6212,6 +6300,2053 @@ export const FinPaymentTermScalarFieldEnum = {
 } as const
 
 export type FinPaymentTermScalarFieldEnum = (typeof FinPaymentTermScalarFieldEnum)[keyof typeof FinPaymentTermScalarFieldEnum]
+
+
+export const HrCompanyScalarFieldEnum = {
+  id: 'id',
+  tenantId: 'tenantId',
+  code: 'code',
+  name: 'name',
+  nameAr: 'nameAr',
+  legalName: 'legalName',
+  registrationNo: 'registrationNo',
+  taxId: 'taxId',
+  currencyCode: 'currencyCode',
+  baseCountry: 'baseCountry',
+  email: 'email',
+  phone: 'phone',
+  addressLine: 'addressLine',
+  logoUrl: 'logoUrl',
+  parentCompanyId: 'parentCompanyId',
+  isLegalEntity: 'isLegalEntity',
+  statusCode: 'statusCode',
+  isActive: 'isActive',
+  versionNumber: 'versionNumber',
+  createdBy: 'createdBy',
+  updatedBy: 'updatedBy',
+  deletedBy: 'deletedBy',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt',
+  deletedAt: 'deletedAt'
+} as const
+
+export type HrCompanyScalarFieldEnum = (typeof HrCompanyScalarFieldEnum)[keyof typeof HrCompanyScalarFieldEnum]
+
+
+export const HrBranchScalarFieldEnum = {
+  id: 'id',
+  tenantId: 'tenantId',
+  companyId: 'companyId',
+  code: 'code',
+  name: 'name',
+  nameAr: 'nameAr',
+  branchType: 'branchType',
+  costCenterId: 'costCenterId',
+  warehouseId: 'warehouseId',
+  managerId: 'managerId',
+  timezone: 'timezone',
+  email: 'email',
+  phone: 'phone',
+  addressLine: 'addressLine',
+  city: 'city',
+  country: 'country',
+  statusCode: 'statusCode',
+  isActive: 'isActive',
+  versionNumber: 'versionNumber',
+  createdBy: 'createdBy',
+  updatedBy: 'updatedBy',
+  deletedBy: 'deletedBy',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt',
+  deletedAt: 'deletedAt'
+} as const
+
+export type HrBranchScalarFieldEnum = (typeof HrBranchScalarFieldEnum)[keyof typeof HrBranchScalarFieldEnum]
+
+
+export const HrBusinessUnitScalarFieldEnum = {
+  id: 'id',
+  tenantId: 'tenantId',
+  companyId: 'companyId',
+  code: 'code',
+  name: 'name',
+  nameAr: 'nameAr',
+  headId: 'headId',
+  costCenterId: 'costCenterId',
+  statusCode: 'statusCode',
+  isActive: 'isActive',
+  versionNumber: 'versionNumber',
+  createdBy: 'createdBy',
+  updatedBy: 'updatedBy',
+  deletedBy: 'deletedBy',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt',
+  deletedAt: 'deletedAt'
+} as const
+
+export type HrBusinessUnitScalarFieldEnum = (typeof HrBusinessUnitScalarFieldEnum)[keyof typeof HrBusinessUnitScalarFieldEnum]
+
+
+export const HrDivisionScalarFieldEnum = {
+  id: 'id',
+  tenantId: 'tenantId',
+  companyId: 'companyId',
+  businessUnitId: 'businessUnitId',
+  code: 'code',
+  name: 'name',
+  nameAr: 'nameAr',
+  headId: 'headId',
+  statusCode: 'statusCode',
+  isActive: 'isActive',
+  versionNumber: 'versionNumber',
+  createdBy: 'createdBy',
+  updatedBy: 'updatedBy',
+  deletedBy: 'deletedBy',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt',
+  deletedAt: 'deletedAt'
+} as const
+
+export type HrDivisionScalarFieldEnum = (typeof HrDivisionScalarFieldEnum)[keyof typeof HrDivisionScalarFieldEnum]
+
+
+export const HrDepartmentScalarFieldEnum = {
+  id: 'id',
+  tenantId: 'tenantId',
+  companyId: 'companyId',
+  branchId: 'branchId',
+  divisionId: 'divisionId',
+  parentDepartmentId: 'parentDepartmentId',
+  code: 'code',
+  name: 'name',
+  nameAr: 'nameAr',
+  managerId: 'managerId',
+  costCenterId: 'costCenterId',
+  depthLevel: 'depthLevel',
+  pathText: 'pathText',
+  headcountBudget: 'headcountBudget',
+  statusCode: 'statusCode',
+  isActive: 'isActive',
+  versionNumber: 'versionNumber',
+  createdBy: 'createdBy',
+  updatedBy: 'updatedBy',
+  deletedBy: 'deletedBy',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt',
+  deletedAt: 'deletedAt'
+} as const
+
+export type HrDepartmentScalarFieldEnum = (typeof HrDepartmentScalarFieldEnum)[keyof typeof HrDepartmentScalarFieldEnum]
+
+
+export const HrSectionScalarFieldEnum = {
+  id: 'id',
+  tenantId: 'tenantId',
+  departmentId: 'departmentId',
+  code: 'code',
+  name: 'name',
+  nameAr: 'nameAr',
+  supervisorId: 'supervisorId',
+  statusCode: 'statusCode',
+  isActive: 'isActive',
+  versionNumber: 'versionNumber',
+  createdBy: 'createdBy',
+  updatedBy: 'updatedBy',
+  deletedBy: 'deletedBy',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt',
+  deletedAt: 'deletedAt'
+} as const
+
+export type HrSectionScalarFieldEnum = (typeof HrSectionScalarFieldEnum)[keyof typeof HrSectionScalarFieldEnum]
+
+
+export const HrJobGradeScalarFieldEnum = {
+  id: 'id',
+  tenantId: 'tenantId',
+  code: 'code',
+  name: 'name',
+  nameAr: 'nameAr',
+  gradeLevel: 'gradeLevel',
+  minSalary: 'minSalary',
+  midSalary: 'midSalary',
+  maxSalary: 'maxSalary',
+  currencyCode: 'currencyCode',
+  annualLeaveDays: 'annualLeaveDays',
+  statusCode: 'statusCode',
+  isActive: 'isActive',
+  versionNumber: 'versionNumber',
+  createdBy: 'createdBy',
+  updatedBy: 'updatedBy',
+  deletedBy: 'deletedBy',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt',
+  deletedAt: 'deletedAt'
+} as const
+
+export type HrJobGradeScalarFieldEnum = (typeof HrJobGradeScalarFieldEnum)[keyof typeof HrJobGradeScalarFieldEnum]
+
+
+export const HrPositionScalarFieldEnum = {
+  id: 'id',
+  tenantId: 'tenantId',
+  code: 'code',
+  title: 'title',
+  titleAr: 'titleAr',
+  departmentId: 'departmentId',
+  jobGradeId: 'jobGradeId',
+  reportsToId: 'reportsToId',
+  employmentType: 'employmentType',
+  headcountLimit: 'headcountLimit',
+  jobDescription: 'jobDescription',
+  isManagerial: 'isManagerial',
+  statusCode: 'statusCode',
+  isActive: 'isActive',
+  versionNumber: 'versionNumber',
+  createdBy: 'createdBy',
+  updatedBy: 'updatedBy',
+  deletedBy: 'deletedBy',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt',
+  deletedAt: 'deletedAt'
+} as const
+
+export type HrPositionScalarFieldEnum = (typeof HrPositionScalarFieldEnum)[keyof typeof HrPositionScalarFieldEnum]
+
+
+export const HrCostCenterScalarFieldEnum = {
+  id: 'id',
+  tenantId: 'tenantId',
+  code: 'code',
+  name: 'name',
+  nameAr: 'nameAr',
+  companyId: 'companyId',
+  departmentId: 'departmentId',
+  parentId: 'parentId',
+  finCostCenterId: 'finCostCenterId',
+  statusCode: 'statusCode',
+  isActive: 'isActive',
+  versionNumber: 'versionNumber',
+  createdBy: 'createdBy',
+  updatedBy: 'updatedBy',
+  deletedBy: 'deletedBy',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt',
+  deletedAt: 'deletedAt'
+} as const
+
+export type HrCostCenterScalarFieldEnum = (typeof HrCostCenterScalarFieldEnum)[keyof typeof HrCostCenterScalarFieldEnum]
+
+
+export const HrReportingStructureScalarFieldEnum = {
+  id: 'id',
+  tenantId: 'tenantId',
+  employeeId: 'employeeId',
+  managerId: 'managerId',
+  relationType: 'relationType',
+  effectiveFrom: 'effectiveFrom',
+  effectiveTo: 'effectiveTo',
+  isPrimary: 'isPrimary',
+  statusCode: 'statusCode',
+  isActive: 'isActive',
+  versionNumber: 'versionNumber',
+  createdBy: 'createdBy',
+  updatedBy: 'updatedBy',
+  deletedBy: 'deletedBy',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt',
+  deletedAt: 'deletedAt'
+} as const
+
+export type HrReportingStructureScalarFieldEnum = (typeof HrReportingStructureScalarFieldEnum)[keyof typeof HrReportingStructureScalarFieldEnum]
+
+
+export const HrEmployeeScalarFieldEnum = {
+  id: 'id',
+  tenantId: 'tenantId',
+  employeeCode: 'employeeCode',
+  profileId: 'profileId',
+  firstName: 'firstName',
+  middleName: 'middleName',
+  lastName: 'lastName',
+  firstNameAr: 'firstNameAr',
+  lastNameAr: 'lastNameAr',
+  displayName: 'displayName',
+  gender: 'gender',
+  dateOfBirth: 'dateOfBirth',
+  maritalStatus: 'maritalStatus',
+  nationality: 'nationality',
+  religion: 'religion',
+  bloodGroup: 'bloodGroup',
+  personalEmail: 'personalEmail',
+  workEmail: 'workEmail',
+  personalPhone: 'personalPhone',
+  workPhone: 'workPhone',
+  nationalId: 'nationalId',
+  passportNo: 'passportNo',
+  photoUrl: 'photoUrl',
+  companyId: 'companyId',
+  branchId: 'branchId',
+  departmentId: 'departmentId',
+  sectionId: 'sectionId',
+  positionId: 'positionId',
+  jobGradeId: 'jobGradeId',
+  costCenterId: 'costCenterId',
+  managerId: 'managerId',
+  employmentType: 'employmentType',
+  employmentStatus: 'employmentStatus',
+  hireDate: 'hireDate',
+  probationEndDate: 'probationEndDate',
+  confirmationDate: 'confirmationDate',
+  terminationDate: 'terminationDate',
+  terminationReason: 'terminationReason',
+  isRehireEligible: 'isRehireEligible',
+  workLocation: 'workLocation',
+  statusCode: 'statusCode',
+  isActive: 'isActive',
+  versionNumber: 'versionNumber',
+  createdBy: 'createdBy',
+  updatedBy: 'updatedBy',
+  deletedBy: 'deletedBy',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt',
+  deletedAt: 'deletedAt'
+} as const
+
+export type HrEmployeeScalarFieldEnum = (typeof HrEmployeeScalarFieldEnum)[keyof typeof HrEmployeeScalarFieldEnum]
+
+
+export const HrEmployeeContactScalarFieldEnum = {
+  id: 'id',
+  tenantId: 'tenantId',
+  employeeId: 'employeeId',
+  contactType: 'contactType',
+  name: 'name',
+  relationship: 'relationship',
+  phone: 'phone',
+  email: 'email',
+  isPrimary: 'isPrimary',
+  createdBy: 'createdBy',
+  updatedBy: 'updatedBy',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt',
+  deletedAt: 'deletedAt'
+} as const
+
+export type HrEmployeeContactScalarFieldEnum = (typeof HrEmployeeContactScalarFieldEnum)[keyof typeof HrEmployeeContactScalarFieldEnum]
+
+
+export const HrEmployeeAddressScalarFieldEnum = {
+  id: 'id',
+  tenantId: 'tenantId',
+  employeeId: 'employeeId',
+  addressType: 'addressType',
+  addressLine1: 'addressLine1',
+  addressLine2: 'addressLine2',
+  city: 'city',
+  state: 'state',
+  postalCode: 'postalCode',
+  country: 'country',
+  isPrimary: 'isPrimary',
+  createdBy: 'createdBy',
+  updatedBy: 'updatedBy',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt',
+  deletedAt: 'deletedAt'
+} as const
+
+export type HrEmployeeAddressScalarFieldEnum = (typeof HrEmployeeAddressScalarFieldEnum)[keyof typeof HrEmployeeAddressScalarFieldEnum]
+
+
+export const HrEmployeeDocumentScalarFieldEnum = {
+  id: 'id',
+  tenantId: 'tenantId',
+  employeeId: 'employeeId',
+  documentType: 'documentType',
+  documentName: 'documentName',
+  documentNo: 'documentNo',
+  issueDate: 'issueDate',
+  expiryDate: 'expiryDate',
+  fileUrl: 'fileUrl',
+  attachmentId: 'attachmentId',
+  isVerified: 'isVerified',
+  notes: 'notes',
+  createdBy: 'createdBy',
+  updatedBy: 'updatedBy',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt',
+  deletedAt: 'deletedAt'
+} as const
+
+export type HrEmployeeDocumentScalarFieldEnum = (typeof HrEmployeeDocumentScalarFieldEnum)[keyof typeof HrEmployeeDocumentScalarFieldEnum]
+
+
+export const HrEmployeeBankAccountScalarFieldEnum = {
+  id: 'id',
+  tenantId: 'tenantId',
+  employeeId: 'employeeId',
+  bankName: 'bankName',
+  accountName: 'accountName',
+  accountNumber: 'accountNumber',
+  iban: 'iban',
+  swiftCode: 'swiftCode',
+  branchName: 'branchName',
+  currencyCode: 'currencyCode',
+  isPrimary: 'isPrimary',
+  allocationPct: 'allocationPct',
+  statusCode: 'statusCode',
+  createdBy: 'createdBy',
+  updatedBy: 'updatedBy',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt',
+  deletedAt: 'deletedAt'
+} as const
+
+export type HrEmployeeBankAccountScalarFieldEnum = (typeof HrEmployeeBankAccountScalarFieldEnum)[keyof typeof HrEmployeeBankAccountScalarFieldEnum]
+
+
+export const HrEmployeeContractScalarFieldEnum = {
+  id: 'id',
+  tenantId: 'tenantId',
+  employeeId: 'employeeId',
+  contractNumber: 'contractNumber',
+  contractType: 'contractType',
+  startDate: 'startDate',
+  endDate: 'endDate',
+  jobGradeId: 'jobGradeId',
+  positionId: 'positionId',
+  baseSalary: 'baseSalary',
+  currencyCode: 'currencyCode',
+  payFrequency: 'payFrequency',
+  workingHours: 'workingHours',
+  probationMonths: 'probationMonths',
+  noticePeriodDays: 'noticePeriodDays',
+  salaryStructureId: 'salaryStructureId',
+  signedDate: 'signedDate',
+  fileUrl: 'fileUrl',
+  statusCode: 'statusCode',
+  isActive: 'isActive',
+  versionNumber: 'versionNumber',
+  createdBy: 'createdBy',
+  updatedBy: 'updatedBy',
+  deletedBy: 'deletedBy',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt',
+  deletedAt: 'deletedAt'
+} as const
+
+export type HrEmployeeContractScalarFieldEnum = (typeof HrEmployeeContractScalarFieldEnum)[keyof typeof HrEmployeeContractScalarFieldEnum]
+
+
+export const HrEmployeeHistoryScalarFieldEnum = {
+  id: 'id',
+  tenantId: 'tenantId',
+  employeeId: 'employeeId',
+  changeType: 'changeType',
+  fieldName: 'fieldName',
+  oldValue: 'oldValue',
+  newValue: 'newValue',
+  effectiveDate: 'effectiveDate',
+  reason: 'reason',
+  reference: 'reference',
+  changedBy: 'changedBy',
+  createdAt: 'createdAt'
+} as const
+
+export type HrEmployeeHistoryScalarFieldEnum = (typeof HrEmployeeHistoryScalarFieldEnum)[keyof typeof HrEmployeeHistoryScalarFieldEnum]
+
+
+export const HrEmployeeDependentScalarFieldEnum = {
+  id: 'id',
+  tenantId: 'tenantId',
+  employeeId: 'employeeId',
+  name: 'name',
+  relationship: 'relationship',
+  dateOfBirth: 'dateOfBirth',
+  gender: 'gender',
+  nationalId: 'nationalId',
+  isBeneficiary: 'isBeneficiary',
+  isInsured: 'isInsured',
+  createdBy: 'createdBy',
+  updatedBy: 'updatedBy',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt',
+  deletedAt: 'deletedAt'
+} as const
+
+export type HrEmployeeDependentScalarFieldEnum = (typeof HrEmployeeDependentScalarFieldEnum)[keyof typeof HrEmployeeDependentScalarFieldEnum]
+
+
+export const HrEmployeeEducationScalarFieldEnum = {
+  id: 'id',
+  tenantId: 'tenantId',
+  employeeId: 'employeeId',
+  institution: 'institution',
+  degree: 'degree',
+  fieldOfStudy: 'fieldOfStudy',
+  startYear: 'startYear',
+  endYear: 'endYear',
+  grade: 'grade',
+  country: 'country',
+  isVerified: 'isVerified',
+  createdBy: 'createdBy',
+  updatedBy: 'updatedBy',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt',
+  deletedAt: 'deletedAt'
+} as const
+
+export type HrEmployeeEducationScalarFieldEnum = (typeof HrEmployeeEducationScalarFieldEnum)[keyof typeof HrEmployeeEducationScalarFieldEnum]
+
+
+export const HrEmployeeExperienceScalarFieldEnum = {
+  id: 'id',
+  tenantId: 'tenantId',
+  employeeId: 'employeeId',
+  companyName: 'companyName',
+  jobTitle: 'jobTitle',
+  startDate: 'startDate',
+  endDate: 'endDate',
+  responsibilities: 'responsibilities',
+  reasonForLeaving: 'reasonForLeaving',
+  isVerified: 'isVerified',
+  createdBy: 'createdBy',
+  updatedBy: 'updatedBy',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt',
+  deletedAt: 'deletedAt'
+} as const
+
+export type HrEmployeeExperienceScalarFieldEnum = (typeof HrEmployeeExperienceScalarFieldEnum)[keyof typeof HrEmployeeExperienceScalarFieldEnum]
+
+
+export const HrEmployeeCertificationScalarFieldEnum = {
+  id: 'id',
+  tenantId: 'tenantId',
+  employeeId: 'employeeId',
+  name: 'name',
+  issuer: 'issuer',
+  certificateNo: 'certificateNo',
+  issueDate: 'issueDate',
+  expiryDate: 'expiryDate',
+  fileUrl: 'fileUrl',
+  createdBy: 'createdBy',
+  updatedBy: 'updatedBy',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt',
+  deletedAt: 'deletedAt'
+} as const
+
+export type HrEmployeeCertificationScalarFieldEnum = (typeof HrEmployeeCertificationScalarFieldEnum)[keyof typeof HrEmployeeCertificationScalarFieldEnum]
+
+
+export const HrEmployeeLanguageScalarFieldEnum = {
+  id: 'id',
+  tenantId: 'tenantId',
+  employeeId: 'employeeId',
+  language: 'language',
+  proficiency: 'proficiency',
+  canRead: 'canRead',
+  canWrite: 'canWrite',
+  canSpeak: 'canSpeak',
+  isNative: 'isNative',
+  createdBy: 'createdBy',
+  updatedBy: 'updatedBy',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt',
+  deletedAt: 'deletedAt'
+} as const
+
+export type HrEmployeeLanguageScalarFieldEnum = (typeof HrEmployeeLanguageScalarFieldEnum)[keyof typeof HrEmployeeLanguageScalarFieldEnum]
+
+
+export const HrJobOpeningScalarFieldEnum = {
+  id: 'id',
+  tenantId: 'tenantId',
+  requisitionNo: 'requisitionNo',
+  title: 'title',
+  departmentId: 'departmentId',
+  positionId: 'positionId',
+  jobGradeId: 'jobGradeId',
+  branchId: 'branchId',
+  hiringManagerId: 'hiringManagerId',
+  employmentType: 'employmentType',
+  vacancies: 'vacancies',
+  description: 'description',
+  requirements: 'requirements',
+  salaryMin: 'salaryMin',
+  salaryMax: 'salaryMax',
+  currencyCode: 'currencyCode',
+  openDate: 'openDate',
+  targetCloseDate: 'targetCloseDate',
+  approvalRequestId: 'approvalRequestId',
+  statusCode: 'statusCode',
+  isActive: 'isActive',
+  versionNumber: 'versionNumber',
+  createdBy: 'createdBy',
+  updatedBy: 'updatedBy',
+  deletedBy: 'deletedBy',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt',
+  deletedAt: 'deletedAt'
+} as const
+
+export type HrJobOpeningScalarFieldEnum = (typeof HrJobOpeningScalarFieldEnum)[keyof typeof HrJobOpeningScalarFieldEnum]
+
+
+export const HrCandidateScalarFieldEnum = {
+  id: 'id',
+  tenantId: 'tenantId',
+  jobOpeningId: 'jobOpeningId',
+  candidateCode: 'candidateCode',
+  firstName: 'firstName',
+  lastName: 'lastName',
+  email: 'email',
+  phone: 'phone',
+  source: 'source',
+  resumeUrl: 'resumeUrl',
+  currentEmployer: 'currentEmployer',
+  expectedSalary: 'expectedSalary',
+  noticePeriodDays: 'noticePeriodDays',
+  rating: 'rating',
+  stageCode: 'stageCode',
+  statusCode: 'statusCode',
+  isActive: 'isActive',
+  versionNumber: 'versionNumber',
+  createdBy: 'createdBy',
+  updatedBy: 'updatedBy',
+  deletedBy: 'deletedBy',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt',
+  deletedAt: 'deletedAt'
+} as const
+
+export type HrCandidateScalarFieldEnum = (typeof HrCandidateScalarFieldEnum)[keyof typeof HrCandidateScalarFieldEnum]
+
+
+export const HrCandidateDocumentScalarFieldEnum = {
+  id: 'id',
+  tenantId: 'tenantId',
+  candidateId: 'candidateId',
+  documentType: 'documentType',
+  documentName: 'documentName',
+  fileUrl: 'fileUrl',
+  attachmentId: 'attachmentId',
+  createdBy: 'createdBy',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt',
+  deletedAt: 'deletedAt'
+} as const
+
+export type HrCandidateDocumentScalarFieldEnum = (typeof HrCandidateDocumentScalarFieldEnum)[keyof typeof HrCandidateDocumentScalarFieldEnum]
+
+
+export const HrInterviewScalarFieldEnum = {
+  id: 'id',
+  tenantId: 'tenantId',
+  candidateId: 'candidateId',
+  jobOpeningId: 'jobOpeningId',
+  roundNumber: 'roundNumber',
+  interviewType: 'interviewType',
+  scheduledAt: 'scheduledAt',
+  durationMins: 'durationMins',
+  location: 'location',
+  meetingLink: 'meetingLink',
+  statusCode: 'statusCode',
+  isActive: 'isActive',
+  versionNumber: 'versionNumber',
+  createdBy: 'createdBy',
+  updatedBy: 'updatedBy',
+  deletedBy: 'deletedBy',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt',
+  deletedAt: 'deletedAt'
+} as const
+
+export type HrInterviewScalarFieldEnum = (typeof HrInterviewScalarFieldEnum)[keyof typeof HrInterviewScalarFieldEnum]
+
+
+export const HrInterviewFeedbackScalarFieldEnum = {
+  id: 'id',
+  tenantId: 'tenantId',
+  interviewId: 'interviewId',
+  interviewerId: 'interviewerId',
+  overallScore: 'overallScore',
+  recommendation: 'recommendation',
+  strengths: 'strengths',
+  weaknesses: 'weaknesses',
+  comments: 'comments',
+  createdBy: 'createdBy',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt',
+  deletedAt: 'deletedAt'
+} as const
+
+export type HrInterviewFeedbackScalarFieldEnum = (typeof HrInterviewFeedbackScalarFieldEnum)[keyof typeof HrInterviewFeedbackScalarFieldEnum]
+
+
+export const HrJobOfferScalarFieldEnum = {
+  id: 'id',
+  tenantId: 'tenantId',
+  candidateId: 'candidateId',
+  jobOpeningId: 'jobOpeningId',
+  offerNumber: 'offerNumber',
+  positionId: 'positionId',
+  jobGradeId: 'jobGradeId',
+  offeredSalary: 'offeredSalary',
+  currencyCode: 'currencyCode',
+  startDate: 'startDate',
+  expiryDate: 'expiryDate',
+  offerLetterUrl: 'offerLetterUrl',
+  approvalRequestId: 'approvalRequestId',
+  statusCode: 'statusCode',
+  isActive: 'isActive',
+  versionNumber: 'versionNumber',
+  createdBy: 'createdBy',
+  updatedBy: 'updatedBy',
+  deletedBy: 'deletedBy',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt',
+  deletedAt: 'deletedAt'
+} as const
+
+export type HrJobOfferScalarFieldEnum = (typeof HrJobOfferScalarFieldEnum)[keyof typeof HrJobOfferScalarFieldEnum]
+
+
+export const HrOfferAcceptanceScalarFieldEnum = {
+  id: 'id',
+  tenantId: 'tenantId',
+  offerId: 'offerId',
+  respondedAt: 'respondedAt',
+  decision: 'decision',
+  signatureUrl: 'signatureUrl',
+  comments: 'comments',
+  createdBy: 'createdBy',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt',
+  deletedAt: 'deletedAt'
+} as const
+
+export type HrOfferAcceptanceScalarFieldEnum = (typeof HrOfferAcceptanceScalarFieldEnum)[keyof typeof HrOfferAcceptanceScalarFieldEnum]
+
+
+export const HrOnboardingTemplateScalarFieldEnum = {
+  id: 'id',
+  tenantId: 'tenantId',
+  code: 'code',
+  name: 'name',
+  nameAr: 'nameAr',
+  departmentId: 'departmentId',
+  description: 'description',
+  statusCode: 'statusCode',
+  isActive: 'isActive',
+  versionNumber: 'versionNumber',
+  createdBy: 'createdBy',
+  updatedBy: 'updatedBy',
+  deletedBy: 'deletedBy',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt',
+  deletedAt: 'deletedAt'
+} as const
+
+export type HrOnboardingTemplateScalarFieldEnum = (typeof HrOnboardingTemplateScalarFieldEnum)[keyof typeof HrOnboardingTemplateScalarFieldEnum]
+
+
+export const HrOnboardingTaskScalarFieldEnum = {
+  id: 'id',
+  tenantId: 'tenantId',
+  templateId: 'templateId',
+  sequence: 'sequence',
+  title: 'title',
+  category: 'category',
+  ownerRole: 'ownerRole',
+  dueOffsetDays: 'dueOffsetDays',
+  isMandatory: 'isMandatory',
+  createdBy: 'createdBy',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt',
+  deletedAt: 'deletedAt'
+} as const
+
+export type HrOnboardingTaskScalarFieldEnum = (typeof HrOnboardingTaskScalarFieldEnum)[keyof typeof HrOnboardingTaskScalarFieldEnum]
+
+
+export const HrEmployeeOnboardingScalarFieldEnum = {
+  id: 'id',
+  tenantId: 'tenantId',
+  employeeId: 'employeeId',
+  templateId: 'templateId',
+  taskId: 'taskId',
+  title: 'title',
+  category: 'category',
+  assignedToId: 'assignedToId',
+  dueDate: 'dueDate',
+  completedAt: 'completedAt',
+  statusCode: 'statusCode',
+  notes: 'notes',
+  versionNumber: 'versionNumber',
+  createdBy: 'createdBy',
+  updatedBy: 'updatedBy',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt',
+  deletedAt: 'deletedAt'
+} as const
+
+export type HrEmployeeOnboardingScalarFieldEnum = (typeof HrEmployeeOnboardingScalarFieldEnum)[keyof typeof HrEmployeeOnboardingScalarFieldEnum]
+
+
+export const HrShiftDefinitionScalarFieldEnum = {
+  id: 'id',
+  tenantId: 'tenantId',
+  code: 'code',
+  name: 'name',
+  nameAr: 'nameAr',
+  shiftType: 'shiftType',
+  startTime: 'startTime',
+  endTime: 'endTime',
+  breakMinutes: 'breakMinutes',
+  workHours: 'workHours',
+  isNightShift: 'isNightShift',
+  graceInMins: 'graceInMins',
+  graceOutMins: 'graceOutMins',
+  statusCode: 'statusCode',
+  isActive: 'isActive',
+  versionNumber: 'versionNumber',
+  createdBy: 'createdBy',
+  updatedBy: 'updatedBy',
+  deletedBy: 'deletedBy',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt',
+  deletedAt: 'deletedAt'
+} as const
+
+export type HrShiftDefinitionScalarFieldEnum = (typeof HrShiftDefinitionScalarFieldEnum)[keyof typeof HrShiftDefinitionScalarFieldEnum]
+
+
+export const HrShiftPatternScalarFieldEnum = {
+  id: 'id',
+  tenantId: 'tenantId',
+  code: 'code',
+  name: 'name',
+  rotationDays: 'rotationDays',
+  patternJson: 'patternJson',
+  statusCode: 'statusCode',
+  isActive: 'isActive',
+  versionNumber: 'versionNumber',
+  createdBy: 'createdBy',
+  updatedBy: 'updatedBy',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt',
+  deletedAt: 'deletedAt'
+} as const
+
+export type HrShiftPatternScalarFieldEnum = (typeof HrShiftPatternScalarFieldEnum)[keyof typeof HrShiftPatternScalarFieldEnum]
+
+
+export const HrShiftAssignmentScalarFieldEnum = {
+  id: 'id',
+  tenantId: 'tenantId',
+  employeeId: 'employeeId',
+  shiftId: 'shiftId',
+  patternId: 'patternId',
+  startDate: 'startDate',
+  endDate: 'endDate',
+  statusCode: 'statusCode',
+  isActive: 'isActive',
+  versionNumber: 'versionNumber',
+  createdBy: 'createdBy',
+  updatedBy: 'updatedBy',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt',
+  deletedAt: 'deletedAt'
+} as const
+
+export type HrShiftAssignmentScalarFieldEnum = (typeof HrShiftAssignmentScalarFieldEnum)[keyof typeof HrShiftAssignmentScalarFieldEnum]
+
+
+export const HrAttendanceLogScalarFieldEnum = {
+  id: 'id',
+  tenantId: 'tenantId',
+  employeeId: 'employeeId',
+  eventTime: 'eventTime',
+  direction: 'direction',
+  captureMethod: 'captureMethod',
+  deviceId: 'deviceId',
+  latitude: 'latitude',
+  longitude: 'longitude',
+  isProcessed: 'isProcessed',
+  rawPayload: 'rawPayload',
+  createdAt: 'createdAt'
+} as const
+
+export type HrAttendanceLogScalarFieldEnum = (typeof HrAttendanceLogScalarFieldEnum)[keyof typeof HrAttendanceLogScalarFieldEnum]
+
+
+export const HrAttendanceDailyScalarFieldEnum = {
+  id: 'id',
+  tenantId: 'tenantId',
+  employeeId: 'employeeId',
+  workDate: 'workDate',
+  shiftId: 'shiftId',
+  firstIn: 'firstIn',
+  lastOut: 'lastOut',
+  workedHours: 'workedHours',
+  overtimeHours: 'overtimeHours',
+  lateMinutes: 'lateMinutes',
+  earlyOutMins: 'earlyOutMins',
+  attendanceCode: 'attendanceCode',
+  isManualEdit: 'isManualEdit',
+  versionNumber: 'versionNumber',
+  createdBy: 'createdBy',
+  updatedBy: 'updatedBy',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type HrAttendanceDailyScalarFieldEnum = (typeof HrAttendanceDailyScalarFieldEnum)[keyof typeof HrAttendanceDailyScalarFieldEnum]
+
+
+export const HrTimesheetScalarFieldEnum = {
+  id: 'id',
+  tenantId: 'tenantId',
+  employeeId: 'employeeId',
+  periodStart: 'periodStart',
+  periodEnd: 'periodEnd',
+  totalHours: 'totalHours',
+  billableHours: 'billableHours',
+  projectId: 'projectId',
+  approvalRequestId: 'approvalRequestId',
+  statusCode: 'statusCode',
+  isActive: 'isActive',
+  versionNumber: 'versionNumber',
+  createdBy: 'createdBy',
+  updatedBy: 'updatedBy',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt',
+  deletedAt: 'deletedAt'
+} as const
+
+export type HrTimesheetScalarFieldEnum = (typeof HrTimesheetScalarFieldEnum)[keyof typeof HrTimesheetScalarFieldEnum]
+
+
+export const HrOvertimeRequestScalarFieldEnum = {
+  id: 'id',
+  tenantId: 'tenantId',
+  employeeId: 'employeeId',
+  requestNumber: 'requestNumber',
+  overtimeDate: 'overtimeDate',
+  startTime: 'startTime',
+  endTime: 'endTime',
+  hours: 'hours',
+  rateMultiplier: 'rateMultiplier',
+  reason: 'reason',
+  approvalRequestId: 'approvalRequestId',
+  statusCode: 'statusCode',
+  isActive: 'isActive',
+  versionNumber: 'versionNumber',
+  createdBy: 'createdBy',
+  updatedBy: 'updatedBy',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt',
+  deletedAt: 'deletedAt'
+} as const
+
+export type HrOvertimeRequestScalarFieldEnum = (typeof HrOvertimeRequestScalarFieldEnum)[keyof typeof HrOvertimeRequestScalarFieldEnum]
+
+
+export const HrBreakLogScalarFieldEnum = {
+  id: 'id',
+  tenantId: 'tenantId',
+  employeeId: 'employeeId',
+  attendanceDailyId: 'attendanceDailyId',
+  breakStart: 'breakStart',
+  breakEnd: 'breakEnd',
+  breakType: 'breakType',
+  minutes: 'minutes',
+  isPaid: 'isPaid',
+  createdAt: 'createdAt'
+} as const
+
+export type HrBreakLogScalarFieldEnum = (typeof HrBreakLogScalarFieldEnum)[keyof typeof HrBreakLogScalarFieldEnum]
+
+
+export const HrLeaveTypeScalarFieldEnum = {
+  id: 'id',
+  tenantId: 'tenantId',
+  code: 'code',
+  name: 'name',
+  nameAr: 'nameAr',
+  isPaid: 'isPaid',
+  affectsPayroll: 'affectsPayroll',
+  requiresDocument: 'requiresDocument',
+  maxDaysPerYear: 'maxDaysPerYear',
+  gender: 'gender',
+  colorHex: 'colorHex',
+  statusCode: 'statusCode',
+  isActive: 'isActive',
+  versionNumber: 'versionNumber',
+  createdBy: 'createdBy',
+  updatedBy: 'updatedBy',
+  deletedBy: 'deletedBy',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt',
+  deletedAt: 'deletedAt'
+} as const
+
+export type HrLeaveTypeScalarFieldEnum = (typeof HrLeaveTypeScalarFieldEnum)[keyof typeof HrLeaveTypeScalarFieldEnum]
+
+
+export const HrLeavePolicyScalarFieldEnum = {
+  id: 'id',
+  tenantId: 'tenantId',
+  leaveTypeId: 'leaveTypeId',
+  name: 'name',
+  jobGradeId: 'jobGradeId',
+  accrualMethod: 'accrualMethod',
+  daysPerYear: 'daysPerYear',
+  accrualRate: 'accrualRate',
+  maxCarryover: 'maxCarryover',
+  minServiceMonths: 'minServiceMonths',
+  allowNegative: 'allowNegative',
+  statusCode: 'statusCode',
+  isActive: 'isActive',
+  versionNumber: 'versionNumber',
+  createdBy: 'createdBy',
+  updatedBy: 'updatedBy',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt',
+  deletedAt: 'deletedAt'
+} as const
+
+export type HrLeavePolicyScalarFieldEnum = (typeof HrLeavePolicyScalarFieldEnum)[keyof typeof HrLeavePolicyScalarFieldEnum]
+
+
+export const HrLeaveBalanceScalarFieldEnum = {
+  id: 'id',
+  tenantId: 'tenantId',
+  employeeId: 'employeeId',
+  leaveTypeId: 'leaveTypeId',
+  year: 'year',
+  entitledDays: 'entitledDays',
+  accruedDays: 'accruedDays',
+  usedDays: 'usedDays',
+  pendingDays: 'pendingDays',
+  carriedDays: 'carriedDays',
+  balanceDays: 'balanceDays',
+  versionNumber: 'versionNumber',
+  createdBy: 'createdBy',
+  updatedBy: 'updatedBy',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type HrLeaveBalanceScalarFieldEnum = (typeof HrLeaveBalanceScalarFieldEnum)[keyof typeof HrLeaveBalanceScalarFieldEnum]
+
+
+export const HrLeaveRequestScalarFieldEnum = {
+  id: 'id',
+  tenantId: 'tenantId',
+  employeeId: 'employeeId',
+  leaveTypeId: 'leaveTypeId',
+  requestNumber: 'requestNumber',
+  startDate: 'startDate',
+  endDate: 'endDate',
+  totalDays: 'totalDays',
+  isHalfDay: 'isHalfDay',
+  reason: 'reason',
+  contactDuringLeave: 'contactDuringLeave',
+  documentUrl: 'documentUrl',
+  approvalRequestId: 'approvalRequestId',
+  statusCode: 'statusCode',
+  isActive: 'isActive',
+  versionNumber: 'versionNumber',
+  createdBy: 'createdBy',
+  updatedBy: 'updatedBy',
+  deletedBy: 'deletedBy',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt',
+  deletedAt: 'deletedAt'
+} as const
+
+export type HrLeaveRequestScalarFieldEnum = (typeof HrLeaveRequestScalarFieldEnum)[keyof typeof HrLeaveRequestScalarFieldEnum]
+
+
+export const HrLeaveApprovalScalarFieldEnum = {
+  id: 'id',
+  tenantId: 'tenantId',
+  leaveRequestId: 'leaveRequestId',
+  approverId: 'approverId',
+  stepOrder: 'stepOrder',
+  decision: 'decision',
+  comments: 'comments',
+  decidedAt: 'decidedAt',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type HrLeaveApprovalScalarFieldEnum = (typeof HrLeaveApprovalScalarFieldEnum)[keyof typeof HrLeaveApprovalScalarFieldEnum]
+
+
+export const HrSalaryComponentScalarFieldEnum = {
+  id: 'id',
+  tenantId: 'tenantId',
+  code: 'code',
+  name: 'name',
+  nameAr: 'nameAr',
+  componentType: 'componentType',
+  calcMethod: 'calcMethod',
+  formula: 'formula',
+  isTaxable: 'isTaxable',
+  affectsGross: 'affectsGross',
+  glAccountId: 'glAccountId',
+  displayOrder: 'displayOrder',
+  statusCode: 'statusCode',
+  isActive: 'isActive',
+  versionNumber: 'versionNumber',
+  createdBy: 'createdBy',
+  updatedBy: 'updatedBy',
+  deletedBy: 'deletedBy',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt',
+  deletedAt: 'deletedAt'
+} as const
+
+export type HrSalaryComponentScalarFieldEnum = (typeof HrSalaryComponentScalarFieldEnum)[keyof typeof HrSalaryComponentScalarFieldEnum]
+
+
+export const HrSalaryStructureScalarFieldEnum = {
+  id: 'id',
+  tenantId: 'tenantId',
+  code: 'code',
+  name: 'name',
+  nameAr: 'nameAr',
+  jobGradeId: 'jobGradeId',
+  currencyCode: 'currencyCode',
+  componentsJson: 'componentsJson',
+  statusCode: 'statusCode',
+  isActive: 'isActive',
+  versionNumber: 'versionNumber',
+  createdBy: 'createdBy',
+  updatedBy: 'updatedBy',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt',
+  deletedAt: 'deletedAt'
+} as const
+
+export type HrSalaryStructureScalarFieldEnum = (typeof HrSalaryStructureScalarFieldEnum)[keyof typeof HrSalaryStructureScalarFieldEnum]
+
+
+export const HrEmployeeSalaryComponentScalarFieldEnum = {
+  id: 'id',
+  tenantId: 'tenantId',
+  employeeId: 'employeeId',
+  componentId: 'componentId',
+  amount: 'amount',
+  percentage: 'percentage',
+  currencyCode: 'currencyCode',
+  effectiveFrom: 'effectiveFrom',
+  effectiveTo: 'effectiveTo',
+  statusCode: 'statusCode',
+  isActive: 'isActive',
+  versionNumber: 'versionNumber',
+  createdBy: 'createdBy',
+  updatedBy: 'updatedBy',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt',
+  deletedAt: 'deletedAt'
+} as const
+
+export type HrEmployeeSalaryComponentScalarFieldEnum = (typeof HrEmployeeSalaryComponentScalarFieldEnum)[keyof typeof HrEmployeeSalaryComponentScalarFieldEnum]
+
+
+export const HrPayrollPeriodScalarFieldEnum = {
+  id: 'id',
+  tenantId: 'tenantId',
+  code: 'code',
+  name: 'name',
+  periodType: 'periodType',
+  startDate: 'startDate',
+  endDate: 'endDate',
+  payDate: 'payDate',
+  statusCode: 'statusCode',
+  isActive: 'isActive',
+  versionNumber: 'versionNumber',
+  createdBy: 'createdBy',
+  updatedBy: 'updatedBy',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt',
+  deletedAt: 'deletedAt'
+} as const
+
+export type HrPayrollPeriodScalarFieldEnum = (typeof HrPayrollPeriodScalarFieldEnum)[keyof typeof HrPayrollPeriodScalarFieldEnum]
+
+
+export const HrPayrollRunScalarFieldEnum = {
+  id: 'id',
+  tenantId: 'tenantId',
+  periodId: 'periodId',
+  runNumber: 'runNumber',
+  runType: 'runType',
+  companyId: 'companyId',
+  branchId: 'branchId',
+  departmentId: 'departmentId',
+  currencyCode: 'currencyCode',
+  employeeCount: 'employeeCount',
+  totalGross: 'totalGross',
+  totalDeductions: 'totalDeductions',
+  totalNet: 'totalNet',
+  approvalRequestId: 'approvalRequestId',
+  journalEntryId: 'journalEntryId',
+  isPosted: 'isPosted',
+  postedAt: 'postedAt',
+  postedByProfileId: 'postedByProfileId',
+  paidAt: 'paidAt',
+  statusCode: 'statusCode',
+  isActive: 'isActive',
+  versionNumber: 'versionNumber',
+  createdBy: 'createdBy',
+  updatedBy: 'updatedBy',
+  deletedBy: 'deletedBy',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt',
+  deletedAt: 'deletedAt'
+} as const
+
+export type HrPayrollRunScalarFieldEnum = (typeof HrPayrollRunScalarFieldEnum)[keyof typeof HrPayrollRunScalarFieldEnum]
+
+
+export const HrPayrollDetailScalarFieldEnum = {
+  id: 'id',
+  tenantId: 'tenantId',
+  payrollRunId: 'payrollRunId',
+  employeeId: 'employeeId',
+  contractId: 'contractId',
+  currencyCode: 'currencyCode',
+  workedDays: 'workedDays',
+  absentDays: 'absentDays',
+  overtimeHours: 'overtimeHours',
+  grossPay: 'grossPay',
+  totalEarnings: 'totalEarnings',
+  totalDeductions: 'totalDeductions',
+  netPay: 'netPay',
+  bankAccountId: 'bankAccountId',
+  paymentStatus: 'paymentStatus',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type HrPayrollDetailScalarFieldEnum = (typeof HrPayrollDetailScalarFieldEnum)[keyof typeof HrPayrollDetailScalarFieldEnum]
+
+
+export const HrPayrollComponentDetailScalarFieldEnum = {
+  id: 'id',
+  tenantId: 'tenantId',
+  payrollDetailId: 'payrollDetailId',
+  componentId: 'componentId',
+  componentCode: 'componentCode',
+  componentName: 'componentName',
+  componentType: 'componentType',
+  amount: 'amount',
+  isTaxable: 'isTaxable',
+  createdAt: 'createdAt'
+} as const
+
+export type HrPayrollComponentDetailScalarFieldEnum = (typeof HrPayrollComponentDetailScalarFieldEnum)[keyof typeof HrPayrollComponentDetailScalarFieldEnum]
+
+
+export const HrLoanScalarFieldEnum = {
+  id: 'id',
+  tenantId: 'tenantId',
+  employeeId: 'employeeId',
+  loanNumber: 'loanNumber',
+  loanType: 'loanType',
+  principalAmount: 'principalAmount',
+  currencyCode: 'currencyCode',
+  interestRate: 'interestRate',
+  installments: 'installments',
+  installmentAmount: 'installmentAmount',
+  outstandingAmount: 'outstandingAmount',
+  startDate: 'startDate',
+  approvalRequestId: 'approvalRequestId',
+  journalEntryId: 'journalEntryId',
+  statusCode: 'statusCode',
+  isActive: 'isActive',
+  versionNumber: 'versionNumber',
+  createdBy: 'createdBy',
+  updatedBy: 'updatedBy',
+  deletedBy: 'deletedBy',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt',
+  deletedAt: 'deletedAt'
+} as const
+
+export type HrLoanScalarFieldEnum = (typeof HrLoanScalarFieldEnum)[keyof typeof HrLoanScalarFieldEnum]
+
+
+export const HrLoanInstallmentScalarFieldEnum = {
+  id: 'id',
+  tenantId: 'tenantId',
+  loanId: 'loanId',
+  installmentNo: 'installmentNo',
+  dueDate: 'dueDate',
+  amount: 'amount',
+  principalPart: 'principalPart',
+  interestPart: 'interestPart',
+  payrollRunId: 'payrollRunId',
+  paidAt: 'paidAt',
+  statusCode: 'statusCode',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type HrLoanInstallmentScalarFieldEnum = (typeof HrLoanInstallmentScalarFieldEnum)[keyof typeof HrLoanInstallmentScalarFieldEnum]
+
+
+export const HrSalaryAdvanceScalarFieldEnum = {
+  id: 'id',
+  tenantId: 'tenantId',
+  employeeId: 'employeeId',
+  advanceNumber: 'advanceNumber',
+  amount: 'amount',
+  currencyCode: 'currencyCode',
+  reason: 'reason',
+  recoveryMonths: 'recoveryMonths',
+  recoveredAmount: 'recoveredAmount',
+  approvalRequestId: 'approvalRequestId',
+  journalEntryId: 'journalEntryId',
+  statusCode: 'statusCode',
+  isActive: 'isActive',
+  versionNumber: 'versionNumber',
+  createdBy: 'createdBy',
+  updatedBy: 'updatedBy',
+  deletedBy: 'deletedBy',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt',
+  deletedAt: 'deletedAt'
+} as const
+
+export type HrSalaryAdvanceScalarFieldEnum = (typeof HrSalaryAdvanceScalarFieldEnum)[keyof typeof HrSalaryAdvanceScalarFieldEnum]
+
+
+export const HrEmployeeBenefitScalarFieldEnum = {
+  id: 'id',
+  tenantId: 'tenantId',
+  employeeId: 'employeeId',
+  benefitType: 'benefitType',
+  name: 'name',
+  provider: 'provider',
+  amount: 'amount',
+  currencyCode: 'currencyCode',
+  frequency: 'frequency',
+  startDate: 'startDate',
+  endDate: 'endDate',
+  policyNumber: 'policyNumber',
+  coverageDetails: 'coverageDetails',
+  statusCode: 'statusCode',
+  isActive: 'isActive',
+  versionNumber: 'versionNumber',
+  createdBy: 'createdBy',
+  updatedBy: 'updatedBy',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt',
+  deletedAt: 'deletedAt'
+} as const
+
+export type HrEmployeeBenefitScalarFieldEnum = (typeof HrEmployeeBenefitScalarFieldEnum)[keyof typeof HrEmployeeBenefitScalarFieldEnum]
+
+
+export const HrCommissionScalarFieldEnum = {
+  id: 'id',
+  tenantId: 'tenantId',
+  employeeId: 'employeeId',
+  sourceType: 'sourceType',
+  sourceId: 'sourceId',
+  periodId: 'periodId',
+  baseAmount: 'baseAmount',
+  commissionRate: 'commissionRate',
+  commissionAmount: 'commissionAmount',
+  currencyCode: 'currencyCode',
+  payrollRunId: 'payrollRunId',
+  statusCode: 'statusCode',
+  isActive: 'isActive',
+  versionNumber: 'versionNumber',
+  createdBy: 'createdBy',
+  updatedBy: 'updatedBy',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt',
+  deletedAt: 'deletedAt'
+} as const
+
+export type HrCommissionScalarFieldEnum = (typeof HrCommissionScalarFieldEnum)[keyof typeof HrCommissionScalarFieldEnum]
+
+
+export const HrKpiScalarFieldEnum = {
+  id: 'id',
+  tenantId: 'tenantId',
+  code: 'code',
+  name: 'name',
+  nameAr: 'nameAr',
+  category: 'category',
+  measureUnit: 'measureUnit',
+  targetValue: 'targetValue',
+  weight: 'weight',
+  statusCode: 'statusCode',
+  isActive: 'isActive',
+  versionNumber: 'versionNumber',
+  createdBy: 'createdBy',
+  updatedBy: 'updatedBy',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt',
+  deletedAt: 'deletedAt'
+} as const
+
+export type HrKpiScalarFieldEnum = (typeof HrKpiScalarFieldEnum)[keyof typeof HrKpiScalarFieldEnum]
+
+
+export const HrGoalScalarFieldEnum = {
+  id: 'id',
+  tenantId: 'tenantId',
+  employeeId: 'employeeId',
+  kpiId: 'kpiId',
+  title: 'title',
+  description: 'description',
+  category: 'category',
+  weight: 'weight',
+  targetValue: 'targetValue',
+  startDate: 'startDate',
+  dueDate: 'dueDate',
+  progressPct: 'progressPct',
+  statusCode: 'statusCode',
+  isActive: 'isActive',
+  versionNumber: 'versionNumber',
+  createdBy: 'createdBy',
+  updatedBy: 'updatedBy',
+  deletedBy: 'deletedBy',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt',
+  deletedAt: 'deletedAt'
+} as const
+
+export type HrGoalScalarFieldEnum = (typeof HrGoalScalarFieldEnum)[keyof typeof HrGoalScalarFieldEnum]
+
+
+export const HrGoalProgressScalarFieldEnum = {
+  id: 'id',
+  tenantId: 'tenantId',
+  goalId: 'goalId',
+  progressPct: 'progressPct',
+  actualValue: 'actualValue',
+  note: 'note',
+  recordedById: 'recordedById',
+  recordedAt: 'recordedAt',
+  createdAt: 'createdAt'
+} as const
+
+export type HrGoalProgressScalarFieldEnum = (typeof HrGoalProgressScalarFieldEnum)[keyof typeof HrGoalProgressScalarFieldEnum]
+
+
+export const HrReviewTemplateScalarFieldEnum = {
+  id: 'id',
+  tenantId: 'tenantId',
+  code: 'code',
+  name: 'name',
+  nameAr: 'nameAr',
+  reviewType: 'reviewType',
+  sectionsJson: 'sectionsJson',
+  ratingScaleMax: 'ratingScaleMax',
+  statusCode: 'statusCode',
+  isActive: 'isActive',
+  versionNumber: 'versionNumber',
+  createdBy: 'createdBy',
+  updatedBy: 'updatedBy',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt',
+  deletedAt: 'deletedAt'
+} as const
+
+export type HrReviewTemplateScalarFieldEnum = (typeof HrReviewTemplateScalarFieldEnum)[keyof typeof HrReviewTemplateScalarFieldEnum]
+
+
+export const HrPerformanceReviewScalarFieldEnum = {
+  id: 'id',
+  tenantId: 'tenantId',
+  employeeId: 'employeeId',
+  templateId: 'templateId',
+  reviewerId: 'reviewerId',
+  reviewType: 'reviewType',
+  periodStart: 'periodStart',
+  periodEnd: 'periodEnd',
+  overallScore: 'overallScore',
+  ratingLabel: 'ratingLabel',
+  strengths: 'strengths',
+  improvements: 'improvements',
+  comments: 'comments',
+  employeeComments: 'employeeComments',
+  statusCode: 'statusCode',
+  isActive: 'isActive',
+  versionNumber: 'versionNumber',
+  createdBy: 'createdBy',
+  updatedBy: 'updatedBy',
+  deletedBy: 'deletedBy',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt',
+  deletedAt: 'deletedAt'
+} as const
+
+export type HrPerformanceReviewScalarFieldEnum = (typeof HrPerformanceReviewScalarFieldEnum)[keyof typeof HrPerformanceReviewScalarFieldEnum]
+
+
+export const HrReviewScoreScalarFieldEnum = {
+  id: 'id',
+  tenantId: 'tenantId',
+  reviewId: 'reviewId',
+  kpiId: 'kpiId',
+  criterion: 'criterion',
+  weight: 'weight',
+  score: 'score',
+  reviewerType: 'reviewerType',
+  comments: 'comments',
+  createdAt: 'createdAt'
+} as const
+
+export type HrReviewScoreScalarFieldEnum = (typeof HrReviewScoreScalarFieldEnum)[keyof typeof HrReviewScoreScalarFieldEnum]
+
+
+export const HrTrainingCourseScalarFieldEnum = {
+  id: 'id',
+  tenantId: 'tenantId',
+  code: 'code',
+  name: 'name',
+  nameAr: 'nameAr',
+  category: 'category',
+  deliveryMode: 'deliveryMode',
+  provider: 'provider',
+  durationHours: 'durationHours',
+  cost: 'cost',
+  currencyCode: 'currencyCode',
+  description: 'description',
+  statusCode: 'statusCode',
+  isActive: 'isActive',
+  versionNumber: 'versionNumber',
+  createdBy: 'createdBy',
+  updatedBy: 'updatedBy',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt',
+  deletedAt: 'deletedAt'
+} as const
+
+export type HrTrainingCourseScalarFieldEnum = (typeof HrTrainingCourseScalarFieldEnum)[keyof typeof HrTrainingCourseScalarFieldEnum]
+
+
+export const HrTrainingSessionScalarFieldEnum = {
+  id: 'id',
+  tenantId: 'tenantId',
+  courseId: 'courseId',
+  code: 'code',
+  trainerId: 'trainerId',
+  trainerName: 'trainerName',
+  location: 'location',
+  startDate: 'startDate',
+  endDate: 'endDate',
+  capacity: 'capacity',
+  statusCode: 'statusCode',
+  isActive: 'isActive',
+  versionNumber: 'versionNumber',
+  createdBy: 'createdBy',
+  updatedBy: 'updatedBy',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt',
+  deletedAt: 'deletedAt'
+} as const
+
+export type HrTrainingSessionScalarFieldEnum = (typeof HrTrainingSessionScalarFieldEnum)[keyof typeof HrTrainingSessionScalarFieldEnum]
+
+
+export const HrTrainingRecordScalarFieldEnum = {
+  id: 'id',
+  tenantId: 'tenantId',
+  sessionId: 'sessionId',
+  employeeId: 'employeeId',
+  enrolledAt: 'enrolledAt',
+  attendancePct: 'attendancePct',
+  score: 'score',
+  completedAt: 'completedAt',
+  statusCode: 'statusCode',
+  feedback: 'feedback',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type HrTrainingRecordScalarFieldEnum = (typeof HrTrainingRecordScalarFieldEnum)[keyof typeof HrTrainingRecordScalarFieldEnum]
+
+
+export const HrTrainingCertificateScalarFieldEnum = {
+  id: 'id',
+  tenantId: 'tenantId',
+  recordId: 'recordId',
+  employeeId: 'employeeId',
+  certificateNo: 'certificateNo',
+  issuedAt: 'issuedAt',
+  expiryDate: 'expiryDate',
+  fileUrl: 'fileUrl',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type HrTrainingCertificateScalarFieldEnum = (typeof HrTrainingCertificateScalarFieldEnum)[keyof typeof HrTrainingCertificateScalarFieldEnum]
+
+
+export const HrCareerPathScalarFieldEnum = {
+  id: 'id',
+  tenantId: 'tenantId',
+  code: 'code',
+  name: 'name',
+  fromPositionId: 'fromPositionId',
+  toPositionId: 'toPositionId',
+  minYears: 'minYears',
+  requirements: 'requirements',
+  statusCode: 'statusCode',
+  isActive: 'isActive',
+  versionNumber: 'versionNumber',
+  createdBy: 'createdBy',
+  updatedBy: 'updatedBy',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt',
+  deletedAt: 'deletedAt'
+} as const
+
+export type HrCareerPathScalarFieldEnum = (typeof HrCareerPathScalarFieldEnum)[keyof typeof HrCareerPathScalarFieldEnum]
+
+
+export const HrSuccessorScalarFieldEnum = {
+  id: 'id',
+  tenantId: 'tenantId',
+  positionId: 'positionId',
+  employeeId: 'employeeId',
+  readinessLevel: 'readinessLevel',
+  readinessMonths: 'readinessMonths',
+  priority: 'priority',
+  notes: 'notes',
+  statusCode: 'statusCode',
+  isActive: 'isActive',
+  versionNumber: 'versionNumber',
+  createdBy: 'createdBy',
+  updatedBy: 'updatedBy',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt',
+  deletedAt: 'deletedAt'
+} as const
+
+export type HrSuccessorScalarFieldEnum = (typeof HrSuccessorScalarFieldEnum)[keyof typeof HrSuccessorScalarFieldEnum]
+
+
+export const HrPromotionScalarFieldEnum = {
+  id: 'id',
+  tenantId: 'tenantId',
+  employeeId: 'employeeId',
+  promotionNumber: 'promotionNumber',
+  fromPositionId: 'fromPositionId',
+  toPositionId: 'toPositionId',
+  fromJobGradeId: 'fromJobGradeId',
+  toJobGradeId: 'toJobGradeId',
+  oldSalary: 'oldSalary',
+  newSalary: 'newSalary',
+  effectiveDate: 'effectiveDate',
+  reason: 'reason',
+  approvalRequestId: 'approvalRequestId',
+  statusCode: 'statusCode',
+  isActive: 'isActive',
+  versionNumber: 'versionNumber',
+  createdBy: 'createdBy',
+  updatedBy: 'updatedBy',
+  deletedBy: 'deletedBy',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt',
+  deletedAt: 'deletedAt'
+} as const
+
+export type HrPromotionScalarFieldEnum = (typeof HrPromotionScalarFieldEnum)[keyof typeof HrPromotionScalarFieldEnum]
+
+
+export const HrSkillScalarFieldEnum = {
+  id: 'id',
+  tenantId: 'tenantId',
+  code: 'code',
+  name: 'name',
+  nameAr: 'nameAr',
+  category: 'category',
+  statusCode: 'statusCode',
+  isActive: 'isActive',
+  versionNumber: 'versionNumber',
+  createdBy: 'createdBy',
+  updatedBy: 'updatedBy',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt',
+  deletedAt: 'deletedAt'
+} as const
+
+export type HrSkillScalarFieldEnum = (typeof HrSkillScalarFieldEnum)[keyof typeof HrSkillScalarFieldEnum]
+
+
+export const HrEmployeeSkillScalarFieldEnum = {
+  id: 'id',
+  tenantId: 'tenantId',
+  employeeId: 'employeeId',
+  skillId: 'skillId',
+  proficiency: 'proficiency',
+  yearsExperience: 'yearsExperience',
+  lastUsedAt: 'lastUsedAt',
+  isCertified: 'isCertified',
+  createdBy: 'createdBy',
+  updatedBy: 'updatedBy',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt',
+  deletedAt: 'deletedAt'
+} as const
+
+export type HrEmployeeSkillScalarFieldEnum = (typeof HrEmployeeSkillScalarFieldEnum)[keyof typeof HrEmployeeSkillScalarFieldEnum]
+
+
+export const HrWorkforcePlanScalarFieldEnum = {
+  id: 'id',
+  tenantId: 'tenantId',
+  code: 'code',
+  name: 'name',
+  fiscalYear: 'fiscalYear',
+  departmentId: 'departmentId',
+  currentHeadcount: 'currentHeadcount',
+  plannedHeadcount: 'plannedHeadcount',
+  approvalRequestId: 'approvalRequestId',
+  statusCode: 'statusCode',
+  isActive: 'isActive',
+  versionNumber: 'versionNumber',
+  createdBy: 'createdBy',
+  updatedBy: 'updatedBy',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt',
+  deletedAt: 'deletedAt'
+} as const
+
+export type HrWorkforcePlanScalarFieldEnum = (typeof HrWorkforcePlanScalarFieldEnum)[keyof typeof HrWorkforcePlanScalarFieldEnum]
+
+
+export const HrWorkforceRequirementScalarFieldEnum = {
+  id: 'id',
+  tenantId: 'tenantId',
+  planId: 'planId',
+  positionId: 'positionId',
+  departmentId: 'departmentId',
+  requiredCount: 'requiredCount',
+  currentCount: 'currentCount',
+  gapCount: 'gapCount',
+  targetQuarter: 'targetQuarter',
+  estimatedCost: 'estimatedCost',
+  priority: 'priority',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type HrWorkforceRequirementScalarFieldEnum = (typeof HrWorkforceRequirementScalarFieldEnum)[keyof typeof HrWorkforceRequirementScalarFieldEnum]
+
+
+export const HrSkillRequirementScalarFieldEnum = {
+  id: 'id',
+  tenantId: 'tenantId',
+  positionId: 'positionId',
+  skillId: 'skillId',
+  minProficiency: 'minProficiency',
+  isMandatory: 'isMandatory',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type HrSkillRequirementScalarFieldEnum = (typeof HrSkillRequirementScalarFieldEnum)[keyof typeof HrSkillRequirementScalarFieldEnum]
+
+
+export const HrBudgetYearScalarFieldEnum = {
+  id: 'id',
+  tenantId: 'tenantId',
+  fiscalYear: 'fiscalYear',
+  name: 'name',
+  companyId: 'companyId',
+  currencyCode: 'currencyCode',
+  totalBudget: 'totalBudget',
+  approvalRequestId: 'approvalRequestId',
+  statusCode: 'statusCode',
+  isActive: 'isActive',
+  versionNumber: 'versionNumber',
+  createdBy: 'createdBy',
+  updatedBy: 'updatedBy',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt',
+  deletedAt: 'deletedAt'
+} as const
+
+export type HrBudgetYearScalarFieldEnum = (typeof HrBudgetYearScalarFieldEnum)[keyof typeof HrBudgetYearScalarFieldEnum]
+
+
+export const HrBudgetDepartmentScalarFieldEnum = {
+  id: 'id',
+  tenantId: 'tenantId',
+  budgetYearId: 'budgetYearId',
+  departmentId: 'departmentId',
+  budgetType: 'budgetType',
+  budgetAmount: 'budgetAmount',
+  currencyCode: 'currencyCode',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type HrBudgetDepartmentScalarFieldEnum = (typeof HrBudgetDepartmentScalarFieldEnum)[keyof typeof HrBudgetDepartmentScalarFieldEnum]
+
+
+export const HrBudgetPositionScalarFieldEnum = {
+  id: 'id',
+  tenantId: 'tenantId',
+  budgetYearId: 'budgetYearId',
+  positionId: 'positionId',
+  plannedCount: 'plannedCount',
+  avgSalary: 'avgSalary',
+  totalCost: 'totalCost',
+  currencyCode: 'currencyCode',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type HrBudgetPositionScalarFieldEnum = (typeof HrBudgetPositionScalarFieldEnum)[keyof typeof HrBudgetPositionScalarFieldEnum]
+
+
+export const HrBudgetActualScalarFieldEnum = {
+  id: 'id',
+  tenantId: 'tenantId',
+  budgetYearId: 'budgetYearId',
+  departmentId: 'departmentId',
+  budgetType: 'budgetType',
+  periodMonth: 'periodMonth',
+  budgetAmount: 'budgetAmount',
+  actualAmount: 'actualAmount',
+  varianceAmount: 'varianceAmount',
+  currencyCode: 'currencyCode',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type HrBudgetActualScalarFieldEnum = (typeof HrBudgetActualScalarFieldEnum)[keyof typeof HrBudgetActualScalarFieldEnum]
+
+
+export const HrEmployeeRequestScalarFieldEnum = {
+  id: 'id',
+  tenantId: 'tenantId',
+  employeeId: 'employeeId',
+  requestNumber: 'requestNumber',
+  requestType: 'requestType',
+  subject: 'subject',
+  details: 'details',
+  priority: 'priority',
+  approvalRequestId: 'approvalRequestId',
+  assignedToId: 'assignedToId',
+  resolvedAt: 'resolvedAt',
+  statusCode: 'statusCode',
+  isActive: 'isActive',
+  versionNumber: 'versionNumber',
+  createdBy: 'createdBy',
+  updatedBy: 'updatedBy',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt',
+  deletedAt: 'deletedAt'
+} as const
+
+export type HrEmployeeRequestScalarFieldEnum = (typeof HrEmployeeRequestScalarFieldEnum)[keyof typeof HrEmployeeRequestScalarFieldEnum]
+
+
+export const HrEmployeeNotificationScalarFieldEnum = {
+  id: 'id',
+  tenantId: 'tenantId',
+  employeeId: 'employeeId',
+  title: 'title',
+  body: 'body',
+  category: 'category',
+  entityType: 'entityType',
+  entityId: 'entityId',
+  isRead: 'isRead',
+  readAt: 'readAt',
+  createdAt: 'createdAt'
+} as const
+
+export type HrEmployeeNotificationScalarFieldEnum = (typeof HrEmployeeNotificationScalarFieldEnum)[keyof typeof HrEmployeeNotificationScalarFieldEnum]
+
+
+export const HrEmployeeAnnouncementScalarFieldEnum = {
+  id: 'id',
+  tenantId: 'tenantId',
+  title: 'title',
+  body: 'body',
+  category: 'category',
+  audience: 'audience',
+  departmentId: 'departmentId',
+  publishAt: 'publishAt',
+  expiresAt: 'expiresAt',
+  isPinned: 'isPinned',
+  statusCode: 'statusCode',
+  isActive: 'isActive',
+  versionNumber: 'versionNumber',
+  createdBy: 'createdBy',
+  updatedBy: 'updatedBy',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt',
+  deletedAt: 'deletedAt'
+} as const
+
+export type HrEmployeeAnnouncementScalarFieldEnum = (typeof HrEmployeeAnnouncementScalarFieldEnum)[keyof typeof HrEmployeeAnnouncementScalarFieldEnum]
+
+
+export const HrEmployeeDocumentSharedScalarFieldEnum = {
+  id: 'id',
+  tenantId: 'tenantId',
+  employeeId: 'employeeId',
+  title: 'title',
+  documentType: 'documentType',
+  fileUrl: 'fileUrl',
+  attachmentId: 'attachmentId',
+  audience: 'audience',
+  requiresAck: 'requiresAck',
+  acknowledgedAt: 'acknowledgedAt',
+  createdBy: 'createdBy',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt',
+  deletedAt: 'deletedAt'
+} as const
+
+export type HrEmployeeDocumentSharedScalarFieldEnum = (typeof HrEmployeeDocumentSharedScalarFieldEnum)[keyof typeof HrEmployeeDocumentSharedScalarFieldEnum]
+
+
+export const HrEmployeeAssetScalarFieldEnum = {
+  id: 'id',
+  tenantId: 'tenantId',
+  employeeId: 'employeeId',
+  assetType: 'assetType',
+  productId: 'productId',
+  finAssetId: 'finAssetId',
+  serialNumber: 'serialNumber',
+  assetTag: 'assetTag',
+  name: 'name',
+  assignedDate: 'assignedDate',
+  returnedDate: 'returnedDate',
+  conditionOut: 'conditionOut',
+  conditionIn: 'conditionIn',
+  value: 'value',
+  currencyCode: 'currencyCode',
+  notes: 'notes',
+  statusCode: 'statusCode',
+  isActive: 'isActive',
+  versionNumber: 'versionNumber',
+  createdBy: 'createdBy',
+  updatedBy: 'updatedBy',
+  deletedBy: 'deletedBy',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt',
+  deletedAt: 'deletedAt'
+} as const
+
+export type HrEmployeeAssetScalarFieldEnum = (typeof HrEmployeeAssetScalarFieldEnum)[keyof typeof HrEmployeeAssetScalarFieldEnum]
+
+
+export const HrTravelRequestScalarFieldEnum = {
+  id: 'id',
+  tenantId: 'tenantId',
+  employeeId: 'employeeId',
+  requestNumber: 'requestNumber',
+  purpose: 'purpose',
+  destination: 'destination',
+  travelType: 'travelType',
+  departDate: 'departDate',
+  returnDate: 'returnDate',
+  estimatedCost: 'estimatedCost',
+  advanceAmount: 'advanceAmount',
+  currencyCode: 'currencyCode',
+  approvalRequestId: 'approvalRequestId',
+  statusCode: 'statusCode',
+  isActive: 'isActive',
+  versionNumber: 'versionNumber',
+  createdBy: 'createdBy',
+  updatedBy: 'updatedBy',
+  deletedBy: 'deletedBy',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt',
+  deletedAt: 'deletedAt'
+} as const
+
+export type HrTravelRequestScalarFieldEnum = (typeof HrTravelRequestScalarFieldEnum)[keyof typeof HrTravelRequestScalarFieldEnum]
+
+
+export const HrExpenseClaimScalarFieldEnum = {
+  id: 'id',
+  tenantId: 'tenantId',
+  employeeId: 'employeeId',
+  claimNumber: 'claimNumber',
+  travelRequestId: 'travelRequestId',
+  title: 'title',
+  claimDate: 'claimDate',
+  totalAmount: 'totalAmount',
+  approvedAmount: 'approvedAmount',
+  currencyCode: 'currencyCode',
+  costCenterId: 'costCenterId',
+  approvalRequestId: 'approvalRequestId',
+  journalEntryId: 'journalEntryId',
+  statusCode: 'statusCode',
+  isActive: 'isActive',
+  versionNumber: 'versionNumber',
+  createdBy: 'createdBy',
+  updatedBy: 'updatedBy',
+  deletedBy: 'deletedBy',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt',
+  deletedAt: 'deletedAt'
+} as const
+
+export type HrExpenseClaimScalarFieldEnum = (typeof HrExpenseClaimScalarFieldEnum)[keyof typeof HrExpenseClaimScalarFieldEnum]
+
+
+export const HrExpenseClaimLineScalarFieldEnum = {
+  id: 'id',
+  tenantId: 'tenantId',
+  claimId: 'claimId',
+  lineNumber: 'lineNumber',
+  expenseDate: 'expenseDate',
+  category: 'category',
+  description: 'description',
+  amount: 'amount',
+  taxAmount: 'taxAmount',
+  currencyCode: 'currencyCode',
+  receiptUrl: 'receiptUrl',
+  isReimbursable: 'isReimbursable',
+  createdAt: 'createdAt'
+} as const
+
+export type HrExpenseClaimLineScalarFieldEnum = (typeof HrExpenseClaimLineScalarFieldEnum)[keyof typeof HrExpenseClaimLineScalarFieldEnum]
+
+
+export const HrExpenseReimbursementScalarFieldEnum = {
+  id: 'id',
+  tenantId: 'tenantId',
+  claimId: 'claimId',
+  employeeId: 'employeeId',
+  amount: 'amount',
+  currencyCode: 'currencyCode',
+  paymentMethod: 'paymentMethod',
+  bankAccountId: 'bankAccountId',
+  payrollRunId: 'payrollRunId',
+  paidAt: 'paidAt',
+  journalEntryId: 'journalEntryId',
+  statusCode: 'statusCode',
+  versionNumber: 'versionNumber',
+  createdBy: 'createdBy',
+  updatedBy: 'updatedBy',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type HrExpenseReimbursementScalarFieldEnum = (typeof HrExpenseReimbursementScalarFieldEnum)[keyof typeof HrExpenseReimbursementScalarFieldEnum]
 
 
 export const SortOrder = {
