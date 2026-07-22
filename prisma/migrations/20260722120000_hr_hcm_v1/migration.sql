@@ -1,296 +1,34 @@
--- Migration: HR / HCM module (Spec 007) — Phase 0
--- Adds 88 hr_* tables (organization, employee, recruitment, onboarding, time,
--- leave, payroll, performance, learning, career, workforce, budgeting, ESS,
--- assets, travel & expense) + 13 HR DocumentType enum values.
---
--- Tenant isolation is enforced in-application via the guard chain + tenantId
--- filters (see CLAUDE.md) — no RLS layer is added here, matching the existing
--- operational modules. pod_document_statuses / pod_status_transitions rows for
--- the HR workflow documents (leave, payroll, expense, ...) are seeded by the
--- later phases that implement those document services.
--- Generated with: prisma migrate diff (live DB -> schema); enum adds made idempotent.
-
--- AlterEnum
--- This migration adds more than one value to an enum.
--- With PostgreSQL versions 11 and earlier, this is not possible
--- in a single migration. This can be worked around by creating
--- multiple migrations, each migration adding only one value to
--- the enum.
-
+-- Migration: HR / HCM module (Spec 007) - Phase 0
+-- 88 hr_ tables + 13 HR DocumentType enum values + HR foreign keys/indexes.
+-- HR-ONLY: pre-existing fin_/pod_ drift from 'prisma migrate diff' is stripped.
+-- Tenant isolation is enforced in-app (see CLAUDE.md); no RLS added here.
 
 ALTER TYPE "DocumentType" ADD VALUE IF NOT EXISTS 'hr_employee';
+
 ALTER TYPE "DocumentType" ADD VALUE IF NOT EXISTS 'hr_job_opening';
+
 ALTER TYPE "DocumentType" ADD VALUE IF NOT EXISTS 'hr_candidate';
+
 ALTER TYPE "DocumentType" ADD VALUE IF NOT EXISTS 'hr_job_offer';
+
 ALTER TYPE "DocumentType" ADD VALUE IF NOT EXISTS 'hr_leave_request';
+
 ALTER TYPE "DocumentType" ADD VALUE IF NOT EXISTS 'hr_overtime_request';
+
 ALTER TYPE "DocumentType" ADD VALUE IF NOT EXISTS 'hr_timesheet';
+
 ALTER TYPE "DocumentType" ADD VALUE IF NOT EXISTS 'hr_payroll_run';
+
 ALTER TYPE "DocumentType" ADD VALUE IF NOT EXISTS 'hr_loan';
+
 ALTER TYPE "DocumentType" ADD VALUE IF NOT EXISTS 'hr_salary_advance';
+
 ALTER TYPE "DocumentType" ADD VALUE IF NOT EXISTS 'hr_performance_review';
+
 ALTER TYPE "DocumentType" ADD VALUE IF NOT EXISTS 'hr_travel_request';
+
 ALTER TYPE "DocumentType" ADD VALUE IF NOT EXISTS 'hr_expense_claim';
 
--- DropIndex
-DROP INDEX "fin_journal_lines_created_brin";
-
--- AlterTable
-ALTER TABLE "fin_account_classes" ALTER COLUMN "updated_at" DROP DEFAULT;
-
--- AlterTable
-ALTER TABLE "fin_account_mappings" ALTER COLUMN "updated_at" DROP DEFAULT;
-
--- AlterTable
-ALTER TABLE "fin_account_types" ALTER COLUMN "updated_at" DROP DEFAULT;
-
--- AlterTable
-ALTER TABLE "fin_accounts" ALTER COLUMN "updated_at" DROP DEFAULT;
-
--- AlterTable
-ALTER TABLE "fin_allocation_rules" ALTER COLUMN "updated_at" DROP DEFAULT;
-
--- AlterTable
-ALTER TABLE "fin_allocation_runs" ALTER COLUMN "updated_at" DROP DEFAULT;
-
--- AlterTable
-ALTER TABLE "fin_analysis_dimension_values" ALTER COLUMN "updated_at" DROP DEFAULT;
-
--- AlterTable
-ALTER TABLE "fin_analysis_dimensions" ALTER COLUMN "updated_at" DROP DEFAULT;
-
--- AlterTable
-ALTER TABLE "fin_ar_receipts" ALTER COLUMN "updated_at" DROP DEFAULT;
-
--- AlterTable
-ALTER TABLE "fin_asset_categories" ALTER COLUMN "updated_at" DROP DEFAULT;
-
--- AlterTable
-ALTER TABLE "fin_asset_depreciation_schedules" ALTER COLUMN "updated_at" DROP DEFAULT;
-
--- AlterTable
-ALTER TABLE "fin_asset_disposals" ALTER COLUMN "updated_at" DROP DEFAULT;
-
--- AlterTable
-ALTER TABLE "fin_asset_revaluations" ALTER COLUMN "updated_at" DROP DEFAULT;
-
--- AlterTable
-ALTER TABLE "fin_assets" ALTER COLUMN "updated_at" DROP DEFAULT;
-
--- AlterTable
-ALTER TABLE "fin_bank_accounts" ALTER COLUMN "updated_at" DROP DEFAULT;
-
--- AlterTable
-ALTER TABLE "fin_bank_matching_rules" ALTER COLUMN "updated_at" DROP DEFAULT;
-
--- AlterTable
-ALTER TABLE "fin_bank_reconciliations" ALTER COLUMN "updated_at" DROP DEFAULT;
-
--- AlterTable
-ALTER TABLE "fin_bank_statement_lines" ALTER COLUMN "updated_at" DROP DEFAULT;
-
--- AlterTable
-ALTER TABLE "fin_bank_statements" ALTER COLUMN "updated_at" DROP DEFAULT;
-
--- AlterTable
-ALTER TABLE "fin_budget_control_policies" ALTER COLUMN "updated_at" DROP DEFAULT;
-
--- AlterTable
-ALTER TABLE "fin_budget_lines" ALTER COLUMN "updated_at" DROP DEFAULT;
-
--- AlterTable
-ALTER TABLE "fin_budget_transfers" ALTER COLUMN "updated_at" DROP DEFAULT;
-
--- AlterTable
-ALTER TABLE "fin_budgets" ALTER COLUMN "updated_at" DROP DEFAULT;
-
--- AlterTable
-ALTER TABLE "fin_cash_flow_categories" ALTER COLUMN "updated_at" DROP DEFAULT;
-
--- AlterTable
-ALTER TABLE "fin_cash_transactions" ALTER COLUMN "updated_at" DROP DEFAULT;
-
--- AlterTable
-ALTER TABLE "fin_cashboxes" ALTER COLUMN "updated_at" DROP DEFAULT;
-
--- AlterTable
-ALTER TABLE "fin_cheque_books" ALTER COLUMN "updated_at" DROP DEFAULT;
-
--- AlterTable
-ALTER TABLE "fin_cheques" ALTER COLUMN "updated_at" DROP DEFAULT;
-
--- AlterTable
-ALTER TABLE "fin_close_task_templates" ALTER COLUMN "updated_at" DROP DEFAULT;
-
--- AlterTable
-ALTER TABLE "fin_cost_centers" ALTER COLUMN "updated_at" DROP DEFAULT;
-
--- AlterTable
-ALTER TABLE "fin_currencies" ALTER COLUMN "updated_at" DROP DEFAULT;
-
--- AlterTable
-ALTER TABLE "fin_customer_financial_profiles" ALTER COLUMN "updated_at" DROP DEFAULT;
-
--- AlterTable
-ALTER TABLE "fin_depreciation_methods" ALTER COLUMN "updated_at" DROP DEFAULT;
-
--- AlterTable
-ALTER TABLE "fin_depreciation_runs" ALTER COLUMN "updated_at" DROP DEFAULT;
-
--- AlterTable
-ALTER TABLE "fin_dunning_levels" ALTER COLUMN "updated_at" DROP DEFAULT;
-
--- AlterTable
-ALTER TABLE "fin_dunning_runs" ALTER COLUMN "updated_at" DROP DEFAULT;
-
--- AlterTable
-ALTER TABLE "fin_event_cursors" ALTER COLUMN "updated_at" DROP DEFAULT;
-
--- AlterTable
-ALTER TABLE "fin_fiscal_periods" ALTER COLUMN "updated_at" DROP DEFAULT;
-
--- AlterTable
-ALTER TABLE "fin_fiscal_years" ALTER COLUMN "updated_at" DROP DEFAULT;
-
--- AlterTable
-ALTER TABLE "fin_funds_transfers" ALTER COLUMN "updated_at" DROP DEFAULT;
-
--- AlterTable
-ALTER TABLE "fin_fx_revaluation_runs" ALTER COLUMN "updated_at" DROP DEFAULT;
-
--- AlterTable
-ALTER TABLE "fin_gl_balances" ALTER COLUMN "updated_at" DROP DEFAULT;
-
--- AlterTable
-ALTER TABLE "fin_journal_entries" ALTER COLUMN "updated_at" DROP DEFAULT;
-
--- AlterTable
-ALTER TABLE "fin_journal_templates" ALTER COLUMN "updated_at" DROP DEFAULT;
-
--- AlterTable
-ALTER TABLE "fin_journal_types" ALTER COLUMN "updated_at" DROP DEFAULT;
-
--- AlterTable
-ALTER TABLE "fin_opening_balance_batches" ALTER COLUMN "updated_at" DROP DEFAULT;
-
--- AlterTable
-ALTER TABLE "fin_payment_run_lines" ALTER COLUMN "updated_at" DROP DEFAULT;
-
--- AlterTable
-ALTER TABLE "fin_payment_runs" ALTER COLUMN "updated_at" DROP DEFAULT;
-
--- AlterTable
-ALTER TABLE "fin_payment_terms" ALTER COLUMN "updated_at" DROP DEFAULT;
-
--- AlterTable
-ALTER TABLE "fin_period_close_run_tasks" ALTER COLUMN "updated_at" DROP DEFAULT;
-
--- AlterTable
-ALTER TABLE "fin_period_close_runs" ALTER COLUMN "updated_at" DROP DEFAULT;
-
--- AlterTable
-ALTER TABLE "fin_posting_queue" ALTER COLUMN "updated_at" DROP DEFAULT;
-
--- AlterTable
-ALTER TABLE "fin_posting_rules" ALTER COLUMN "updated_at" DROP DEFAULT;
-
--- AlterTable
-ALTER TABLE "fin_projects" ALTER COLUMN "updated_at" DROP DEFAULT;
-
--- AlterTable
-ALTER TABLE "fin_recurring_journal_schedules" ALTER COLUMN "updated_at" DROP DEFAULT;
-
--- AlterTable
-ALTER TABLE "fin_settings" ALTER COLUMN "updated_at" DROP DEFAULT;
-
--- AlterTable
-ALTER TABLE "fin_supplier_financial_profiles" ALTER COLUMN "updated_at" DROP DEFAULT;
-
--- AlterTable
-ALTER TABLE "fin_tax_authorities" ALTER COLUMN "updated_at" DROP DEFAULT;
-
--- AlterTable
-ALTER TABLE "fin_tax_codes" ALTER COLUMN "updated_at" DROP DEFAULT;
-
--- AlterTable
-ALTER TABLE "fin_tax_returns" ALTER COLUMN "updated_at" DROP DEFAULT;
-
--- AlterTable
-ALTER TABLE "fin_tax_types" ALTER COLUMN "updated_at" DROP DEFAULT;
-
--- AlterTable
-ALTER TABLE "fin_wht_certificates" ALTER COLUMN "updated_at" DROP DEFAULT;
-
--- AlterTable
-ALTER TABLE "fin_year_close_runs" ALTER COLUMN "updated_at" DROP DEFAULT;
-
--- AlterTable
-ALTER TABLE "pod_approval_requests" ALTER COLUMN "updated_at" DROP DEFAULT;
-
--- AlterTable
-ALTER TABLE "pod_approval_workflow_steps" ALTER COLUMN "updated_at" DROP DEFAULT;
-
--- AlterTable
-ALTER TABLE "pod_approval_workflows" ALTER COLUMN "updated_at" DROP DEFAULT;
-
--- AlterTable
-ALTER TABLE "pod_attachments" ALTER COLUMN "updated_at" DROP DEFAULT;
-
--- AlterTable
-ALTER TABLE "pod_custom_field_definitions" ALTER COLUMN "updated_at" DROP DEFAULT;
-
--- AlterTable
-ALTER TABLE "pod_custom_field_values" ALTER COLUMN "updated_at" DROP DEFAULT;
-
--- AlterTable
-ALTER TABLE "pod_debit_note_reasons" ALTER COLUMN "updated_at" DROP DEFAULT;
-
--- AlterTable
-ALTER TABLE "pod_document_statuses" ALTER COLUMN "updated_at" DROP DEFAULT;
-
--- AlterTable
-ALTER TABLE "pod_incoterms" ALTER COLUMN "updated_at" DROP DEFAULT;
-
--- AlterTable
-ALTER TABLE "pod_landed_cost_types" ALTER COLUMN "updated_at" DROP DEFAULT;
-
--- AlterTable
-ALTER TABLE "pod_landed_cost_vouchers" ALTER COLUMN "updated_at" DROP DEFAULT;
-
--- AlterTable
-ALTER TABLE "pod_payment_methods" ALTER COLUMN "updated_at" DROP DEFAULT;
-
--- AlterTable
-ALTER TABLE "pod_return_reasons" ALTER COLUMN "updated_at" DROP DEFAULT;
-
--- AlterTable
-ALTER TABLE "pod_rfqs" ALTER COLUMN "updated_at" DROP DEFAULT;
-
--- AlterTable
-ALTER TABLE "pod_supplier_addresses" ALTER COLUMN "updated_at" DROP DEFAULT;
-
--- AlterTable
-ALTER TABLE "pod_supplier_bank_accounts" ALTER COLUMN "updated_at" DROP DEFAULT;
-
--- AlterTable
-ALTER TABLE "pod_supplier_categories" ALTER COLUMN "updated_at" DROP DEFAULT;
-
--- AlterTable
-ALTER TABLE "pod_supplier_contacts" ALTER COLUMN "updated_at" DROP DEFAULT;
-
--- AlterTable
-ALTER TABLE "pod_supplier_invoices" ALTER COLUMN "updated_at" DROP DEFAULT;
-
--- AlterTable
-ALTER TABLE "pod_supplier_payments" ALTER COLUMN "updated_at" DROP DEFAULT;
-
--- AlterTable
-ALTER TABLE "pod_supplier_quotations" ALTER COLUMN "updated_at" DROP DEFAULT;
-
--- AlterTable
-ALTER TABLE "purchase_order_lines" ALTER COLUMN "remaining_qty" DROP DEFAULT;
-
--- CreateTable
 CREATE TABLE "hr_companies" (
     "id" UUID NOT NULL,
     "tenant_id" UUID NOT NULL,
@@ -321,7 +59,6 @@ CREATE TABLE "hr_companies" (
     CONSTRAINT "hr_companies_pkey" PRIMARY KEY ("id")
 );
 
--- CreateTable
 CREATE TABLE "hr_branches" (
     "id" UUID NOT NULL,
     "tenant_id" UUID NOT NULL,
@@ -352,7 +89,6 @@ CREATE TABLE "hr_branches" (
     CONSTRAINT "hr_branches_pkey" PRIMARY KEY ("id")
 );
 
--- CreateTable
 CREATE TABLE "hr_business_units" (
     "id" UUID NOT NULL,
     "tenant_id" UUID NOT NULL,
@@ -375,7 +111,6 @@ CREATE TABLE "hr_business_units" (
     CONSTRAINT "hr_business_units_pkey" PRIMARY KEY ("id")
 );
 
--- CreateTable
 CREATE TABLE "hr_divisions" (
     "id" UUID NOT NULL,
     "tenant_id" UUID NOT NULL,
@@ -398,7 +133,6 @@ CREATE TABLE "hr_divisions" (
     CONSTRAINT "hr_divisions_pkey" PRIMARY KEY ("id")
 );
 
--- CreateTable
 CREATE TABLE "hr_departments" (
     "id" UUID NOT NULL,
     "tenant_id" UUID NOT NULL,
@@ -427,7 +161,6 @@ CREATE TABLE "hr_departments" (
     CONSTRAINT "hr_departments_pkey" PRIMARY KEY ("id")
 );
 
--- CreateTable
 CREATE TABLE "hr_sections" (
     "id" UUID NOT NULL,
     "tenant_id" UUID NOT NULL,
@@ -449,7 +182,6 @@ CREATE TABLE "hr_sections" (
     CONSTRAINT "hr_sections_pkey" PRIMARY KEY ("id")
 );
 
--- CreateTable
 CREATE TABLE "hr_job_grades" (
     "id" UUID NOT NULL,
     "tenant_id" UUID NOT NULL,
@@ -475,7 +207,6 @@ CREATE TABLE "hr_job_grades" (
     CONSTRAINT "hr_job_grades_pkey" PRIMARY KEY ("id")
 );
 
--- CreateTable
 CREATE TABLE "hr_positions" (
     "id" UUID NOT NULL,
     "tenant_id" UUID NOT NULL,
@@ -502,7 +233,6 @@ CREATE TABLE "hr_positions" (
     CONSTRAINT "hr_positions_pkey" PRIMARY KEY ("id")
 );
 
--- CreateTable
 CREATE TABLE "hr_cost_centers" (
     "id" UUID NOT NULL,
     "tenant_id" UUID NOT NULL,
@@ -526,7 +256,6 @@ CREATE TABLE "hr_cost_centers" (
     CONSTRAINT "hr_cost_centers_pkey" PRIMARY KEY ("id")
 );
 
--- CreateTable
 CREATE TABLE "hr_reporting_structure" (
     "id" UUID NOT NULL,
     "tenant_id" UUID NOT NULL,
@@ -549,7 +278,6 @@ CREATE TABLE "hr_reporting_structure" (
     CONSTRAINT "hr_reporting_structure_pkey" PRIMARY KEY ("id")
 );
 
--- CreateTable
 CREATE TABLE "hr_employees" (
     "id" UUID NOT NULL,
     "tenant_id" UUID NOT NULL,
@@ -604,7 +332,6 @@ CREATE TABLE "hr_employees" (
     CONSTRAINT "hr_employees_pkey" PRIMARY KEY ("id")
 );
 
--- CreateTable
 CREATE TABLE "hr_employee_contacts" (
     "id" UUID NOT NULL,
     "tenant_id" UUID NOT NULL,
@@ -624,7 +351,6 @@ CREATE TABLE "hr_employee_contacts" (
     CONSTRAINT "hr_employee_contacts_pkey" PRIMARY KEY ("id")
 );
 
--- CreateTable
 CREATE TABLE "hr_employee_addresses" (
     "id" UUID NOT NULL,
     "tenant_id" UUID NOT NULL,
@@ -646,7 +372,6 @@ CREATE TABLE "hr_employee_addresses" (
     CONSTRAINT "hr_employee_addresses_pkey" PRIMARY KEY ("id")
 );
 
--- CreateTable
 CREATE TABLE "hr_employee_documents" (
     "id" UUID NOT NULL,
     "tenant_id" UUID NOT NULL,
@@ -669,7 +394,6 @@ CREATE TABLE "hr_employee_documents" (
     CONSTRAINT "hr_employee_documents_pkey" PRIMARY KEY ("id")
 );
 
--- CreateTable
 CREATE TABLE "hr_employee_bank_accounts" (
     "id" UUID NOT NULL,
     "tenant_id" UUID NOT NULL,
@@ -693,7 +417,6 @@ CREATE TABLE "hr_employee_bank_accounts" (
     CONSTRAINT "hr_employee_bank_accounts_pkey" PRIMARY KEY ("id")
 );
 
--- CreateTable
 CREATE TABLE "hr_employee_contracts" (
     "id" UUID NOT NULL,
     "tenant_id" UUID NOT NULL,
@@ -726,7 +449,6 @@ CREATE TABLE "hr_employee_contracts" (
     CONSTRAINT "hr_employee_contracts_pkey" PRIMARY KEY ("id")
 );
 
--- CreateTable
 CREATE TABLE "hr_employee_history" (
     "id" UUID NOT NULL,
     "tenant_id" UUID NOT NULL,
@@ -744,7 +466,6 @@ CREATE TABLE "hr_employee_history" (
     CONSTRAINT "hr_employee_history_pkey" PRIMARY KEY ("id")
 );
 
--- CreateTable
 CREATE TABLE "hr_employee_dependents" (
     "id" UUID NOT NULL,
     "tenant_id" UUID NOT NULL,
@@ -765,7 +486,6 @@ CREATE TABLE "hr_employee_dependents" (
     CONSTRAINT "hr_employee_dependents_pkey" PRIMARY KEY ("id")
 );
 
--- CreateTable
 CREATE TABLE "hr_employee_education" (
     "id" UUID NOT NULL,
     "tenant_id" UUID NOT NULL,
@@ -787,7 +507,6 @@ CREATE TABLE "hr_employee_education" (
     CONSTRAINT "hr_employee_education_pkey" PRIMARY KEY ("id")
 );
 
--- CreateTable
 CREATE TABLE "hr_employee_experience" (
     "id" UUID NOT NULL,
     "tenant_id" UUID NOT NULL,
@@ -808,7 +527,6 @@ CREATE TABLE "hr_employee_experience" (
     CONSTRAINT "hr_employee_experience_pkey" PRIMARY KEY ("id")
 );
 
--- CreateTable
 CREATE TABLE "hr_employee_certifications" (
     "id" UUID NOT NULL,
     "tenant_id" UUID NOT NULL,
@@ -828,7 +546,6 @@ CREATE TABLE "hr_employee_certifications" (
     CONSTRAINT "hr_employee_certifications_pkey" PRIMARY KEY ("id")
 );
 
--- CreateTable
 CREATE TABLE "hr_employee_languages" (
     "id" UUID NOT NULL,
     "tenant_id" UUID NOT NULL,
@@ -848,7 +565,6 @@ CREATE TABLE "hr_employee_languages" (
     CONSTRAINT "hr_employee_languages_pkey" PRIMARY KEY ("id")
 );
 
--- CreateTable
 CREATE TABLE "hr_job_openings" (
     "id" UUID NOT NULL,
     "tenant_id" UUID NOT NULL,
@@ -882,7 +598,6 @@ CREATE TABLE "hr_job_openings" (
     CONSTRAINT "hr_job_openings_pkey" PRIMARY KEY ("id")
 );
 
--- CreateTable
 CREATE TABLE "hr_candidates" (
     "id" UUID NOT NULL,
     "tenant_id" UUID NOT NULL,
@@ -912,7 +627,6 @@ CREATE TABLE "hr_candidates" (
     CONSTRAINT "hr_candidates_pkey" PRIMARY KEY ("id")
 );
 
--- CreateTable
 CREATE TABLE "hr_candidate_documents" (
     "id" UUID NOT NULL,
     "tenant_id" UUID NOT NULL,
@@ -929,7 +643,6 @@ CREATE TABLE "hr_candidate_documents" (
     CONSTRAINT "hr_candidate_documents_pkey" PRIMARY KEY ("id")
 );
 
--- CreateTable
 CREATE TABLE "hr_interviews" (
     "id" UUID NOT NULL,
     "tenant_id" UUID NOT NULL,
@@ -954,7 +667,6 @@ CREATE TABLE "hr_interviews" (
     CONSTRAINT "hr_interviews_pkey" PRIMARY KEY ("id")
 );
 
--- CreateTable
 CREATE TABLE "hr_interview_feedback" (
     "id" UUID NOT NULL,
     "tenant_id" UUID NOT NULL,
@@ -973,7 +685,6 @@ CREATE TABLE "hr_interview_feedback" (
     CONSTRAINT "hr_interview_feedback_pkey" PRIMARY KEY ("id")
 );
 
--- CreateTable
 CREATE TABLE "hr_job_offers" (
     "id" UUID NOT NULL,
     "tenant_id" UUID NOT NULL,
@@ -1001,7 +712,6 @@ CREATE TABLE "hr_job_offers" (
     CONSTRAINT "hr_job_offers_pkey" PRIMARY KEY ("id")
 );
 
--- CreateTable
 CREATE TABLE "hr_offer_acceptance" (
     "id" UUID NOT NULL,
     "tenant_id" UUID NOT NULL,
@@ -1018,7 +728,6 @@ CREATE TABLE "hr_offer_acceptance" (
     CONSTRAINT "hr_offer_acceptance_pkey" PRIMARY KEY ("id")
 );
 
--- CreateTable
 CREATE TABLE "hr_onboarding_templates" (
     "id" UUID NOT NULL,
     "tenant_id" UUID NOT NULL,
@@ -1040,7 +749,6 @@ CREATE TABLE "hr_onboarding_templates" (
     CONSTRAINT "hr_onboarding_templates_pkey" PRIMARY KEY ("id")
 );
 
--- CreateTable
 CREATE TABLE "hr_onboarding_tasks" (
     "id" UUID NOT NULL,
     "tenant_id" UUID NOT NULL,
@@ -1059,7 +767,6 @@ CREATE TABLE "hr_onboarding_tasks" (
     CONSTRAINT "hr_onboarding_tasks_pkey" PRIMARY KEY ("id")
 );
 
--- CreateTable
 CREATE TABLE "hr_employee_onboarding" (
     "id" UUID NOT NULL,
     "tenant_id" UUID NOT NULL,
@@ -1083,7 +790,6 @@ CREATE TABLE "hr_employee_onboarding" (
     CONSTRAINT "hr_employee_onboarding_pkey" PRIMARY KEY ("id")
 );
 
--- CreateTable
 CREATE TABLE "hr_shift_definitions" (
     "id" UUID NOT NULL,
     "tenant_id" UUID NOT NULL,
@@ -1111,7 +817,6 @@ CREATE TABLE "hr_shift_definitions" (
     CONSTRAINT "hr_shift_definitions_pkey" PRIMARY KEY ("id")
 );
 
--- CreateTable
 CREATE TABLE "hr_shift_patterns" (
     "id" UUID NOT NULL,
     "tenant_id" UUID NOT NULL,
@@ -1131,7 +836,6 @@ CREATE TABLE "hr_shift_patterns" (
     CONSTRAINT "hr_shift_patterns_pkey" PRIMARY KEY ("id")
 );
 
--- CreateTable
 CREATE TABLE "hr_shift_assignments" (
     "id" UUID NOT NULL,
     "tenant_id" UUID NOT NULL,
@@ -1152,7 +856,6 @@ CREATE TABLE "hr_shift_assignments" (
     CONSTRAINT "hr_shift_assignments_pkey" PRIMARY KEY ("id")
 );
 
--- CreateTable
 CREATE TABLE "hr_attendance_logs" (
     "id" UUID NOT NULL,
     "tenant_id" UUID NOT NULL,
@@ -1170,7 +873,6 @@ CREATE TABLE "hr_attendance_logs" (
     CONSTRAINT "hr_attendance_logs_pkey" PRIMARY KEY ("id")
 );
 
--- CreateTable
 CREATE TABLE "hr_attendance_daily" (
     "id" UUID NOT NULL,
     "tenant_id" UUID NOT NULL,
@@ -1194,7 +896,6 @@ CREATE TABLE "hr_attendance_daily" (
     CONSTRAINT "hr_attendance_daily_pkey" PRIMARY KEY ("id")
 );
 
--- CreateTable
 CREATE TABLE "hr_timesheets" (
     "id" UUID NOT NULL,
     "tenant_id" UUID NOT NULL,
@@ -1217,7 +918,6 @@ CREATE TABLE "hr_timesheets" (
     CONSTRAINT "hr_timesheets_pkey" PRIMARY KEY ("id")
 );
 
--- CreateTable
 CREATE TABLE "hr_overtime_requests" (
     "id" UUID NOT NULL,
     "tenant_id" UUID NOT NULL,
@@ -1242,7 +942,6 @@ CREATE TABLE "hr_overtime_requests" (
     CONSTRAINT "hr_overtime_requests_pkey" PRIMARY KEY ("id")
 );
 
--- CreateTable
 CREATE TABLE "hr_break_logs" (
     "id" UUID NOT NULL,
     "tenant_id" UUID NOT NULL,
@@ -1258,7 +957,6 @@ CREATE TABLE "hr_break_logs" (
     CONSTRAINT "hr_break_logs_pkey" PRIMARY KEY ("id")
 );
 
--- CreateTable
 CREATE TABLE "hr_leave_types" (
     "id" UUID NOT NULL,
     "tenant_id" UUID NOT NULL,
@@ -1284,7 +982,6 @@ CREATE TABLE "hr_leave_types" (
     CONSTRAINT "hr_leave_types_pkey" PRIMARY KEY ("id")
 );
 
--- CreateTable
 CREATE TABLE "hr_leave_policies" (
     "id" UUID NOT NULL,
     "tenant_id" UUID NOT NULL,
@@ -1309,7 +1006,6 @@ CREATE TABLE "hr_leave_policies" (
     CONSTRAINT "hr_leave_policies_pkey" PRIMARY KEY ("id")
 );
 
--- CreateTable
 CREATE TABLE "hr_leave_balances" (
     "id" UUID NOT NULL,
     "tenant_id" UUID NOT NULL,
@@ -1331,7 +1027,6 @@ CREATE TABLE "hr_leave_balances" (
     CONSTRAINT "hr_leave_balances_pkey" PRIMARY KEY ("id")
 );
 
--- CreateTable
 CREATE TABLE "hr_leave_requests" (
     "id" UUID NOT NULL,
     "tenant_id" UUID NOT NULL,
@@ -1359,7 +1054,6 @@ CREATE TABLE "hr_leave_requests" (
     CONSTRAINT "hr_leave_requests_pkey" PRIMARY KEY ("id")
 );
 
--- CreateTable
 CREATE TABLE "hr_leave_approvals" (
     "id" UUID NOT NULL,
     "tenant_id" UUID NOT NULL,
@@ -1375,7 +1069,6 @@ CREATE TABLE "hr_leave_approvals" (
     CONSTRAINT "hr_leave_approvals_pkey" PRIMARY KEY ("id")
 );
 
--- CreateTable
 CREATE TABLE "hr_salary_components" (
     "id" UUID NOT NULL,
     "tenant_id" UUID NOT NULL,
@@ -1402,7 +1095,6 @@ CREATE TABLE "hr_salary_components" (
     CONSTRAINT "hr_salary_components_pkey" PRIMARY KEY ("id")
 );
 
--- CreateTable
 CREATE TABLE "hr_salary_structures" (
     "id" UUID NOT NULL,
     "tenant_id" UUID NOT NULL,
@@ -1424,7 +1116,6 @@ CREATE TABLE "hr_salary_structures" (
     CONSTRAINT "hr_salary_structures_pkey" PRIMARY KEY ("id")
 );
 
--- CreateTable
 CREATE TABLE "hr_employee_salary_components" (
     "id" UUID NOT NULL,
     "tenant_id" UUID NOT NULL,
@@ -1447,7 +1138,6 @@ CREATE TABLE "hr_employee_salary_components" (
     CONSTRAINT "hr_employee_salary_components_pkey" PRIMARY KEY ("id")
 );
 
--- CreateTable
 CREATE TABLE "hr_payroll_periods" (
     "id" UUID NOT NULL,
     "tenant_id" UUID NOT NULL,
@@ -1469,7 +1159,6 @@ CREATE TABLE "hr_payroll_periods" (
     CONSTRAINT "hr_payroll_periods_pkey" PRIMARY KEY ("id")
 );
 
--- CreateTable
 CREATE TABLE "hr_payroll_runs" (
     "id" UUID NOT NULL,
     "tenant_id" UUID NOT NULL,
@@ -1503,7 +1192,6 @@ CREATE TABLE "hr_payroll_runs" (
     CONSTRAINT "hr_payroll_runs_pkey" PRIMARY KEY ("id")
 );
 
--- CreateTable
 CREATE TABLE "hr_payroll_details" (
     "id" UUID NOT NULL,
     "tenant_id" UUID NOT NULL,
@@ -1526,7 +1214,6 @@ CREATE TABLE "hr_payroll_details" (
     CONSTRAINT "hr_payroll_details_pkey" PRIMARY KEY ("id")
 );
 
--- CreateTable
 CREATE TABLE "hr_payroll_component_details" (
     "id" UUID NOT NULL,
     "tenant_id" UUID NOT NULL,
@@ -1542,7 +1229,6 @@ CREATE TABLE "hr_payroll_component_details" (
     CONSTRAINT "hr_payroll_component_details_pkey" PRIMARY KEY ("id")
 );
 
--- CreateTable
 CREATE TABLE "hr_loans" (
     "id" UUID NOT NULL,
     "tenant_id" UUID NOT NULL,
@@ -1571,7 +1257,6 @@ CREATE TABLE "hr_loans" (
     CONSTRAINT "hr_loans_pkey" PRIMARY KEY ("id")
 );
 
--- CreateTable
 CREATE TABLE "hr_loan_installments" (
     "id" UUID NOT NULL,
     "tenant_id" UUID NOT NULL,
@@ -1590,7 +1275,6 @@ CREATE TABLE "hr_loan_installments" (
     CONSTRAINT "hr_loan_installments_pkey" PRIMARY KEY ("id")
 );
 
--- CreateTable
 CREATE TABLE "hr_salary_advances" (
     "id" UUID NOT NULL,
     "tenant_id" UUID NOT NULL,
@@ -1616,7 +1300,6 @@ CREATE TABLE "hr_salary_advances" (
     CONSTRAINT "hr_salary_advances_pkey" PRIMARY KEY ("id")
 );
 
--- CreateTable
 CREATE TABLE "hr_employee_benefits" (
     "id" UUID NOT NULL,
     "tenant_id" UUID NOT NULL,
@@ -1643,7 +1326,6 @@ CREATE TABLE "hr_employee_benefits" (
     CONSTRAINT "hr_employee_benefits_pkey" PRIMARY KEY ("id")
 );
 
--- CreateTable
 CREATE TABLE "hr_commissions" (
     "id" UUID NOT NULL,
     "tenant_id" UUID NOT NULL,
@@ -1668,7 +1350,6 @@ CREATE TABLE "hr_commissions" (
     CONSTRAINT "hr_commissions_pkey" PRIMARY KEY ("id")
 );
 
--- CreateTable
 CREATE TABLE "hr_kpis" (
     "id" UUID NOT NULL,
     "tenant_id" UUID NOT NULL,
@@ -1691,7 +1372,6 @@ CREATE TABLE "hr_kpis" (
     CONSTRAINT "hr_kpis_pkey" PRIMARY KEY ("id")
 );
 
--- CreateTable
 CREATE TABLE "hr_goals" (
     "id" UUID NOT NULL,
     "tenant_id" UUID NOT NULL,
@@ -1718,7 +1398,6 @@ CREATE TABLE "hr_goals" (
     CONSTRAINT "hr_goals_pkey" PRIMARY KEY ("id")
 );
 
--- CreateTable
 CREATE TABLE "hr_goal_progress" (
     "id" UUID NOT NULL,
     "tenant_id" UUID NOT NULL,
@@ -1733,7 +1412,6 @@ CREATE TABLE "hr_goal_progress" (
     CONSTRAINT "hr_goal_progress_pkey" PRIMARY KEY ("id")
 );
 
--- CreateTable
 CREATE TABLE "hr_review_templates" (
     "id" UUID NOT NULL,
     "tenant_id" UUID NOT NULL,
@@ -1755,7 +1433,6 @@ CREATE TABLE "hr_review_templates" (
     CONSTRAINT "hr_review_templates_pkey" PRIMARY KEY ("id")
 );
 
--- CreateTable
 CREATE TABLE "hr_performance_reviews" (
     "id" UUID NOT NULL,
     "tenant_id" UUID NOT NULL,
@@ -1784,7 +1461,6 @@ CREATE TABLE "hr_performance_reviews" (
     CONSTRAINT "hr_performance_reviews_pkey" PRIMARY KEY ("id")
 );
 
--- CreateTable
 CREATE TABLE "hr_review_scores" (
     "id" UUID NOT NULL,
     "tenant_id" UUID NOT NULL,
@@ -1800,7 +1476,6 @@ CREATE TABLE "hr_review_scores" (
     CONSTRAINT "hr_review_scores_pkey" PRIMARY KEY ("id")
 );
 
--- CreateTable
 CREATE TABLE "hr_training_courses" (
     "id" UUID NOT NULL,
     "tenant_id" UUID NOT NULL,
@@ -1826,7 +1501,6 @@ CREATE TABLE "hr_training_courses" (
     CONSTRAINT "hr_training_courses_pkey" PRIMARY KEY ("id")
 );
 
--- CreateTable
 CREATE TABLE "hr_training_sessions" (
     "id" UUID NOT NULL,
     "tenant_id" UUID NOT NULL,
@@ -1850,7 +1524,6 @@ CREATE TABLE "hr_training_sessions" (
     CONSTRAINT "hr_training_sessions_pkey" PRIMARY KEY ("id")
 );
 
--- CreateTable
 CREATE TABLE "hr_training_records" (
     "id" UUID NOT NULL,
     "tenant_id" UUID NOT NULL,
@@ -1868,7 +1541,6 @@ CREATE TABLE "hr_training_records" (
     CONSTRAINT "hr_training_records_pkey" PRIMARY KEY ("id")
 );
 
--- CreateTable
 CREATE TABLE "hr_training_certificates" (
     "id" UUID NOT NULL,
     "tenant_id" UUID NOT NULL,
@@ -1884,7 +1556,6 @@ CREATE TABLE "hr_training_certificates" (
     CONSTRAINT "hr_training_certificates_pkey" PRIMARY KEY ("id")
 );
 
--- CreateTable
 CREATE TABLE "hr_career_paths" (
     "id" UUID NOT NULL,
     "tenant_id" UUID NOT NULL,
@@ -1906,7 +1577,6 @@ CREATE TABLE "hr_career_paths" (
     CONSTRAINT "hr_career_paths_pkey" PRIMARY KEY ("id")
 );
 
--- CreateTable
 CREATE TABLE "hr_successors" (
     "id" UUID NOT NULL,
     "tenant_id" UUID NOT NULL,
@@ -1928,7 +1598,6 @@ CREATE TABLE "hr_successors" (
     CONSTRAINT "hr_successors_pkey" PRIMARY KEY ("id")
 );
 
--- CreateTable
 CREATE TABLE "hr_promotions" (
     "id" UUID NOT NULL,
     "tenant_id" UUID NOT NULL,
@@ -1956,7 +1625,6 @@ CREATE TABLE "hr_promotions" (
     CONSTRAINT "hr_promotions_pkey" PRIMARY KEY ("id")
 );
 
--- CreateTable
 CREATE TABLE "hr_skills" (
     "id" UUID NOT NULL,
     "tenant_id" UUID NOT NULL,
@@ -1976,7 +1644,6 @@ CREATE TABLE "hr_skills" (
     CONSTRAINT "hr_skills_pkey" PRIMARY KEY ("id")
 );
 
--- CreateTable
 CREATE TABLE "hr_employee_skills" (
     "id" UUID NOT NULL,
     "tenant_id" UUID NOT NULL,
@@ -1995,7 +1662,6 @@ CREATE TABLE "hr_employee_skills" (
     CONSTRAINT "hr_employee_skills_pkey" PRIMARY KEY ("id")
 );
 
--- CreateTable
 CREATE TABLE "hr_workforce_plans" (
     "id" UUID NOT NULL,
     "tenant_id" UUID NOT NULL,
@@ -2018,7 +1684,6 @@ CREATE TABLE "hr_workforce_plans" (
     CONSTRAINT "hr_workforce_plans_pkey" PRIMARY KEY ("id")
 );
 
--- CreateTable
 CREATE TABLE "hr_workforce_requirements" (
     "id" UUID NOT NULL,
     "tenant_id" UUID NOT NULL,
@@ -2037,7 +1702,6 @@ CREATE TABLE "hr_workforce_requirements" (
     CONSTRAINT "hr_workforce_requirements_pkey" PRIMARY KEY ("id")
 );
 
--- CreateTable
 CREATE TABLE "hr_skill_requirements" (
     "id" UUID NOT NULL,
     "tenant_id" UUID NOT NULL,
@@ -2051,7 +1715,6 @@ CREATE TABLE "hr_skill_requirements" (
     CONSTRAINT "hr_skill_requirements_pkey" PRIMARY KEY ("id")
 );
 
--- CreateTable
 CREATE TABLE "hr_budget_years" (
     "id" UUID NOT NULL,
     "tenant_id" UUID NOT NULL,
@@ -2073,7 +1736,6 @@ CREATE TABLE "hr_budget_years" (
     CONSTRAINT "hr_budget_years_pkey" PRIMARY KEY ("id")
 );
 
--- CreateTable
 CREATE TABLE "hr_budget_departments" (
     "id" UUID NOT NULL,
     "tenant_id" UUID NOT NULL,
@@ -2088,7 +1750,6 @@ CREATE TABLE "hr_budget_departments" (
     CONSTRAINT "hr_budget_departments_pkey" PRIMARY KEY ("id")
 );
 
--- CreateTable
 CREATE TABLE "hr_budget_positions" (
     "id" UUID NOT NULL,
     "tenant_id" UUID NOT NULL,
@@ -2104,7 +1765,6 @@ CREATE TABLE "hr_budget_positions" (
     CONSTRAINT "hr_budget_positions_pkey" PRIMARY KEY ("id")
 );
 
--- CreateTable
 CREATE TABLE "hr_budget_actuals" (
     "id" UUID NOT NULL,
     "tenant_id" UUID NOT NULL,
@@ -2122,7 +1782,6 @@ CREATE TABLE "hr_budget_actuals" (
     CONSTRAINT "hr_budget_actuals_pkey" PRIMARY KEY ("id")
 );
 
--- CreateTable
 CREATE TABLE "hr_employee_requests" (
     "id" UUID NOT NULL,
     "tenant_id" UUID NOT NULL,
@@ -2147,7 +1806,6 @@ CREATE TABLE "hr_employee_requests" (
     CONSTRAINT "hr_employee_requests_pkey" PRIMARY KEY ("id")
 );
 
--- CreateTable
 CREATE TABLE "hr_employee_notifications" (
     "id" UUID NOT NULL,
     "tenant_id" UUID NOT NULL,
@@ -2164,7 +1822,6 @@ CREATE TABLE "hr_employee_notifications" (
     CONSTRAINT "hr_employee_notifications_pkey" PRIMARY KEY ("id")
 );
 
--- CreateTable
 CREATE TABLE "hr_employee_announcements" (
     "id" UUID NOT NULL,
     "tenant_id" UUID NOT NULL,
@@ -2188,7 +1845,6 @@ CREATE TABLE "hr_employee_announcements" (
     CONSTRAINT "hr_employee_announcements_pkey" PRIMARY KEY ("id")
 );
 
--- CreateTable
 CREATE TABLE "hr_employee_documents_shared" (
     "id" UUID NOT NULL,
     "tenant_id" UUID NOT NULL,
@@ -2208,7 +1864,6 @@ CREATE TABLE "hr_employee_documents_shared" (
     CONSTRAINT "hr_employee_documents_shared_pkey" PRIMARY KEY ("id")
 );
 
--- CreateTable
 CREATE TABLE "hr_employee_assets" (
     "id" UUID NOT NULL,
     "tenant_id" UUID NOT NULL,
@@ -2239,7 +1894,6 @@ CREATE TABLE "hr_employee_assets" (
     CONSTRAINT "hr_employee_assets_pkey" PRIMARY KEY ("id")
 );
 
--- CreateTable
 CREATE TABLE "hr_travel_requests" (
     "id" UUID NOT NULL,
     "tenant_id" UUID NOT NULL,
@@ -2267,7 +1921,6 @@ CREATE TABLE "hr_travel_requests" (
     CONSTRAINT "hr_travel_requests_pkey" PRIMARY KEY ("id")
 );
 
--- CreateTable
 CREATE TABLE "hr_expense_claims" (
     "id" UUID NOT NULL,
     "tenant_id" UUID NOT NULL,
@@ -2295,7 +1948,6 @@ CREATE TABLE "hr_expense_claims" (
     CONSTRAINT "hr_expense_claims_pkey" PRIMARY KEY ("id")
 );
 
--- CreateTable
 CREATE TABLE "hr_expense_claim_lines" (
     "id" UUID NOT NULL,
     "tenant_id" UUID NOT NULL,
@@ -2314,7 +1966,6 @@ CREATE TABLE "hr_expense_claim_lines" (
     CONSTRAINT "hr_expense_claim_lines_pkey" PRIMARY KEY ("id")
 );
 
--- CreateTable
 CREATE TABLE "hr_expense_reimbursements" (
     "id" UUID NOT NULL,
     "tenant_id" UUID NOT NULL,
@@ -2337,672 +1988,448 @@ CREATE TABLE "hr_expense_reimbursements" (
     CONSTRAINT "hr_expense_reimbursements_pkey" PRIMARY KEY ("id")
 );
 
--- CreateIndex
 CREATE INDEX "hr_companies_tenant_status_idx" ON "hr_companies"("tenant_id", "status_code");
 
--- CreateIndex
 CREATE UNIQUE INDEX "hr_companies_tenant_code_unique" ON "hr_companies"("tenant_id", "code");
 
--- CreateIndex
 CREATE INDEX "hr_branches_tenant_company_idx" ON "hr_branches"("tenant_id", "company_id");
 
--- CreateIndex
 CREATE UNIQUE INDEX "hr_branches_tenant_code_unique" ON "hr_branches"("tenant_id", "code");
 
--- CreateIndex
 CREATE UNIQUE INDEX "hr_business_units_tenant_code_unique" ON "hr_business_units"("tenant_id", "code");
 
--- CreateIndex
 CREATE UNIQUE INDEX "hr_divisions_tenant_code_unique" ON "hr_divisions"("tenant_id", "code");
 
--- CreateIndex
 CREATE INDEX "hr_departments_tenant_company_idx" ON "hr_departments"("tenant_id", "company_id");
 
--- CreateIndex
 CREATE INDEX "hr_departments_tenant_parent_idx" ON "hr_departments"("tenant_id", "parent_department_id");
 
--- CreateIndex
 CREATE UNIQUE INDEX "hr_departments_tenant_code_unique" ON "hr_departments"("tenant_id", "code");
 
--- CreateIndex
 CREATE INDEX "hr_sections_tenant_department_idx" ON "hr_sections"("tenant_id", "department_id");
 
--- CreateIndex
 CREATE UNIQUE INDEX "hr_sections_tenant_code_unique" ON "hr_sections"("tenant_id", "code");
 
--- CreateIndex
 CREATE UNIQUE INDEX "hr_job_grades_tenant_code_unique" ON "hr_job_grades"("tenant_id", "code");
 
--- CreateIndex
 CREATE INDEX "hr_positions_tenant_department_idx" ON "hr_positions"("tenant_id", "department_id");
 
--- CreateIndex
 CREATE UNIQUE INDEX "hr_positions_tenant_code_unique" ON "hr_positions"("tenant_id", "code");
 
--- CreateIndex
 CREATE UNIQUE INDEX "hr_cost_centers_tenant_code_unique" ON "hr_cost_centers"("tenant_id", "code");
 
--- CreateIndex
 CREATE INDEX "hr_reporting_structure_tenant_employee_idx" ON "hr_reporting_structure"("tenant_id", "employee_id");
 
--- CreateIndex
 CREATE INDEX "hr_reporting_structure_tenant_manager_idx" ON "hr_reporting_structure"("tenant_id", "manager_id");
 
--- CreateIndex
 CREATE INDEX "hr_employees_tenant_status_idx" ON "hr_employees"("tenant_id", "employment_status");
 
--- CreateIndex
 CREATE INDEX "hr_employees_tenant_department_idx" ON "hr_employees"("tenant_id", "department_id");
 
--- CreateIndex
 CREATE INDEX "hr_employees_tenant_manager_idx" ON "hr_employees"("tenant_id", "manager_id");
 
--- CreateIndex
 CREATE UNIQUE INDEX "hr_employees_tenant_code_unique" ON "hr_employees"("tenant_id", "employee_code");
 
--- CreateIndex
 CREATE INDEX "hr_employee_contacts_tenant_employee_idx" ON "hr_employee_contacts"("tenant_id", "employee_id");
 
--- CreateIndex
 CREATE INDEX "hr_employee_addresses_tenant_employee_idx" ON "hr_employee_addresses"("tenant_id", "employee_id");
 
--- CreateIndex
 CREATE INDEX "hr_employee_documents_tenant_employee_idx" ON "hr_employee_documents"("tenant_id", "employee_id");
 
--- CreateIndex
 CREATE INDEX "hr_employee_documents_tenant_expiry_idx" ON "hr_employee_documents"("tenant_id", "expiry_date");
 
--- CreateIndex
 CREATE INDEX "hr_employee_bank_accounts_tenant_employee_idx" ON "hr_employee_bank_accounts"("tenant_id", "employee_id");
 
--- CreateIndex
 CREATE INDEX "hr_employee_contracts_tenant_employee_idx" ON "hr_employee_contracts"("tenant_id", "employee_id");
 
--- CreateIndex
 CREATE UNIQUE INDEX "hr_employee_contracts_tenant_number_unique" ON "hr_employee_contracts"("tenant_id", "contract_number");
 
--- CreateIndex
 CREATE INDEX "hr_employee_history_tenant_employee_idx" ON "hr_employee_history"("tenant_id", "employee_id");
 
--- CreateIndex
 CREATE INDEX "hr_employee_history_tenant_type_idx" ON "hr_employee_history"("tenant_id", "change_type");
 
--- CreateIndex
 CREATE INDEX "hr_employee_dependents_tenant_employee_idx" ON "hr_employee_dependents"("tenant_id", "employee_id");
 
--- CreateIndex
 CREATE INDEX "hr_employee_education_tenant_employee_idx" ON "hr_employee_education"("tenant_id", "employee_id");
 
--- CreateIndex
 CREATE INDEX "hr_employee_experience_tenant_employee_idx" ON "hr_employee_experience"("tenant_id", "employee_id");
 
--- CreateIndex
 CREATE INDEX "hr_employee_certifications_tenant_employee_idx" ON "hr_employee_certifications"("tenant_id", "employee_id");
 
--- CreateIndex
 CREATE INDEX "hr_employee_languages_tenant_employee_idx" ON "hr_employee_languages"("tenant_id", "employee_id");
 
--- CreateIndex
 CREATE INDEX "hr_job_openings_tenant_status_idx" ON "hr_job_openings"("tenant_id", "status_code");
 
--- CreateIndex
 CREATE UNIQUE INDEX "hr_job_openings_tenant_number_unique" ON "hr_job_openings"("tenant_id", "requisition_no");
 
--- CreateIndex
 CREATE INDEX "hr_candidates_tenant_opening_idx" ON "hr_candidates"("tenant_id", "job_opening_id");
 
--- CreateIndex
 CREATE UNIQUE INDEX "hr_candidates_tenant_code_unique" ON "hr_candidates"("tenant_id", "candidate_code");
 
--- CreateIndex
 CREATE INDEX "hr_candidate_documents_tenant_candidate_idx" ON "hr_candidate_documents"("tenant_id", "candidate_id");
 
--- CreateIndex
 CREATE INDEX "hr_interviews_tenant_candidate_idx" ON "hr_interviews"("tenant_id", "candidate_id");
 
--- CreateIndex
 CREATE INDEX "hr_interviews_tenant_scheduled_idx" ON "hr_interviews"("tenant_id", "scheduled_at");
 
--- CreateIndex
 CREATE INDEX "hr_interview_feedback_tenant_interview_idx" ON "hr_interview_feedback"("tenant_id", "interview_id");
 
--- CreateIndex
 CREATE INDEX "hr_job_offers_tenant_candidate_idx" ON "hr_job_offers"("tenant_id", "candidate_id");
 
--- CreateIndex
 CREATE UNIQUE INDEX "hr_job_offers_tenant_number_unique" ON "hr_job_offers"("tenant_id", "offer_number");
 
--- CreateIndex
 CREATE INDEX "hr_offer_acceptance_tenant_offer_idx" ON "hr_offer_acceptance"("tenant_id", "offer_id");
 
--- CreateIndex
 CREATE UNIQUE INDEX "hr_onboarding_templates_tenant_code_unique" ON "hr_onboarding_templates"("tenant_id", "code");
 
--- CreateIndex
 CREATE INDEX "hr_onboarding_tasks_tenant_template_idx" ON "hr_onboarding_tasks"("tenant_id", "template_id");
 
--- CreateIndex
 CREATE INDEX "hr_employee_onboarding_tenant_employee_idx" ON "hr_employee_onboarding"("tenant_id", "employee_id");
 
--- CreateIndex
 CREATE UNIQUE INDEX "hr_shift_definitions_tenant_code_unique" ON "hr_shift_definitions"("tenant_id", "code");
 
--- CreateIndex
 CREATE UNIQUE INDEX "hr_shift_patterns_tenant_code_unique" ON "hr_shift_patterns"("tenant_id", "code");
 
--- CreateIndex
 CREATE INDEX "hr_shift_assignments_tenant_employee_idx" ON "hr_shift_assignments"("tenant_id", "employee_id");
 
--- CreateIndex
 CREATE INDEX "hr_attendance_logs_tenant_employee_time_idx" ON "hr_attendance_logs"("tenant_id", "employee_id", "event_time");
 
--- CreateIndex
 CREATE INDEX "hr_attendance_daily_tenant_date_idx" ON "hr_attendance_daily"("tenant_id", "work_date");
 
--- CreateIndex
 CREATE UNIQUE INDEX "hr_attendance_daily_tenant_employee_date_unique" ON "hr_attendance_daily"("tenant_id", "employee_id", "work_date");
 
--- CreateIndex
 CREATE INDEX "hr_timesheets_tenant_employee_idx" ON "hr_timesheets"("tenant_id", "employee_id");
 
--- CreateIndex
 CREATE INDEX "hr_overtime_requests_tenant_employee_idx" ON "hr_overtime_requests"("tenant_id", "employee_id");
 
--- CreateIndex
 CREATE UNIQUE INDEX "hr_overtime_requests_tenant_number_unique" ON "hr_overtime_requests"("tenant_id", "request_number");
 
--- CreateIndex
 CREATE INDEX "hr_break_logs_tenant_employee_idx" ON "hr_break_logs"("tenant_id", "employee_id");
 
--- CreateIndex
 CREATE UNIQUE INDEX "hr_leave_types_tenant_code_unique" ON "hr_leave_types"("tenant_id", "code");
 
--- CreateIndex
 CREATE INDEX "hr_leave_policies_tenant_type_idx" ON "hr_leave_policies"("tenant_id", "leave_type_id");
 
--- CreateIndex
 CREATE INDEX "hr_leave_balances_tenant_employee_idx" ON "hr_leave_balances"("tenant_id", "employee_id");
 
--- CreateIndex
 CREATE UNIQUE INDEX "hr_leave_balances_unique" ON "hr_leave_balances"("tenant_id", "employee_id", "leave_type_id", "year");
 
--- CreateIndex
 CREATE INDEX "hr_leave_requests_tenant_employee_idx" ON "hr_leave_requests"("tenant_id", "employee_id");
 
--- CreateIndex
 CREATE INDEX "hr_leave_requests_tenant_status_idx" ON "hr_leave_requests"("tenant_id", "status_code");
 
--- CreateIndex
 CREATE UNIQUE INDEX "hr_leave_requests_tenant_number_unique" ON "hr_leave_requests"("tenant_id", "request_number");
 
--- CreateIndex
 CREATE INDEX "hr_leave_approvals_tenant_request_idx" ON "hr_leave_approvals"("tenant_id", "leave_request_id");
 
--- CreateIndex
 CREATE UNIQUE INDEX "hr_salary_components_tenant_code_unique" ON "hr_salary_components"("tenant_id", "code");
 
--- CreateIndex
 CREATE UNIQUE INDEX "hr_salary_structures_tenant_code_unique" ON "hr_salary_structures"("tenant_id", "code");
 
--- CreateIndex
 CREATE INDEX "hr_employee_salary_components_tenant_employee_idx" ON "hr_employee_salary_components"("tenant_id", "employee_id");
 
--- CreateIndex
 CREATE INDEX "hr_payroll_periods_tenant_status_idx" ON "hr_payroll_periods"("tenant_id", "status_code");
 
--- CreateIndex
 CREATE UNIQUE INDEX "hr_payroll_periods_tenant_code_unique" ON "hr_payroll_periods"("tenant_id", "code");
 
--- CreateIndex
 CREATE INDEX "hr_payroll_runs_tenant_period_idx" ON "hr_payroll_runs"("tenant_id", "period_id");
 
--- CreateIndex
 CREATE INDEX "hr_payroll_runs_tenant_status_idx" ON "hr_payroll_runs"("tenant_id", "status_code");
 
--- CreateIndex
 CREATE UNIQUE INDEX "hr_payroll_runs_tenant_number_unique" ON "hr_payroll_runs"("tenant_id", "run_number");
 
--- CreateIndex
 CREATE INDEX "hr_payroll_details_tenant_employee_idx" ON "hr_payroll_details"("tenant_id", "employee_id");
 
--- CreateIndex
 CREATE UNIQUE INDEX "hr_payroll_details_run_employee_unique" ON "hr_payroll_details"("tenant_id", "payroll_run_id", "employee_id");
 
--- CreateIndex
 CREATE INDEX "hr_payroll_component_details_tenant_detail_idx" ON "hr_payroll_component_details"("tenant_id", "payroll_detail_id");
 
--- CreateIndex
 CREATE INDEX "hr_loans_tenant_employee_idx" ON "hr_loans"("tenant_id", "employee_id");
 
--- CreateIndex
 CREATE UNIQUE INDEX "hr_loans_tenant_number_unique" ON "hr_loans"("tenant_id", "loan_number");
 
--- CreateIndex
 CREATE INDEX "hr_loan_installments_tenant_loan_idx" ON "hr_loan_installments"("tenant_id", "loan_id");
 
--- CreateIndex
 CREATE UNIQUE INDEX "hr_loan_installments_unique" ON "hr_loan_installments"("tenant_id", "loan_id", "installment_no");
 
--- CreateIndex
 CREATE INDEX "hr_salary_advances_tenant_employee_idx" ON "hr_salary_advances"("tenant_id", "employee_id");
 
--- CreateIndex
 CREATE UNIQUE INDEX "hr_salary_advances_tenant_number_unique" ON "hr_salary_advances"("tenant_id", "advance_number");
 
--- CreateIndex
 CREATE INDEX "hr_employee_benefits_tenant_employee_idx" ON "hr_employee_benefits"("tenant_id", "employee_id");
 
--- CreateIndex
 CREATE INDEX "hr_commissions_tenant_employee_idx" ON "hr_commissions"("tenant_id", "employee_id");
 
--- CreateIndex
 CREATE UNIQUE INDEX "hr_kpis_tenant_code_unique" ON "hr_kpis"("tenant_id", "code");
 
--- CreateIndex
 CREATE INDEX "hr_goals_tenant_employee_idx" ON "hr_goals"("tenant_id", "employee_id");
 
--- CreateIndex
 CREATE INDEX "hr_goal_progress_tenant_goal_idx" ON "hr_goal_progress"("tenant_id", "goal_id");
 
--- CreateIndex
 CREATE UNIQUE INDEX "hr_review_templates_tenant_code_unique" ON "hr_review_templates"("tenant_id", "code");
 
--- CreateIndex
 CREATE INDEX "hr_performance_reviews_tenant_employee_idx" ON "hr_performance_reviews"("tenant_id", "employee_id");
 
--- CreateIndex
 CREATE INDEX "hr_review_scores_tenant_review_idx" ON "hr_review_scores"("tenant_id", "review_id");
 
--- CreateIndex
 CREATE UNIQUE INDEX "hr_training_courses_tenant_code_unique" ON "hr_training_courses"("tenant_id", "code");
 
--- CreateIndex
 CREATE INDEX "hr_training_sessions_tenant_course_idx" ON "hr_training_sessions"("tenant_id", "course_id");
 
--- CreateIndex
 CREATE INDEX "hr_training_records_tenant_employee_idx" ON "hr_training_records"("tenant_id", "employee_id");
 
--- CreateIndex
 CREATE INDEX "hr_training_records_tenant_session_idx" ON "hr_training_records"("tenant_id", "session_id");
 
--- CreateIndex
 CREATE INDEX "hr_training_certificates_tenant_employee_idx" ON "hr_training_certificates"("tenant_id", "employee_id");
 
--- CreateIndex
 CREATE UNIQUE INDEX "hr_career_paths_tenant_code_unique" ON "hr_career_paths"("tenant_id", "code");
 
--- CreateIndex
 CREATE INDEX "hr_successors_tenant_position_idx" ON "hr_successors"("tenant_id", "position_id");
 
--- CreateIndex
 CREATE INDEX "hr_promotions_tenant_employee_idx" ON "hr_promotions"("tenant_id", "employee_id");
 
--- CreateIndex
 CREATE UNIQUE INDEX "hr_promotions_tenant_number_unique" ON "hr_promotions"("tenant_id", "promotion_number");
 
--- CreateIndex
 CREATE UNIQUE INDEX "hr_skills_tenant_code_unique" ON "hr_skills"("tenant_id", "code");
 
--- CreateIndex
 CREATE INDEX "hr_employee_skills_tenant_skill_idx" ON "hr_employee_skills"("tenant_id", "skill_id");
 
--- CreateIndex
 CREATE UNIQUE INDEX "hr_employee_skills_unique" ON "hr_employee_skills"("tenant_id", "employee_id", "skill_id");
 
--- CreateIndex
 CREATE UNIQUE INDEX "hr_workforce_plans_tenant_code_unique" ON "hr_workforce_plans"("tenant_id", "code");
 
--- CreateIndex
 CREATE INDEX "hr_workforce_requirements_tenant_plan_idx" ON "hr_workforce_requirements"("tenant_id", "plan_id");
 
--- CreateIndex
 CREATE UNIQUE INDEX "hr_skill_requirements_unique" ON "hr_skill_requirements"("tenant_id", "position_id", "skill_id");
 
--- CreateIndex
 CREATE UNIQUE INDEX "hr_budget_years_tenant_year_unique" ON "hr_budget_years"("tenant_id", "fiscal_year");
 
--- CreateIndex
 CREATE INDEX "hr_budget_departments_tenant_year_idx" ON "hr_budget_departments"("tenant_id", "budget_year_id");
 
--- CreateIndex
 CREATE INDEX "hr_budget_positions_tenant_year_idx" ON "hr_budget_positions"("tenant_id", "budget_year_id");
 
--- CreateIndex
 CREATE INDEX "hr_budget_actuals_tenant_year_idx" ON "hr_budget_actuals"("tenant_id", "budget_year_id");
 
--- CreateIndex
 CREATE INDEX "hr_employee_requests_tenant_employee_idx" ON "hr_employee_requests"("tenant_id", "employee_id");
 
--- CreateIndex
 CREATE UNIQUE INDEX "hr_employee_requests_tenant_number_unique" ON "hr_employee_requests"("tenant_id", "request_number");
 
--- CreateIndex
 CREATE INDEX "hr_employee_notifications_tenant_employee_read_idx" ON "hr_employee_notifications"("tenant_id", "employee_id", "is_read");
 
--- CreateIndex
 CREATE INDEX "hr_employee_announcements_tenant_publish_idx" ON "hr_employee_announcements"("tenant_id", "publish_at");
 
--- CreateIndex
 CREATE INDEX "hr_employee_documents_shared_tenant_employee_idx" ON "hr_employee_documents_shared"("tenant_id", "employee_id");
 
--- CreateIndex
 CREATE INDEX "hr_employee_assets_tenant_employee_idx" ON "hr_employee_assets"("tenant_id", "employee_id");
 
--- CreateIndex
 CREATE INDEX "hr_travel_requests_tenant_employee_idx" ON "hr_travel_requests"("tenant_id", "employee_id");
 
--- CreateIndex
 CREATE UNIQUE INDEX "hr_travel_requests_tenant_number_unique" ON "hr_travel_requests"("tenant_id", "request_number");
 
--- CreateIndex
 CREATE INDEX "hr_expense_claims_tenant_employee_idx" ON "hr_expense_claims"("tenant_id", "employee_id");
 
--- CreateIndex
 CREATE UNIQUE INDEX "hr_expense_claims_tenant_number_unique" ON "hr_expense_claims"("tenant_id", "claim_number");
 
--- CreateIndex
 CREATE INDEX "hr_expense_claim_lines_tenant_claim_idx" ON "hr_expense_claim_lines"("tenant_id", "claim_id");
 
--- CreateIndex
 CREATE UNIQUE INDEX "hr_expense_claim_lines_unique" ON "hr_expense_claim_lines"("tenant_id", "claim_id", "line_number");
 
--- CreateIndex
 CREATE INDEX "hr_expense_reimbursements_tenant_claim_idx" ON "hr_expense_reimbursements"("tenant_id", "claim_id");
 
--- AddForeignKey
 ALTER TABLE "hr_companies" ADD CONSTRAINT "hr_companies_tenant_id_fkey" FOREIGN KEY ("tenant_id") REFERENCES "tenant_accounts"("id") ON DELETE CASCADE ON UPDATE CASCADE;
 
--- AddForeignKey
 ALTER TABLE "hr_branches" ADD CONSTRAINT "hr_branches_tenant_id_fkey" FOREIGN KEY ("tenant_id") REFERENCES "tenant_accounts"("id") ON DELETE CASCADE ON UPDATE CASCADE;
 
--- AddForeignKey
 ALTER TABLE "hr_business_units" ADD CONSTRAINT "hr_business_units_tenant_id_fkey" FOREIGN KEY ("tenant_id") REFERENCES "tenant_accounts"("id") ON DELETE CASCADE ON UPDATE CASCADE;
 
--- AddForeignKey
 ALTER TABLE "hr_divisions" ADD CONSTRAINT "hr_divisions_tenant_id_fkey" FOREIGN KEY ("tenant_id") REFERENCES "tenant_accounts"("id") ON DELETE CASCADE ON UPDATE CASCADE;
 
--- AddForeignKey
 ALTER TABLE "hr_departments" ADD CONSTRAINT "hr_departments_tenant_id_fkey" FOREIGN KEY ("tenant_id") REFERENCES "tenant_accounts"("id") ON DELETE CASCADE ON UPDATE CASCADE;
 
--- AddForeignKey
 ALTER TABLE "hr_sections" ADD CONSTRAINT "hr_sections_tenant_id_fkey" FOREIGN KEY ("tenant_id") REFERENCES "tenant_accounts"("id") ON DELETE CASCADE ON UPDATE CASCADE;
 
--- AddForeignKey
 ALTER TABLE "hr_job_grades" ADD CONSTRAINT "hr_job_grades_tenant_id_fkey" FOREIGN KEY ("tenant_id") REFERENCES "tenant_accounts"("id") ON DELETE CASCADE ON UPDATE CASCADE;
 
--- AddForeignKey
 ALTER TABLE "hr_positions" ADD CONSTRAINT "hr_positions_tenant_id_fkey" FOREIGN KEY ("tenant_id") REFERENCES "tenant_accounts"("id") ON DELETE CASCADE ON UPDATE CASCADE;
 
--- AddForeignKey
 ALTER TABLE "hr_cost_centers" ADD CONSTRAINT "hr_cost_centers_tenant_id_fkey" FOREIGN KEY ("tenant_id") REFERENCES "tenant_accounts"("id") ON DELETE CASCADE ON UPDATE CASCADE;
 
--- AddForeignKey
 ALTER TABLE "hr_reporting_structure" ADD CONSTRAINT "hr_reporting_structure_tenant_id_fkey" FOREIGN KEY ("tenant_id") REFERENCES "tenant_accounts"("id") ON DELETE CASCADE ON UPDATE CASCADE;
 
--- AddForeignKey
 ALTER TABLE "hr_employees" ADD CONSTRAINT "hr_employees_tenant_id_fkey" FOREIGN KEY ("tenant_id") REFERENCES "tenant_accounts"("id") ON DELETE CASCADE ON UPDATE CASCADE;
 
--- AddForeignKey
 ALTER TABLE "hr_employee_contacts" ADD CONSTRAINT "hr_employee_contacts_tenant_id_fkey" FOREIGN KEY ("tenant_id") REFERENCES "tenant_accounts"("id") ON DELETE CASCADE ON UPDATE CASCADE;
 
--- AddForeignKey
 ALTER TABLE "hr_employee_contacts" ADD CONSTRAINT "hr_employee_contacts_employee_id_fkey" FOREIGN KEY ("employee_id") REFERENCES "hr_employees"("id") ON DELETE CASCADE ON UPDATE CASCADE;
 
--- AddForeignKey
 ALTER TABLE "hr_employee_addresses" ADD CONSTRAINT "hr_employee_addresses_tenant_id_fkey" FOREIGN KEY ("tenant_id") REFERENCES "tenant_accounts"("id") ON DELETE CASCADE ON UPDATE CASCADE;
 
--- AddForeignKey
 ALTER TABLE "hr_employee_addresses" ADD CONSTRAINT "hr_employee_addresses_employee_id_fkey" FOREIGN KEY ("employee_id") REFERENCES "hr_employees"("id") ON DELETE CASCADE ON UPDATE CASCADE;
 
--- AddForeignKey
 ALTER TABLE "hr_employee_documents" ADD CONSTRAINT "hr_employee_documents_tenant_id_fkey" FOREIGN KEY ("tenant_id") REFERENCES "tenant_accounts"("id") ON DELETE CASCADE ON UPDATE CASCADE;
 
--- AddForeignKey
 ALTER TABLE "hr_employee_documents" ADD CONSTRAINT "hr_employee_documents_employee_id_fkey" FOREIGN KEY ("employee_id") REFERENCES "hr_employees"("id") ON DELETE CASCADE ON UPDATE CASCADE;
 
--- AddForeignKey
 ALTER TABLE "hr_employee_bank_accounts" ADD CONSTRAINT "hr_employee_bank_accounts_tenant_id_fkey" FOREIGN KEY ("tenant_id") REFERENCES "tenant_accounts"("id") ON DELETE CASCADE ON UPDATE CASCADE;
 
--- AddForeignKey
 ALTER TABLE "hr_employee_bank_accounts" ADD CONSTRAINT "hr_employee_bank_accounts_employee_id_fkey" FOREIGN KEY ("employee_id") REFERENCES "hr_employees"("id") ON DELETE CASCADE ON UPDATE CASCADE;
 
--- AddForeignKey
 ALTER TABLE "hr_employee_contracts" ADD CONSTRAINT "hr_employee_contracts_tenant_id_fkey" FOREIGN KEY ("tenant_id") REFERENCES "tenant_accounts"("id") ON DELETE CASCADE ON UPDATE CASCADE;
 
--- AddForeignKey
 ALTER TABLE "hr_employee_contracts" ADD CONSTRAINT "hr_employee_contracts_employee_id_fkey" FOREIGN KEY ("employee_id") REFERENCES "hr_employees"("id") ON DELETE CASCADE ON UPDATE CASCADE;
 
--- AddForeignKey
 ALTER TABLE "hr_employee_history" ADD CONSTRAINT "hr_employee_history_tenant_id_fkey" FOREIGN KEY ("tenant_id") REFERENCES "tenant_accounts"("id") ON DELETE CASCADE ON UPDATE CASCADE;
 
--- AddForeignKey
 ALTER TABLE "hr_employee_history" ADD CONSTRAINT "hr_employee_history_employee_id_fkey" FOREIGN KEY ("employee_id") REFERENCES "hr_employees"("id") ON DELETE CASCADE ON UPDATE CASCADE;
 
--- AddForeignKey
 ALTER TABLE "hr_employee_dependents" ADD CONSTRAINT "hr_employee_dependents_tenant_id_fkey" FOREIGN KEY ("tenant_id") REFERENCES "tenant_accounts"("id") ON DELETE CASCADE ON UPDATE CASCADE;
 
--- AddForeignKey
 ALTER TABLE "hr_employee_dependents" ADD CONSTRAINT "hr_employee_dependents_employee_id_fkey" FOREIGN KEY ("employee_id") REFERENCES "hr_employees"("id") ON DELETE CASCADE ON UPDATE CASCADE;
 
--- AddForeignKey
 ALTER TABLE "hr_employee_education" ADD CONSTRAINT "hr_employee_education_tenant_id_fkey" FOREIGN KEY ("tenant_id") REFERENCES "tenant_accounts"("id") ON DELETE CASCADE ON UPDATE CASCADE;
 
--- AddForeignKey
 ALTER TABLE "hr_employee_education" ADD CONSTRAINT "hr_employee_education_employee_id_fkey" FOREIGN KEY ("employee_id") REFERENCES "hr_employees"("id") ON DELETE CASCADE ON UPDATE CASCADE;
 
--- AddForeignKey
 ALTER TABLE "hr_employee_experience" ADD CONSTRAINT "hr_employee_experience_tenant_id_fkey" FOREIGN KEY ("tenant_id") REFERENCES "tenant_accounts"("id") ON DELETE CASCADE ON UPDATE CASCADE;
 
--- AddForeignKey
 ALTER TABLE "hr_employee_experience" ADD CONSTRAINT "hr_employee_experience_employee_id_fkey" FOREIGN KEY ("employee_id") REFERENCES "hr_employees"("id") ON DELETE CASCADE ON UPDATE CASCADE;
 
--- AddForeignKey
 ALTER TABLE "hr_employee_certifications" ADD CONSTRAINT "hr_employee_certifications_tenant_id_fkey" FOREIGN KEY ("tenant_id") REFERENCES "tenant_accounts"("id") ON DELETE CASCADE ON UPDATE CASCADE;
 
--- AddForeignKey
 ALTER TABLE "hr_employee_certifications" ADD CONSTRAINT "hr_employee_certifications_employee_id_fkey" FOREIGN KEY ("employee_id") REFERENCES "hr_employees"("id") ON DELETE CASCADE ON UPDATE CASCADE;
 
--- AddForeignKey
 ALTER TABLE "hr_employee_languages" ADD CONSTRAINT "hr_employee_languages_tenant_id_fkey" FOREIGN KEY ("tenant_id") REFERENCES "tenant_accounts"("id") ON DELETE CASCADE ON UPDATE CASCADE;
 
--- AddForeignKey
 ALTER TABLE "hr_employee_languages" ADD CONSTRAINT "hr_employee_languages_employee_id_fkey" FOREIGN KEY ("employee_id") REFERENCES "hr_employees"("id") ON DELETE CASCADE ON UPDATE CASCADE;
 
--- AddForeignKey
 ALTER TABLE "hr_job_openings" ADD CONSTRAINT "hr_job_openings_tenant_id_fkey" FOREIGN KEY ("tenant_id") REFERENCES "tenant_accounts"("id") ON DELETE CASCADE ON UPDATE CASCADE;
 
--- AddForeignKey
 ALTER TABLE "hr_candidates" ADD CONSTRAINT "hr_candidates_tenant_id_fkey" FOREIGN KEY ("tenant_id") REFERENCES "tenant_accounts"("id") ON DELETE CASCADE ON UPDATE CASCADE;
 
--- AddForeignKey
 ALTER TABLE "hr_candidate_documents" ADD CONSTRAINT "hr_candidate_documents_tenant_id_fkey" FOREIGN KEY ("tenant_id") REFERENCES "tenant_accounts"("id") ON DELETE CASCADE ON UPDATE CASCADE;
 
--- AddForeignKey
 ALTER TABLE "hr_interviews" ADD CONSTRAINT "hr_interviews_tenant_id_fkey" FOREIGN KEY ("tenant_id") REFERENCES "tenant_accounts"("id") ON DELETE CASCADE ON UPDATE CASCADE;
 
--- AddForeignKey
 ALTER TABLE "hr_interview_feedback" ADD CONSTRAINT "hr_interview_feedback_tenant_id_fkey" FOREIGN KEY ("tenant_id") REFERENCES "tenant_accounts"("id") ON DELETE CASCADE ON UPDATE CASCADE;
 
--- AddForeignKey
 ALTER TABLE "hr_job_offers" ADD CONSTRAINT "hr_job_offers_tenant_id_fkey" FOREIGN KEY ("tenant_id") REFERENCES "tenant_accounts"("id") ON DELETE CASCADE ON UPDATE CASCADE;
 
--- AddForeignKey
 ALTER TABLE "hr_offer_acceptance" ADD CONSTRAINT "hr_offer_acceptance_tenant_id_fkey" FOREIGN KEY ("tenant_id") REFERENCES "tenant_accounts"("id") ON DELETE CASCADE ON UPDATE CASCADE;
 
--- AddForeignKey
 ALTER TABLE "hr_onboarding_templates" ADD CONSTRAINT "hr_onboarding_templates_tenant_id_fkey" FOREIGN KEY ("tenant_id") REFERENCES "tenant_accounts"("id") ON DELETE CASCADE ON UPDATE CASCADE;
 
--- AddForeignKey
 ALTER TABLE "hr_onboarding_tasks" ADD CONSTRAINT "hr_onboarding_tasks_tenant_id_fkey" FOREIGN KEY ("tenant_id") REFERENCES "tenant_accounts"("id") ON DELETE CASCADE ON UPDATE CASCADE;
 
--- AddForeignKey
 ALTER TABLE "hr_employee_onboarding" ADD CONSTRAINT "hr_employee_onboarding_tenant_id_fkey" FOREIGN KEY ("tenant_id") REFERENCES "tenant_accounts"("id") ON DELETE CASCADE ON UPDATE CASCADE;
 
--- AddForeignKey
 ALTER TABLE "hr_shift_definitions" ADD CONSTRAINT "hr_shift_definitions_tenant_id_fkey" FOREIGN KEY ("tenant_id") REFERENCES "tenant_accounts"("id") ON DELETE CASCADE ON UPDATE CASCADE;
 
--- AddForeignKey
 ALTER TABLE "hr_shift_patterns" ADD CONSTRAINT "hr_shift_patterns_tenant_id_fkey" FOREIGN KEY ("tenant_id") REFERENCES "tenant_accounts"("id") ON DELETE CASCADE ON UPDATE CASCADE;
 
--- AddForeignKey
 ALTER TABLE "hr_shift_assignments" ADD CONSTRAINT "hr_shift_assignments_tenant_id_fkey" FOREIGN KEY ("tenant_id") REFERENCES "tenant_accounts"("id") ON DELETE CASCADE ON UPDATE CASCADE;
 
--- AddForeignKey
 ALTER TABLE "hr_attendance_logs" ADD CONSTRAINT "hr_attendance_logs_tenant_id_fkey" FOREIGN KEY ("tenant_id") REFERENCES "tenant_accounts"("id") ON DELETE CASCADE ON UPDATE CASCADE;
 
--- AddForeignKey
 ALTER TABLE "hr_attendance_daily" ADD CONSTRAINT "hr_attendance_daily_tenant_id_fkey" FOREIGN KEY ("tenant_id") REFERENCES "tenant_accounts"("id") ON DELETE CASCADE ON UPDATE CASCADE;
 
--- AddForeignKey
 ALTER TABLE "hr_timesheets" ADD CONSTRAINT "hr_timesheets_tenant_id_fkey" FOREIGN KEY ("tenant_id") REFERENCES "tenant_accounts"("id") ON DELETE CASCADE ON UPDATE CASCADE;
 
--- AddForeignKey
 ALTER TABLE "hr_overtime_requests" ADD CONSTRAINT "hr_overtime_requests_tenant_id_fkey" FOREIGN KEY ("tenant_id") REFERENCES "tenant_accounts"("id") ON DELETE CASCADE ON UPDATE CASCADE;
 
--- AddForeignKey
 ALTER TABLE "hr_break_logs" ADD CONSTRAINT "hr_break_logs_tenant_id_fkey" FOREIGN KEY ("tenant_id") REFERENCES "tenant_accounts"("id") ON DELETE CASCADE ON UPDATE CASCADE;
 
--- AddForeignKey
 ALTER TABLE "hr_leave_types" ADD CONSTRAINT "hr_leave_types_tenant_id_fkey" FOREIGN KEY ("tenant_id") REFERENCES "tenant_accounts"("id") ON DELETE CASCADE ON UPDATE CASCADE;
 
--- AddForeignKey
 ALTER TABLE "hr_leave_policies" ADD CONSTRAINT "hr_leave_policies_tenant_id_fkey" FOREIGN KEY ("tenant_id") REFERENCES "tenant_accounts"("id") ON DELETE CASCADE ON UPDATE CASCADE;
 
--- AddForeignKey
 ALTER TABLE "hr_leave_balances" ADD CONSTRAINT "hr_leave_balances_tenant_id_fkey" FOREIGN KEY ("tenant_id") REFERENCES "tenant_accounts"("id") ON DELETE CASCADE ON UPDATE CASCADE;
 
--- AddForeignKey
 ALTER TABLE "hr_leave_requests" ADD CONSTRAINT "hr_leave_requests_tenant_id_fkey" FOREIGN KEY ("tenant_id") REFERENCES "tenant_accounts"("id") ON DELETE CASCADE ON UPDATE CASCADE;
 
--- AddForeignKey
 ALTER TABLE "hr_leave_approvals" ADD CONSTRAINT "hr_leave_approvals_tenant_id_fkey" FOREIGN KEY ("tenant_id") REFERENCES "tenant_accounts"("id") ON DELETE CASCADE ON UPDATE CASCADE;
 
--- AddForeignKey
 ALTER TABLE "hr_salary_components" ADD CONSTRAINT "hr_salary_components_tenant_id_fkey" FOREIGN KEY ("tenant_id") REFERENCES "tenant_accounts"("id") ON DELETE CASCADE ON UPDATE CASCADE;
 
--- AddForeignKey
 ALTER TABLE "hr_salary_structures" ADD CONSTRAINT "hr_salary_structures_tenant_id_fkey" FOREIGN KEY ("tenant_id") REFERENCES "tenant_accounts"("id") ON DELETE CASCADE ON UPDATE CASCADE;
 
--- AddForeignKey
 ALTER TABLE "hr_employee_salary_components" ADD CONSTRAINT "hr_employee_salary_components_tenant_id_fkey" FOREIGN KEY ("tenant_id") REFERENCES "tenant_accounts"("id") ON DELETE CASCADE ON UPDATE CASCADE;
 
--- AddForeignKey
 ALTER TABLE "hr_payroll_periods" ADD CONSTRAINT "hr_payroll_periods_tenant_id_fkey" FOREIGN KEY ("tenant_id") REFERENCES "tenant_accounts"("id") ON DELETE CASCADE ON UPDATE CASCADE;
 
--- AddForeignKey
 ALTER TABLE "hr_payroll_runs" ADD CONSTRAINT "hr_payroll_runs_tenant_id_fkey" FOREIGN KEY ("tenant_id") REFERENCES "tenant_accounts"("id") ON DELETE CASCADE ON UPDATE CASCADE;
 
--- AddForeignKey
 ALTER TABLE "hr_payroll_details" ADD CONSTRAINT "hr_payroll_details_tenant_id_fkey" FOREIGN KEY ("tenant_id") REFERENCES "tenant_accounts"("id") ON DELETE CASCADE ON UPDATE CASCADE;
 
--- AddForeignKey
 ALTER TABLE "hr_payroll_component_details" ADD CONSTRAINT "hr_payroll_component_details_tenant_id_fkey" FOREIGN KEY ("tenant_id") REFERENCES "tenant_accounts"("id") ON DELETE CASCADE ON UPDATE CASCADE;
 
--- AddForeignKey
 ALTER TABLE "hr_loans" ADD CONSTRAINT "hr_loans_tenant_id_fkey" FOREIGN KEY ("tenant_id") REFERENCES "tenant_accounts"("id") ON DELETE CASCADE ON UPDATE CASCADE;
 
--- AddForeignKey
 ALTER TABLE "hr_loan_installments" ADD CONSTRAINT "hr_loan_installments_tenant_id_fkey" FOREIGN KEY ("tenant_id") REFERENCES "tenant_accounts"("id") ON DELETE CASCADE ON UPDATE CASCADE;
 
--- AddForeignKey
 ALTER TABLE "hr_salary_advances" ADD CONSTRAINT "hr_salary_advances_tenant_id_fkey" FOREIGN KEY ("tenant_id") REFERENCES "tenant_accounts"("id") ON DELETE CASCADE ON UPDATE CASCADE;
 
--- AddForeignKey
 ALTER TABLE "hr_employee_benefits" ADD CONSTRAINT "hr_employee_benefits_tenant_id_fkey" FOREIGN KEY ("tenant_id") REFERENCES "tenant_accounts"("id") ON DELETE CASCADE ON UPDATE CASCADE;
 
--- AddForeignKey
 ALTER TABLE "hr_commissions" ADD CONSTRAINT "hr_commissions_tenant_id_fkey" FOREIGN KEY ("tenant_id") REFERENCES "tenant_accounts"("id") ON DELETE CASCADE ON UPDATE CASCADE;
 
--- AddForeignKey
 ALTER TABLE "hr_kpis" ADD CONSTRAINT "hr_kpis_tenant_id_fkey" FOREIGN KEY ("tenant_id") REFERENCES "tenant_accounts"("id") ON DELETE CASCADE ON UPDATE CASCADE;
 
--- AddForeignKey
 ALTER TABLE "hr_goals" ADD CONSTRAINT "hr_goals_tenant_id_fkey" FOREIGN KEY ("tenant_id") REFERENCES "tenant_accounts"("id") ON DELETE CASCADE ON UPDATE CASCADE;
 
--- AddForeignKey
 ALTER TABLE "hr_goal_progress" ADD CONSTRAINT "hr_goal_progress_tenant_id_fkey" FOREIGN KEY ("tenant_id") REFERENCES "tenant_accounts"("id") ON DELETE CASCADE ON UPDATE CASCADE;
 
--- AddForeignKey
 ALTER TABLE "hr_review_templates" ADD CONSTRAINT "hr_review_templates_tenant_id_fkey" FOREIGN KEY ("tenant_id") REFERENCES "tenant_accounts"("id") ON DELETE CASCADE ON UPDATE CASCADE;
 
--- AddForeignKey
 ALTER TABLE "hr_performance_reviews" ADD CONSTRAINT "hr_performance_reviews_tenant_id_fkey" FOREIGN KEY ("tenant_id") REFERENCES "tenant_accounts"("id") ON DELETE CASCADE ON UPDATE CASCADE;
 
--- AddForeignKey
 ALTER TABLE "hr_review_scores" ADD CONSTRAINT "hr_review_scores_tenant_id_fkey" FOREIGN KEY ("tenant_id") REFERENCES "tenant_accounts"("id") ON DELETE CASCADE ON UPDATE CASCADE;
 
--- AddForeignKey
 ALTER TABLE "hr_training_courses" ADD CONSTRAINT "hr_training_courses_tenant_id_fkey" FOREIGN KEY ("tenant_id") REFERENCES "tenant_accounts"("id") ON DELETE CASCADE ON UPDATE CASCADE;
 
--- AddForeignKey
 ALTER TABLE "hr_training_sessions" ADD CONSTRAINT "hr_training_sessions_tenant_id_fkey" FOREIGN KEY ("tenant_id") REFERENCES "tenant_accounts"("id") ON DELETE CASCADE ON UPDATE CASCADE;
 
--- AddForeignKey
 ALTER TABLE "hr_training_records" ADD CONSTRAINT "hr_training_records_tenant_id_fkey" FOREIGN KEY ("tenant_id") REFERENCES "tenant_accounts"("id") ON DELETE CASCADE ON UPDATE CASCADE;
 
--- AddForeignKey
 ALTER TABLE "hr_training_certificates" ADD CONSTRAINT "hr_training_certificates_tenant_id_fkey" FOREIGN KEY ("tenant_id") REFERENCES "tenant_accounts"("id") ON DELETE CASCADE ON UPDATE CASCADE;
 
--- AddForeignKey
 ALTER TABLE "hr_career_paths" ADD CONSTRAINT "hr_career_paths_tenant_id_fkey" FOREIGN KEY ("tenant_id") REFERENCES "tenant_accounts"("id") ON DELETE CASCADE ON UPDATE CASCADE;
 
--- AddForeignKey
 ALTER TABLE "hr_successors" ADD CONSTRAINT "hr_successors_tenant_id_fkey" FOREIGN KEY ("tenant_id") REFERENCES "tenant_accounts"("id") ON DELETE CASCADE ON UPDATE CASCADE;
 
--- AddForeignKey
 ALTER TABLE "hr_promotions" ADD CONSTRAINT "hr_promotions_tenant_id_fkey" FOREIGN KEY ("tenant_id") REFERENCES "tenant_accounts"("id") ON DELETE CASCADE ON UPDATE CASCADE;
 
--- AddForeignKey
 ALTER TABLE "hr_skills" ADD CONSTRAINT "hr_skills_tenant_id_fkey" FOREIGN KEY ("tenant_id") REFERENCES "tenant_accounts"("id") ON DELETE CASCADE ON UPDATE CASCADE;
 
--- AddForeignKey
 ALTER TABLE "hr_employee_skills" ADD CONSTRAINT "hr_employee_skills_tenant_id_fkey" FOREIGN KEY ("tenant_id") REFERENCES "tenant_accounts"("id") ON DELETE CASCADE ON UPDATE CASCADE;
 
--- AddForeignKey
 ALTER TABLE "hr_workforce_plans" ADD CONSTRAINT "hr_workforce_plans_tenant_id_fkey" FOREIGN KEY ("tenant_id") REFERENCES "tenant_accounts"("id") ON DELETE CASCADE ON UPDATE CASCADE;
 
--- AddForeignKey
 ALTER TABLE "hr_workforce_requirements" ADD CONSTRAINT "hr_workforce_requirements_tenant_id_fkey" FOREIGN KEY ("tenant_id") REFERENCES "tenant_accounts"("id") ON DELETE CASCADE ON UPDATE CASCADE;
 
--- AddForeignKey
 ALTER TABLE "hr_skill_requirements" ADD CONSTRAINT "hr_skill_requirements_tenant_id_fkey" FOREIGN KEY ("tenant_id") REFERENCES "tenant_accounts"("id") ON DELETE CASCADE ON UPDATE CASCADE;
 
--- AddForeignKey
 ALTER TABLE "hr_budget_years" ADD CONSTRAINT "hr_budget_years_tenant_id_fkey" FOREIGN KEY ("tenant_id") REFERENCES "tenant_accounts"("id") ON DELETE CASCADE ON UPDATE CASCADE;
 
--- AddForeignKey
 ALTER TABLE "hr_budget_departments" ADD CONSTRAINT "hr_budget_departments_tenant_id_fkey" FOREIGN KEY ("tenant_id") REFERENCES "tenant_accounts"("id") ON DELETE CASCADE ON UPDATE CASCADE;
 
--- AddForeignKey
 ALTER TABLE "hr_budget_positions" ADD CONSTRAINT "hr_budget_positions_tenant_id_fkey" FOREIGN KEY ("tenant_id") REFERENCES "tenant_accounts"("id") ON DELETE CASCADE ON UPDATE CASCADE;
 
--- AddForeignKey
 ALTER TABLE "hr_budget_actuals" ADD CONSTRAINT "hr_budget_actuals_tenant_id_fkey" FOREIGN KEY ("tenant_id") REFERENCES "tenant_accounts"("id") ON DELETE CASCADE ON UPDATE CASCADE;
 
--- AddForeignKey
 ALTER TABLE "hr_employee_requests" ADD CONSTRAINT "hr_employee_requests_tenant_id_fkey" FOREIGN KEY ("tenant_id") REFERENCES "tenant_accounts"("id") ON DELETE CASCADE ON UPDATE CASCADE;
 
--- AddForeignKey
 ALTER TABLE "hr_employee_notifications" ADD CONSTRAINT "hr_employee_notifications_tenant_id_fkey" FOREIGN KEY ("tenant_id") REFERENCES "tenant_accounts"("id") ON DELETE CASCADE ON UPDATE CASCADE;
 
--- AddForeignKey
 ALTER TABLE "hr_employee_announcements" ADD CONSTRAINT "hr_employee_announcements_tenant_id_fkey" FOREIGN KEY ("tenant_id") REFERENCES "tenant_accounts"("id") ON DELETE CASCADE ON UPDATE CASCADE;
 
--- AddForeignKey
 ALTER TABLE "hr_employee_documents_shared" ADD CONSTRAINT "hr_employee_documents_shared_tenant_id_fkey" FOREIGN KEY ("tenant_id") REFERENCES "tenant_accounts"("id") ON DELETE CASCADE ON UPDATE CASCADE;
 
--- AddForeignKey
 ALTER TABLE "hr_employee_assets" ADD CONSTRAINT "hr_employee_assets_tenant_id_fkey" FOREIGN KEY ("tenant_id") REFERENCES "tenant_accounts"("id") ON DELETE CASCADE ON UPDATE CASCADE;
 
--- AddForeignKey
 ALTER TABLE "hr_travel_requests" ADD CONSTRAINT "hr_travel_requests_tenant_id_fkey" FOREIGN KEY ("tenant_id") REFERENCES "tenant_accounts"("id") ON DELETE CASCADE ON UPDATE CASCADE;
 
--- AddForeignKey
 ALTER TABLE "hr_expense_claims" ADD CONSTRAINT "hr_expense_claims_tenant_id_fkey" FOREIGN KEY ("tenant_id") REFERENCES "tenant_accounts"("id") ON DELETE CASCADE ON UPDATE CASCADE;
 
--- AddForeignKey
 ALTER TABLE "hr_expense_claim_lines" ADD CONSTRAINT "hr_expense_claim_lines_tenant_id_fkey" FOREIGN KEY ("tenant_id") REFERENCES "tenant_accounts"("id") ON DELETE CASCADE ON UPDATE CASCADE;
 
--- AddForeignKey
 ALTER TABLE "hr_expense_reimbursements" ADD CONSTRAINT "hr_expense_reimbursements_tenant_id_fkey" FOREIGN KEY ("tenant_id") REFERENCES "tenant_accounts"("id") ON DELETE CASCADE ON UPDATE CASCADE;
-
