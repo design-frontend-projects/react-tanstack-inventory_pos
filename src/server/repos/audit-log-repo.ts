@@ -39,6 +39,37 @@ export async function createAuditLog(
   })
 }
 
+// Entity-scoped trail for detail-page Activity tabs. Full rows (including the
+// JSON diffs) so the viewer can render before/after values.
+export async function listAuditLogsForEntity(
+  tenantId: string,
+  entityType: string,
+  entityId: string,
+  limit = 50,
+) {
+  return prisma.auditLog.findMany({
+    where: {
+      tenantId,
+      entityType,
+      entityId,
+    },
+    orderBy: {
+      createdAt: 'desc',
+    },
+    take: limit,
+    select: {
+      id: true,
+      actionKey: true,
+      entityType: true,
+      entityId: true,
+      actorEmail: true,
+      oldValues: true,
+      newValues: true,
+      createdAt: true,
+    },
+  })
+}
+
 export async function listRecentAuditLogs(tenantId: string, limit = 12) {
   return prisma.auditLog.findMany({
     where: {

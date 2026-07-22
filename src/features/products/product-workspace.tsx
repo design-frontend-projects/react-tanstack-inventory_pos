@@ -1,6 +1,7 @@
 'use client'
 
 import * as React from 'react'
+import { Link } from '@tanstack/react-router'
 import {
   WorkspaceEmptyState,
   WorkspacePage,
@@ -8,8 +9,13 @@ import {
 } from '#/components/layout/workspace-page'
 import { Button } from '#/components/ui/button'
 import { useInventoryKpis } from '#/features/inventory/use-inventory-analytics'
+import { LabelPrintDialog } from '#/features/products/barcode/label-print-dialog'
+import { ScanDialog } from '#/features/products/barcode/scan-dialog'
+import { ProductImportWizard } from '#/features/products/import/product-import-wizard'
 import { MasterDataPanel } from '#/features/products/master-data-panel'
+import { ProductCreateWizard } from '#/features/products/product-create-wizard'
 import { ProductFormDialog } from '#/features/products/product-form-dialog'
+import type { LabelProduct } from '#/features/products/barcode/label-print-dialog'
 import type { ProductFormValues } from '#/features/products/product-form-dialog'
 import { useBrands, useCategories } from '#/features/products/use-master-data'
 import { useProductsPage } from '#/features/products/use-products'
@@ -36,6 +42,12 @@ export function ProductWorkspace() {
   const [status, setStatus] = React.useState('')
   const [page, setPage] = React.useState(0)
   const [dialogOpen, setDialogOpen] = React.useState(false)
+  const [wizardOpen, setWizardOpen] = React.useState(false)
+  const [importOpen, setImportOpen] = React.useState(false)
+  const [scanOpen, setScanOpen] = React.useState(false)
+  const [labelProduct, setLabelProduct] = React.useState<LabelProduct | null>(
+    null,
+  )
   const [editing, setEditing] = React.useState<ProductFormValues | null>(null)
 
   const productsQuery = useProductsPage({
@@ -86,7 +98,20 @@ export function ProductWorkspace() {
       eyebrow="Catalog"
       title="Manage the product master: identity, units, costing, and replenishment."
       description="Every sellable and stockable item in one register — classification, tracking policy, pricing, and reorder thresholds feeding POS, purchasing, and the stock ledger."
-      actions={<Button onClick={openCreate}>New product</Button>}
+      actions={
+        <>
+          <Button variant="outline" onClick={() => setScanOpen(true)}>
+            Scan
+          </Button>
+          <Button variant="outline" onClick={() => setImportOpen(true)}>
+            Import CSV
+          </Button>
+          <Button variant="outline" onClick={() => setWizardOpen(true)}>
+            Guided create
+          </Button>
+          <Button onClick={openCreate}>New product</Button>
+        </>
+      }
       metrics={[
         {
           label: 'Products',
@@ -221,13 +246,30 @@ export function ProductWorkspace() {
                       <StatusBadge status={product.status} />
                     </td>
                     <td className="py-2 text-right">
-                      <Button
-                        size="xs"
-                        variant="outline"
-                        onClick={() => openEdit(product)}
-                      >
-                        Edit
-                      </Button>
+                      <div className="inline-flex gap-2">
+                        <Button size="xs" variant="outline" asChild>
+                          <Link
+                            to="/inventory/catalog/$productId"
+                            params={{ productId: product.id }}
+                          >
+                            View
+                          </Link>
+                        </Button>
+                        <Button
+                          size="xs"
+                          variant="outline"
+                          onClick={() => openEdit(product)}
+                        >
+                          Edit
+                        </Button>
+                        <Button
+                          size="xs"
+                          variant="outline"
+                          onClick={() => setLabelProduct(product)}
+                        >
+                          Label
+                        </Button>
+                      </div>
                     </td>
                   </tr>
                 ))}
@@ -267,6 +309,29 @@ export function ProductWorkspace() {
         open={dialogOpen}
         onOpenChange={setDialogOpen}
         product={editing}
+      />
+
+      <ProductCreateWizard open={wizardOpen} onOpenChange={setWizardOpen} />
+
+      <ProductImportWizard open={importOpen} onOpenChange={setImportOpen} />
+
+      <ScanDialog
+        open={scanOpen}
+        onOpenChange={setScanOpen}
+        onPrintLabel={(product) => {
+          setScanOpen(false)
+          setLabelProduct(product)
+        }}
+      />
+
+      <LabelPrintDialog
+        open={labelProduct !== null}
+        onOpenChange={(nextOpen) => {
+          if (!nextOpen) {
+            setLabelProduct(null)
+          }
+        }}
+        product={labelProduct}
       />
     </WorkspacePage>
   )

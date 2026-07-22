@@ -14,7 +14,17 @@ function createPrismaClient() {
   const pool = new Pool({
     connectionString: serverEnv.DATABASE_URL,
     connectionTimeoutMillis: 5_000,
-    idleTimeoutMillis: 300_000,
+    // Close idle clients before Supabase's pooler reaps them out from under us.
+    idleTimeoutMillis: 30_000,
+    keepAlive: true,
+  })
+
+  // node-postgres emits 'error' on the pool when an *idle* client's connection
+  // drops (Supabase's pooler reaps idle sessions). Without a listener that
+  // event crashes the whole process — seed runs and long dev sessions alike.
+  // A dropped idle client is harmless; the pool replaces it on demand.
+  pool.on('error', (error) => {
+    console.warn('[db] idle client connection dropped:', error.message)
   })
 
   const adapter = new PrismaPg(pool)

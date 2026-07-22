@@ -62,12 +62,19 @@ import { Route as AppPurchaseInvoicesRouteImport } from './routes/_app/purchase/
 import { Route as AppPurchaseApprovalsRouteImport } from './routes/_app/purchase/approvals'
 import { Route as AppPosReturnsRouteImport } from './routes/_app/pos/returns'
 import { Route as AppPosOrdersRouteImport } from './routes/_app/pos/orders'
+import { Route as AppInventoryUnitsRouteImport } from './routes/_app/inventory/units'
 import { Route as AppInventoryTransfersRouteImport } from './routes/_app/inventory/transfers'
 import { Route as AppInventoryStockRouteImport } from './routes/_app/inventory/stock'
+import { Route as AppInventorySettingsRouteImport } from './routes/_app/inventory/settings'
+import { Route as AppInventoryReservationsRouteImport } from './routes/_app/inventory/reservations'
 import { Route as AppInventoryReportsRouteImport } from './routes/_app/inventory/reports'
+import { Route as AppInventoryPricingRouteImport } from './routes/_app/inventory/pricing'
 import { Route as AppInventoryMovementsRouteImport } from './routes/_app/inventory/movements'
+import { Route as AppInventoryLocationsRouteImport } from './routes/_app/inventory/locations'
 import { Route as AppInventoryCountsRouteImport } from './routes/_app/inventory/counts'
+import { Route as AppInventoryCategoriesRouteImport } from './routes/_app/inventory/categories'
 import { Route as AppInventoryCatalogRouteImport } from './routes/_app/inventory/catalog'
+import { Route as AppInventoryBrandsRouteImport } from './routes/_app/inventory/brands'
 import { Route as AppInventoryAdjustmentsRouteImport } from './routes/_app/inventory/adjustments'
 import { Route as AppCrmSegmentsRouteImport } from './routes/_app/crm/segments'
 import { Route as AppCrmLoyaltyRouteImport } from './routes/_app/crm/loyalty'
@@ -75,6 +82,7 @@ import { Route as AppCrmCustomersRouteImport } from './routes/_app/crm/customers
 import { Route as AppCrmAnalyticsRouteImport } from './routes/_app/crm/analytics'
 import { Route as AppRestaurantOrdersIndexRouteImport } from './routes/_app/restaurant/orders/index'
 import { Route as AppRestaurantOrdersOrderIdRouteImport } from './routes/_app/restaurant/orders/$orderId'
+import { Route as AppInventoryCatalogProductIdRouteImport } from './routes/_app/inventory/catalog_.$productId'
 
 const AboutRoute = AboutRouteImport.update({
   id: '/about',
@@ -341,6 +349,11 @@ const AppPosOrdersRoute = AppPosOrdersRouteImport.update({
   path: '/pos/orders',
   getParentRoute: () => AppRoute,
 } as any)
+const AppInventoryUnitsRoute = AppInventoryUnitsRouteImport.update({
+  id: '/inventory/units',
+  path: '/inventory/units',
+  getParentRoute: () => AppRoute,
+} as any)
 const AppInventoryTransfersRoute = AppInventoryTransfersRouteImport.update({
   id: '/inventory/transfers',
   path: '/inventory/transfers',
@@ -351,9 +364,25 @@ const AppInventoryStockRoute = AppInventoryStockRouteImport.update({
   path: '/inventory/stock',
   getParentRoute: () => AppRoute,
 } as any)
+const AppInventorySettingsRoute = AppInventorySettingsRouteImport.update({
+  id: '/inventory/settings',
+  path: '/inventory/settings',
+  getParentRoute: () => AppRoute,
+} as any)
+const AppInventoryReservationsRoute =
+  AppInventoryReservationsRouteImport.update({
+    id: '/inventory/reservations',
+    path: '/inventory/reservations',
+    getParentRoute: () => AppRoute,
+  } as any)
 const AppInventoryReportsRoute = AppInventoryReportsRouteImport.update({
   id: '/inventory/reports',
   path: '/inventory/reports',
+  getParentRoute: () => AppRoute,
+} as any)
+const AppInventoryPricingRoute = AppInventoryPricingRouteImport.update({
+  id: '/inventory/pricing',
+  path: '/inventory/pricing',
   getParentRoute: () => AppRoute,
 } as any)
 const AppInventoryMovementsRoute = AppInventoryMovementsRouteImport.update({
@@ -361,14 +390,29 @@ const AppInventoryMovementsRoute = AppInventoryMovementsRouteImport.update({
   path: '/inventory/movements',
   getParentRoute: () => AppRoute,
 } as any)
+const AppInventoryLocationsRoute = AppInventoryLocationsRouteImport.update({
+  id: '/inventory/locations',
+  path: '/inventory/locations',
+  getParentRoute: () => AppRoute,
+} as any)
 const AppInventoryCountsRoute = AppInventoryCountsRouteImport.update({
   id: '/inventory/counts',
   path: '/inventory/counts',
   getParentRoute: () => AppRoute,
 } as any)
+const AppInventoryCategoriesRoute = AppInventoryCategoriesRouteImport.update({
+  id: '/inventory/categories',
+  path: '/inventory/categories',
+  getParentRoute: () => AppRoute,
+} as any)
 const AppInventoryCatalogRoute = AppInventoryCatalogRouteImport.update({
   id: '/inventory/catalog',
   path: '/inventory/catalog',
+  getParentRoute: () => AppRoute,
+} as any)
+const AppInventoryBrandsRoute = AppInventoryBrandsRouteImport.update({
+  id: '/inventory/brands',
+  path: '/inventory/brands',
   getParentRoute: () => AppRoute,
 } as any)
 const AppInventoryAdjustmentsRoute = AppInventoryAdjustmentsRouteImport.update({
@@ -408,6 +452,12 @@ const AppRestaurantOrdersOrderIdRoute =
     path: '/restaurant/orders/$orderId',
     getParentRoute: () => AppRoute,
   } as any)
+const AppInventoryCatalogProductIdRoute =
+  AppInventoryCatalogProductIdRouteImport.update({
+    id: '/inventory/catalog_/$productId',
+    path: '/inventory/catalog/$productId',
+    getParentRoute: () => AppRoute,
+  } as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
@@ -426,12 +476,19 @@ export interface FileRoutesByFullPath {
   '/crm/loyalty': typeof AppCrmLoyaltyRoute
   '/crm/segments': typeof AppCrmSegmentsRoute
   '/inventory/adjustments': typeof AppInventoryAdjustmentsRoute
+  '/inventory/brands': typeof AppInventoryBrandsRoute
   '/inventory/catalog': typeof AppInventoryCatalogRoute
+  '/inventory/categories': typeof AppInventoryCategoriesRoute
   '/inventory/counts': typeof AppInventoryCountsRoute
+  '/inventory/locations': typeof AppInventoryLocationsRoute
   '/inventory/movements': typeof AppInventoryMovementsRoute
+  '/inventory/pricing': typeof AppInventoryPricingRoute
   '/inventory/reports': typeof AppInventoryReportsRoute
+  '/inventory/reservations': typeof AppInventoryReservationsRoute
+  '/inventory/settings': typeof AppInventorySettingsRoute
   '/inventory/stock': typeof AppInventoryStockRoute
   '/inventory/transfers': typeof AppInventoryTransfersRoute
+  '/inventory/units': typeof AppInventoryUnitsRoute
   '/pos/orders': typeof AppPosOrdersRoute
   '/pos/returns': typeof AppPosReturnsRoute
   '/purchase/approvals': typeof AppPurchaseApprovalsRoute
@@ -472,6 +529,7 @@ export interface FileRoutesByFullPath {
   '/outlets/': typeof AppOutletsIndexRoute
   '/pos/': typeof AppPosIndexRoute
   '/purchase/': typeof AppPurchaseIndexRoute
+  '/inventory/catalog/$productId': typeof AppInventoryCatalogProductIdRoute
   '/restaurant/orders/$orderId': typeof AppRestaurantOrdersOrderIdRoute
   '/restaurant/orders/': typeof AppRestaurantOrdersIndexRoute
 }
@@ -492,12 +550,19 @@ export interface FileRoutesByTo {
   '/crm/loyalty': typeof AppCrmLoyaltyRoute
   '/crm/segments': typeof AppCrmSegmentsRoute
   '/inventory/adjustments': typeof AppInventoryAdjustmentsRoute
+  '/inventory/brands': typeof AppInventoryBrandsRoute
   '/inventory/catalog': typeof AppInventoryCatalogRoute
+  '/inventory/categories': typeof AppInventoryCategoriesRoute
   '/inventory/counts': typeof AppInventoryCountsRoute
+  '/inventory/locations': typeof AppInventoryLocationsRoute
   '/inventory/movements': typeof AppInventoryMovementsRoute
+  '/inventory/pricing': typeof AppInventoryPricingRoute
   '/inventory/reports': typeof AppInventoryReportsRoute
+  '/inventory/reservations': typeof AppInventoryReservationsRoute
+  '/inventory/settings': typeof AppInventorySettingsRoute
   '/inventory/stock': typeof AppInventoryStockRoute
   '/inventory/transfers': typeof AppInventoryTransfersRoute
+  '/inventory/units': typeof AppInventoryUnitsRoute
   '/pos/orders': typeof AppPosOrdersRoute
   '/pos/returns': typeof AppPosReturnsRoute
   '/purchase/approvals': typeof AppPurchaseApprovalsRoute
@@ -538,6 +603,7 @@ export interface FileRoutesByTo {
   '/outlets': typeof AppOutletsIndexRoute
   '/pos': typeof AppPosIndexRoute
   '/purchase': typeof AppPurchaseIndexRoute
+  '/inventory/catalog/$productId': typeof AppInventoryCatalogProductIdRoute
   '/restaurant/orders/$orderId': typeof AppRestaurantOrdersOrderIdRoute
   '/restaurant/orders': typeof AppRestaurantOrdersIndexRoute
 }
@@ -561,12 +627,19 @@ export interface FileRoutesById {
   '/_app/crm/loyalty': typeof AppCrmLoyaltyRoute
   '/_app/crm/segments': typeof AppCrmSegmentsRoute
   '/_app/inventory/adjustments': typeof AppInventoryAdjustmentsRoute
+  '/_app/inventory/brands': typeof AppInventoryBrandsRoute
   '/_app/inventory/catalog': typeof AppInventoryCatalogRoute
+  '/_app/inventory/categories': typeof AppInventoryCategoriesRoute
   '/_app/inventory/counts': typeof AppInventoryCountsRoute
+  '/_app/inventory/locations': typeof AppInventoryLocationsRoute
   '/_app/inventory/movements': typeof AppInventoryMovementsRoute
+  '/_app/inventory/pricing': typeof AppInventoryPricingRoute
   '/_app/inventory/reports': typeof AppInventoryReportsRoute
+  '/_app/inventory/reservations': typeof AppInventoryReservationsRoute
+  '/_app/inventory/settings': typeof AppInventorySettingsRoute
   '/_app/inventory/stock': typeof AppInventoryStockRoute
   '/_app/inventory/transfers': typeof AppInventoryTransfersRoute
+  '/_app/inventory/units': typeof AppInventoryUnitsRoute
   '/_app/pos/orders': typeof AppPosOrdersRoute
   '/_app/pos/returns': typeof AppPosReturnsRoute
   '/_app/purchase/approvals': typeof AppPurchaseApprovalsRoute
@@ -607,6 +680,7 @@ export interface FileRoutesById {
   '/_app/outlets/': typeof AppOutletsIndexRoute
   '/_app/pos/': typeof AppPosIndexRoute
   '/_app/purchase/': typeof AppPurchaseIndexRoute
+  '/_app/inventory/catalog_/$productId': typeof AppInventoryCatalogProductIdRoute
   '/_app/restaurant/orders/$orderId': typeof AppRestaurantOrdersOrderIdRoute
   '/_app/restaurant/orders/': typeof AppRestaurantOrdersIndexRoute
 }
@@ -629,12 +703,19 @@ export interface FileRouteTypes {
     | '/crm/loyalty'
     | '/crm/segments'
     | '/inventory/adjustments'
+    | '/inventory/brands'
     | '/inventory/catalog'
+    | '/inventory/categories'
     | '/inventory/counts'
+    | '/inventory/locations'
     | '/inventory/movements'
+    | '/inventory/pricing'
     | '/inventory/reports'
+    | '/inventory/reservations'
+    | '/inventory/settings'
     | '/inventory/stock'
     | '/inventory/transfers'
+    | '/inventory/units'
     | '/pos/orders'
     | '/pos/returns'
     | '/purchase/approvals'
@@ -675,6 +756,7 @@ export interface FileRouteTypes {
     | '/outlets/'
     | '/pos/'
     | '/purchase/'
+    | '/inventory/catalog/$productId'
     | '/restaurant/orders/$orderId'
     | '/restaurant/orders/'
   fileRoutesByTo: FileRoutesByTo
@@ -695,12 +777,19 @@ export interface FileRouteTypes {
     | '/crm/loyalty'
     | '/crm/segments'
     | '/inventory/adjustments'
+    | '/inventory/brands'
     | '/inventory/catalog'
+    | '/inventory/categories'
     | '/inventory/counts'
+    | '/inventory/locations'
     | '/inventory/movements'
+    | '/inventory/pricing'
     | '/inventory/reports'
+    | '/inventory/reservations'
+    | '/inventory/settings'
     | '/inventory/stock'
     | '/inventory/transfers'
+    | '/inventory/units'
     | '/pos/orders'
     | '/pos/returns'
     | '/purchase/approvals'
@@ -741,6 +830,7 @@ export interface FileRouteTypes {
     | '/outlets'
     | '/pos'
     | '/purchase'
+    | '/inventory/catalog/$productId'
     | '/restaurant/orders/$orderId'
     | '/restaurant/orders'
   id:
@@ -763,12 +853,19 @@ export interface FileRouteTypes {
     | '/_app/crm/loyalty'
     | '/_app/crm/segments'
     | '/_app/inventory/adjustments'
+    | '/_app/inventory/brands'
     | '/_app/inventory/catalog'
+    | '/_app/inventory/categories'
     | '/_app/inventory/counts'
+    | '/_app/inventory/locations'
     | '/_app/inventory/movements'
+    | '/_app/inventory/pricing'
     | '/_app/inventory/reports'
+    | '/_app/inventory/reservations'
+    | '/_app/inventory/settings'
     | '/_app/inventory/stock'
     | '/_app/inventory/transfers'
+    | '/_app/inventory/units'
     | '/_app/pos/orders'
     | '/_app/pos/returns'
     | '/_app/purchase/approvals'
@@ -809,6 +906,7 @@ export interface FileRouteTypes {
     | '/_app/outlets/'
     | '/_app/pos/'
     | '/_app/purchase/'
+    | '/_app/inventory/catalog_/$productId'
     | '/_app/restaurant/orders/$orderId'
     | '/_app/restaurant/orders/'
   fileRoutesById: FileRoutesById
@@ -1193,6 +1291,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AppPosOrdersRouteImport
       parentRoute: typeof AppRoute
     }
+    '/_app/inventory/units': {
+      id: '/_app/inventory/units'
+      path: '/inventory/units'
+      fullPath: '/inventory/units'
+      preLoaderRoute: typeof AppInventoryUnitsRouteImport
+      parentRoute: typeof AppRoute
+    }
     '/_app/inventory/transfers': {
       id: '/_app/inventory/transfers'
       path: '/inventory/transfers'
@@ -1207,11 +1312,32 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AppInventoryStockRouteImport
       parentRoute: typeof AppRoute
     }
+    '/_app/inventory/settings': {
+      id: '/_app/inventory/settings'
+      path: '/inventory/settings'
+      fullPath: '/inventory/settings'
+      preLoaderRoute: typeof AppInventorySettingsRouteImport
+      parentRoute: typeof AppRoute
+    }
+    '/_app/inventory/reservations': {
+      id: '/_app/inventory/reservations'
+      path: '/inventory/reservations'
+      fullPath: '/inventory/reservations'
+      preLoaderRoute: typeof AppInventoryReservationsRouteImport
+      parentRoute: typeof AppRoute
+    }
     '/_app/inventory/reports': {
       id: '/_app/inventory/reports'
       path: '/inventory/reports'
       fullPath: '/inventory/reports'
       preLoaderRoute: typeof AppInventoryReportsRouteImport
+      parentRoute: typeof AppRoute
+    }
+    '/_app/inventory/pricing': {
+      id: '/_app/inventory/pricing'
+      path: '/inventory/pricing'
+      fullPath: '/inventory/pricing'
+      preLoaderRoute: typeof AppInventoryPricingRouteImport
       parentRoute: typeof AppRoute
     }
     '/_app/inventory/movements': {
@@ -1221,6 +1347,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AppInventoryMovementsRouteImport
       parentRoute: typeof AppRoute
     }
+    '/_app/inventory/locations': {
+      id: '/_app/inventory/locations'
+      path: '/inventory/locations'
+      fullPath: '/inventory/locations'
+      preLoaderRoute: typeof AppInventoryLocationsRouteImport
+      parentRoute: typeof AppRoute
+    }
     '/_app/inventory/counts': {
       id: '/_app/inventory/counts'
       path: '/inventory/counts'
@@ -1228,11 +1361,25 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AppInventoryCountsRouteImport
       parentRoute: typeof AppRoute
     }
+    '/_app/inventory/categories': {
+      id: '/_app/inventory/categories'
+      path: '/inventory/categories'
+      fullPath: '/inventory/categories'
+      preLoaderRoute: typeof AppInventoryCategoriesRouteImport
+      parentRoute: typeof AppRoute
+    }
     '/_app/inventory/catalog': {
       id: '/_app/inventory/catalog'
       path: '/inventory/catalog'
       fullPath: '/inventory/catalog'
       preLoaderRoute: typeof AppInventoryCatalogRouteImport
+      parentRoute: typeof AppRoute
+    }
+    '/_app/inventory/brands': {
+      id: '/_app/inventory/brands'
+      path: '/inventory/brands'
+      fullPath: '/inventory/brands'
+      preLoaderRoute: typeof AppInventoryBrandsRouteImport
       parentRoute: typeof AppRoute
     }
     '/_app/inventory/adjustments': {
@@ -1284,6 +1431,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AppRestaurantOrdersOrderIdRouteImport
       parentRoute: typeof AppRoute
     }
+    '/_app/inventory/catalog_/$productId': {
+      id: '/_app/inventory/catalog_/$productId'
+      path: '/inventory/catalog/$productId'
+      fullPath: '/inventory/catalog/$productId'
+      preLoaderRoute: typeof AppInventoryCatalogProductIdRouteImport
+      parentRoute: typeof AppRoute
+    }
   }
 }
 
@@ -1295,12 +1449,19 @@ interface AppRouteChildren {
   AppCrmLoyaltyRoute: typeof AppCrmLoyaltyRoute
   AppCrmSegmentsRoute: typeof AppCrmSegmentsRoute
   AppInventoryAdjustmentsRoute: typeof AppInventoryAdjustmentsRoute
+  AppInventoryBrandsRoute: typeof AppInventoryBrandsRoute
   AppInventoryCatalogRoute: typeof AppInventoryCatalogRoute
+  AppInventoryCategoriesRoute: typeof AppInventoryCategoriesRoute
   AppInventoryCountsRoute: typeof AppInventoryCountsRoute
+  AppInventoryLocationsRoute: typeof AppInventoryLocationsRoute
   AppInventoryMovementsRoute: typeof AppInventoryMovementsRoute
+  AppInventoryPricingRoute: typeof AppInventoryPricingRoute
   AppInventoryReportsRoute: typeof AppInventoryReportsRoute
+  AppInventoryReservationsRoute: typeof AppInventoryReservationsRoute
+  AppInventorySettingsRoute: typeof AppInventorySettingsRoute
   AppInventoryStockRoute: typeof AppInventoryStockRoute
   AppInventoryTransfersRoute: typeof AppInventoryTransfersRoute
+  AppInventoryUnitsRoute: typeof AppInventoryUnitsRoute
   AppPosOrdersRoute: typeof AppPosOrdersRoute
   AppPosReturnsRoute: typeof AppPosReturnsRoute
   AppPurchaseApprovalsRoute: typeof AppPurchaseApprovalsRoute
@@ -1341,6 +1502,7 @@ interface AppRouteChildren {
   AppOutletsIndexRoute: typeof AppOutletsIndexRoute
   AppPosIndexRoute: typeof AppPosIndexRoute
   AppPurchaseIndexRoute: typeof AppPurchaseIndexRoute
+  AppInventoryCatalogProductIdRoute: typeof AppInventoryCatalogProductIdRoute
   AppRestaurantOrdersOrderIdRoute: typeof AppRestaurantOrdersOrderIdRoute
   AppRestaurantOrdersIndexRoute: typeof AppRestaurantOrdersIndexRoute
 }
@@ -1353,12 +1515,19 @@ const AppRouteChildren: AppRouteChildren = {
   AppCrmLoyaltyRoute: AppCrmLoyaltyRoute,
   AppCrmSegmentsRoute: AppCrmSegmentsRoute,
   AppInventoryAdjustmentsRoute: AppInventoryAdjustmentsRoute,
+  AppInventoryBrandsRoute: AppInventoryBrandsRoute,
   AppInventoryCatalogRoute: AppInventoryCatalogRoute,
+  AppInventoryCategoriesRoute: AppInventoryCategoriesRoute,
   AppInventoryCountsRoute: AppInventoryCountsRoute,
+  AppInventoryLocationsRoute: AppInventoryLocationsRoute,
   AppInventoryMovementsRoute: AppInventoryMovementsRoute,
+  AppInventoryPricingRoute: AppInventoryPricingRoute,
   AppInventoryReportsRoute: AppInventoryReportsRoute,
+  AppInventoryReservationsRoute: AppInventoryReservationsRoute,
+  AppInventorySettingsRoute: AppInventorySettingsRoute,
   AppInventoryStockRoute: AppInventoryStockRoute,
   AppInventoryTransfersRoute: AppInventoryTransfersRoute,
+  AppInventoryUnitsRoute: AppInventoryUnitsRoute,
   AppPosOrdersRoute: AppPosOrdersRoute,
   AppPosReturnsRoute: AppPosReturnsRoute,
   AppPurchaseApprovalsRoute: AppPurchaseApprovalsRoute,
@@ -1399,6 +1568,7 @@ const AppRouteChildren: AppRouteChildren = {
   AppOutletsIndexRoute: AppOutletsIndexRoute,
   AppPosIndexRoute: AppPosIndexRoute,
   AppPurchaseIndexRoute: AppPurchaseIndexRoute,
+  AppInventoryCatalogProductIdRoute: AppInventoryCatalogProductIdRoute,
   AppRestaurantOrdersOrderIdRoute: AppRestaurantOrdersOrderIdRoute,
   AppRestaurantOrdersIndexRoute: AppRestaurantOrdersIndexRoute,
 }
@@ -1436,3 +1606,12 @@ const rootRouteChildren: RootRouteChildren = {
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
   ._addFileTypes<FileRouteTypes>()
+
+import type { getRouter } from './router.tsx'
+import type { createStart } from '@tanstack/react-start'
+declare module '@tanstack/react-start' {
+  interface Register {
+    ssr: true
+    router: Awaited<ReturnType<typeof getRouter>>
+  }
+}

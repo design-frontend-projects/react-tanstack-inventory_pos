@@ -10,6 +10,7 @@ import {
   Boxes,
   CalendarClock,
   ClipboardCheck,
+  FolderTree,
   Gift,
   ChartSpline,
   ChefHat,
@@ -27,7 +28,9 @@ import {
   QrCode,
   ReceiptText,
   RotateCcw,
+  Ruler,
   ShieldCheck,
+  Tags,
   ShoppingBag,
   ShoppingBasket,
   UsersRound,
@@ -37,12 +40,19 @@ export type AppNavRouteTo =
   | '/dashboard'
   | '/inventory'
   | '/inventory/catalog'
+  | '/inventory/pricing'
+  | '/inventory/categories'
+  | '/inventory/brands'
+  | '/inventory/units'
+  | '/inventory/locations'
   | '/inventory/stock'
   | '/inventory/movements'
+  | '/inventory/reservations'
   | '/inventory/adjustments'
   | '/inventory/transfers'
   | '/inventory/counts'
   | '/inventory/reports'
+  | '/inventory/settings'
   | '/outlets'
   | '/purchase'
   | '/purchase/requisitions'
@@ -176,6 +186,46 @@ export const appNavSections: AppNavSection[] = [
         permissions: ['product.view'],
       },
       {
+        id: 'inventory-pricing',
+        sectionId: 'inventory',
+        to: '/inventory/pricing',
+        icon: BadgePercent,
+        titleKey: 'nav.inventoryPricing',
+        fallbackTitle: 'Product Pricing',
+        keywords: ['pricing', 'price lists', 'tiers', 'currency'],
+        permissions: ['product.view', 'product.manage_pricing'],
+      },
+      {
+        id: 'inventory-categories',
+        sectionId: 'inventory',
+        to: '/inventory/categories',
+        icon: FolderTree,
+        titleKey: 'nav.inventoryCategories',
+        fallbackTitle: 'Categories',
+        keywords: ['categories', 'hierarchy', 'tree', 'classification'],
+        permissions: ['product.view'],
+      },
+      {
+        id: 'inventory-brands',
+        sectionId: 'inventory',
+        to: '/inventory/brands',
+        icon: Tags,
+        titleKey: 'nav.inventoryBrands',
+        fallbackTitle: 'Brands',
+        keywords: ['brands', 'manufacturers', 'labels'],
+        permissions: ['product.view'],
+      },
+      {
+        id: 'inventory-units',
+        sectionId: 'inventory',
+        to: '/inventory/units',
+        icon: Ruler,
+        titleKey: 'nav.inventoryUnits',
+        fallbackTitle: 'Units',
+        keywords: ['units', 'uom', 'measure', 'conversions'],
+        permissions: ['product.view'],
+      },
+      {
         id: 'inventory-outlets',
         sectionId: 'inventory',
         to: '/outlets',
@@ -183,6 +233,16 @@ export const appNavSections: AppNavSection[] = [
         titleKey: 'nav.inventoryOutlets',
         fallbackTitle: 'Outlets',
         keywords: ['outlets', 'stores', 'locations', 'coverage'],
+        permissions: ['warehouse.view'],
+      },
+      {
+        id: 'inventory-locations',
+        sectionId: 'inventory',
+        to: '/inventory/locations',
+        icon: MapPinned,
+        titleKey: 'nav.inventoryLocations',
+        fallbackTitle: 'Warehouse Locations',
+        keywords: ['locations', 'zones', 'racks', 'shelves', 'bins'],
         permissions: ['warehouse.view'],
       },
       {
@@ -204,6 +264,16 @@ export const appNavSections: AppNavSection[] = [
         fallbackTitle: 'Movements',
         keywords: ['movements', 'ledger', 'audit', 'transactions', 'history'],
         permissions: ['inventory.view_movements'],
+      },
+      {
+        id: 'inventory-reservations',
+        sectionId: 'inventory',
+        to: '/inventory/reservations',
+        icon: PackageCheck,
+        titleKey: 'nav.inventoryReservations',
+        fallbackTitle: 'Stock Reservations',
+        keywords: ['reservations', 'holds', 'allocation', 'reserved'],
+        permissions: ['inventory.view_stock'],
       },
       {
         id: 'inventory-adjustments',
@@ -244,6 +314,16 @@ export const appNavSections: AppNavSection[] = [
         fallbackTitle: 'Reports',
         keywords: ['reports', 'valuation', 'reorder', 'analytics', 'aging'],
         permissions: ['inventory.view_valuation', 'inventory.view_stock'],
+      },
+      {
+        id: 'inventory-settings',
+        sectionId: 'inventory',
+        to: '/inventory/settings',
+        icon: SlidersHorizontal,
+        titleKey: 'nav.inventorySettings',
+        fallbackTitle: 'Settings',
+        keywords: ['settings', 'reorder rules', 'snapshots', 'housekeeping'],
+        permissions: ['inventory.view_stock', 'inventory.manage_reorder'],
       },
     ],
   },

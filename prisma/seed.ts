@@ -509,6 +509,8 @@ async function seedRolePermissions() {
     permissions.map((permission) => [permission.code, permission.id]),
   )
 
+  const grants: Array<{ roleId: string; permissionId: string }> = []
+
   for (const role of roles) {
     const permissionCodes =
       ROLE_PERMISSION_MAP[role.code as keyof typeof ROLE_PERMISSION_MAP]
@@ -520,21 +522,18 @@ async function seedRolePermissions() {
         throw new Error(`Missing permission seed for code "${permissionCode}"`)
       }
 
-      await prisma.rolePermission.upsert({
-        where: {
-          roleId_permissionId: {
-            roleId: role.id,
-            permissionId,
-          },
-        },
-        update: {},
-        create: {
-          roleId: role.id,
-          permissionId,
-        },
-      })
+      grants.push({ roleId: role.id, permissionId })
     }
   }
+
+  // One round trip instead of ~1000 sequential upserts. The upserts carried an
+  // empty update payload, so insert-if-missing (skipDuplicates) is semantically
+  // identical — and the long-lived Supabase pooler connection no longer has
+  // minutes of exposure in which to drop mid-loop.
+  await prisma.rolePermission.createMany({
+    data: grants,
+    skipDuplicates: true,
+  })
 }
 
 async function cleanupStalePermissions() {
@@ -712,19 +711,47 @@ async function seedDefaultApprovalWorkflows() {
   }
 }
 
+// Every seed step is idempotent (upserts / insert-if-missing), so a step that
+// dies on a dropped pooler connection can simply run again — the pg pool
+// replaces the dead client on the next query. Non-connection errors rethrow.
+async function runStep(name: string, step: () => Promise<void>) {
+  const maxAttempts = 3
+
+  for (let attempt = 1; attempt <= maxAttempts; attempt += 1) {
+    try {
+      await step()
+      return
+    } catch (error) {
+      const message = error instanceof Error ? error.message : String(error)
+      const isTransient =
+        /connection|ECONNRESET|terminated|not queryable|Can't reach/i.test(
+          message,
+        )
+
+      if (!isTransient || attempt === maxAttempts) {
+        throw error
+      }
+
+      console.warn(
+        `Seed step "${name}" hit a connection drop (attempt ${attempt}/${maxAttempts}); retrying…`,
+      )
+    }
+  }
+}
+
 async function main() {
-  await seedModules()
-  await seedScreens()
-  await seedScreenActions()
-  await seedPermissions()
-  await linkScreenDefaultPermissions()
-  await seedRoles()
-  await migrateLegacyRoles()
-  await seedRolePermissions()
-  await cleanupStalePermissions()
-  await seedOwnerActivityOptions()
-  await seedOwnerSubscriptionPlans()
-  await seedDefaultApprovalWorkflows()
+  await runStep('modules', seedModules)
+  await runStep('screens', seedScreens)
+  await runStep('screen actions', seedScreenActions)
+  await runStep('permissions', seedPermissions)
+  await runStep('screen default permissions', linkScreenDefaultPermissions)
+  await runStep('roles', seedRoles)
+  await runStep('legacy roles', migrateLegacyRoles)
+  await runStep('role permissions', seedRolePermissions)
+  await runStep('stale permission cleanup', cleanupStalePermissions)
+  await runStep('owner activity options', seedOwnerActivityOptions)
+  await runStep('owner subscription plans', seedOwnerSubscriptionPlans)
+  await runStep('default approval workflows', seedDefaultApprovalWorkflows)
 
   console.log('Seeded auth/RBAC + owner-tier foundation data.')
 }
