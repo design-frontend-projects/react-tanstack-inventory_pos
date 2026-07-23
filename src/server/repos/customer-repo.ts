@@ -51,6 +51,72 @@ export function listCustomers(
   })
 }
 
+export interface CustomerPageFilters {
+  search?: string
+  includeInactive?: boolean
+  // Restricts the page to these ids (used by CRM satellite filters).
+  ids?: Array<string>
+}
+
+function customerPageWhere(
+  tenantId: string,
+  filters: CustomerPageFilters
+): Prisma.CustomerWhereInput {
+  return {
+    tenantId,
+    deletedAt: null,
+    ...(filters.includeInactive ? {} : { isActive: true }),
+    ...(filters.ids ? { id: { in: filters.ids } } : {}),
+    ...(filters.search
+      ? {
+          OR: [
+            { name: { contains: filters.search, mode: 'insensitive' } },
+            { code: { contains: filters.search, mode: 'insensitive' } },
+            { phone: { contains: filters.search, mode: 'insensitive' } },
+            { email: { contains: filters.search, mode: 'insensitive' } },
+          ],
+        }
+      : {}),
+  }
+}
+
+export function listCustomersPage(
+  tenantId: string,
+  filters: CustomerPageFilters,
+  skip: number,
+  take: number,
+  client: PrismaClientLike = prisma
+) {
+  return client.customer.findMany({
+    where: customerPageWhere(tenantId, filters),
+    orderBy: { name: 'asc' },
+    skip,
+    take,
+  })
+}
+
+export function countCustomersPage(
+  tenantId: string,
+  filters: CustomerPageFilters,
+  client: PrismaClientLike = prisma
+) {
+  return client.customer.count({ where: customerPageWhere(tenantId, filters) })
+}
+
+export function listCustomersByIds(
+  tenantId: string,
+  ids: Array<string>,
+  client: PrismaClientLike = prisma
+) {
+  if (ids.length === 0) {
+    return Promise.resolve([])
+  }
+
+  return client.customer.findMany({
+    where: { tenantId, id: { in: ids } },
+  })
+}
+
 export function createCustomer(
   tenantId: string,
   input: CustomerWriteInput,

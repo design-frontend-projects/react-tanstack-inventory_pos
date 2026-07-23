@@ -86,6 +86,20 @@ export function findAccountByCustomerId(
   })
 }
 
+export function listAccountsByCustomerIds(
+  tenantId: string,
+  customerIds: Array<string>,
+  client: PrismaClientLike = prisma
+) {
+  if (customerIds.length === 0) {
+    return Promise.resolve([])
+  }
+
+  return client.crmLoyaltyAccount.findMany({
+    where: { tenantId, customerId: { in: customerIds } },
+  })
+}
+
 export async function ensureAccount(
   tenantId: string,
   customerId: string,

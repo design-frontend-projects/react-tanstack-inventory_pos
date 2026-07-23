@@ -141,7 +141,7 @@ export function DetailPage({
         <WorkspaceEmptyState
           title="Unable to load"
           description={errorMessage}
-          className="border-destructive/30 bg-destructive/[0.04]"
+          className="border-destructive/30 bg-destructive/4"
         />
       </div>
     )

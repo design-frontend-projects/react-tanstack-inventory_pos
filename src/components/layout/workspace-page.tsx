@@ -51,7 +51,7 @@ function WorkspaceMetricStrip({
             >
               {metric.value}
             </strong>
-            <span className="max-w-[10rem] text-right text-xs leading-5 text-muted-foreground">
+            <span className="max-w-40 text-right text-xs leading-5 text-muted-foreground">
               {metric.hint}
             </span>
           </div>

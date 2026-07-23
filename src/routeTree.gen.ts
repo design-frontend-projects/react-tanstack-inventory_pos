@@ -99,12 +99,14 @@ import { Route as AppHrAssetsRouteImport } from './routes/_app/hr/assets'
 import { Route as AppHrAnalyticsRouteImport } from './routes/_app/hr/analytics'
 import { Route as AppCrmSegmentsRouteImport } from './routes/_app/crm/segments'
 import { Route as AppCrmLoyaltyRouteImport } from './routes/_app/crm/loyalty'
+import { Route as AppCrmDashboardRouteImport } from './routes/_app/crm/dashboard'
 import { Route as AppCrmCustomersRouteImport } from './routes/_app/crm/customers'
 import { Route as AppCrmAnalyticsRouteImport } from './routes/_app/crm/analytics'
 import { Route as AppRestaurantOrdersIndexRouteImport } from './routes/_app/restaurant/orders/index'
 import { Route as AppRestaurantOrdersOrderIdRouteImport } from './routes/_app/restaurant/orders/$orderId'
 import { Route as AppInventoryCatalogProductIdRouteImport } from './routes/_app/inventory/catalog_.$productId'
 import { Route as AppHrEmployeesEmployeeIdRouteImport } from './routes/_app/hr/employees_.$employeeId'
+import { Route as AppCrmCustomersCustomerIdRouteImport } from './routes/_app/crm/customers_.$customerId'
 
 const AboutRoute = AboutRouteImport.update({
   id: '/about',
@@ -557,6 +559,11 @@ const AppCrmLoyaltyRoute = AppCrmLoyaltyRouteImport.update({
   path: '/crm/loyalty',
   getParentRoute: () => AppRoute,
 } as any)
+const AppCrmDashboardRoute = AppCrmDashboardRouteImport.update({
+  id: '/crm/dashboard',
+  path: '/crm/dashboard',
+  getParentRoute: () => AppRoute,
+} as any)
 const AppCrmCustomersRoute = AppCrmCustomersRouteImport.update({
   id: '/crm/customers',
   path: '/crm/customers',
@@ -591,6 +598,12 @@ const AppHrEmployeesEmployeeIdRoute =
     path: '/hr/employees/$employeeId',
     getParentRoute: () => AppRoute,
   } as any)
+const AppCrmCustomersCustomerIdRoute =
+  AppCrmCustomersCustomerIdRouteImport.update({
+    id: '/crm/customers_/$customerId',
+    path: '/crm/customers/$customerId',
+    getParentRoute: () => AppRoute,
+  } as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
@@ -606,6 +619,7 @@ export interface FileRoutesByFullPath {
   '/sign-up': typeof AuthSignUpRoute
   '/crm/analytics': typeof AppCrmAnalyticsRoute
   '/crm/customers': typeof AppCrmCustomersRoute
+  '/crm/dashboard': typeof AppCrmDashboardRoute
   '/crm/loyalty': typeof AppCrmLoyaltyRoute
   '/crm/segments': typeof AppCrmSegmentsRoute
   '/hr/analytics': typeof AppHrAnalyticsRoute
@@ -683,6 +697,7 @@ export interface FileRoutesByFullPath {
   '/outlets/': typeof AppOutletsIndexRoute
   '/pos/': typeof AppPosIndexRoute
   '/purchase/': typeof AppPurchaseIndexRoute
+  '/crm/customers/$customerId': typeof AppCrmCustomersCustomerIdRoute
   '/hr/employees/$employeeId': typeof AppHrEmployeesEmployeeIdRoute
   '/inventory/catalog/$productId': typeof AppInventoryCatalogProductIdRoute
   '/restaurant/orders/$orderId': typeof AppRestaurantOrdersOrderIdRoute
@@ -702,6 +717,7 @@ export interface FileRoutesByTo {
   '/sign-up': typeof AuthSignUpRoute
   '/crm/analytics': typeof AppCrmAnalyticsRoute
   '/crm/customers': typeof AppCrmCustomersRoute
+  '/crm/dashboard': typeof AppCrmDashboardRoute
   '/crm/loyalty': typeof AppCrmLoyaltyRoute
   '/crm/segments': typeof AppCrmSegmentsRoute
   '/hr/analytics': typeof AppHrAnalyticsRoute
@@ -779,6 +795,7 @@ export interface FileRoutesByTo {
   '/outlets': typeof AppOutletsIndexRoute
   '/pos': typeof AppPosIndexRoute
   '/purchase': typeof AppPurchaseIndexRoute
+  '/crm/customers/$customerId': typeof AppCrmCustomersCustomerIdRoute
   '/hr/employees/$employeeId': typeof AppHrEmployeesEmployeeIdRoute
   '/inventory/catalog/$productId': typeof AppInventoryCatalogProductIdRoute
   '/restaurant/orders/$orderId': typeof AppRestaurantOrdersOrderIdRoute
@@ -801,6 +818,7 @@ export interface FileRoutesById {
   '/_auth/sign-up': typeof AuthSignUpRoute
   '/_app/crm/analytics': typeof AppCrmAnalyticsRoute
   '/_app/crm/customers': typeof AppCrmCustomersRoute
+  '/_app/crm/dashboard': typeof AppCrmDashboardRoute
   '/_app/crm/loyalty': typeof AppCrmLoyaltyRoute
   '/_app/crm/segments': typeof AppCrmSegmentsRoute
   '/_app/hr/analytics': typeof AppHrAnalyticsRoute
@@ -878,6 +896,7 @@ export interface FileRoutesById {
   '/_app/outlets/': typeof AppOutletsIndexRoute
   '/_app/pos/': typeof AppPosIndexRoute
   '/_app/purchase/': typeof AppPurchaseIndexRoute
+  '/_app/crm/customers_/$customerId': typeof AppCrmCustomersCustomerIdRoute
   '/_app/hr/employees_/$employeeId': typeof AppHrEmployeesEmployeeIdRoute
   '/_app/inventory/catalog_/$productId': typeof AppInventoryCatalogProductIdRoute
   '/_app/restaurant/orders/$orderId': typeof AppRestaurantOrdersOrderIdRoute
@@ -899,6 +918,7 @@ export interface FileRouteTypes {
     | '/sign-up'
     | '/crm/analytics'
     | '/crm/customers'
+    | '/crm/dashboard'
     | '/crm/loyalty'
     | '/crm/segments'
     | '/hr/analytics'
@@ -976,6 +996,7 @@ export interface FileRouteTypes {
     | '/outlets/'
     | '/pos/'
     | '/purchase/'
+    | '/crm/customers/$customerId'
     | '/hr/employees/$employeeId'
     | '/inventory/catalog/$productId'
     | '/restaurant/orders/$orderId'
@@ -995,6 +1016,7 @@ export interface FileRouteTypes {
     | '/sign-up'
     | '/crm/analytics'
     | '/crm/customers'
+    | '/crm/dashboard'
     | '/crm/loyalty'
     | '/crm/segments'
     | '/hr/analytics'
@@ -1072,6 +1094,7 @@ export interface FileRouteTypes {
     | '/outlets'
     | '/pos'
     | '/purchase'
+    | '/crm/customers/$customerId'
     | '/hr/employees/$employeeId'
     | '/inventory/catalog/$productId'
     | '/restaurant/orders/$orderId'
@@ -1093,6 +1116,7 @@ export interface FileRouteTypes {
     | '/_auth/sign-up'
     | '/_app/crm/analytics'
     | '/_app/crm/customers'
+    | '/_app/crm/dashboard'
     | '/_app/crm/loyalty'
     | '/_app/crm/segments'
     | '/_app/hr/analytics'
@@ -1170,6 +1194,7 @@ export interface FileRouteTypes {
     | '/_app/outlets/'
     | '/_app/pos/'
     | '/_app/purchase/'
+    | '/_app/crm/customers_/$customerId'
     | '/_app/hr/employees_/$employeeId'
     | '/_app/inventory/catalog_/$productId'
     | '/_app/restaurant/orders/$orderId'
@@ -1815,6 +1840,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AppCrmLoyaltyRouteImport
       parentRoute: typeof AppRoute
     }
+    '/_app/crm/dashboard': {
+      id: '/_app/crm/dashboard'
+      path: '/crm/dashboard'
+      fullPath: '/crm/dashboard'
+      preLoaderRoute: typeof AppCrmDashboardRouteImport
+      parentRoute: typeof AppRoute
+    }
     '/_app/crm/customers': {
       id: '/_app/crm/customers'
       path: '/crm/customers'
@@ -1857,6 +1889,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AppHrEmployeesEmployeeIdRouteImport
       parentRoute: typeof AppRoute
     }
+    '/_app/crm/customers_/$customerId': {
+      id: '/_app/crm/customers_/$customerId'
+      path: '/crm/customers/$customerId'
+      fullPath: '/crm/customers/$customerId'
+      preLoaderRoute: typeof AppCrmCustomersCustomerIdRouteImport
+      parentRoute: typeof AppRoute
+    }
   }
 }
 
@@ -1865,6 +1904,7 @@ interface AppRouteChildren {
   AppProfileRoute: typeof AppProfileRoute
   AppCrmAnalyticsRoute: typeof AppCrmAnalyticsRoute
   AppCrmCustomersRoute: typeof AppCrmCustomersRoute
+  AppCrmDashboardRoute: typeof AppCrmDashboardRoute
   AppCrmLoyaltyRoute: typeof AppCrmLoyaltyRoute
   AppCrmSegmentsRoute: typeof AppCrmSegmentsRoute
   AppHrAnalyticsRoute: typeof AppHrAnalyticsRoute
@@ -1942,6 +1982,7 @@ interface AppRouteChildren {
   AppOutletsIndexRoute: typeof AppOutletsIndexRoute
   AppPosIndexRoute: typeof AppPosIndexRoute
   AppPurchaseIndexRoute: typeof AppPurchaseIndexRoute
+  AppCrmCustomersCustomerIdRoute: typeof AppCrmCustomersCustomerIdRoute
   AppHrEmployeesEmployeeIdRoute: typeof AppHrEmployeesEmployeeIdRoute
   AppInventoryCatalogProductIdRoute: typeof AppInventoryCatalogProductIdRoute
   AppRestaurantOrdersOrderIdRoute: typeof AppRestaurantOrdersOrderIdRoute
@@ -1953,6 +1994,7 @@ const AppRouteChildren: AppRouteChildren = {
   AppProfileRoute: AppProfileRoute,
   AppCrmAnalyticsRoute: AppCrmAnalyticsRoute,
   AppCrmCustomersRoute: AppCrmCustomersRoute,
+  AppCrmDashboardRoute: AppCrmDashboardRoute,
   AppCrmLoyaltyRoute: AppCrmLoyaltyRoute,
   AppCrmSegmentsRoute: AppCrmSegmentsRoute,
   AppHrAnalyticsRoute: AppHrAnalyticsRoute,
@@ -2030,6 +2072,7 @@ const AppRouteChildren: AppRouteChildren = {
   AppOutletsIndexRoute: AppOutletsIndexRoute,
   AppPosIndexRoute: AppPosIndexRoute,
   AppPurchaseIndexRoute: AppPurchaseIndexRoute,
+  AppCrmCustomersCustomerIdRoute: AppCrmCustomersCustomerIdRoute,
   AppHrEmployeesEmployeeIdRoute: AppHrEmployeesEmployeeIdRoute,
   AppInventoryCatalogProductIdRoute: AppInventoryCatalogProductIdRoute,
   AppRestaurantOrdersOrderIdRoute: AppRestaurantOrdersOrderIdRoute,

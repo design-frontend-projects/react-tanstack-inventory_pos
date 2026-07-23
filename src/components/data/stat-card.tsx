@@ -58,7 +58,7 @@ export function StatCard({
           </strong>
         )}
         {hint ? (
-          <span className="max-w-[10rem] text-end text-xs leading-5 text-muted-foreground">
+          <span className="max-w-40 text-end text-xs leading-5 text-muted-foreground">
             {hint}
           </span>
         ) : null}

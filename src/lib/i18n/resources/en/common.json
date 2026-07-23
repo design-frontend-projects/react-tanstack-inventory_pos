@@ -99,6 +99,7 @@
     "posOrders": "Orders",
     "posReturns": "Returns",
     "crm": "CRM",
+    "crmDashboard": "CRM Dashboard",
     "crmCustomers": "Customers 360",
     "crmLoyalty": "Loyalty",
     "crmSegments": "Segments",

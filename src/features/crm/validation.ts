@@ -12,9 +12,19 @@ export const crmLifecycleStatusSchema = z.enum([
   'BLOCKED',
 ])
 
-export const crmContactTypeSchema = z.enum(['PHONE', 'EMAIL', 'SOCIAL', 'OTHER'])
+export const crmContactTypeSchema = z.enum([
+  'PHONE',
+  'EMAIL',
+  'SOCIAL',
+  'OTHER',
+])
 
-export const crmAddressTypeSchema = z.enum(['BILLING', 'SHIPPING', 'DELIVERY', 'OTHER'])
+export const crmAddressTypeSchema = z.enum([
+  'BILLING',
+  'SHIPPING',
+  'DELIVERY',
+  'OTHER',
+])
 
 export const crmRelationTypeSchema = z.enum([
   'FAMILY',
@@ -24,8 +34,18 @@ export const crmRelationTypeSchema = z.enum([
   'OTHER',
 ])
 
-export const consentChannelSchema = z.enum(['EMAIL', 'SMS', 'PUSH', 'WHATSAPP', 'PHONE'])
-export const consentPurposeSchema = z.enum(['MARKETING', 'TRANSACTIONAL', 'SURVEY'])
+export const consentChannelSchema = z.enum([
+  'EMAIL',
+  'SMS',
+  'PUSH',
+  'WHATSAPP',
+  'PHONE',
+])
+export const consentPurposeSchema = z.enum([
+  'MARKETING',
+  'TRANSACTIONAL',
+  'SURVEY',
+])
 export const consentStatusSchema = z.enum(['GRANTED', 'DENIED', 'WITHDRAWN'])
 
 export const crmFieldTypeSchema = z.enum([
@@ -41,6 +61,17 @@ const decimalInput = z.union([
   z.number(),
   z.string().regex(/^-?\d+(\.\d+)?$/, 'Invalid decimal'),
 ])
+
+export const crmDirectoryFiltersSchema = z.object({
+  search: z.string().max(160).optional(),
+  lifecycleStatus: crmLifecycleStatusSchema.optional(),
+  tagId: z.string().uuid().optional(),
+  includeInactive: z.boolean().optional(),
+  page: z.number().int().min(0).optional(),
+  pageSize: z.number().int().min(1).max(100).optional(),
+})
+
+export type CrmDirectoryFiltersInput = z.infer<typeof crmDirectoryFiltersSchema>
 
 export const profileUpsertSchema = z.object({
   dateOfBirth: z.coerce.date().nullish(),
@@ -112,7 +143,10 @@ export const groupUpsertSchema = z.object({
     .string()
     .min(1)
     .max(60)
-    .regex(/^[a-z0-9_-]+$/, 'Lowercase letters, digits, hyphen, underscore only'),
+    .regex(
+      /^[a-z0-9_-]+$/,
+      'Lowercase letters, digits, hyphen, underscore only',
+    ),
   name: z.string().min(1).max(160),
   description: z.string().max(2000).nullish(),
 })
@@ -136,7 +170,7 @@ export const customFieldValuesSchema = z
     z.object({
       definitionId: z.string().uuid(),
       valueJson: z.unknown(),
-    })
+    }),
   )
   .min(1)
   .max(100)
@@ -158,7 +192,10 @@ export const loyaltyTierSchema = z.object({
     .string()
     .min(1)
     .max(40)
-    .regex(/^[a-z0-9_-]+$/, 'Lowercase letters, digits, hyphen, underscore only'),
+    .regex(
+      /^[a-z0-9_-]+$/,
+      'Lowercase letters, digits, hyphen, underscore only',
+    ),
   name: z.string().min(1).max(120),
   rank: z.number().int().min(0).max(1000).optional(),
   minLifetimePoints: z.number().int().min(0).optional(),
@@ -214,7 +251,10 @@ export const segmentUpsertSchema = z.object({
     .string()
     .min(1)
     .max(60)
-    .regex(/^[a-z0-9_-]+$/, 'Lowercase letters, digits, hyphen, underscore only'),
+    .regex(
+      /^[a-z0-9_-]+$/,
+      'Lowercase letters, digits, hyphen, underscore only',
+    ),
   name: z.string().min(1).max(160),
   description: z.string().max(2000).nullish(),
   ruleJson: segmentRuleSchema,

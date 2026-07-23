@@ -61,6 +61,34 @@ export function listCustomerTags(
   })
 }
 
+export function listTagsForCustomers(
+  tenantId: string,
+  customerIds: Array<string>,
+  client: PrismaClientLike = prisma
+) {
+  if (customerIds.length === 0) {
+    return Promise.resolve([])
+  }
+
+  return client.crmCustomerTag.findMany({
+    where: { tenantId, customerId: { in: customerIds } },
+    include: { tag: true },
+  })
+}
+
+export function listCustomerIdsByTag(
+  tenantId: string,
+  tagId: string,
+  client: PrismaClientLike = prisma
+) {
+  return client.crmCustomerTag
+    .findMany({
+      where: { tenantId, tagId },
+      select: { customerId: true },
+    })
+    .then((rows) => rows.map((row) => row.customerId))
+}
+
 export function assignTag(
   tenantId: string,
   customerId: string,

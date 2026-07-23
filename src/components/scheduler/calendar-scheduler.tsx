@@ -193,7 +193,7 @@ export function CalendarScheduler({
       {/* Month view */}
       {view === 'month' ? (
         <div className="overflow-x-auto">
-          <div className="grid min-w-[42rem] grid-cols-7 overflow-hidden rounded-2xl border border-border">
+          <div className="grid min-w-2xl grid-cols-7 overflow-hidden rounded-2xl border border-border">
             {monthGridDays(anchorDate)
               .slice(0, 7)
               .map((day) => (
@@ -262,7 +262,7 @@ export function CalendarScheduler({
       {/* Week view */}
       {view === 'week' ? (
         <div className="overflow-x-auto">
-          <div className="grid min-w-[42rem] grid-cols-7 gap-2">
+          <div className="grid min-w-2xl grid-cols-7 gap-2">
             {Array.from({ length: 7 }, (_, index) =>
               addDays(startOfWeek(anchorDate), index),
             ).map((day) => {

@@ -34,12 +34,13 @@ describe('crm module registration', () => {
     expect(crmModule?.rootPath).toBe('/crm/customers')
   })
 
-  it('registers the four crm screens', () => {
+  it('registers the five crm screens', () => {
     const screens = SCREEN_DEFINITIONS.filter((screen) => screen.moduleCode === 'crm')
 
     expect(screens.map((screen) => screen.code).sort()).toEqual([
       'crm-analytics',
       'crm-customers',
+      'crm-dashboard',
       'crm-loyalty',
       'crm-segments',
     ])

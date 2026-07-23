@@ -49,6 +49,44 @@ export function findProfileByCustomerId(
   })
 }
 
+export function listProfilesByCustomerIds(
+  tenantId: string,
+  customerIds: Array<string>,
+  client: PrismaClientLike = prisma
+) {
+  if (customerIds.length === 0) {
+    return Promise.resolve([])
+  }
+
+  return client.crmCustomerProfile.findMany({
+    where: { tenantId, customerId: { in: customerIds } },
+  })
+}
+
+export function listCustomerIdsByLifecycle(
+  tenantId: string,
+  lifecycleStatus: CrmLifecycleStatus,
+  client: PrismaClientLike = prisma
+) {
+  return client.crmCustomerProfile
+    .findMany({
+      where: { tenantId, lifecycleStatus },
+      select: { customerId: true },
+    })
+    .then((rows) => rows.map((row) => row.customerId))
+}
+
+export function countProfilesByLifecycle(
+  tenantId: string,
+  client: PrismaClientLike = prisma
+) {
+  return client.crmCustomerProfile.groupBy({
+    by: ['lifecycleStatus'],
+    where: { tenantId },
+    _count: { _all: true },
+  })
+}
+
 export function upsertProfile(
   tenantId: string,
   customerId: string,

@@ -1,5 +1,6 @@
 import { z } from 'zod'
 import { createServerFn } from '@tanstack/react-start'
+import * as directoryService from '#/server/crm/customer-directory-service'
 import * as loyaltyService from '#/server/crm/loyalty-service'
 import * as metricsService from '#/server/crm/metrics-service'
 import * as profileService from '#/server/crm/customer-profile-service'
@@ -7,10 +8,14 @@ import * as segmentService from '#/server/crm/segment-service'
 import * as timelineService from '#/server/crm/timeline-service'
 import { runCrmProjector } from '#/server/crm/projector'
 import { getCurrentUserContext } from '#/server/auth/session'
-import { requirePermission, requireTenantAccess } from '#/server/auth/tenant-guard'
+import {
+  requirePermission,
+  requireTenantAccess,
+} from '#/server/auth/tenant-guard'
 import type { CurrentUserContext } from '#/types/auth'
 import {
   addressUpsertSchema,
+  crmDirectoryFiltersSchema,
   adjustPointsSchema,
   consentSetSchema,
   contactUpsertSchema,
@@ -34,7 +39,7 @@ const idSchema = z.string().uuid()
 
 async function resolveContext(
   data: { accessToken: string; tenantId: string },
-  permission: Array<string> | string
+  permission: Array<string> | string,
 ): Promise<CurrentUserContext> {
   return requirePermission(
     requireTenantAccess(
@@ -42,15 +47,42 @@ async function resolveContext(
         accessToken: data.accessToken,
         tenantId: data.tenantId,
       }),
-      data.tenantId
+      data.tenantId,
     ),
-    permission
+    permission,
   )
 }
 
-const base = z.object({ accessToken: accessTokenSchema, tenantId: tenantIdSchema })
+const base = z.object({
+  accessToken: accessTokenSchema,
+  tenantId: tenantIdSchema,
+})
 const withId = base.extend({ id: idSchema })
 const withCustomer = base.extend({ customerId: idSchema })
+
+// --- Directory ------------------------------------------------------------------
+
+export const listCrmCustomersServerFn = createServerFn({ method: 'POST' })
+  .inputValidator(
+    base.extend({ filters: crmDirectoryFiltersSchema.optional() }),
+  )
+  .handler(async ({ data }) => {
+    const context = await resolveContext(data, 'crm.view')
+
+    return directoryService.listCrmCustomers(
+      context,
+      data.tenantId,
+      data.filters,
+    )
+  })
+
+export const getCrmCustomerSummaryServerFn = createServerFn({ method: 'POST' })
+  .inputValidator(base)
+  .handler(async ({ data }) => {
+    const context = await resolveContext(data, 'crm.view')
+
+    return directoryService.getCrmCustomerSummary(context, data.tenantId)
+  })
 
 // --- Customer 360 & profile ---------------------------------------------------
 
@@ -59,7 +91,11 @@ export const getCustomer360ServerFn = createServerFn({ method: 'POST' })
   .handler(async ({ data }) => {
     const context = await resolveContext(data, 'crm.view')
 
-    return profileService.getCustomer360(context, data.tenantId, data.customerId)
+    return profileService.getCustomer360(
+      context,
+      data.tenantId,
+      data.customerId,
+    )
   })
 
 export const upsertCustomerProfileServerFn = createServerFn({ method: 'POST' })
@@ -67,7 +103,12 @@ export const upsertCustomerProfileServerFn = createServerFn({ method: 'POST' })
   .handler(async ({ data }) => {
     const context = await resolveContext(data, 'crm.profile_manage')
 
-    return profileService.upsertProfile(context, data.tenantId, data.customerId, data.input)
+    return profileService.upsertProfile(
+      context,
+      data.tenantId,
+      data.customerId,
+      data.input,
+    )
   })
 
 export const upsertCustomerContactServerFn = createServerFn({ method: 'POST' })
@@ -75,7 +116,12 @@ export const upsertCustomerContactServerFn = createServerFn({ method: 'POST' })
   .handler(async ({ data }) => {
     const context = await resolveContext(data, 'crm.profile_manage')
 
-    return profileService.upsertContact(context, data.tenantId, data.customerId, data.input)
+    return profileService.upsertContact(
+      context,
+      data.tenantId,
+      data.customerId,
+      data.input,
+    )
   })
 
 export const deleteCustomerContactServerFn = createServerFn({ method: 'POST' })
@@ -91,7 +137,12 @@ export const upsertCustomerAddressServerFn = createServerFn({ method: 'POST' })
   .handler(async ({ data }) => {
     const context = await resolveContext(data, 'crm.profile_manage')
 
-    return profileService.upsertAddress(context, data.tenantId, data.customerId, data.input)
+    return profileService.upsertAddress(
+      context,
+      data.tenantId,
+      data.customerId,
+      data.input,
+    )
   })
 
 export const deleteCustomerAddressServerFn = createServerFn({ method: 'POST' })
@@ -102,7 +153,9 @@ export const deleteCustomerAddressServerFn = createServerFn({ method: 'POST' })
     return profileService.deleteAddress(context, data.tenantId, data.id)
   })
 
-export const upsertCustomerRelationshipServerFn = createServerFn({ method: 'POST' })
+export const upsertCustomerRelationshipServerFn = createServerFn({
+  method: 'POST',
+})
   .inputValidator(withCustomer.extend({ input: relationshipUpsertSchema }))
   .handler(async ({ data }) => {
     const context = await resolveContext(data, 'crm.profile_manage')
@@ -111,11 +164,13 @@ export const upsertCustomerRelationshipServerFn = createServerFn({ method: 'POST
       context,
       data.tenantId,
       data.customerId,
-      data.input
+      data.input,
     )
   })
 
-export const deleteCustomerRelationshipServerFn = createServerFn({ method: 'POST' })
+export const deleteCustomerRelationshipServerFn = createServerFn({
+  method: 'POST',
+})
   .inputValidator(withId)
   .handler(async ({ data }) => {
     const context = await resolveContext(data, 'crm.profile_manage')
@@ -133,7 +188,7 @@ export const setCustomerPreferenceServerFn = createServerFn({ method: 'POST' })
       data.tenantId,
       data.customerId,
       data.input.prefKey,
-      data.input.valueJson
+      data.input.valueJson,
     )
   })
 
@@ -142,7 +197,12 @@ export const setConsentServerFn = createServerFn({ method: 'POST' })
   .handler(async ({ data }) => {
     const context = await resolveContext(data, 'crm.profile_manage')
 
-    return profileService.setConsent(context, data.tenantId, data.customerId, data.input)
+    return profileService.setConsent(
+      context,
+      data.tenantId,
+      data.customerId,
+      data.input,
+    )
   })
 
 export const listConsentsServerFn = createServerFn({ method: 'POST' })
@@ -176,7 +236,12 @@ export const assignTagServerFn = createServerFn({ method: 'POST' })
   .handler(async ({ data }) => {
     const context = await resolveContext(data, 'crm.profile_manage')
 
-    return profileService.assignTag(context, data.tenantId, data.customerId, data.tagId)
+    return profileService.assignTag(
+      context,
+      data.tenantId,
+      data.customerId,
+      data.tagId,
+    )
   })
 
 export const unassignTagServerFn = createServerFn({ method: 'POST' })
@@ -184,7 +249,12 @@ export const unassignTagServerFn = createServerFn({ method: 'POST' })
   .handler(async ({ data }) => {
     const context = await resolveContext(data, 'crm.profile_manage')
 
-    return profileService.unassignTag(context, data.tenantId, data.customerId, data.tagId)
+    return profileService.unassignTag(
+      context,
+      data.tenantId,
+      data.customerId,
+      data.tagId,
+    )
   })
 
 export const listGroupsServerFn = createServerFn({ method: 'POST' })
@@ -204,7 +274,12 @@ export const upsertGroupServerFn = createServerFn({ method: 'POST' })
   })
 
 export const setGroupMembersServerFn = createServerFn({ method: 'POST' })
-  .inputValidator(base.extend({ groupId: idSchema, customerIds: z.array(idSchema).max(10_000) }))
+  .inputValidator(
+    base.extend({
+      groupId: idSchema,
+      customerIds: z.array(idSchema).max(10_000),
+    }),
+  )
   .handler(async ({ data }) => {
     const context = await resolveContext(data, 'crm.settings_manage')
 
@@ -212,24 +287,36 @@ export const setGroupMembersServerFn = createServerFn({ method: 'POST' })
       context,
       data.tenantId,
       data.groupId,
-      data.customerIds
+      data.customerIds,
     )
   })
 
-export const listCustomFieldDefinitionsServerFn = createServerFn({ method: 'POST' })
+export const listCustomFieldDefinitionsServerFn = createServerFn({
+  method: 'POST',
+})
   .inputValidator(base.extend({ entityType: z.string().max(60).optional() }))
   .handler(async ({ data }) => {
     const context = await resolveContext(data, 'crm.view')
 
-    return profileService.listCustomFieldDefinitions(context, data.tenantId, data.entityType)
+    return profileService.listCustomFieldDefinitions(
+      context,
+      data.tenantId,
+      data.entityType,
+    )
   })
 
-export const upsertCustomFieldDefinitionServerFn = createServerFn({ method: 'POST' })
+export const upsertCustomFieldDefinitionServerFn = createServerFn({
+  method: 'POST',
+})
   .inputValidator(base.extend({ input: customFieldDefinitionSchema }))
   .handler(async ({ data }) => {
     const context = await resolveContext(data, 'crm.settings_manage')
 
-    return profileService.upsertCustomFieldDefinition(context, data.tenantId, data.input)
+    return profileService.upsertCustomFieldDefinition(
+      context,
+      data.tenantId,
+      data.input,
+    )
   })
 
 export const setCustomFieldValuesServerFn = createServerFn({ method: 'POST' })
@@ -241,7 +328,7 @@ export const setCustomFieldValuesServerFn = createServerFn({ method: 'POST' })
       context,
       data.tenantId,
       data.customerId,
-      data.values
+      data.values,
     )
   })
 
@@ -253,16 +340,21 @@ export const listCustomerTimelineServerFn = createServerFn({ method: 'POST' })
       entryType: z.string().max(40).optional(),
       before: z.coerce.date().optional(),
       take: z.number().int().min(1).max(200).optional(),
-    })
+    }),
   )
   .handler(async ({ data }) => {
     const context = await resolveContext(data, 'crm.timeline_view')
 
-    return timelineService.listCustomerTimeline(context, data.tenantId, data.customerId, {
-      entryType: data.entryType,
-      before: data.before,
-      take: data.take,
-    })
+    return timelineService.listCustomerTimeline(
+      context,
+      data.tenantId,
+      data.customerId,
+      {
+        entryType: data.entryType,
+        before: data.before,
+        take: data.take,
+      },
+    )
   })
 
 export const addTimelineNoteServerFn = createServerFn({ method: 'POST' })
@@ -270,7 +362,12 @@ export const addTimelineNoteServerFn = createServerFn({ method: 'POST' })
   .handler(async ({ data }) => {
     const context = await resolveContext(data, 'crm.timeline_note')
 
-    return timelineService.addManualNote(context, data.tenantId, data.customerId, data.note)
+    return timelineService.addManualNote(
+      context,
+      data.tenantId,
+      data.customerId,
+      data.note,
+    )
   })
 
 // --- Loyalty ---------------------------------------------------------------------
@@ -280,7 +377,11 @@ export const getLoyaltyAccountServerFn = createServerFn({ method: 'POST' })
   .handler(async ({ data }) => {
     const context = await resolveContext(data, 'crm.loyalty_view')
 
-    return loyaltyService.getLoyaltyAccount(context, data.tenantId, data.customerId)
+    return loyaltyService.getLoyaltyAccount(
+      context,
+      data.tenantId,
+      data.customerId,
+    )
   })
 
 export const listLoyaltyLedgerServerFn = createServerFn({ method: 'POST' })
@@ -288,15 +389,20 @@ export const listLoyaltyLedgerServerFn = createServerFn({ method: 'POST' })
     withCustomer.extend({
       take: z.number().int().min(1).max(200).optional(),
       before: z.coerce.date().optional(),
-    })
+    }),
   )
   .handler(async ({ data }) => {
     const context = await resolveContext(data, 'crm.loyalty_view')
 
-    return loyaltyService.listLoyaltyLedger(context, data.tenantId, data.customerId, {
-      take: data.take,
-      before: data.before,
-    })
+    return loyaltyService.listLoyaltyLedger(
+      context,
+      data.tenantId,
+      data.customerId,
+      {
+        take: data.take,
+        before: data.before,
+      },
+    )
   })
 
 export const redeemPointsServerFn = createServerFn({ method: 'POST' })
@@ -309,7 +415,7 @@ export const redeemPointsServerFn = createServerFn({ method: 'POST' })
       data.tenantId,
       data.customerId,
       data.input.points,
-      data.input
+      data.input,
     )
   })
 
@@ -323,7 +429,7 @@ export const adjustPointsServerFn = createServerFn({ method: 'POST' })
       data.tenantId,
       data.customerId,
       data.input.points,
-      data.input.note
+      data.input.note,
     )
   })
 
@@ -340,7 +446,11 @@ export const updateLoyaltySettingsServerFn = createServerFn({ method: 'POST' })
   .handler(async ({ data }) => {
     const context = await resolveContext(data, 'crm.loyalty_manage')
 
-    return loyaltyService.updateLoyaltySettings(context, data.tenantId, data.input)
+    return loyaltyService.updateLoyaltySettings(
+      context,
+      data.tenantId,
+      data.input,
+    )
   })
 
 export const listLoyaltyTiersServerFn = createServerFn({ method: 'POST' })
@@ -377,11 +487,15 @@ export const upsertEarnRuleServerFn = createServerFn({ method: 'POST' })
 
 // Scheduler-driven, like expireReservationsServerFn.
 export const expireLoyaltyPointsServerFn = createServerFn({ method: 'POST' })
-  .inputValidator(base.extend({ limit: z.number().int().min(1).max(500).optional() }))
+  .inputValidator(
+    base.extend({ limit: z.number().int().min(1).max(500).optional() }),
+  )
   .handler(async ({ data }) => {
     const context = await resolveContext(data, 'crm.loyalty_adjust')
 
-    return loyaltyService.expireLoyaltyPoints(context, data.tenantId, { limit: data.limit })
+    return loyaltyService.expireLoyaltyPoints(context, data.tenantId, {
+      limit: data.limit,
+    })
   })
 
 // --- Segmentation ----------------------------------------------------------------
@@ -419,11 +533,21 @@ export const rebuildSegmentServerFn = createServerFn({ method: 'POST' })
   })
 
 export const listSegmentMembersServerFn = createServerFn({ method: 'POST' })
-  .inputValidator(base.extend({ segmentId: idSchema, take: z.number().int().min(1).max(500).optional() }))
+  .inputValidator(
+    base.extend({
+      segmentId: idSchema,
+      take: z.number().int().min(1).max(500).optional(),
+    }),
+  )
   .handler(async ({ data }) => {
     const context = await resolveContext(data, 'crm.segment_view')
 
-    return segmentService.listSegmentMembers(context, data.tenantId, data.segmentId, data.take)
+    return segmentService.listSegmentMembers(
+      context,
+      data.tenantId,
+      data.segmentId,
+      data.take,
+    )
   })
 
 // --- Analytics -------------------------------------------------------------------
@@ -433,15 +557,21 @@ export const getCustomerMetricsServerFn = createServerFn({ method: 'POST' })
   .handler(async ({ data }) => {
     const context = await resolveContext(data, 'crm.analytics_view')
 
-    return metricsService.getCustomerMetrics(context, data.tenantId, data.customerId)
+    return metricsService.getCustomerMetrics(
+      context,
+      data.tenantId,
+      data.customerId,
+    )
   })
 
 export const getCrmDashboardServerFn = createServerFn({ method: 'POST' })
-  .inputValidator(base.extend({ churnThreshold: z.number().min(0).max(1).optional() }))
+  .inputValidator(
+    base.extend({ churnThreshold: z.number().min(0).max(1).optional() }),
+  )
   .handler(async ({ data }) => {
     const context = await resolveContext(data, 'crm.analytics_view')
 
-    return metricsService.getCrmDashboard(context, data.tenantId, {
+    return directoryService.getCrmDashboardWithNames(context, data.tenantId, {
       churnThreshold: data.churnThreshold,
     })
   })
@@ -454,7 +584,7 @@ export const runCrmProjectorServerFn = createServerFn({ method: 'POST' })
     base.extend({
       batchSize: z.number().int().min(1).max(1000).optional(),
       maxBatches: z.number().int().min(1).max(100).optional(),
-    })
+    }),
   )
   .handler(async ({ data }) => {
     const context = await resolveContext(data, 'crm.settings_manage')

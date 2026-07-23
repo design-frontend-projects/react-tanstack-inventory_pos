@@ -85,7 +85,7 @@ export function KanbanBoard<TCard extends KanbanCard>({
             key={column.id}
             className={cn(
               'flex min-w-72 flex-1 flex-col gap-3 rounded-2xl border border-border bg-muted/30 p-3 transition-colors',
-              isOver && 'border-primary/50 bg-primary/[0.04]',
+              isOver && 'border-primary/50 bg-primary/4',
               columnClassName,
             )}
             onDragOver={(event) => {

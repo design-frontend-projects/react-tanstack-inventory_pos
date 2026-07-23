@@ -91,6 +91,7 @@ export type AppNavRouteTo =
   | '/pos'
   | '/pos/orders'
   | '/pos/returns'
+  | '/crm/dashboard'
   | '/crm/customers'
   | '/crm/loyalty'
   | '/crm/segments'
@@ -718,6 +719,16 @@ export const appNavSections: AppNavSection[] = [
     keywords: ['crm', 'customers', 'loyalty', 'segments', 'analytics'],
     permissions: ['crm.view', 'crm.loyalty_view'],
     items: [
+      {
+        id: 'crm-dashboard',
+        sectionId: 'crm',
+        to: '/crm/dashboard',
+        icon: LayoutDashboard,
+        titleKey: 'nav.crmDashboard',
+        fallbackTitle: 'CRM Dashboard',
+        keywords: ['crm', 'dashboard', 'overview', 'kpis', 'churn', 'revenue'],
+        permissions: ['crm.analytics_view'],
+      },
       {
         id: 'crm-customers',
         sectionId: 'crm',

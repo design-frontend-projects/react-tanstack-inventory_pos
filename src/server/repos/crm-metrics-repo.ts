@@ -91,6 +91,20 @@ export function listMonthly(
   })
 }
 
+export function listMetricsByCustomerIds(
+  tenantId: string,
+  customerIds: Array<string>,
+  client: PrismaClientLike = prisma
+) {
+  if (customerIds.length === 0) {
+    return Promise.resolve([])
+  }
+
+  return client.crmCustomerMetrics.findMany({
+    where: { tenantId, customerId: { in: customerIds } },
+  })
+}
+
 export function listTopBySpend(
   tenantId: string,
   take = 10,

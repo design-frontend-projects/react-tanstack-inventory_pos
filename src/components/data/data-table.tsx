@@ -347,7 +347,7 @@ export function DataTable<TRow>({
         <WorkspaceEmptyState
           title="Unable to load"
           description={errorMessage}
-          className="border-destructive/30 bg-destructive/[0.04]"
+          className="border-destructive/30 bg-destructive/4"
         />
       </div>
     )
@@ -382,7 +382,7 @@ export function DataTable<TRow>({
       {toolbar}
 
       {selection && selectedCount > 0 ? (
-        <div className="flex flex-wrap items-center justify-between gap-2 rounded-xl border border-primary/30 bg-primary/[0.06] px-3 py-2 text-sm">
+        <div className="flex flex-wrap items-center justify-between gap-2 rounded-xl border border-primary/30 bg-primary/6 px-3 py-2 text-sm">
           <span className="font-medium text-foreground">
             {selectedCount} selected
           </span>
@@ -401,7 +401,7 @@ export function DataTable<TRow>({
       ) : null}
 
       <div className="overflow-x-auto">
-        <table className="w-full min-w-[36rem] border-collapse text-sm">
+        <table className="w-full min-w-xl border-collapse text-sm">
           <thead className={cn(stickyHeader && 'sticky top-0 z-10 bg-card')}>
             <tr className="border-b border-border text-left text-xs uppercase tracking-wide text-muted-foreground">
               {selection ? (
@@ -465,7 +465,7 @@ export function DataTable<TRow>({
                   key={key}
                   data-selected={selectedSet.has(key) || undefined}
                   className={cn(
-                    'border-b border-border/70 last:border-0 data-selected:bg-primary/[0.04]',
+                    'border-b border-border/70 last:border-0 data-selected:bg-primary/4',
                     onRowClick &&
                       'cursor-pointer transition-colors hover:bg-muted/50',
                   )}

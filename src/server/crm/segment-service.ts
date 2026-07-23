@@ -10,6 +10,7 @@ import { prisma } from '#/server/db/client'
 import type { CrmSegment } from '#/server/db/generated/prisma/client'
 import type { PrismaClientLike } from '#/server/db/types'
 import { createAuditLog } from '#/server/repos/audit-log-repo'
+import * as customerRepo from '#/server/repos/customer-repo'
 import * as segmentRepo from '#/server/repos/crm-segment-repo'
 import type { CurrentUserContext } from '#/types/auth'
 
@@ -186,8 +187,18 @@ export async function listSegmentMembers(
   take = 100
 ) {
   const members = await segmentRepo.listMembers(tenantId, segmentId, take)
+  const customers = await customerRepo.listCustomersByIds(
+    tenantId,
+    members.map((member) => member.customerId)
+  )
+  const nameById = new Map(
+    customers.map((customer) => [customer.id, customer.name])
+  )
 
-  return members.map((member) => ({ ...member }))
+  return members.map((member) => ({
+    ...member,
+    customerName: nameById.get(member.customerId) ?? null,
+  }))
 }
 
 // Incremental: re-evaluate one customer against every active segment, applying

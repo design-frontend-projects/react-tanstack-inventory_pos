@@ -80,7 +80,7 @@ export function AuditTrail({
       <WorkspaceEmptyState
         title="Unable to load activity"
         description="The audit trail could not be loaded. You may not have access to it."
-        className="border-destructive/30 bg-destructive/[0.04]"
+        className="border-destructive/30 bg-destructive/4"
       />
     )
   }
@@ -102,7 +102,7 @@ export function AuditTrail({
           <li key={entry.id} className="relative pb-5 last:pb-0">
             <span
               aria-hidden
-              className="absolute -start-[1.4rem] top-1.5 size-2.5 rounded-full border-2 border-background bg-primary"
+              className="absolute -inset-s-[1.4rem] top-1.5 size-2.5 rounded-full border-2 border-background bg-primary"
             />
             <div className="flex flex-wrap items-baseline justify-between gap-2">
               <p className="text-sm font-semibold text-foreground">

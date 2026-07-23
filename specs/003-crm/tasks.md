@@ -63,6 +63,19 @@
 - [ ] T072 Feedback (NPS/CSAT/reviews) + satisfaction aggregation.
 - [ ] T073 Dining reservations + restaurant event contracts; delivery event contracts.
 
+## Phase 9 — CRM UI (core workspaces) ✅
+
+- [X] T090 Backend directory read: `src/server/crm/customer-directory-service.ts` (paginated customer page + batched satellite enrichment: profile/metrics/loyalty/tags; lifecycle summary; dashboard name enrichment) + repo helpers (`customer-repo` page/count/byIds, `crm-customer-profile-repo` byIds/lifecycle, `crm-metrics-repo` byIds, `crm-loyalty-repo` accountsByIds, `crm-tag-repo` tagsForCustomers/idsByTag) + server fns `listCrmCustomers`, `getCrmCustomerSummary` (`crm.view`) + `crmDirectoryFiltersSchema`; segment members enriched with customer names.
+- [X] T091 Feature foundation: `crm-format.ts` (lifecycle/RFM/timeline tone maps, money/date/churn formatting), `use-crm-base.ts`, hooks `use-crm-customers` / `use-customer-360` / `use-crm-dashboard` / `use-loyalty-admin` / `use-segments` (TanStack Query + mutations with per-customer invalidation).
+- [X] T092 Dashboard: `dashboard-workspace.tsx` + route `/crm/dashboard` (KPIs, RFM + lifecycle distributions, top customers, churn watchlist, quick actions).
+- [X] T093 Customer list: `customers-workspace.tsx` (server-paginated DataTable, search/lifecycle/tag/scope filters, column chooser, CSV export, bulk tag assignment, avatars) rewired into `/crm/customers`.
+- [X] T094 Customer 360: `customer-detail-page.tsx` + `detail/customer-{overview,timeline,loyalty,analytics}-tab.tsx` + audit tab (`AuditTrail entityType="customer"`) + edit drawer (master + profile) + route `/crm/customers/$customerId` (`customers_.$customerId.tsx`).
+- [X] T095 Wizard: `customer-wizard.tsx` (FormWizard: general → contact → business → preferences → CRM profile → review; creates master via catalog fn + profile satellite).
+- [X] T096 Loyalty admin: `loyalty-workspace.tsx` (program settings drawer, tier ladder, earn rules) rewired into `/crm/loyalty`; per-customer redeem/adjust live on the 360 loyalty tab.
+- [X] T097 Segments: `segments-workspace.tsx` + `segment-rule-builder.tsx` (recursive and/or rule tree editor over `SEGMENT_FIELDS`, member preview drawer, rebuild, delete) rewired into `/crm/segments`.
+- [X] T098 Analytics: `analytics-workspace.tsx` (RFM distribution, exportable top-customer metrics, churn threshold selector) rewired into `/crm/analytics`.
+- [X] T099 Registration: `/crm/dashboard` in `AppNavRouteTo` + nav item, `crm-dashboard` screen in `module-catalog.ts` (reseed required), `nav.crmDashboard` i18n (en/ar), route tree regenerated headlessly.
+
 ## Phase 8 — Ops (design-only)
 
 - [ ] T080 Outbox prune job (`pruneEventsBefore` below min cursor, >90d).
