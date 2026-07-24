@@ -97,6 +97,16 @@ import { Route as AppHrBudgetingRouteImport } from './routes/_app/hr/budgeting'
 import { Route as AppHrAttendanceRouteImport } from './routes/_app/hr/attendance'
 import { Route as AppHrAssetsRouteImport } from './routes/_app/hr/assets'
 import { Route as AppHrAnalyticsRouteImport } from './routes/_app/hr/analytics'
+import { Route as AppFinanceSettingsRouteImport } from './routes/_app/finance/settings'
+import { Route as AppFinanceReportsRouteImport } from './routes/_app/finance/reports'
+import { Route as AppFinanceRecurringJournalsRouteImport } from './routes/_app/finance/recurring-journals'
+import { Route as AppFinancePostingQueueRouteImport } from './routes/_app/finance/posting-queue'
+import { Route as AppFinanceJournalsRouteImport } from './routes/_app/finance/journals'
+import { Route as AppFinanceJournalTypesRouteImport } from './routes/_app/finance/journal-types'
+import { Route as AppFinanceFiscalRouteImport } from './routes/_app/finance/fiscal'
+import { Route as AppFinanceDashboardRouteImport } from './routes/_app/finance/dashboard'
+import { Route as AppFinanceClosingRouteImport } from './routes/_app/finance/closing'
+import { Route as AppFinanceAccountsRouteImport } from './routes/_app/finance/accounts'
 import { Route as AppCrmSegmentsRouteImport } from './routes/_app/crm/segments'
 import { Route as AppCrmLoyaltyRouteImport } from './routes/_app/crm/loyalty'
 import { Route as AppCrmDashboardRouteImport } from './routes/_app/crm/dashboard'
@@ -106,7 +116,36 @@ import { Route as AppRestaurantOrdersIndexRouteImport } from './routes/_app/rest
 import { Route as AppRestaurantOrdersOrderIdRouteImport } from './routes/_app/restaurant/orders/$orderId'
 import { Route as AppInventoryCatalogProductIdRouteImport } from './routes/_app/inventory/catalog_.$productId'
 import { Route as AppHrEmployeesEmployeeIdRouteImport } from './routes/_app/hr/employees_.$employeeId'
+import { Route as AppFinanceSettingsTaxRouteImport } from './routes/_app/finance/settings_.tax'
+import { Route as AppFinanceReceivablesStatementsRouteImport } from './routes/_app/finance/receivables/statements'
+import { Route as AppFinanceReceivablesPaymentsRouteImport } from './routes/_app/finance/receivables/payments'
+import { Route as AppFinanceReceivablesLedgerRouteImport } from './routes/_app/finance/receivables/ledger'
+import { Route as AppFinanceReceivablesCustomersRouteImport } from './routes/_app/finance/receivables/customers'
+import { Route as AppFinanceReceivablesCreditNotesRouteImport } from './routes/_app/finance/receivables/credit-notes'
+import { Route as AppFinancePayablesVendorsRouteImport } from './routes/_app/finance/payables/vendors'
+import { Route as AppFinancePayablesPaymentsRouteImport } from './routes/_app/finance/payables/payments'
+import { Route as AppFinancePayablesLedgerRouteImport } from './routes/_app/finance/payables/ledger'
+import { Route as AppFinancePayablesDebitNotesRouteImport } from './routes/_app/finance/payables/debit-notes'
+import { Route as AppFinanceJournalsNewRouteImport } from './routes/_app/finance/journals_.new'
+import { Route as AppFinanceJournalsEntryIdRouteImport } from './routes/_app/finance/journals_.$entryId'
+import { Route as AppFinanceCostProjectsRouteImport } from './routes/_app/finance/cost/projects'
+import { Route as AppFinanceCostDepartmentsRouteImport } from './routes/_app/finance/cost/departments'
+import { Route as AppFinanceCostCostCentersRouteImport } from './routes/_app/finance/cost/cost-centers'
+import { Route as AppFinanceCashTransactionsRouteImport } from './routes/_app/finance/cash/transactions'
+import { Route as AppFinanceCashSessionsRouteImport } from './routes/_app/finance/cash/sessions'
+import { Route as AppFinanceCashPettyCashRouteImport } from './routes/_app/finance/cash/petty-cash'
+import { Route as AppFinanceCashAccountsRouteImport } from './routes/_app/finance/cash/accounts'
+import { Route as AppFinanceBudgetsPlansRouteImport } from './routes/_app/finance/budgets/plans'
+import { Route as AppFinanceBudgetsMonitoringRouteImport } from './routes/_app/finance/budgets/monitoring'
+import { Route as AppFinanceBankingTransactionsRouteImport } from './routes/_app/finance/banking/transactions'
+import { Route as AppFinanceBankingReconciliationRouteImport } from './routes/_app/finance/banking/reconciliation'
+import { Route as AppFinanceBankingChequesRouteImport } from './routes/_app/finance/banking/cheques'
+import { Route as AppFinanceBankingAccountsRouteImport } from './routes/_app/finance/banking/accounts'
+import { Route as AppFinanceAssetsRegisterRouteImport } from './routes/_app/finance/assets/register'
+import { Route as AppFinanceAssetsDepreciationRouteImport } from './routes/_app/finance/assets/depreciation'
+import { Route as AppFinanceAssetsCategoriesRouteImport } from './routes/_app/finance/assets/categories'
 import { Route as AppCrmCustomersCustomerIdRouteImport } from './routes/_app/crm/customers_.$customerId'
+import { Route as AppFinanceJournalsEntryIdEditRouteImport } from './routes/_app/finance/journals_.$entryId_.edit'
 
 const AboutRoute = AboutRouteImport.update({
   id: '/about',
@@ -549,6 +588,57 @@ const AppHrAnalyticsRoute = AppHrAnalyticsRouteImport.update({
   path: '/hr/analytics',
   getParentRoute: () => AppRoute,
 } as any)
+const AppFinanceSettingsRoute = AppFinanceSettingsRouteImport.update({
+  id: '/finance/settings',
+  path: '/finance/settings',
+  getParentRoute: () => AppRoute,
+} as any)
+const AppFinanceReportsRoute = AppFinanceReportsRouteImport.update({
+  id: '/finance/reports',
+  path: '/finance/reports',
+  getParentRoute: () => AppRoute,
+} as any)
+const AppFinanceRecurringJournalsRoute =
+  AppFinanceRecurringJournalsRouteImport.update({
+    id: '/finance/recurring-journals',
+    path: '/finance/recurring-journals',
+    getParentRoute: () => AppRoute,
+  } as any)
+const AppFinancePostingQueueRoute = AppFinancePostingQueueRouteImport.update({
+  id: '/finance/posting-queue',
+  path: '/finance/posting-queue',
+  getParentRoute: () => AppRoute,
+} as any)
+const AppFinanceJournalsRoute = AppFinanceJournalsRouteImport.update({
+  id: '/finance/journals',
+  path: '/finance/journals',
+  getParentRoute: () => AppRoute,
+} as any)
+const AppFinanceJournalTypesRoute = AppFinanceJournalTypesRouteImport.update({
+  id: '/finance/journal-types',
+  path: '/finance/journal-types',
+  getParentRoute: () => AppRoute,
+} as any)
+const AppFinanceFiscalRoute = AppFinanceFiscalRouteImport.update({
+  id: '/finance/fiscal',
+  path: '/finance/fiscal',
+  getParentRoute: () => AppRoute,
+} as any)
+const AppFinanceDashboardRoute = AppFinanceDashboardRouteImport.update({
+  id: '/finance/dashboard',
+  path: '/finance/dashboard',
+  getParentRoute: () => AppRoute,
+} as any)
+const AppFinanceClosingRoute = AppFinanceClosingRouteImport.update({
+  id: '/finance/closing',
+  path: '/finance/closing',
+  getParentRoute: () => AppRoute,
+} as any)
+const AppFinanceAccountsRoute = AppFinanceAccountsRouteImport.update({
+  id: '/finance/accounts',
+  path: '/finance/accounts',
+  getParentRoute: () => AppRoute,
+} as any)
 const AppCrmSegmentsRoute = AppCrmSegmentsRouteImport.update({
   id: '/crm/segments',
   path: '/crm/segments',
@@ -598,10 +688,177 @@ const AppHrEmployeesEmployeeIdRoute =
     path: '/hr/employees/$employeeId',
     getParentRoute: () => AppRoute,
   } as any)
+const AppFinanceSettingsTaxRoute = AppFinanceSettingsTaxRouteImport.update({
+  id: '/finance/settings_/tax',
+  path: '/finance/settings/tax',
+  getParentRoute: () => AppRoute,
+} as any)
+const AppFinanceReceivablesStatementsRoute =
+  AppFinanceReceivablesStatementsRouteImport.update({
+    id: '/finance/receivables/statements',
+    path: '/finance/receivables/statements',
+    getParentRoute: () => AppRoute,
+  } as any)
+const AppFinanceReceivablesPaymentsRoute =
+  AppFinanceReceivablesPaymentsRouteImport.update({
+    id: '/finance/receivables/payments',
+    path: '/finance/receivables/payments',
+    getParentRoute: () => AppRoute,
+  } as any)
+const AppFinanceReceivablesLedgerRoute =
+  AppFinanceReceivablesLedgerRouteImport.update({
+    id: '/finance/receivables/ledger',
+    path: '/finance/receivables/ledger',
+    getParentRoute: () => AppRoute,
+  } as any)
+const AppFinanceReceivablesCustomersRoute =
+  AppFinanceReceivablesCustomersRouteImport.update({
+    id: '/finance/receivables/customers',
+    path: '/finance/receivables/customers',
+    getParentRoute: () => AppRoute,
+  } as any)
+const AppFinanceReceivablesCreditNotesRoute =
+  AppFinanceReceivablesCreditNotesRouteImport.update({
+    id: '/finance/receivables/credit-notes',
+    path: '/finance/receivables/credit-notes',
+    getParentRoute: () => AppRoute,
+  } as any)
+const AppFinancePayablesVendorsRoute =
+  AppFinancePayablesVendorsRouteImport.update({
+    id: '/finance/payables/vendors',
+    path: '/finance/payables/vendors',
+    getParentRoute: () => AppRoute,
+  } as any)
+const AppFinancePayablesPaymentsRoute =
+  AppFinancePayablesPaymentsRouteImport.update({
+    id: '/finance/payables/payments',
+    path: '/finance/payables/payments',
+    getParentRoute: () => AppRoute,
+  } as any)
+const AppFinancePayablesLedgerRoute =
+  AppFinancePayablesLedgerRouteImport.update({
+    id: '/finance/payables/ledger',
+    path: '/finance/payables/ledger',
+    getParentRoute: () => AppRoute,
+  } as any)
+const AppFinancePayablesDebitNotesRoute =
+  AppFinancePayablesDebitNotesRouteImport.update({
+    id: '/finance/payables/debit-notes',
+    path: '/finance/payables/debit-notes',
+    getParentRoute: () => AppRoute,
+  } as any)
+const AppFinanceJournalsNewRoute = AppFinanceJournalsNewRouteImport.update({
+  id: '/finance/journals_/new',
+  path: '/finance/journals/new',
+  getParentRoute: () => AppRoute,
+} as any)
+const AppFinanceJournalsEntryIdRoute =
+  AppFinanceJournalsEntryIdRouteImport.update({
+    id: '/finance/journals_/$entryId',
+    path: '/finance/journals/$entryId',
+    getParentRoute: () => AppRoute,
+  } as any)
+const AppFinanceCostProjectsRoute = AppFinanceCostProjectsRouteImport.update({
+  id: '/finance/cost/projects',
+  path: '/finance/cost/projects',
+  getParentRoute: () => AppRoute,
+} as any)
+const AppFinanceCostDepartmentsRoute =
+  AppFinanceCostDepartmentsRouteImport.update({
+    id: '/finance/cost/departments',
+    path: '/finance/cost/departments',
+    getParentRoute: () => AppRoute,
+  } as any)
+const AppFinanceCostCostCentersRoute =
+  AppFinanceCostCostCentersRouteImport.update({
+    id: '/finance/cost/cost-centers',
+    path: '/finance/cost/cost-centers',
+    getParentRoute: () => AppRoute,
+  } as any)
+const AppFinanceCashTransactionsRoute =
+  AppFinanceCashTransactionsRouteImport.update({
+    id: '/finance/cash/transactions',
+    path: '/finance/cash/transactions',
+    getParentRoute: () => AppRoute,
+  } as any)
+const AppFinanceCashSessionsRoute = AppFinanceCashSessionsRouteImport.update({
+  id: '/finance/cash/sessions',
+  path: '/finance/cash/sessions',
+  getParentRoute: () => AppRoute,
+} as any)
+const AppFinanceCashPettyCashRoute = AppFinanceCashPettyCashRouteImport.update({
+  id: '/finance/cash/petty-cash',
+  path: '/finance/cash/petty-cash',
+  getParentRoute: () => AppRoute,
+} as any)
+const AppFinanceCashAccountsRoute = AppFinanceCashAccountsRouteImport.update({
+  id: '/finance/cash/accounts',
+  path: '/finance/cash/accounts',
+  getParentRoute: () => AppRoute,
+} as any)
+const AppFinanceBudgetsPlansRoute = AppFinanceBudgetsPlansRouteImport.update({
+  id: '/finance/budgets/plans',
+  path: '/finance/budgets/plans',
+  getParentRoute: () => AppRoute,
+} as any)
+const AppFinanceBudgetsMonitoringRoute =
+  AppFinanceBudgetsMonitoringRouteImport.update({
+    id: '/finance/budgets/monitoring',
+    path: '/finance/budgets/monitoring',
+    getParentRoute: () => AppRoute,
+  } as any)
+const AppFinanceBankingTransactionsRoute =
+  AppFinanceBankingTransactionsRouteImport.update({
+    id: '/finance/banking/transactions',
+    path: '/finance/banking/transactions',
+    getParentRoute: () => AppRoute,
+  } as any)
+const AppFinanceBankingReconciliationRoute =
+  AppFinanceBankingReconciliationRouteImport.update({
+    id: '/finance/banking/reconciliation',
+    path: '/finance/banking/reconciliation',
+    getParentRoute: () => AppRoute,
+  } as any)
+const AppFinanceBankingChequesRoute =
+  AppFinanceBankingChequesRouteImport.update({
+    id: '/finance/banking/cheques',
+    path: '/finance/banking/cheques',
+    getParentRoute: () => AppRoute,
+  } as any)
+const AppFinanceBankingAccountsRoute =
+  AppFinanceBankingAccountsRouteImport.update({
+    id: '/finance/banking/accounts',
+    path: '/finance/banking/accounts',
+    getParentRoute: () => AppRoute,
+  } as any)
+const AppFinanceAssetsRegisterRoute =
+  AppFinanceAssetsRegisterRouteImport.update({
+    id: '/finance/assets/register',
+    path: '/finance/assets/register',
+    getParentRoute: () => AppRoute,
+  } as any)
+const AppFinanceAssetsDepreciationRoute =
+  AppFinanceAssetsDepreciationRouteImport.update({
+    id: '/finance/assets/depreciation',
+    path: '/finance/assets/depreciation',
+    getParentRoute: () => AppRoute,
+  } as any)
+const AppFinanceAssetsCategoriesRoute =
+  AppFinanceAssetsCategoriesRouteImport.update({
+    id: '/finance/assets/categories',
+    path: '/finance/assets/categories',
+    getParentRoute: () => AppRoute,
+  } as any)
 const AppCrmCustomersCustomerIdRoute =
   AppCrmCustomersCustomerIdRouteImport.update({
     id: '/crm/customers_/$customerId',
     path: '/crm/customers/$customerId',
+    getParentRoute: () => AppRoute,
+  } as any)
+const AppFinanceJournalsEntryIdEditRoute =
+  AppFinanceJournalsEntryIdEditRouteImport.update({
+    id: '/finance/journals_/$entryId_/edit',
+    path: '/finance/journals/$entryId/edit',
     getParentRoute: () => AppRoute,
   } as any)
 
@@ -622,6 +879,16 @@ export interface FileRoutesByFullPath {
   '/crm/dashboard': typeof AppCrmDashboardRoute
   '/crm/loyalty': typeof AppCrmLoyaltyRoute
   '/crm/segments': typeof AppCrmSegmentsRoute
+  '/finance/accounts': typeof AppFinanceAccountsRoute
+  '/finance/closing': typeof AppFinanceClosingRoute
+  '/finance/dashboard': typeof AppFinanceDashboardRoute
+  '/finance/fiscal': typeof AppFinanceFiscalRoute
+  '/finance/journal-types': typeof AppFinanceJournalTypesRoute
+  '/finance/journals': typeof AppFinanceJournalsRoute
+  '/finance/posting-queue': typeof AppFinancePostingQueueRoute
+  '/finance/recurring-journals': typeof AppFinanceRecurringJournalsRoute
+  '/finance/reports': typeof AppFinanceReportsRoute
+  '/finance/settings': typeof AppFinanceSettingsRoute
   '/hr/analytics': typeof AppHrAnalyticsRoute
   '/hr/assets': typeof AppHrAssetsRoute
   '/hr/attendance': typeof AppHrAttendanceRoute
@@ -698,10 +965,39 @@ export interface FileRoutesByFullPath {
   '/pos/': typeof AppPosIndexRoute
   '/purchase/': typeof AppPurchaseIndexRoute
   '/crm/customers/$customerId': typeof AppCrmCustomersCustomerIdRoute
+  '/finance/assets/categories': typeof AppFinanceAssetsCategoriesRoute
+  '/finance/assets/depreciation': typeof AppFinanceAssetsDepreciationRoute
+  '/finance/assets/register': typeof AppFinanceAssetsRegisterRoute
+  '/finance/banking/accounts': typeof AppFinanceBankingAccountsRoute
+  '/finance/banking/cheques': typeof AppFinanceBankingChequesRoute
+  '/finance/banking/reconciliation': typeof AppFinanceBankingReconciliationRoute
+  '/finance/banking/transactions': typeof AppFinanceBankingTransactionsRoute
+  '/finance/budgets/monitoring': typeof AppFinanceBudgetsMonitoringRoute
+  '/finance/budgets/plans': typeof AppFinanceBudgetsPlansRoute
+  '/finance/cash/accounts': typeof AppFinanceCashAccountsRoute
+  '/finance/cash/petty-cash': typeof AppFinanceCashPettyCashRoute
+  '/finance/cash/sessions': typeof AppFinanceCashSessionsRoute
+  '/finance/cash/transactions': typeof AppFinanceCashTransactionsRoute
+  '/finance/cost/cost-centers': typeof AppFinanceCostCostCentersRoute
+  '/finance/cost/departments': typeof AppFinanceCostDepartmentsRoute
+  '/finance/cost/projects': typeof AppFinanceCostProjectsRoute
+  '/finance/journals/$entryId': typeof AppFinanceJournalsEntryIdRoute
+  '/finance/journals/new': typeof AppFinanceJournalsNewRoute
+  '/finance/payables/debit-notes': typeof AppFinancePayablesDebitNotesRoute
+  '/finance/payables/ledger': typeof AppFinancePayablesLedgerRoute
+  '/finance/payables/payments': typeof AppFinancePayablesPaymentsRoute
+  '/finance/payables/vendors': typeof AppFinancePayablesVendorsRoute
+  '/finance/receivables/credit-notes': typeof AppFinanceReceivablesCreditNotesRoute
+  '/finance/receivables/customers': typeof AppFinanceReceivablesCustomersRoute
+  '/finance/receivables/ledger': typeof AppFinanceReceivablesLedgerRoute
+  '/finance/receivables/payments': typeof AppFinanceReceivablesPaymentsRoute
+  '/finance/receivables/statements': typeof AppFinanceReceivablesStatementsRoute
+  '/finance/settings/tax': typeof AppFinanceSettingsTaxRoute
   '/hr/employees/$employeeId': typeof AppHrEmployeesEmployeeIdRoute
   '/inventory/catalog/$productId': typeof AppInventoryCatalogProductIdRoute
   '/restaurant/orders/$orderId': typeof AppRestaurantOrdersOrderIdRoute
   '/restaurant/orders/': typeof AppRestaurantOrdersIndexRoute
+  '/finance/journals/$entryId/edit': typeof AppFinanceJournalsEntryIdEditRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
@@ -720,6 +1016,16 @@ export interface FileRoutesByTo {
   '/crm/dashboard': typeof AppCrmDashboardRoute
   '/crm/loyalty': typeof AppCrmLoyaltyRoute
   '/crm/segments': typeof AppCrmSegmentsRoute
+  '/finance/accounts': typeof AppFinanceAccountsRoute
+  '/finance/closing': typeof AppFinanceClosingRoute
+  '/finance/dashboard': typeof AppFinanceDashboardRoute
+  '/finance/fiscal': typeof AppFinanceFiscalRoute
+  '/finance/journal-types': typeof AppFinanceJournalTypesRoute
+  '/finance/journals': typeof AppFinanceJournalsRoute
+  '/finance/posting-queue': typeof AppFinancePostingQueueRoute
+  '/finance/recurring-journals': typeof AppFinanceRecurringJournalsRoute
+  '/finance/reports': typeof AppFinanceReportsRoute
+  '/finance/settings': typeof AppFinanceSettingsRoute
   '/hr/analytics': typeof AppHrAnalyticsRoute
   '/hr/assets': typeof AppHrAssetsRoute
   '/hr/attendance': typeof AppHrAttendanceRoute
@@ -796,10 +1102,39 @@ export interface FileRoutesByTo {
   '/pos': typeof AppPosIndexRoute
   '/purchase': typeof AppPurchaseIndexRoute
   '/crm/customers/$customerId': typeof AppCrmCustomersCustomerIdRoute
+  '/finance/assets/categories': typeof AppFinanceAssetsCategoriesRoute
+  '/finance/assets/depreciation': typeof AppFinanceAssetsDepreciationRoute
+  '/finance/assets/register': typeof AppFinanceAssetsRegisterRoute
+  '/finance/banking/accounts': typeof AppFinanceBankingAccountsRoute
+  '/finance/banking/cheques': typeof AppFinanceBankingChequesRoute
+  '/finance/banking/reconciliation': typeof AppFinanceBankingReconciliationRoute
+  '/finance/banking/transactions': typeof AppFinanceBankingTransactionsRoute
+  '/finance/budgets/monitoring': typeof AppFinanceBudgetsMonitoringRoute
+  '/finance/budgets/plans': typeof AppFinanceBudgetsPlansRoute
+  '/finance/cash/accounts': typeof AppFinanceCashAccountsRoute
+  '/finance/cash/petty-cash': typeof AppFinanceCashPettyCashRoute
+  '/finance/cash/sessions': typeof AppFinanceCashSessionsRoute
+  '/finance/cash/transactions': typeof AppFinanceCashTransactionsRoute
+  '/finance/cost/cost-centers': typeof AppFinanceCostCostCentersRoute
+  '/finance/cost/departments': typeof AppFinanceCostDepartmentsRoute
+  '/finance/cost/projects': typeof AppFinanceCostProjectsRoute
+  '/finance/journals/$entryId': typeof AppFinanceJournalsEntryIdRoute
+  '/finance/journals/new': typeof AppFinanceJournalsNewRoute
+  '/finance/payables/debit-notes': typeof AppFinancePayablesDebitNotesRoute
+  '/finance/payables/ledger': typeof AppFinancePayablesLedgerRoute
+  '/finance/payables/payments': typeof AppFinancePayablesPaymentsRoute
+  '/finance/payables/vendors': typeof AppFinancePayablesVendorsRoute
+  '/finance/receivables/credit-notes': typeof AppFinanceReceivablesCreditNotesRoute
+  '/finance/receivables/customers': typeof AppFinanceReceivablesCustomersRoute
+  '/finance/receivables/ledger': typeof AppFinanceReceivablesLedgerRoute
+  '/finance/receivables/payments': typeof AppFinanceReceivablesPaymentsRoute
+  '/finance/receivables/statements': typeof AppFinanceReceivablesStatementsRoute
+  '/finance/settings/tax': typeof AppFinanceSettingsTaxRoute
   '/hr/employees/$employeeId': typeof AppHrEmployeesEmployeeIdRoute
   '/inventory/catalog/$productId': typeof AppInventoryCatalogProductIdRoute
   '/restaurant/orders/$orderId': typeof AppRestaurantOrdersOrderIdRoute
   '/restaurant/orders': typeof AppRestaurantOrdersIndexRoute
+  '/finance/journals/$entryId/edit': typeof AppFinanceJournalsEntryIdEditRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -821,6 +1156,16 @@ export interface FileRoutesById {
   '/_app/crm/dashboard': typeof AppCrmDashboardRoute
   '/_app/crm/loyalty': typeof AppCrmLoyaltyRoute
   '/_app/crm/segments': typeof AppCrmSegmentsRoute
+  '/_app/finance/accounts': typeof AppFinanceAccountsRoute
+  '/_app/finance/closing': typeof AppFinanceClosingRoute
+  '/_app/finance/dashboard': typeof AppFinanceDashboardRoute
+  '/_app/finance/fiscal': typeof AppFinanceFiscalRoute
+  '/_app/finance/journal-types': typeof AppFinanceJournalTypesRoute
+  '/_app/finance/journals': typeof AppFinanceJournalsRoute
+  '/_app/finance/posting-queue': typeof AppFinancePostingQueueRoute
+  '/_app/finance/recurring-journals': typeof AppFinanceRecurringJournalsRoute
+  '/_app/finance/reports': typeof AppFinanceReportsRoute
+  '/_app/finance/settings': typeof AppFinanceSettingsRoute
   '/_app/hr/analytics': typeof AppHrAnalyticsRoute
   '/_app/hr/assets': typeof AppHrAssetsRoute
   '/_app/hr/attendance': typeof AppHrAttendanceRoute
@@ -897,10 +1242,39 @@ export interface FileRoutesById {
   '/_app/pos/': typeof AppPosIndexRoute
   '/_app/purchase/': typeof AppPurchaseIndexRoute
   '/_app/crm/customers_/$customerId': typeof AppCrmCustomersCustomerIdRoute
+  '/_app/finance/assets/categories': typeof AppFinanceAssetsCategoriesRoute
+  '/_app/finance/assets/depreciation': typeof AppFinanceAssetsDepreciationRoute
+  '/_app/finance/assets/register': typeof AppFinanceAssetsRegisterRoute
+  '/_app/finance/banking/accounts': typeof AppFinanceBankingAccountsRoute
+  '/_app/finance/banking/cheques': typeof AppFinanceBankingChequesRoute
+  '/_app/finance/banking/reconciliation': typeof AppFinanceBankingReconciliationRoute
+  '/_app/finance/banking/transactions': typeof AppFinanceBankingTransactionsRoute
+  '/_app/finance/budgets/monitoring': typeof AppFinanceBudgetsMonitoringRoute
+  '/_app/finance/budgets/plans': typeof AppFinanceBudgetsPlansRoute
+  '/_app/finance/cash/accounts': typeof AppFinanceCashAccountsRoute
+  '/_app/finance/cash/petty-cash': typeof AppFinanceCashPettyCashRoute
+  '/_app/finance/cash/sessions': typeof AppFinanceCashSessionsRoute
+  '/_app/finance/cash/transactions': typeof AppFinanceCashTransactionsRoute
+  '/_app/finance/cost/cost-centers': typeof AppFinanceCostCostCentersRoute
+  '/_app/finance/cost/departments': typeof AppFinanceCostDepartmentsRoute
+  '/_app/finance/cost/projects': typeof AppFinanceCostProjectsRoute
+  '/_app/finance/journals_/$entryId': typeof AppFinanceJournalsEntryIdRoute
+  '/_app/finance/journals_/new': typeof AppFinanceJournalsNewRoute
+  '/_app/finance/payables/debit-notes': typeof AppFinancePayablesDebitNotesRoute
+  '/_app/finance/payables/ledger': typeof AppFinancePayablesLedgerRoute
+  '/_app/finance/payables/payments': typeof AppFinancePayablesPaymentsRoute
+  '/_app/finance/payables/vendors': typeof AppFinancePayablesVendorsRoute
+  '/_app/finance/receivables/credit-notes': typeof AppFinanceReceivablesCreditNotesRoute
+  '/_app/finance/receivables/customers': typeof AppFinanceReceivablesCustomersRoute
+  '/_app/finance/receivables/ledger': typeof AppFinanceReceivablesLedgerRoute
+  '/_app/finance/receivables/payments': typeof AppFinanceReceivablesPaymentsRoute
+  '/_app/finance/receivables/statements': typeof AppFinanceReceivablesStatementsRoute
+  '/_app/finance/settings_/tax': typeof AppFinanceSettingsTaxRoute
   '/_app/hr/employees_/$employeeId': typeof AppHrEmployeesEmployeeIdRoute
   '/_app/inventory/catalog_/$productId': typeof AppInventoryCatalogProductIdRoute
   '/_app/restaurant/orders/$orderId': typeof AppRestaurantOrdersOrderIdRoute
   '/_app/restaurant/orders/': typeof AppRestaurantOrdersIndexRoute
+  '/_app/finance/journals_/$entryId_/edit': typeof AppFinanceJournalsEntryIdEditRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -921,6 +1295,16 @@ export interface FileRouteTypes {
     | '/crm/dashboard'
     | '/crm/loyalty'
     | '/crm/segments'
+    | '/finance/accounts'
+    | '/finance/closing'
+    | '/finance/dashboard'
+    | '/finance/fiscal'
+    | '/finance/journal-types'
+    | '/finance/journals'
+    | '/finance/posting-queue'
+    | '/finance/recurring-journals'
+    | '/finance/reports'
+    | '/finance/settings'
     | '/hr/analytics'
     | '/hr/assets'
     | '/hr/attendance'
@@ -997,10 +1381,39 @@ export interface FileRouteTypes {
     | '/pos/'
     | '/purchase/'
     | '/crm/customers/$customerId'
+    | '/finance/assets/categories'
+    | '/finance/assets/depreciation'
+    | '/finance/assets/register'
+    | '/finance/banking/accounts'
+    | '/finance/banking/cheques'
+    | '/finance/banking/reconciliation'
+    | '/finance/banking/transactions'
+    | '/finance/budgets/monitoring'
+    | '/finance/budgets/plans'
+    | '/finance/cash/accounts'
+    | '/finance/cash/petty-cash'
+    | '/finance/cash/sessions'
+    | '/finance/cash/transactions'
+    | '/finance/cost/cost-centers'
+    | '/finance/cost/departments'
+    | '/finance/cost/projects'
+    | '/finance/journals/$entryId'
+    | '/finance/journals/new'
+    | '/finance/payables/debit-notes'
+    | '/finance/payables/ledger'
+    | '/finance/payables/payments'
+    | '/finance/payables/vendors'
+    | '/finance/receivables/credit-notes'
+    | '/finance/receivables/customers'
+    | '/finance/receivables/ledger'
+    | '/finance/receivables/payments'
+    | '/finance/receivables/statements'
+    | '/finance/settings/tax'
     | '/hr/employees/$employeeId'
     | '/inventory/catalog/$productId'
     | '/restaurant/orders/$orderId'
     | '/restaurant/orders/'
+    | '/finance/journals/$entryId/edit'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
@@ -1019,6 +1432,16 @@ export interface FileRouteTypes {
     | '/crm/dashboard'
     | '/crm/loyalty'
     | '/crm/segments'
+    | '/finance/accounts'
+    | '/finance/closing'
+    | '/finance/dashboard'
+    | '/finance/fiscal'
+    | '/finance/journal-types'
+    | '/finance/journals'
+    | '/finance/posting-queue'
+    | '/finance/recurring-journals'
+    | '/finance/reports'
+    | '/finance/settings'
     | '/hr/analytics'
     | '/hr/assets'
     | '/hr/attendance'
@@ -1095,10 +1518,39 @@ export interface FileRouteTypes {
     | '/pos'
     | '/purchase'
     | '/crm/customers/$customerId'
+    | '/finance/assets/categories'
+    | '/finance/assets/depreciation'
+    | '/finance/assets/register'
+    | '/finance/banking/accounts'
+    | '/finance/banking/cheques'
+    | '/finance/banking/reconciliation'
+    | '/finance/banking/transactions'
+    | '/finance/budgets/monitoring'
+    | '/finance/budgets/plans'
+    | '/finance/cash/accounts'
+    | '/finance/cash/petty-cash'
+    | '/finance/cash/sessions'
+    | '/finance/cash/transactions'
+    | '/finance/cost/cost-centers'
+    | '/finance/cost/departments'
+    | '/finance/cost/projects'
+    | '/finance/journals/$entryId'
+    | '/finance/journals/new'
+    | '/finance/payables/debit-notes'
+    | '/finance/payables/ledger'
+    | '/finance/payables/payments'
+    | '/finance/payables/vendors'
+    | '/finance/receivables/credit-notes'
+    | '/finance/receivables/customers'
+    | '/finance/receivables/ledger'
+    | '/finance/receivables/payments'
+    | '/finance/receivables/statements'
+    | '/finance/settings/tax'
     | '/hr/employees/$employeeId'
     | '/inventory/catalog/$productId'
     | '/restaurant/orders/$orderId'
     | '/restaurant/orders'
+    | '/finance/journals/$entryId/edit'
   id:
     | '__root__'
     | '/'
@@ -1119,6 +1571,16 @@ export interface FileRouteTypes {
     | '/_app/crm/dashboard'
     | '/_app/crm/loyalty'
     | '/_app/crm/segments'
+    | '/_app/finance/accounts'
+    | '/_app/finance/closing'
+    | '/_app/finance/dashboard'
+    | '/_app/finance/fiscal'
+    | '/_app/finance/journal-types'
+    | '/_app/finance/journals'
+    | '/_app/finance/posting-queue'
+    | '/_app/finance/recurring-journals'
+    | '/_app/finance/reports'
+    | '/_app/finance/settings'
     | '/_app/hr/analytics'
     | '/_app/hr/assets'
     | '/_app/hr/attendance'
@@ -1195,10 +1657,39 @@ export interface FileRouteTypes {
     | '/_app/pos/'
     | '/_app/purchase/'
     | '/_app/crm/customers_/$customerId'
+    | '/_app/finance/assets/categories'
+    | '/_app/finance/assets/depreciation'
+    | '/_app/finance/assets/register'
+    | '/_app/finance/banking/accounts'
+    | '/_app/finance/banking/cheques'
+    | '/_app/finance/banking/reconciliation'
+    | '/_app/finance/banking/transactions'
+    | '/_app/finance/budgets/monitoring'
+    | '/_app/finance/budgets/plans'
+    | '/_app/finance/cash/accounts'
+    | '/_app/finance/cash/petty-cash'
+    | '/_app/finance/cash/sessions'
+    | '/_app/finance/cash/transactions'
+    | '/_app/finance/cost/cost-centers'
+    | '/_app/finance/cost/departments'
+    | '/_app/finance/cost/projects'
+    | '/_app/finance/journals_/$entryId'
+    | '/_app/finance/journals_/new'
+    | '/_app/finance/payables/debit-notes'
+    | '/_app/finance/payables/ledger'
+    | '/_app/finance/payables/payments'
+    | '/_app/finance/payables/vendors'
+    | '/_app/finance/receivables/credit-notes'
+    | '/_app/finance/receivables/customers'
+    | '/_app/finance/receivables/ledger'
+    | '/_app/finance/receivables/payments'
+    | '/_app/finance/receivables/statements'
+    | '/_app/finance/settings_/tax'
     | '/_app/hr/employees_/$employeeId'
     | '/_app/inventory/catalog_/$productId'
     | '/_app/restaurant/orders/$orderId'
     | '/_app/restaurant/orders/'
+    | '/_app/finance/journals_/$entryId_/edit'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -1826,6 +2317,76 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AppHrAnalyticsRouteImport
       parentRoute: typeof AppRoute
     }
+    '/_app/finance/settings': {
+      id: '/_app/finance/settings'
+      path: '/finance/settings'
+      fullPath: '/finance/settings'
+      preLoaderRoute: typeof AppFinanceSettingsRouteImport
+      parentRoute: typeof AppRoute
+    }
+    '/_app/finance/reports': {
+      id: '/_app/finance/reports'
+      path: '/finance/reports'
+      fullPath: '/finance/reports'
+      preLoaderRoute: typeof AppFinanceReportsRouteImport
+      parentRoute: typeof AppRoute
+    }
+    '/_app/finance/recurring-journals': {
+      id: '/_app/finance/recurring-journals'
+      path: '/finance/recurring-journals'
+      fullPath: '/finance/recurring-journals'
+      preLoaderRoute: typeof AppFinanceRecurringJournalsRouteImport
+      parentRoute: typeof AppRoute
+    }
+    '/_app/finance/posting-queue': {
+      id: '/_app/finance/posting-queue'
+      path: '/finance/posting-queue'
+      fullPath: '/finance/posting-queue'
+      preLoaderRoute: typeof AppFinancePostingQueueRouteImport
+      parentRoute: typeof AppRoute
+    }
+    '/_app/finance/journals': {
+      id: '/_app/finance/journals'
+      path: '/finance/journals'
+      fullPath: '/finance/journals'
+      preLoaderRoute: typeof AppFinanceJournalsRouteImport
+      parentRoute: typeof AppRoute
+    }
+    '/_app/finance/journal-types': {
+      id: '/_app/finance/journal-types'
+      path: '/finance/journal-types'
+      fullPath: '/finance/journal-types'
+      preLoaderRoute: typeof AppFinanceJournalTypesRouteImport
+      parentRoute: typeof AppRoute
+    }
+    '/_app/finance/fiscal': {
+      id: '/_app/finance/fiscal'
+      path: '/finance/fiscal'
+      fullPath: '/finance/fiscal'
+      preLoaderRoute: typeof AppFinanceFiscalRouteImport
+      parentRoute: typeof AppRoute
+    }
+    '/_app/finance/dashboard': {
+      id: '/_app/finance/dashboard'
+      path: '/finance/dashboard'
+      fullPath: '/finance/dashboard'
+      preLoaderRoute: typeof AppFinanceDashboardRouteImport
+      parentRoute: typeof AppRoute
+    }
+    '/_app/finance/closing': {
+      id: '/_app/finance/closing'
+      path: '/finance/closing'
+      fullPath: '/finance/closing'
+      preLoaderRoute: typeof AppFinanceClosingRouteImport
+      parentRoute: typeof AppRoute
+    }
+    '/_app/finance/accounts': {
+      id: '/_app/finance/accounts'
+      path: '/finance/accounts'
+      fullPath: '/finance/accounts'
+      preLoaderRoute: typeof AppFinanceAccountsRouteImport
+      parentRoute: typeof AppRoute
+    }
     '/_app/crm/segments': {
       id: '/_app/crm/segments'
       path: '/crm/segments'
@@ -1889,11 +2450,214 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AppHrEmployeesEmployeeIdRouteImport
       parentRoute: typeof AppRoute
     }
+    '/_app/finance/settings_/tax': {
+      id: '/_app/finance/settings_/tax'
+      path: '/finance/settings/tax'
+      fullPath: '/finance/settings/tax'
+      preLoaderRoute: typeof AppFinanceSettingsTaxRouteImport
+      parentRoute: typeof AppRoute
+    }
+    '/_app/finance/receivables/statements': {
+      id: '/_app/finance/receivables/statements'
+      path: '/finance/receivables/statements'
+      fullPath: '/finance/receivables/statements'
+      preLoaderRoute: typeof AppFinanceReceivablesStatementsRouteImport
+      parentRoute: typeof AppRoute
+    }
+    '/_app/finance/receivables/payments': {
+      id: '/_app/finance/receivables/payments'
+      path: '/finance/receivables/payments'
+      fullPath: '/finance/receivables/payments'
+      preLoaderRoute: typeof AppFinanceReceivablesPaymentsRouteImport
+      parentRoute: typeof AppRoute
+    }
+    '/_app/finance/receivables/ledger': {
+      id: '/_app/finance/receivables/ledger'
+      path: '/finance/receivables/ledger'
+      fullPath: '/finance/receivables/ledger'
+      preLoaderRoute: typeof AppFinanceReceivablesLedgerRouteImport
+      parentRoute: typeof AppRoute
+    }
+    '/_app/finance/receivables/customers': {
+      id: '/_app/finance/receivables/customers'
+      path: '/finance/receivables/customers'
+      fullPath: '/finance/receivables/customers'
+      preLoaderRoute: typeof AppFinanceReceivablesCustomersRouteImport
+      parentRoute: typeof AppRoute
+    }
+    '/_app/finance/receivables/credit-notes': {
+      id: '/_app/finance/receivables/credit-notes'
+      path: '/finance/receivables/credit-notes'
+      fullPath: '/finance/receivables/credit-notes'
+      preLoaderRoute: typeof AppFinanceReceivablesCreditNotesRouteImport
+      parentRoute: typeof AppRoute
+    }
+    '/_app/finance/payables/vendors': {
+      id: '/_app/finance/payables/vendors'
+      path: '/finance/payables/vendors'
+      fullPath: '/finance/payables/vendors'
+      preLoaderRoute: typeof AppFinancePayablesVendorsRouteImport
+      parentRoute: typeof AppRoute
+    }
+    '/_app/finance/payables/payments': {
+      id: '/_app/finance/payables/payments'
+      path: '/finance/payables/payments'
+      fullPath: '/finance/payables/payments'
+      preLoaderRoute: typeof AppFinancePayablesPaymentsRouteImport
+      parentRoute: typeof AppRoute
+    }
+    '/_app/finance/payables/ledger': {
+      id: '/_app/finance/payables/ledger'
+      path: '/finance/payables/ledger'
+      fullPath: '/finance/payables/ledger'
+      preLoaderRoute: typeof AppFinancePayablesLedgerRouteImport
+      parentRoute: typeof AppRoute
+    }
+    '/_app/finance/payables/debit-notes': {
+      id: '/_app/finance/payables/debit-notes'
+      path: '/finance/payables/debit-notes'
+      fullPath: '/finance/payables/debit-notes'
+      preLoaderRoute: typeof AppFinancePayablesDebitNotesRouteImport
+      parentRoute: typeof AppRoute
+    }
+    '/_app/finance/journals_/new': {
+      id: '/_app/finance/journals_/new'
+      path: '/finance/journals/new'
+      fullPath: '/finance/journals/new'
+      preLoaderRoute: typeof AppFinanceJournalsNewRouteImport
+      parentRoute: typeof AppRoute
+    }
+    '/_app/finance/journals_/$entryId': {
+      id: '/_app/finance/journals_/$entryId'
+      path: '/finance/journals/$entryId'
+      fullPath: '/finance/journals/$entryId'
+      preLoaderRoute: typeof AppFinanceJournalsEntryIdRouteImport
+      parentRoute: typeof AppRoute
+    }
+    '/_app/finance/cost/projects': {
+      id: '/_app/finance/cost/projects'
+      path: '/finance/cost/projects'
+      fullPath: '/finance/cost/projects'
+      preLoaderRoute: typeof AppFinanceCostProjectsRouteImport
+      parentRoute: typeof AppRoute
+    }
+    '/_app/finance/cost/departments': {
+      id: '/_app/finance/cost/departments'
+      path: '/finance/cost/departments'
+      fullPath: '/finance/cost/departments'
+      preLoaderRoute: typeof AppFinanceCostDepartmentsRouteImport
+      parentRoute: typeof AppRoute
+    }
+    '/_app/finance/cost/cost-centers': {
+      id: '/_app/finance/cost/cost-centers'
+      path: '/finance/cost/cost-centers'
+      fullPath: '/finance/cost/cost-centers'
+      preLoaderRoute: typeof AppFinanceCostCostCentersRouteImport
+      parentRoute: typeof AppRoute
+    }
+    '/_app/finance/cash/transactions': {
+      id: '/_app/finance/cash/transactions'
+      path: '/finance/cash/transactions'
+      fullPath: '/finance/cash/transactions'
+      preLoaderRoute: typeof AppFinanceCashTransactionsRouteImport
+      parentRoute: typeof AppRoute
+    }
+    '/_app/finance/cash/sessions': {
+      id: '/_app/finance/cash/sessions'
+      path: '/finance/cash/sessions'
+      fullPath: '/finance/cash/sessions'
+      preLoaderRoute: typeof AppFinanceCashSessionsRouteImport
+      parentRoute: typeof AppRoute
+    }
+    '/_app/finance/cash/petty-cash': {
+      id: '/_app/finance/cash/petty-cash'
+      path: '/finance/cash/petty-cash'
+      fullPath: '/finance/cash/petty-cash'
+      preLoaderRoute: typeof AppFinanceCashPettyCashRouteImport
+      parentRoute: typeof AppRoute
+    }
+    '/_app/finance/cash/accounts': {
+      id: '/_app/finance/cash/accounts'
+      path: '/finance/cash/accounts'
+      fullPath: '/finance/cash/accounts'
+      preLoaderRoute: typeof AppFinanceCashAccountsRouteImport
+      parentRoute: typeof AppRoute
+    }
+    '/_app/finance/budgets/plans': {
+      id: '/_app/finance/budgets/plans'
+      path: '/finance/budgets/plans'
+      fullPath: '/finance/budgets/plans'
+      preLoaderRoute: typeof AppFinanceBudgetsPlansRouteImport
+      parentRoute: typeof AppRoute
+    }
+    '/_app/finance/budgets/monitoring': {
+      id: '/_app/finance/budgets/monitoring'
+      path: '/finance/budgets/monitoring'
+      fullPath: '/finance/budgets/monitoring'
+      preLoaderRoute: typeof AppFinanceBudgetsMonitoringRouteImport
+      parentRoute: typeof AppRoute
+    }
+    '/_app/finance/banking/transactions': {
+      id: '/_app/finance/banking/transactions'
+      path: '/finance/banking/transactions'
+      fullPath: '/finance/banking/transactions'
+      preLoaderRoute: typeof AppFinanceBankingTransactionsRouteImport
+      parentRoute: typeof AppRoute
+    }
+    '/_app/finance/banking/reconciliation': {
+      id: '/_app/finance/banking/reconciliation'
+      path: '/finance/banking/reconciliation'
+      fullPath: '/finance/banking/reconciliation'
+      preLoaderRoute: typeof AppFinanceBankingReconciliationRouteImport
+      parentRoute: typeof AppRoute
+    }
+    '/_app/finance/banking/cheques': {
+      id: '/_app/finance/banking/cheques'
+      path: '/finance/banking/cheques'
+      fullPath: '/finance/banking/cheques'
+      preLoaderRoute: typeof AppFinanceBankingChequesRouteImport
+      parentRoute: typeof AppRoute
+    }
+    '/_app/finance/banking/accounts': {
+      id: '/_app/finance/banking/accounts'
+      path: '/finance/banking/accounts'
+      fullPath: '/finance/banking/accounts'
+      preLoaderRoute: typeof AppFinanceBankingAccountsRouteImport
+      parentRoute: typeof AppRoute
+    }
+    '/_app/finance/assets/register': {
+      id: '/_app/finance/assets/register'
+      path: '/finance/assets/register'
+      fullPath: '/finance/assets/register'
+      preLoaderRoute: typeof AppFinanceAssetsRegisterRouteImport
+      parentRoute: typeof AppRoute
+    }
+    '/_app/finance/assets/depreciation': {
+      id: '/_app/finance/assets/depreciation'
+      path: '/finance/assets/depreciation'
+      fullPath: '/finance/assets/depreciation'
+      preLoaderRoute: typeof AppFinanceAssetsDepreciationRouteImport
+      parentRoute: typeof AppRoute
+    }
+    '/_app/finance/assets/categories': {
+      id: '/_app/finance/assets/categories'
+      path: '/finance/assets/categories'
+      fullPath: '/finance/assets/categories'
+      preLoaderRoute: typeof AppFinanceAssetsCategoriesRouteImport
+      parentRoute: typeof AppRoute
+    }
     '/_app/crm/customers_/$customerId': {
       id: '/_app/crm/customers_/$customerId'
       path: '/crm/customers/$customerId'
       fullPath: '/crm/customers/$customerId'
       preLoaderRoute: typeof AppCrmCustomersCustomerIdRouteImport
+      parentRoute: typeof AppRoute
+    }
+    '/_app/finance/journals_/$entryId_/edit': {
+      id: '/_app/finance/journals_/$entryId_/edit'
+      path: '/finance/journals/$entryId/edit'
+      fullPath: '/finance/journals/$entryId/edit'
+      preLoaderRoute: typeof AppFinanceJournalsEntryIdEditRouteImport
       parentRoute: typeof AppRoute
     }
   }
@@ -1907,6 +2671,16 @@ interface AppRouteChildren {
   AppCrmDashboardRoute: typeof AppCrmDashboardRoute
   AppCrmLoyaltyRoute: typeof AppCrmLoyaltyRoute
   AppCrmSegmentsRoute: typeof AppCrmSegmentsRoute
+  AppFinanceAccountsRoute: typeof AppFinanceAccountsRoute
+  AppFinanceClosingRoute: typeof AppFinanceClosingRoute
+  AppFinanceDashboardRoute: typeof AppFinanceDashboardRoute
+  AppFinanceFiscalRoute: typeof AppFinanceFiscalRoute
+  AppFinanceJournalTypesRoute: typeof AppFinanceJournalTypesRoute
+  AppFinanceJournalsRoute: typeof AppFinanceJournalsRoute
+  AppFinancePostingQueueRoute: typeof AppFinancePostingQueueRoute
+  AppFinanceRecurringJournalsRoute: typeof AppFinanceRecurringJournalsRoute
+  AppFinanceReportsRoute: typeof AppFinanceReportsRoute
+  AppFinanceSettingsRoute: typeof AppFinanceSettingsRoute
   AppHrAnalyticsRoute: typeof AppHrAnalyticsRoute
   AppHrAssetsRoute: typeof AppHrAssetsRoute
   AppHrAttendanceRoute: typeof AppHrAttendanceRoute
@@ -1983,10 +2757,39 @@ interface AppRouteChildren {
   AppPosIndexRoute: typeof AppPosIndexRoute
   AppPurchaseIndexRoute: typeof AppPurchaseIndexRoute
   AppCrmCustomersCustomerIdRoute: typeof AppCrmCustomersCustomerIdRoute
+  AppFinanceAssetsCategoriesRoute: typeof AppFinanceAssetsCategoriesRoute
+  AppFinanceAssetsDepreciationRoute: typeof AppFinanceAssetsDepreciationRoute
+  AppFinanceAssetsRegisterRoute: typeof AppFinanceAssetsRegisterRoute
+  AppFinanceBankingAccountsRoute: typeof AppFinanceBankingAccountsRoute
+  AppFinanceBankingChequesRoute: typeof AppFinanceBankingChequesRoute
+  AppFinanceBankingReconciliationRoute: typeof AppFinanceBankingReconciliationRoute
+  AppFinanceBankingTransactionsRoute: typeof AppFinanceBankingTransactionsRoute
+  AppFinanceBudgetsMonitoringRoute: typeof AppFinanceBudgetsMonitoringRoute
+  AppFinanceBudgetsPlansRoute: typeof AppFinanceBudgetsPlansRoute
+  AppFinanceCashAccountsRoute: typeof AppFinanceCashAccountsRoute
+  AppFinanceCashPettyCashRoute: typeof AppFinanceCashPettyCashRoute
+  AppFinanceCashSessionsRoute: typeof AppFinanceCashSessionsRoute
+  AppFinanceCashTransactionsRoute: typeof AppFinanceCashTransactionsRoute
+  AppFinanceCostCostCentersRoute: typeof AppFinanceCostCostCentersRoute
+  AppFinanceCostDepartmentsRoute: typeof AppFinanceCostDepartmentsRoute
+  AppFinanceCostProjectsRoute: typeof AppFinanceCostProjectsRoute
+  AppFinanceJournalsEntryIdRoute: typeof AppFinanceJournalsEntryIdRoute
+  AppFinanceJournalsNewRoute: typeof AppFinanceJournalsNewRoute
+  AppFinancePayablesDebitNotesRoute: typeof AppFinancePayablesDebitNotesRoute
+  AppFinancePayablesLedgerRoute: typeof AppFinancePayablesLedgerRoute
+  AppFinancePayablesPaymentsRoute: typeof AppFinancePayablesPaymentsRoute
+  AppFinancePayablesVendorsRoute: typeof AppFinancePayablesVendorsRoute
+  AppFinanceReceivablesCreditNotesRoute: typeof AppFinanceReceivablesCreditNotesRoute
+  AppFinanceReceivablesCustomersRoute: typeof AppFinanceReceivablesCustomersRoute
+  AppFinanceReceivablesLedgerRoute: typeof AppFinanceReceivablesLedgerRoute
+  AppFinanceReceivablesPaymentsRoute: typeof AppFinanceReceivablesPaymentsRoute
+  AppFinanceReceivablesStatementsRoute: typeof AppFinanceReceivablesStatementsRoute
+  AppFinanceSettingsTaxRoute: typeof AppFinanceSettingsTaxRoute
   AppHrEmployeesEmployeeIdRoute: typeof AppHrEmployeesEmployeeIdRoute
   AppInventoryCatalogProductIdRoute: typeof AppInventoryCatalogProductIdRoute
   AppRestaurantOrdersOrderIdRoute: typeof AppRestaurantOrdersOrderIdRoute
   AppRestaurantOrdersIndexRoute: typeof AppRestaurantOrdersIndexRoute
+  AppFinanceJournalsEntryIdEditRoute: typeof AppFinanceJournalsEntryIdEditRoute
 }
 
 const AppRouteChildren: AppRouteChildren = {
@@ -1997,6 +2800,16 @@ const AppRouteChildren: AppRouteChildren = {
   AppCrmDashboardRoute: AppCrmDashboardRoute,
   AppCrmLoyaltyRoute: AppCrmLoyaltyRoute,
   AppCrmSegmentsRoute: AppCrmSegmentsRoute,
+  AppFinanceAccountsRoute: AppFinanceAccountsRoute,
+  AppFinanceClosingRoute: AppFinanceClosingRoute,
+  AppFinanceDashboardRoute: AppFinanceDashboardRoute,
+  AppFinanceFiscalRoute: AppFinanceFiscalRoute,
+  AppFinanceJournalTypesRoute: AppFinanceJournalTypesRoute,
+  AppFinanceJournalsRoute: AppFinanceJournalsRoute,
+  AppFinancePostingQueueRoute: AppFinancePostingQueueRoute,
+  AppFinanceRecurringJournalsRoute: AppFinanceRecurringJournalsRoute,
+  AppFinanceReportsRoute: AppFinanceReportsRoute,
+  AppFinanceSettingsRoute: AppFinanceSettingsRoute,
   AppHrAnalyticsRoute: AppHrAnalyticsRoute,
   AppHrAssetsRoute: AppHrAssetsRoute,
   AppHrAttendanceRoute: AppHrAttendanceRoute,
@@ -2073,10 +2886,39 @@ const AppRouteChildren: AppRouteChildren = {
   AppPosIndexRoute: AppPosIndexRoute,
   AppPurchaseIndexRoute: AppPurchaseIndexRoute,
   AppCrmCustomersCustomerIdRoute: AppCrmCustomersCustomerIdRoute,
+  AppFinanceAssetsCategoriesRoute: AppFinanceAssetsCategoriesRoute,
+  AppFinanceAssetsDepreciationRoute: AppFinanceAssetsDepreciationRoute,
+  AppFinanceAssetsRegisterRoute: AppFinanceAssetsRegisterRoute,
+  AppFinanceBankingAccountsRoute: AppFinanceBankingAccountsRoute,
+  AppFinanceBankingChequesRoute: AppFinanceBankingChequesRoute,
+  AppFinanceBankingReconciliationRoute: AppFinanceBankingReconciliationRoute,
+  AppFinanceBankingTransactionsRoute: AppFinanceBankingTransactionsRoute,
+  AppFinanceBudgetsMonitoringRoute: AppFinanceBudgetsMonitoringRoute,
+  AppFinanceBudgetsPlansRoute: AppFinanceBudgetsPlansRoute,
+  AppFinanceCashAccountsRoute: AppFinanceCashAccountsRoute,
+  AppFinanceCashPettyCashRoute: AppFinanceCashPettyCashRoute,
+  AppFinanceCashSessionsRoute: AppFinanceCashSessionsRoute,
+  AppFinanceCashTransactionsRoute: AppFinanceCashTransactionsRoute,
+  AppFinanceCostCostCentersRoute: AppFinanceCostCostCentersRoute,
+  AppFinanceCostDepartmentsRoute: AppFinanceCostDepartmentsRoute,
+  AppFinanceCostProjectsRoute: AppFinanceCostProjectsRoute,
+  AppFinanceJournalsEntryIdRoute: AppFinanceJournalsEntryIdRoute,
+  AppFinanceJournalsNewRoute: AppFinanceJournalsNewRoute,
+  AppFinancePayablesDebitNotesRoute: AppFinancePayablesDebitNotesRoute,
+  AppFinancePayablesLedgerRoute: AppFinancePayablesLedgerRoute,
+  AppFinancePayablesPaymentsRoute: AppFinancePayablesPaymentsRoute,
+  AppFinancePayablesVendorsRoute: AppFinancePayablesVendorsRoute,
+  AppFinanceReceivablesCreditNotesRoute: AppFinanceReceivablesCreditNotesRoute,
+  AppFinanceReceivablesCustomersRoute: AppFinanceReceivablesCustomersRoute,
+  AppFinanceReceivablesLedgerRoute: AppFinanceReceivablesLedgerRoute,
+  AppFinanceReceivablesPaymentsRoute: AppFinanceReceivablesPaymentsRoute,
+  AppFinanceReceivablesStatementsRoute: AppFinanceReceivablesStatementsRoute,
+  AppFinanceSettingsTaxRoute: AppFinanceSettingsTaxRoute,
   AppHrEmployeesEmployeeIdRoute: AppHrEmployeesEmployeeIdRoute,
   AppInventoryCatalogProductIdRoute: AppInventoryCatalogProductIdRoute,
   AppRestaurantOrdersOrderIdRoute: AppRestaurantOrdersOrderIdRoute,
   AppRestaurantOrdersIndexRoute: AppRestaurantOrdersIndexRoute,
+  AppFinanceJournalsEntryIdEditRoute: AppFinanceJournalsEntryIdEditRoute,
 }
 
 const AppRouteWithChildren = AppRoute._addFileChildren(AppRouteChildren)
